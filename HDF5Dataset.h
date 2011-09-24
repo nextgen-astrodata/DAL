@@ -18,7 +18,9 @@ public:
    * has its maximum set by dims[d]. A maximum of -1 represents an unbounded dimension.
    *
    * If a `filename` is given, that file will be used to store the data. The file can be provided by
-   * the user, or will be created upon the first write.
+   * the user, or will be created upon the first write. Note that the filename cannot be changed
+   * after the dataset has been created (HDF5 1.8.7), so providing absolute paths will make the
+   * dataset difficult to copy or move across systems.
    *
    * `endianness` toggles whether the data is in big-endian format. Typically:
    *  NATIVE: use the endianness of the current machine
@@ -28,14 +30,24 @@ public:
   void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename = "", enum Endianness endianness = NATIVE );
   virtual void create() const { throw HDF5Exception("create() not supported on a dataset"); }
 
+  // returns the rank
   size_t ndims();
+
+  // returns the dimension sizes
   std::vector<ssize_t> dims();
+
+  // returns the maximum dimension sizes to which this dataset can grow;
+  // elements of -1 represent unbounded dimensions
   std::vector<ssize_t> maxdims();
+
+  // returns a list of the files containing data
   std::vector<std::string> externalFiles();
 
+  // get/set a slice of values
   void getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer );
   void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
 
+  // get/set a single value
   T getScalar( const std::vector<size_t> &pos );
   void setScalar( const std::vector<size_t> &pos, const T &value );
 

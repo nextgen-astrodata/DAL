@@ -37,14 +37,23 @@ void HDF5Group::remove() const {
     throw HDF5Exception("Could not delete group"); 
 }
 
-void HDF5Group::set( const HDF5Group &other ) {
+void HDF5Group::set( const HDF5Group &other, bool deepcopy ) {
   if (exists()) {
     // maybe rename the attribute instead, in case the copying fails?
     remove();
   }
 
+  hid_gc ocpl(H5Pcreate(H5P_OBJECT_COPY), H5Pclose, "Could not create property list");
+
+  if (!deepcopy) {
+    // do a shallow copy
+    if (H5Pset_copy_object(ocpl, H5O_COPY_SHALLOW_HIERARCHY_FLAG) < 0) {
+      throw HDF5Exception("Could not enable shallow copy mode");
+    }
+  }
+
   // H5Ocopy allows us to copy all properties, subgroups, etc, even across files
-  if (H5Ocopy(other.parent, other._name.c_str(), parent, _name.c_str(), H5P_DEFAULT, H5P_DEFAULT) < 0)
+  if (H5Ocopy(other.parent, other._name.c_str(), parent, _name.c_str(), ocpl, H5P_DEFAULT) < 0)
     throw HDF5Exception("Could not copy element");
 }
 

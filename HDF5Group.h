@@ -15,7 +15,7 @@ public:
   virtual void create();
   bool exists() const;
   void remove() const;
-  void set( const HDF5Group &other );
+  void set( const HDF5Group &other, bool deepcopy );
 
   Attribute<std::string> groupType();
 
