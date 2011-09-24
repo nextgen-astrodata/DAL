@@ -4,7 +4,7 @@
 #include <string>
 #include <hdf5.h>
 #include "HDF5Node.h"
-#include "hdf5core/h5element.h"
+#include "hdf5core/h5attribute.h"
 #include "hdf5core/hid_gc.h"
 
 class HDF5File: public HDF5Node {

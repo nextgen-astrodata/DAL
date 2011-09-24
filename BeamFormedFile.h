@@ -3,7 +3,7 @@
 
 #include <string>
 #include <hdf5.h>
-#include "hdf5core/h5element.h"
+#include "hdf5core/h5attribute.h"
 #include "HDF5File.h"
 #include "HDF5Group.h"
 #include "HDF5Dataset.h"

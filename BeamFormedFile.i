@@ -41,7 +41,7 @@ namespace std {
 
 %rename(get_hid_t) operator hid_t;
 
-%include hdf5core/h5element.h
+%include hdf5core/h5attribute.h
 
 %template(AttributeBool)      Attribute<bool>;
 %template(AttributeUnsigned)  Attribute<unsigned>;
