@@ -17,12 +17,13 @@ public:
    * rank of the dataset is dims.size() <= maxdims.size(). Any dimension d not mentioned in maxdims
    * has its maximum set by dims[d]. A maximum of -1 represents an unbounded dimension.
    *
-   * If a filename is given, that file will be used to store the data. The file can be provided by
+   * If a `filename` is given, that file will be used to store the data. The file can be provided by
    * the user, or will be created upon the first write.
    *
-   * `bigEndian` toggles whether the data is in big-endian format. Typically:
-   *  big-endian:    MIPS, POWER, PowerPC, SPARC
-   *  little-endian: ARM, x86, x86_64
+   * `endianness` toggles whether the data is in big-endian format. Typically:
+   *  NATIVE: use the endianness of the current machine
+   *  LITTLE: use little-endian: ARM, x86, x86_64
+   *  BIG:    use big-endian:    MIPS, POWER, PowerPC, SPARC
    */
   void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename = "", enum Endianness endianness = NATIVE );
   virtual void create() const { throw HDF5Exception("create() not supported on a dataset"); }
@@ -33,7 +34,10 @@ public:
   std::vector<std::string> externalFiles();
 
   void getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer );
+  void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
+
   T getScalar( const std::vector<size_t> &pos );
+  void setScalar( const std::vector<size_t> &pos, const T &value );
 
 protected:
   HDF5Dataset( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
@@ -43,25 +47,9 @@ protected:
   }
 
 private:
-  bool bigEndian( enum Endianness endianness ) const {
-    switch (endianness) {
-      union {
-        char c[sizeof (unsigned)];
-        unsigned i;
-      } checker;
+  bool bigEndian( enum Endianness endianness ) const;
 
-      case LITTLE:
-        return false;
-
-      case BIG:
-        return true;
-
-      default:
-        // we don't actually know sizeof unsigned, so check for little-endianness
-        checker.i = 1;
-        return checker.c[0] != 1;
-    };
-  }
+  void matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer, bool read );
 };
 
 template<typename T> void HDF5Dataset<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
@@ -168,6 +156,54 @@ template<typename T> std::vector<std::string> HDF5Dataset<T>::externalFiles()
 
 template<typename T> void HDF5Dataset<T>::getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer )
 {
+  matrixIO(pos, size, buffer, true);
+}
+
+template<typename T> void HDF5Dataset<T>::setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer )
+{
+  matrixIO(pos, size, const_cast<T *>(buffer), false);
+}
+
+template<typename T> T HDF5Dataset<T>::getScalar( const std::vector<size_t> &pos )
+{
+  T value;
+  std::vector<size_t> size(ndims(),1);
+
+  getMatrix(pos, size, &value);
+
+  return value;
+}
+
+template<typename T> void HDF5Dataset<T>::setScalar( const std::vector<size_t> &pos, const T &value )
+{
+  std::vector<size_t> size(ndims(),1);
+
+  setMatrix(pos, size, &value);
+}
+
+template<typename T>  bool HDF5Dataset<T>::bigEndian( enum Endianness endianness ) const
+{
+  switch (endianness) {
+    union {
+      char c[sizeof (unsigned)];
+      unsigned i;
+    } checker;
+
+    case LITTLE:
+      return false;
+
+    case BIG:
+      return true;
+
+    default:
+      // we don't actually know sizeof unsigned, so check for little-endianness
+      checker.i = 1;
+      return checker.c[0] != 1;
+  };
+}
+
+template<typename T> void HDF5Dataset<T>::matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer, bool read )
+{
   const size_t rank = ndims();
 
   std::vector<hsize_t> offset(rank), count(rank);
@@ -191,18 +227,14 @@ template<typename T> void HDF5Dataset<T>::getMatrix( const std::vector<size_t> &
   if (H5Sselect_hyperslab(memspace, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL) < 0)
     throw HDF5Exception("Could not select hyperslab in dataspace");
 
-  if (H5Dread(group(), h5nativeType<T>(), memspace, dataspace, H5P_DEFAULT, buffer) < 0)
-    throw HDF5Exception("Could not read data from dataset");
-}
 
-template<typename T> T HDF5Dataset<T>::getScalar( const std::vector<size_t> &pos )
-{
-  T value;
-  std::vector<size_t> size(ndims(),1);
-
-  getMatrix(pos, size, &value);
-
-  return value;
+  if (read) {
+    if (H5Dread(group(), h5nativeType<T>(), memspace, dataspace, H5P_DEFAULT, buffer) < 0)
+      throw HDF5Exception("Could not read data from dataset");
+  } else {
+    if (H5Dwrite(group(), h5nativeType<T>(), memspace, dataspace, H5P_DEFAULT, buffer) < 0)
+      throw HDF5Exception("Could not write data to dataset");
+  }    
 }
 
 #endif
