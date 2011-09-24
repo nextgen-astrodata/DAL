@@ -22,6 +22,8 @@ class BeamFormedFile: public HDF5File {
 public:
   BeamFormedFile( const std::string &filename, enum fileMode mode = READ );
 
+  // Common LOFAR attributes (CLA)
+
   Attribute<std::string>  telescope();
   Attribute<std::string>  observer();
 
@@ -54,9 +56,36 @@ public:
   Attribute<std::string>  systemVersion();
   Attribute<std::string>  pipelineName();
   Attribute<std::string>  pipelineVersion();
+  Attribute<std::string>  ICDNumber();
+  Attribute<std::string>  ICDVersion();
   Attribute<std::string>  notes();
 
-  SAPGroup                sap( unsigned nr );
+  Attribute<std::string>  createOfflineOnline();
+  Attribute<std::string>  BFFormat();
+  Attribute<std::string>  BFVersion();
+
+  Attribute<std::string>  expTimeStartUTC();
+  Attribute<double>       expTimeStartMJD();
+  Attribute<std::string>  expTimeStartTAI();
+
+  Attribute<std::string>  expTimeEndUTC();
+  Attribute<double>       expTimeEndMJD();
+  Attribute<std::string>  expTimeEndTAI();
+
+  Attribute<double>       totalIntegrationTime();
+
+  Attribute<std::string>  obsDatatype();
+
+  Attribute<double>       subArrayPointingDiameter();
+  Attribute<double>       bandwidth();
+  Attribute<double>       beamDiameter();
+
+  AttributeV<double>      weatherTemperature();
+  AttributeV<double>      weatherHumidity();
+  AttributeV<double>      systemTemperature();
+
+  Attribute<unsigned>     nofSubArrayPointing();
+  SAPGroup                subArrayPointing( unsigned nr );
 };
 
 class SAPGroup: public HDF5Group {

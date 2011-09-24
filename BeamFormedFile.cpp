@@ -113,6 +113,11 @@ Attribute<string> BeamFormedFile::filterSelection()
   return Attribute<string>(group(), "FILTER_SELECTION");
 }
 
+Attribute<string> BeamFormedFile::target()
+{
+  return Attribute<string>(group(), "TARGET");
+}
+
 Attribute<string> BeamFormedFile::systemVersion()
 {
   return Attribute<string>(group(), "SYSTEM_VERSION");
@@ -128,17 +133,112 @@ Attribute<string> BeamFormedFile::pipelineVersion()
   return Attribute<string>(group(), "PIPELINE_VERSION");
 }
 
+Attribute<string> BeamFormedFile::ICDNumber()
+{
+  return Attribute<string>(group(), "ICD_NUMBER");
+}
+
+Attribute<string> BeamFormedFile::ICDVersion()
+{
+  return Attribute<string>(group(), "ICD_VERSION");
+}
+
 Attribute<string> BeamFormedFile::notes()
 {
   return Attribute<string>(group(), "NOTES");
 }
 
-Attribute<string> BeamFormedFile::target()
+Attribute<string> BeamFormedFile::createOfflineOnline()
 {
-  return Attribute<string>(group(), "TARGET");
+  return Attribute<string>(group(), "CREATE_OFFLINE_ONLINE");
 }
 
-SAPGroup BeamFormedFile::sap( unsigned nr )
+Attribute<string> BeamFormedFile::BFFormat()
+{
+  return Attribute<string>(group(), "BF_FORMAT");
+}
+
+Attribute<string> BeamFormedFile::BFVersion()
+{
+  return Attribute<string>(group(), "BF_VERSION");
+}
+
+Attribute<string> BeamFormedFile::expTimeStartUTC()
+{
+  return Attribute<string>(group(), "EXPTIME_START_UTC");
+}
+
+Attribute<double> BeamFormedFile::expTimeStartMJD()
+{
+  return Attribute<double>(group(), "EXPTIME_START_MJD");
+}
+
+Attribute<string> BeamFormedFile::expTimeStartTAI()
+{
+  return Attribute<string>(group(), "EXPTIME_START_TAI");
+}
+
+Attribute<string> BeamFormedFile::expTimeEndUTC()
+{
+  return Attribute<string>(group(), "EXPTIME_END_UTC");
+}
+
+Attribute<double> BeamFormedFile::expTimeEndMJD()
+{
+  return Attribute<double>(group(), "EXPTIME_END_MJD");
+}
+
+Attribute<string> BeamFormedFile::expTimeEndTAI()
+{
+  return Attribute<string>(group(), "EXPTIME_END_TAI");
+}
+
+Attribute<double> BeamFormedFile::totalIntegrationTime()
+{
+  return Attribute<double>(group(), "TOTAL_INTEGRATION_TIME");
+}
+
+Attribute<string> BeamFormedFile::obsDatatype()
+{
+  return Attribute<string>(group(), "OBS_DATATYPE");
+}
+
+Attribute<double> BeamFormedFile::subArrayPointingDiameter()
+{
+  return Attribute<double>(group(), "SUB_ARRAY_POINTING_DIAMETER");
+}
+
+Attribute<double> BeamFormedFile::bandwidth()
+{
+  return Attribute<double>(group(), "BANDWIDTH");
+}
+
+Attribute<double> BeamFormedFile::beamDiameter()
+{
+  return Attribute<double>(group(), "BEAM_DIAMETER");
+}
+
+AttributeV<double> BeamFormedFile::weatherTemperature()
+{
+  return AttributeV<double>(group(), "WEATHER_TEMPERATURE");
+}
+
+AttributeV<double> BeamFormedFile::weatherHumidity()
+{
+  return AttributeV<double>(group(), "WEATHER_HUMIDITY");
+}
+
+AttributeV<double> BeamFormedFile::systemTemperature()
+{
+  return AttributeV<double>(group(), "SYSTEM_TEMPERATURE");
+}
+
+Attribute<unsigned> BeamFormedFile::nofSubArrayPointing()
+{
+  return Attribute<unsigned>(group(), "NOF_SUB_ARRAY_POINTING");
+}
+
+SAPGroup BeamFormedFile::subArrayPointing( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "SUB_ARRAY_POINTING_%03u", nr);
