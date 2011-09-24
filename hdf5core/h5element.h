@@ -2,7 +2,7 @@
 #define __H5ELEMENT__
 
 #include <hdf5.h>
-#include "sys/h5attribute.h"
+#include "h5attribute.h"
 
 /*
  * Represents an element inside a group.

@@ -3,11 +3,11 @@
 
 #include <string>
 #include <hdf5.h>
-#include "HDF5Group.h"
+#include "HDF5Node.h"
 #include "hdf5core/h5element.h"
 #include "hdf5core/hid_gc.h"
 
-class HDF5File: public HDF5Group {
+class HDF5File: public HDF5Node {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
 

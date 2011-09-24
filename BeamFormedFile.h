@@ -130,7 +130,7 @@ public:
   Attribute<unsigned>     nofSamples();
 
 protected:
-  StokesGroup( const hid_gc &parent, const std::string &name ): HDF5Dataset(parent, name) {}
+  StokesGroup( const hid_gc &parent, const std::string &name ): HDF5Dataset<float>(parent, name) {}
 
   friend class BeamGroup;
 };

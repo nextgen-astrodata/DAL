@@ -7,7 +7,7 @@ typedef unsigned long size_t;
 %include "exception.i"
 
 %{
-#include "sys/h5exception.h"
+#include "hdf5core/h5exception.h"
 %}
 
 %exception {
@@ -41,7 +41,7 @@ namespace std {
 
 %rename(get_hid_t) operator hid_t;
 
-%include h5element.h
+%include hdf5core/h5element.h
 
 %template(AttributeBool)      Attribute<bool>;
 %template(AttributeUnsigned)  Attribute<unsigned>;
@@ -51,9 +51,9 @@ namespace std {
 %template(AttributeVUnsigned) AttributeV<unsigned>;
 %template(AttributeVString)   AttributeV<std::string>;
 
-%include HDF5Group.h
+%include HDF5Node.h
 %include HDF5File.h
-%include HDF5SubGroup.h
+%include HDF5Group.h
 %include HDF5Dataset.h
 
 %template(HDF5DatasetFloat)   HDF5Dataset<float>;

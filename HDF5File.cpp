@@ -7,8 +7,8 @@ HDF5File::HDF5File( const string &filename, enum HDF5File::fileMode mode )
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
   // completed: any open group identifiers (etc) will remain functioning)
-  HDF5Group(""),
-  _group(hid_gc(open(filename, mode), H5Fclose, mode == CREATE ? "Could not create HDF5 file" : "Could not open HDF5 file")),
+  HDF5Node(""),
+  _group(hid_gc(open(filename, mode), H5Fclose, mode == CREATE ? "Could not create file" : "Could not open file")),
   filename(filename),
   fileMode(mode)
 {
