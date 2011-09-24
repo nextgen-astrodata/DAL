@@ -37,6 +37,17 @@ void HDF5Group::remove() const {
     throw HDF5Exception("Could not delete group"); 
 }
 
+void HDF5Group::set( const HDF5Group &other ) {
+  if (exists()) {
+    // maybe rename the attribute instead, in case the copying fails?
+    remove();
+  }
+
+  // H5Ocopy allows us to copy all properties, subgroups, etc, even across files
+  if (H5Ocopy(other.parent, other._name.c_str(), parent, _name.c_str(), H5P_DEFAULT, H5P_DEFAULT) < 0)
+    throw HDF5Exception("Could not copy element");
+}
+
 hid_gc *HDF5Group::open( hid_t parent, const string &name ) const
 {
   return new hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group");

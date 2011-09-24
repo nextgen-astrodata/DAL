@@ -21,7 +21,7 @@ public:
   bool exists() const { return H5Aexists(container, _name.c_str()) > 0; }
 
   // useful for porting, repairing, or otherwise modifying files on a structural level
-  void remove() const { if (H5Adelete(container, _name.c_str()) < 0) throw HDF5Exception("Could not delete atttribute"); }
+  void remove() const { if (H5Adelete(container, _name.c_str()) < 0) throw HDF5Exception("Could not delete element"); }
 
 protected:
   Element( const hid_gc &container, const std::string &name ): container(container), _name(name) {}
