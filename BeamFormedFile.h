@@ -36,7 +36,7 @@ public:
 
   Attribute<double>       totalIntegrationTime();
 
-  Attribute<std::string>  obsDatatype();
+  Attribute<std::string>  observationDatatype();
 
   Attribute<double>       subArrayPointingDiameter();
   Attribute<double>       bandwidth();
@@ -46,7 +46,7 @@ public:
   AttributeV<double>      weatherHumidity();
   AttributeV<double>      systemTemperature();
 
-  Attribute<unsigned>     nofSubArrayPointing();
+  Attribute<unsigned>     nofSubArrayPointings();
   SAPGroup                subArrayPointing( unsigned nr );
 };
 

@@ -58,9 +58,9 @@ Attribute<double> BeamFormedFile::totalIntegrationTime()
   return Attribute<double>(group(), "TOTAL_INTEGRATION_TIME");
 }
 
-Attribute<string> BeamFormedFile::obsDatatype()
+Attribute<string> BeamFormedFile::observationDatatype()
 {
-  return Attribute<string>(group(), "OBS_DATATYPE");
+  return Attribute<string>(group(), "OBSERVATION_DATATYPE");
 }
 
 Attribute<double> BeamFormedFile::subArrayPointingDiameter()
@@ -93,9 +93,9 @@ AttributeV<double> BeamFormedFile::systemTemperature()
   return AttributeV<double>(group(), "SYSTEM_TEMPERATURE");
 }
 
-Attribute<unsigned> BeamFormedFile::nofSubArrayPointing()
+Attribute<unsigned> BeamFormedFile::nofSubArrayPointings()
 {
-  return Attribute<unsigned>(group(), "NOF_SUB_ARRAY_POINTING");
+  return Attribute<unsigned>(group(), "NOF_SUB_ARRAY_POINTINGS");
 }
 
 SAPGroup BeamFormedFile::subArrayPointing( unsigned nr )
