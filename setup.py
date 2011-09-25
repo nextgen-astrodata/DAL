@@ -16,9 +16,9 @@ BeamFormedFile_module = Extension('_BeamFormedFile',
                            )
 
 setup (name = 'BeamFormedFile',
-       version = '0.1',
+       version = '1.0',
        author      = "dr. Jan David Mol, ASTRON, the Netherlands",
-       description = """Bindings of newDAL""",
+       description = """Bindings of LDA""",
        ext_modules = [BeamFormedFile_module],
        py_modules = ["BeamFormedFile"],
        )

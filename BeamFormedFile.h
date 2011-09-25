@@ -4,7 +4,7 @@
 #include <string>
 #include <hdf5.h>
 #include "hdf5core/h5attribute.h"
-#include "HDF5File.h"
+#include "CLAFile.h"
 #include "HDF5Group.h"
 #include "HDF5Dataset.h"
 
@@ -18,47 +18,9 @@ class SAPGroup;
 class BeamGroup;
 class StokesGroup;
 
-class BeamFormedFile: public HDF5File {
+class BeamFormedFile: public CLAFile {
 public:
   BeamFormedFile( const std::string &filename, enum fileMode mode = READ );
-
-  // Common LOFAR attributes (CLA)
-
-  Attribute<std::string>  telescope();
-  Attribute<std::string>  observer();
-
-  Attribute<std::string>  projectID();
-  Attribute<std::string>  projectTitle();
-  Attribute<std::string>  projectPI();
-  Attribute<std::string>  projectCOI();
-  Attribute<std::string>  projectContact();
-
-  Attribute<std::string>  observationID();
-
-  Attribute<std::string>  observationStartUTC();
-  Attribute<double>       observationStartMJD();
-  Attribute<std::string>  observationStartTAI();
-
-  Attribute<std::string>  observationEndUTC();
-  Attribute<double>       observationEndMJD();
-  Attribute<std::string>  observationEndTAI();
-
-  Attribute<unsigned>     observationNofStations();
-  AttributeV<std::string> observationStationsList();
-
-  Attribute<unsigned>     observationNofBitsPerSample();
-  Attribute<double>       clockFrequency();
-  Attribute<std::string>  clockFrequencyUnit();
-  Attribute<std::string>  antennaSet();
-  Attribute<std::string>  filterSelection();
-  Attribute<std::string>  target();
-
-  Attribute<std::string>  systemVersion();
-  Attribute<std::string>  pipelineName();
-  Attribute<std::string>  pipelineVersion();
-  Attribute<std::string>  ICDNumber();
-  Attribute<std::string>  ICDVersion();
-  Attribute<std::string>  notes();
 
   Attribute<std::string>  createOfflineOnline();
   Attribute<std::string>  BFFormat();
