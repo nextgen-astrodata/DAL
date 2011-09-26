@@ -13,11 +13,6 @@ public:
 
   void flush() const;
 
-  Attribute<std::string> groupType() const;
-  Attribute<std::string> fileName() const;
-  Attribute<std::string> fileDate() const;
-  Attribute<std::string> fileType() const;
-
 protected:
   HDF5File( const std::string &filename, enum fileMode mode );
 

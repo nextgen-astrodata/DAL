@@ -14,6 +14,11 @@ class CLAFile: public HDF5File {
 public:
   CLAFile( const std::string &filename, enum fileMode mode = READ );
 
+  Attribute<std::string> groupType();
+  Attribute<std::string> fileName();
+  Attribute<std::string> fileDate();
+  Attribute<std::string> fileType();
+
   Attribute<std::string>  telescope();
   Attribute<std::string>  observer();
 

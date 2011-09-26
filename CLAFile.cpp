@@ -8,6 +8,26 @@ CLAFile::CLAFile( const string &filename, enum HDF5File::fileMode mode )
 {
 }
 
+Attribute<string> CLAFile::groupType()
+{
+  return Attribute<string>(group(), "GROUPTYPE");
+}
+
+Attribute<string> CLAFile::fileName()
+{
+  return Attribute<string>(group(), "FILENAME");
+}
+
+Attribute<string> CLAFile::fileDate()
+{
+  return Attribute<string>(group(), "FILEDATE");
+}
+
+Attribute<string> CLAFile::fileType()
+{
+  return Attribute<string>(group(), "FILETYPE");
+}
+
 Attribute<string> CLAFile::telescope()
 {
   return Attribute<string>(group(), "TELESCOPE");

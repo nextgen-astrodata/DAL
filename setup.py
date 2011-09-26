@@ -8,7 +8,7 @@ from distutils.core import setup, Extension
 
 
 BeamFormedFile_module = Extension('_BeamFormedFile',
-                           sources=['BeamFormedFile.i', 'BeamFormedFile.cpp', 'HDF5File.cpp', 'HDF5Group.cpp'],
+                           sources=['BeamFormedFile.i', 'CLAFile.cpp', 'BeamFormedFile.cpp', 'HDF5File.cpp', 'HDF5Group.cpp'],
                            include_dirs=['/data/sys/opt/cep/hdf5/include'],
                            libraries=['hdf5'],
                            swig_opts=['-c++'],

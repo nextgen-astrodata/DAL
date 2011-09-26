@@ -33,23 +33,3 @@ void HDF5File::flush() const
 {
   H5Fflush(group(), H5F_SCOPE_GLOBAL);
 }
-
-Attribute<string> HDF5File::groupType() const
-{
-  return Attribute<string>(group(), "GROUPTYPE");
-}
-
-Attribute<string> HDF5File::fileName() const
-{
-  return Attribute<string>(group(), "FILENAME");
-}
-
-Attribute<string> HDF5File::fileDate() const
-{
-  return Attribute<string>(group(), "FILEDATE");
-}
-
-Attribute<string> HDF5File::fileType() const
-{
-  return Attribute<string>(group(), "FILETYPE");
-}
