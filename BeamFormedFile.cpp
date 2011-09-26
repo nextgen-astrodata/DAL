@@ -106,6 +106,26 @@ SAPGroup BeamFormedFile::subArrayPointing( unsigned nr )
   return SAPGroup(group(), string(buf));
 }
 
+SysLogGroup BeamFormedFile::sysLog()
+{
+  return SysLogGroup(group(), "SYS_LOG");
+}
+
+Attribute<bool> ProcessHistoryGroup::parsetObs()
+{
+  return Attribute<bool>(group(), "PARSET_OBS");
+}
+
+Attribute<bool> ProcessHistoryGroup::logPresto()
+{
+  return Attribute<bool>(group(), "LOG_PRESTO");
+}
+
+Attribute<bool> ProcessHistoryGroup::parFile()
+{
+  return Attribute<bool>(group(), "PARFILE");
+}
+
 Attribute<unsigned> SAPGroup::nofStations()
 {
   return Attribute<unsigned>(group(), "NOF_STATIONS");

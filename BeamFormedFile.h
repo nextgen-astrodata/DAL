@@ -14,6 +14,8 @@
  */
 
 class BeamFormedFile;
+class SysLogGroup;
+class ProcessHistoryGroup;
 class SAPGroup;
 class BeamGroup;
 class StokesGroup;
@@ -48,6 +50,28 @@ public:
 
   Attribute<unsigned>     nofSubArrayPointings();
   SAPGroup                subArrayPointing( unsigned nr );
+
+  SysLogGroup             sysLog();
+};
+
+class SysLogGroup: public HDF5Group {
+protected:
+  SysLogGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+
+  friend class BeamFormedFile;
+};
+
+class ProcessHistoryGroup: public HDF5Group {
+public:
+  Attribute<bool>         parsetObs();
+  Attribute<bool>         logPresto();
+  Attribute<bool>         parFile();
+
+protected:
+  ProcessHistoryGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+
+  friend class SAPGroup;
+  friend class BeamGroup;
 };
 
 class SAPGroup: public HDF5Group {
