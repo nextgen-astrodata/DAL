@@ -298,6 +298,119 @@ StokesGroup BeamGroup::stokes( unsigned nr )
   return StokesGroup(group(), string(buf));
 }
 
+CoordinatesGroup BeamGroup::coordinates()
+{
+  return CoordinatesGroup(group(), "COORDINATES");
+}
+
+AttributeV<double> CoordinatesGroup::refLocationValue()
+{
+  return AttributeV<double>(group(), "REF_LOCATION_VALUE");
+}
+
+AttributeV<string> CoordinatesGroup::refLocationUnit()
+{
+  return AttributeV<string>(group(), "REF_LOCATION_UNIT");
+}
+
+Attribute<string> CoordinatesGroup::refLocationFrame()
+{
+  return Attribute<string>(group(), "REF_LOCATION_FRAME");
+}
+
+Attribute<double> CoordinatesGroup::refTimeValue()
+{
+  return Attribute<double>(group(), "REF_TIME_VALUE");
+}
+
+Attribute<string> CoordinatesGroup::refTimeUnit()
+{
+  return Attribute<string>(group(), "REF_TIME_UNIT");
+}
+
+Attribute<string> CoordinatesGroup::refTimeFrame()
+{
+  return Attribute<string>(group(), "REF_TIME_FRAME");
+}
+
+Attribute<unsigned> CoordinatesGroup::nofCoordinates()
+{
+  return Attribute<unsigned>(group(), "NOF_COORDINATES");
+}
+
+Attribute<unsigned> CoordinatesGroup::nofAxes()
+{
+  return Attribute<unsigned>(group(), "NOF_AXES");
+}
+
+AttributeV<string> CoordinatesGroup::coordinateTypes()
+{
+  return AttributeV<string>(group(), "COORDINATE_TYPES");
+}
+
+CoordinateTypeGroup CoordinatesGroup::coordinate( unsigned nr )
+{
+  char buf[128];
+  snprintf(buf, sizeof buf, "COORDINATE_%01u", nr);
+
+  return CoordinateTypeGroup(group(), string(buf));
+}
+
+Attribute<string> CoordinateTypeGroup::coordinateType()
+{
+  return Attribute<string>(group(), "COORDINATE_TYPE");
+}
+
+AttributeV<string> CoordinateTypeGroup::storageType()
+{
+  return AttributeV<string>(group(), "STORAGE_TYPE");
+}
+
+Attribute<unsigned> CoordinateTypeGroup::nofAxes()
+{
+  return Attribute<unsigned>(group(), "NOF_AXES");
+}
+
+AttributeV<string> CoordinateTypeGroup::axisNames()
+{
+  return AttributeV<string>(group(), "AXIS_NAMES");
+}
+
+AttributeV<string> CoordinateTypeGroup::axisUnits()
+{
+  return AttributeV<string>(group(), "AXIS_UNITS");
+}
+
+AttributeV<double> CoordinateTypeGroup::referenceValue()
+{
+  return AttributeV<double>(group(), "REFERENCE_VALUE");
+}
+
+AttributeV<double> CoordinateTypeGroup::referencePixel()
+{
+  return AttributeV<double>(group(), "REFERENCE_PIXEL");
+}
+
+AttributeV<double> CoordinateTypeGroup::increment()
+{
+  return AttributeV<double>(group(), "INCREMENT");
+}
+
+AttributeV<double> CoordinateTypeGroup::pc()
+{
+  return AttributeV<double>(group(), "PC");
+}
+
+AttributeV<double> CoordinateTypeGroup::axisValuesPixel()
+{
+  return AttributeV<double>(group(), "AXIS_VALUES_PIXEL");
+}
+
+AttributeV<double> CoordinateTypeGroup::axisValuesWorld()
+{
+  return AttributeV<double>(group(), "AXIS_VALUES_WORLD");
+}
+
 Attribute<string> StokesGroup::stokesComponent()
 {
   return Attribute<string>(group(), "STOKES_COMPONENT");

@@ -18,6 +18,8 @@ class SysLogGroup;
 class ProcessHistoryGroup;
 class SAPGroup;
 class BeamGroup;
+class CoordinatesGroup;
+class CoordinateTypeGroup;
 class StokesGroup;
 
 class BeamFormedFile: public CLAFile {
@@ -131,10 +133,56 @@ public:
   Attribute<std::string>  signalSum();
   StokesGroup             stokes( unsigned nr );
 
+  CoordinatesGroup        coordinates();
+
 protected:
   BeamGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
 
   friend class SAPGroup;
+};
+
+class CoordinatesGroup: public HDF5Group {
+public:
+  AttributeV<double>      refLocationValue();
+  AttributeV<std::string> refLocationUnit();
+  Attribute<std::string>  refLocationFrame();
+
+  Attribute<double>       refTimeValue();
+  Attribute<std::string>  refTimeUnit();
+  Attribute<std::string>  refTimeFrame();
+
+  Attribute<unsigned>     nofCoordinates();
+  Attribute<unsigned>     nofAxes();
+  AttributeV<std::string> coordinateTypes();
+
+  CoordinateTypeGroup     coordinate( unsigned nr );
+
+protected:
+  CoordinatesGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+
+  friend class BeamGroup;
+};
+
+class CoordinateTypeGroup: public HDF5Group {
+public:
+  Attribute<std::string>  coordinateType();
+  AttributeV<std::string> storageType();
+
+  Attribute<unsigned>     nofAxes();
+  AttributeV<std::string> axisNames();
+  AttributeV<std::string> axisUnits();
+
+  AttributeV<double>      referenceValue();
+  AttributeV<double>      referencePixel();
+  AttributeV<double>      increment();
+  AttributeV<double>      pc();
+  AttributeV<double>      axisValuesPixel();
+  AttributeV<double>      axisValuesWorld();
+
+protected:
+  CoordinateTypeGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+
+  friend class CoordinatesGroup;
 };
 
 class StokesGroup: public HDF5Dataset<float> {
