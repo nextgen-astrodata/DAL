@@ -1,0 +1,16 @@
+Requirements:
+        - swig
+        - python-dev
+        - numpy
+        - libhdf5-*-dev
+        - libhdf5-*
+
+To install:
+        python setup.py install
+
+To build in-place and test:
+        python setup.py build
+        export PYTHONPATH=$PYTHONPATH:`echo $PWD/build/lib*` # just a way to add build/lib-platform/
+        cd test
+        python example.py
+
