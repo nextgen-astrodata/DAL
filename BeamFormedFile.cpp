@@ -353,6 +353,22 @@ CoordinateTypeGroup CoordinatesGroup::coordinate( unsigned nr )
   char buf[128];
   snprintf(buf, sizeof buf, "COORDINATE_%01u", nr);
 
+  const vector<string> types =
+    coordinateTypes().exists()
+        ? coordinateTypes().get()
+        : vector<string>();
+
+  if (types.size() > nr) {
+    if (types[nr] == "Time") {
+      return TimeCoordinateGroup(group(), string(buf));
+    }
+
+    if (types[nr] == "Spectral") {
+      return SpectralCoordinateGroup(group(), string(buf));
+    }
+  }  
+
+  // unknown type
   return CoordinateTypeGroup(group(), string(buf));
 }
 

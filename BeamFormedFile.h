@@ -20,6 +20,8 @@ class SAPGroup;
 class BeamGroup;
 class CoordinatesGroup;
 class CoordinateTypeGroup;
+class TimeCoordinateGroup;
+class SpectralCoordinateGroup;
 class StokesGroup;
 
 class BeamFormedFile: public CLAFile {
@@ -181,6 +183,20 @@ public:
 
 protected:
   CoordinateTypeGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+
+  friend class CoordinatesGroup;
+};
+
+class TimeCoordinateGroup: public CoordinateTypeGroup {
+protected:
+  TimeCoordinateGroup( const hid_gc &parent, const std::string &name ): CoordinateTypeGroup(parent, name) {}
+
+  friend class CoordinatesGroup;
+};
+
+class SpectralCoordinateGroup: public CoordinateTypeGroup {
+protected:
+  SpectralCoordinateGroup( const hid_gc &parent, const std::string &name ): CoordinateTypeGroup(parent, name) {}
 
   friend class CoordinatesGroup;
 };
