@@ -21,8 +21,29 @@ typedef unsigned long size_t;
 }
 
 // use carrays for arrays for now. primitive, but better than nothing.
-%include "carrays.i"
-%array_class(float,ArrayFloat);
+// (use if numpy is not available)
+//%include "carrays.i"
+//%array_class(float,ArrayFloat);
+
+%{
+  #define SWIG_FILE_WITH_INIT
+  #include "BeamFormedFile.h"
+%}
+
+%include "numpy.i"
+
+%init %{
+  import_array();
+%}
+
+// SWIG does not allow syntax for numpy.i supporting true
+// multidimentional output arrays. So we use INPLACE_ARRAY for everything
+// for consistency.
+%apply (int DIM1, float* INPLACE_ARRAY1) {(int dim1, float *outbuffer1)}
+%apply (int DIM1, int DIM2, float* INPLACE_ARRAY2) {(int dim1, int dim2, float *outbuffer2)}
+
+%apply (int DIM1, float* IN_ARRAY1) {(int dim1, const float *inbuffer1)}
+%apply (int DIM1, int DIM2, float* IN_ARRAY2) {(int dim1, int dim2, const float *inbuffer2)}
 
 %include "std_string.i"
 
@@ -34,10 +55,6 @@ namespace std {
   %template(VectorLong)         vector<long>;
   %template(VectorString)       vector<string>;
 };
-
-%{
-#include "BeamFormedFile.h"
-%}
 
 %rename(get_hid_t) operator hid_t;
 

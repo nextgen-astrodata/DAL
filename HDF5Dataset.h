@@ -47,6 +47,14 @@ public:
   void getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer );
   void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
 
+  // get/set a 2D slice of values (macro for SWIG/numpy binding)
+  void get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2 );
+  void set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2 );
+
+  // get/set a 1D slice of values (macro for SWIG/numpy binding)
+  void get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1 );
+  void set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1 );
+
   // get/set a single value
   T getScalar( const std::vector<size_t> &pos );
   void setScalar( const std::vector<size_t> &pos, const T &value );
@@ -174,6 +182,44 @@ template<typename T> void HDF5Dataset<T>::getMatrix( const std::vector<size_t> &
 template<typename T> void HDF5Dataset<T>::setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer )
 {
   matrixIO(pos, size, const_cast<T *>(buffer), false);
+}
+
+template<typename T> void HDF5Dataset<T>::get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2 )
+{
+  std::vector<size_t> size(pos.size(),1);
+
+  size[0] = dim1;
+  size[1] = dim2;
+
+  getMatrix(pos, size, outbuffer2);
+}
+
+template<typename T> void HDF5Dataset<T>::set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2 )
+{
+  std::vector<size_t> size(pos.size(),1);
+
+  size[0] = dim1;
+  size[1] = dim2;
+
+  setMatrix(pos, size, inbuffer2);
+}
+
+template<typename T> void HDF5Dataset<T>::get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1 )
+{
+  std::vector<size_t> size(pos.size(),1);
+
+  size[0] = dim1;
+
+  getMatrix(pos, size, outbuffer1);
+}
+
+template<typename T> void HDF5Dataset<T>::set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1 )
+{
+  std::vector<size_t> size(pos.size(),1);
+
+  size[0] = dim1;
+
+  setMatrix(pos, size, inbuffer1);
 }
 
 template<typename T> T HDF5Dataset<T>::getScalar( const std::vector<size_t> &pos )

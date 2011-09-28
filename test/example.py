@@ -1,4 +1,5 @@
 import BeamFormedFile
+import numpy
 from itertools import count
 
 f = BeamFormedFile.BeamFormedFile("test.h5")
@@ -10,7 +11,6 @@ for sapnr in count():
 
   if not sap.exists():
     break
-
 
   print "SAP %u points to (%.2f, %.2f)" % (sapnr, sap.pointRA().get(), sap.pointDEC().get())
 
@@ -32,12 +32,8 @@ for sapnr in count():
 
       print "        Stokes %s has %u subbands and %u samples" % (stokes.stokesComponent().get(), stokes.nofSubbands().get(), stokes.nofSamples().get())
 
-      # ArrayFloat has no bounds check, nor does it act
-      # like a list! So be careful to only use valid
-      # and nonnegative indices
-      x = BeamFormedFile.ArrayFloat(4)
-      stokes.getMatrix([0,0],[4,1],x);
+      x = numpy.array([[0,0],[0,0]], dtype=numpy.float32)
+      stokes.get2D([0,0],x);
 
-      print "            First few samples of the first channel are %s" % ([x[i] for i in range(4)],)
-
+      print "            First two samples of the first two channels are:\n%s" % (x,)
 
