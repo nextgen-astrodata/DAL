@@ -176,7 +176,8 @@ template<> inline void Attribute<std::string>::set( const std::string &value ) c
     create ? "Could not create atttribute"
            : "Could not open attribute");
 
-  if (H5Awrite(attr, datatype, value.c_str()) < 0) // might need &(value.c_str())
+  const char *cstr = value.c_str();
+  if (H5Awrite(attr, datatype, &cstr) < 0)
     throw HDF5Exception("Could not write attribute");
 }
 
