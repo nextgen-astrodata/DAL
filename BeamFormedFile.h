@@ -4,7 +4,7 @@
 #include <string>
 #include <hdf5.h>
 #include "hdf5core/h5attribute.h"
-#include "CLAFile.h"
+#include "CommonAttributesFile.h"
 #include "HDF5Group.h"
 #include "HDF5Dataset.h"
 
@@ -24,7 +24,7 @@ class TimeCoordinateGroup;
 class SpectralCoordinateGroup;
 class StokesGroup;
 
-class BeamFormedFile: public CLAFile {
+class BeamFormedFile: public CommonAttributesFile {
 public:
   BeamFormedFile( const std::string &filename, enum fileMode mode = READ );
 

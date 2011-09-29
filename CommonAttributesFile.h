@@ -10,9 +10,9 @@
  * These classes implement the Common LOFAR Atttributes.
  */
 
-class CLAFile: public HDF5File {
+class CommonAttributesFile: public HDF5File {
 public:
-  CLAFile( const std::string &filename, enum fileMode mode = READ );
+  CommonAttributesFile( const std::string &filename, enum fileMode mode = READ );
 
   Attribute<std::string> groupType();
   Attribute<std::string> fileName();

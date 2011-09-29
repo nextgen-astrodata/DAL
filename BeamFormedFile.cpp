@@ -4,7 +4,7 @@ using namespace std;
 
 BeamFormedFile::BeamFormedFile( const string &filename, enum HDF5File::fileMode mode )
 :
-  CLAFile(filename, mode)
+  CommonAttributesFile(filename, mode)
 {
 }
 

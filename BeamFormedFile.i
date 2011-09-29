@@ -75,6 +75,6 @@ namespace std {
 
 %template(HDF5DatasetFloat)   HDF5Dataset<float>;
 
-%include CLAFile.h
+%include CommonAttributesFile.h
 %include BeamFormedFile.h
 

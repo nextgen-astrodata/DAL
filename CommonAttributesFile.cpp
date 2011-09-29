@@ -1,169 +1,169 @@
-#include "CLAFile.h"
+#include "CommonAttributesFile.h"
 
 using namespace std;
 
-CLAFile::CLAFile( const string &filename, enum HDF5File::fileMode mode )
+CommonAttributesFile::CommonAttributesFile( const string &filename, enum HDF5File::fileMode mode )
 :
   HDF5File(filename, mode)
 {
 }
 
-Attribute<string> CLAFile::groupType()
+Attribute<string> CommonAttributesFile::groupType()
 {
   return Attribute<string>(group(), "GROUPTYPE");
 }
 
-Attribute<string> CLAFile::fileName()
+Attribute<string> CommonAttributesFile::fileName()
 {
   return Attribute<string>(group(), "FILENAME");
 }
 
-Attribute<string> CLAFile::fileDate()
+Attribute<string> CommonAttributesFile::fileDate()
 {
   return Attribute<string>(group(), "FILEDATE");
 }
 
-Attribute<string> CLAFile::fileType()
+Attribute<string> CommonAttributesFile::fileType()
 {
   return Attribute<string>(group(), "FILETYPE");
 }
 
-Attribute<string> CLAFile::telescope()
+Attribute<string> CommonAttributesFile::telescope()
 {
   return Attribute<string>(group(), "TELESCOPE");
 }
 
-Attribute<string> CLAFile::observer()
+Attribute<string> CommonAttributesFile::observer()
 {
   return Attribute<string>(group(), "OBSERVER");
 }
 
-Attribute<string> CLAFile::projectID()
+Attribute<string> CommonAttributesFile::projectID()
 {
   return Attribute<string>(group(), "PROJECT_ID");
 }
 
-Attribute<string> CLAFile::projectTitle()
+Attribute<string> CommonAttributesFile::projectTitle()
 {
   return Attribute<string>(group(), "PROJECT_TITLE");
 }
 
-Attribute<string> CLAFile::projectPI()
+Attribute<string> CommonAttributesFile::projectPI()
 {
   return Attribute<string>(group(), "PROJECT_PI");
 }
 
-Attribute<string> CLAFile::projectCOI()
+Attribute<string> CommonAttributesFile::projectCOI()
 {
   return Attribute<string>(group(), "PROJECT_CO_I");
 }
 
-Attribute<string> CLAFile::projectContact()
+Attribute<string> CommonAttributesFile::projectContact()
 {
   return Attribute<string>(group(), "PROJECT_CONTACT");
 }
 
-Attribute<string> CLAFile::observationID()
+Attribute<string> CommonAttributesFile::observationID()
 {
   return Attribute<string>(group(), "OBSERVATION_ID");
 }
 
-Attribute<string> CLAFile::observationStartUTC()
+Attribute<string> CommonAttributesFile::observationStartUTC()
 {
   return Attribute<string>(group(), "OBSERVATION_START_UTC");
 }
 
-Attribute<double> CLAFile::observationStartMJD()
+Attribute<double> CommonAttributesFile::observationStartMJD()
 {
   return Attribute<double>(group(), "OBSERVATION_START_MJD");
 }
 
-Attribute<string> CLAFile::observationStartTAI()
+Attribute<string> CommonAttributesFile::observationStartTAI()
 {
   return Attribute<string>(group(), "OBSERVATION_START_TAI");
 }
 
-Attribute<string> CLAFile::observationEndUTC()
+Attribute<string> CommonAttributesFile::observationEndUTC()
 {
   return Attribute<string>(group(), "OBSERVATION_END_UTC");
 }
 
-Attribute<double> CLAFile::observationEndMJD()
+Attribute<double> CommonAttributesFile::observationEndMJD()
 {
   return Attribute<double>(group(), "OBSERVATION_END_MJD");
 }
 
-Attribute<string> CLAFile::observationEndTAI()
+Attribute<string> CommonAttributesFile::observationEndTAI()
 {
   return Attribute<string>(group(), "OBSERVATION_END_TAI");
 }
 
-Attribute<unsigned> CLAFile::observationNofStations()
+Attribute<unsigned> CommonAttributesFile::observationNofStations()
 {
   return Attribute<unsigned>(group(), "OBSERVATION_NOF_STATIONS");
 }
 
-AttributeV<string> CLAFile::observationStationsList()
+AttributeV<string> CommonAttributesFile::observationStationsList()
 {
   return AttributeV<string>(group(), "OBSERVATION_STATIONS_LIST");
 }
 
-Attribute<unsigned> CLAFile::observationNofBitsPerSample()
+Attribute<unsigned> CommonAttributesFile::observationNofBitsPerSample()
 {
   return Attribute<unsigned>(group(), "OBSERVATION_NOF_BITS_PER_SAMPLE");
 }
 
-Attribute<double> CLAFile::clockFrequency()
+Attribute<double> CommonAttributesFile::clockFrequency()
 {
   return Attribute<double>(group(), "CLOCK_FREQUENCY");
 }
 
-Attribute<string> CLAFile::clockFrequencyUnit()
+Attribute<string> CommonAttributesFile::clockFrequencyUnit()
 {
   return Attribute<string>(group(), "CLOCK_FREQUENCY_UNIT");
 }
 
-Attribute<string> CLAFile::antennaSet()
+Attribute<string> CommonAttributesFile::antennaSet()
 {
   return Attribute<string>(group(), "ANTENNA_SET");
 }
 
-Attribute<string> CLAFile::filterSelection()
+Attribute<string> CommonAttributesFile::filterSelection()
 {
   return Attribute<string>(group(), "FILTER_SELECTION");
 }
 
-Attribute<string> CLAFile::target()
+Attribute<string> CommonAttributesFile::target()
 {
   return Attribute<string>(group(), "TARGET");
 }
 
-Attribute<string> CLAFile::systemVersion()
+Attribute<string> CommonAttributesFile::systemVersion()
 {
   return Attribute<string>(group(), "SYSTEM_VERSION");
 }
 
-Attribute<string> CLAFile::pipelineName()
+Attribute<string> CommonAttributesFile::pipelineName()
 {
   return Attribute<string>(group(), "PIPELINE_NAME");
 }
 
-Attribute<string> CLAFile::pipelineVersion()
+Attribute<string> CommonAttributesFile::pipelineVersion()
 {
   return Attribute<string>(group(), "PIPELINE_VERSION");
 }
 
-Attribute<string> CLAFile::ICDNumber()
+Attribute<string> CommonAttributesFile::ICDNumber()
 {
   return Attribute<string>(group(), "ICD_NUMBER");
 }
 
-Attribute<string> CLAFile::ICDVersion()
+Attribute<string> CommonAttributesFile::ICDVersion()
 {
   return Attribute<string>(group(), "ICD_VERSION");
 }
 
-Attribute<string> CLAFile::notes()
+Attribute<string> CommonAttributesFile::notes()
 {
   return Attribute<string>(group(), "NOTES");
 }
