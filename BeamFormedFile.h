@@ -14,15 +14,15 @@
  */
 
 class BeamFormedFile;
-class SysLogGroup;
-class ProcessHistoryGroup;
-class SAPGroup;
-class BeamGroup;
+class SysLog;
+class BF_ProcessingHistory;
+class BF_SubArrayPointing;
+class BF_BeamGroup;
 class CoordinatesGroup;
-class CoordinateTypeGroup;
-class TimeCoordinateGroup;
-class SpectralCoordinateGroup;
-class StokesGroup;
+class Coordinate;
+class TimeCoordinate;
+class SpectralCoordinate;
+class BF_StokesDataset;
 
 class BeamFormedFile: public CommonAttributesFile {
 public:
@@ -53,32 +53,32 @@ public:
   AttributeV<double>      systemTemperature();
 
   Attribute<unsigned>     nofSubArrayPointings();
-  SAPGroup                subArrayPointing( unsigned nr );
+  BF_SubArrayPointing                subArrayPointing( unsigned nr );
 
-  SysLogGroup             sysLog();
+  SysLog             sysLog();
 };
 
-class SysLogGroup: public HDF5Group {
+class SysLog: public HDF5Group {
 protected:
-  SysLogGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  SysLog( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
 
   friend class BeamFormedFile;
 };
 
-class ProcessHistoryGroup: public HDF5Group {
+class BF_ProcessingHistory: public HDF5Group {
 public:
   Attribute<bool>         parsetObs();
   Attribute<bool>         logPresto();
   Attribute<bool>         parFile();
 
 protected:
-  ProcessHistoryGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  BF_ProcessingHistory( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
 
-  friend class SAPGroup;
-  friend class BeamGroup;
+  friend class BF_SubArrayPointing;
+  friend class BF_BeamGroup;
 };
 
-class SAPGroup: public HDF5Group {
+class BF_SubArrayPointing: public HDF5Group {
 public:
   Attribute<unsigned>     nofStations();
   AttributeV<std::string> stationsList();
@@ -102,15 +102,15 @@ public:
   Attribute<std::string>  channelWidthUnit();
 
   Attribute<unsigned>     nofBeams();
-  BeamGroup               beam( unsigned nr );
+  BF_BeamGroup               beam( unsigned nr );
 
 protected:
-  SAPGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  BF_SubArrayPointing( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
 
   friend class BeamFormedFile;
 };
 
-class BeamGroup: public HDF5Group {
+class BF_BeamGroup: public HDF5Group {
 public:
   Attribute<unsigned>     nofStations();
   AttributeV<std::string> stationsList();
@@ -133,14 +133,14 @@ public:
   AttributeV<std::string> stokesComponents();
   Attribute<bool>         complexVoltages();
   Attribute<std::string>  signalSum();
-  StokesGroup             stokes( unsigned nr );
+  BF_StokesDataset             stokes( unsigned nr );
 
   CoordinatesGroup        coordinates();
 
 protected:
-  BeamGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  BF_BeamGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
 
-  friend class SAPGroup;
+  friend class BF_SubArrayPointing;
 };
 
 class CoordinatesGroup: public HDF5Group {
@@ -157,15 +157,15 @@ public:
   Attribute<unsigned>     nofAxes();
   AttributeV<std::string> coordinateTypes();
 
-  CoordinateTypeGroup     coordinate( unsigned nr );
+  Coordinate     coordinate( unsigned nr );
 
 protected:
   CoordinatesGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
 
-  friend class BeamGroup;
+  friend class BF_BeamGroup;
 };
 
-class CoordinateTypeGroup: public HDF5Group {
+class Coordinate: public HDF5Group {
 public:
   Attribute<std::string>  coordinateType();
   AttributeV<std::string> storageType();
@@ -182,26 +182,26 @@ public:
   AttributeV<double>      axisValuesWorld();
 
 protected:
-  CoordinateTypeGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  Coordinate( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
 
   friend class CoordinatesGroup;
 };
 
-class TimeCoordinateGroup: public CoordinateTypeGroup {
+class TimeCoordinate: public Coordinate {
 protected:
-  TimeCoordinateGroup( const hid_gc &parent, const std::string &name ): CoordinateTypeGroup(parent, name) {}
+  TimeCoordinate( const hid_gc &parent, const std::string &name ): Coordinate(parent, name) {}
 
   friend class CoordinatesGroup;
 };
 
-class SpectralCoordinateGroup: public CoordinateTypeGroup {
+class SpectralCoordinate: public Coordinate {
 protected:
-  SpectralCoordinateGroup( const hid_gc &parent, const std::string &name ): CoordinateTypeGroup(parent, name) {}
+  SpectralCoordinate( const hid_gc &parent, const std::string &name ): Coordinate(parent, name) {}
 
   friend class CoordinatesGroup;
 };
 
-class StokesGroup: public HDF5Dataset<float> {
+class BF_StokesDataset: public HDF5Dataset<float> {
 public:
   Attribute<std::string>  stokesComponent();
   AttributeV<unsigned>    nofChannels();
@@ -209,9 +209,9 @@ public:
   Attribute<unsigned>     nofSamples();
 
 protected:
-  StokesGroup( const hid_gc &parent, const std::string &name ): HDF5Dataset<float>(parent, name) {}
+  BF_StokesDataset( const hid_gc &parent, const std::string &name ): HDF5Dataset<float>(parent, name) {}
 
-  friend class BeamGroup;
+  friend class BF_BeamGroup;
 };
 
 #endif

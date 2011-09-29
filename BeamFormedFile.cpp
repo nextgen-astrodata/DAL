@@ -98,207 +98,207 @@ Attribute<unsigned> BeamFormedFile::nofSubArrayPointings()
   return Attribute<unsigned>(group(), "NOF_SUB_ARRAY_POINTINGS");
 }
 
-SAPGroup BeamFormedFile::subArrayPointing( unsigned nr )
+BF_SubArrayPointing BeamFormedFile::subArrayPointing( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "SUB_ARRAY_POINTING_%03u", nr);
 
-  return SAPGroup(group(), string(buf));
+  return BF_SubArrayPointing(group(), string(buf));
 }
 
-SysLogGroup BeamFormedFile::sysLog()
+SysLog BeamFormedFile::sysLog()
 {
-  return SysLogGroup(group(), "SYS_LOG");
+  return SysLog(group(), "SYS_LOG");
 }
 
-Attribute<bool> ProcessHistoryGroup::parsetObs()
+Attribute<bool> BF_ProcessingHistory::parsetObs()
 {
   return Attribute<bool>(group(), "PARSET_OBS");
 }
 
-Attribute<bool> ProcessHistoryGroup::logPresto()
+Attribute<bool> BF_ProcessingHistory::logPresto()
 {
   return Attribute<bool>(group(), "LOG_PRESTO");
 }
 
-Attribute<bool> ProcessHistoryGroup::parFile()
+Attribute<bool> BF_ProcessingHistory::parFile()
 {
   return Attribute<bool>(group(), "PARFILE");
 }
 
-Attribute<unsigned> SAPGroup::nofStations()
+Attribute<unsigned> BF_SubArrayPointing::nofStations()
 {
   return Attribute<unsigned>(group(), "NOF_STATIONS");
 }
 
-AttributeV<string> SAPGroup::stationsList()
+AttributeV<string> BF_SubArrayPointing::stationsList()
 {
   return AttributeV<string>(group(), "STATIONS_LIST");
 }
 
-Attribute<double> SAPGroup::pointRA()
+Attribute<double> BF_SubArrayPointing::pointRA()
 {
   return Attribute<double>(group(), "POINT_RA");
 }
 
-Attribute<double> SAPGroup::pointDEC()
+Attribute<double> BF_SubArrayPointing::pointDEC()
 {
   return Attribute<double>(group(), "POINT_DEC");
 }
 
-Attribute<double> SAPGroup::clockRate()
+Attribute<double> BF_SubArrayPointing::clockRate()
 {
   return Attribute<double>(group(), "CLOCK_RATE");
 }
 
-Attribute<string> SAPGroup::clockRateUnit()
+Attribute<string> BF_SubArrayPointing::clockRateUnit()
 {
   return Attribute<string>(group(), "CLOCK_RATE_UNIT");
 }
 
-Attribute<unsigned> SAPGroup::nofSamples()
+Attribute<unsigned> BF_SubArrayPointing::nofSamples()
 {
   return Attribute<unsigned>(group(), "NOF_SAMPLES");
 }
 
-Attribute<double> SAPGroup::samplingRate()
+Attribute<double> BF_SubArrayPointing::samplingRate()
 {
   return Attribute<double>(group(), "SAMPLING_RATE");
 }
 
-Attribute<string> SAPGroup::samplingRateUnit()
+Attribute<string> BF_SubArrayPointing::samplingRateUnit()
 {
   return Attribute<string>(group(), "SAMPLING_RATE_UNIT");
 }
 
-Attribute<unsigned> SAPGroup::channelsPerSubband()
+Attribute<unsigned> BF_SubArrayPointing::channelsPerSubband()
 {
   return Attribute<unsigned>(group(), "CHANNELS_PER_SUBBAND");
 }
 
-Attribute<double> SAPGroup::subbandWidth()
+Attribute<double> BF_SubArrayPointing::subbandWidth()
 {
   return Attribute<double>(group(), "SUBBAND_WIDTH");
 }
 
-Attribute<string> SAPGroup::subbandWidthUnit()
+Attribute<string> BF_SubArrayPointing::subbandWidthUnit()
 {
   return Attribute<string>(group(), "SUBBAND_WIDTH_UNIT");
 }
 
-Attribute<double> SAPGroup::channelWidth()
+Attribute<double> BF_SubArrayPointing::channelWidth()
 {
   return Attribute<double>(group(), "CHANNEL_WIDTH");
 }
 
-Attribute<string> SAPGroup::channelWidthUnit()
+Attribute<string> BF_SubArrayPointing::channelWidthUnit()
 {
   return Attribute<string>(group(), "CHANNEL_WIDTH_UNIT");
 }
 
 
-Attribute<unsigned> SAPGroup::nofBeams()
+Attribute<unsigned> BF_SubArrayPointing::nofBeams()
 {
   return Attribute<unsigned>(group(), "NOF_BEAMS");
 }
 
-BeamGroup SAPGroup::beam( unsigned nr )
+BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "BEAM_%03u", nr);
 
-  return BeamGroup(group(), string(buf));
+  return BF_BeamGroup(group(), string(buf));
 }
 
-Attribute<unsigned> BeamGroup::nofStations()
+Attribute<unsigned> BF_BeamGroup::nofStations()
 {
   return Attribute<unsigned>(group(), "NOF_STATIONS");
 }
 
-AttributeV<string> BeamGroup::stationsList()
+AttributeV<string> BF_BeamGroup::stationsList()
 {
   return AttributeV<string>(group(), "STATIONS_LIST");
 }
 
-Attribute<double> BeamGroup::pointRA()
+Attribute<double> BF_BeamGroup::pointRA()
 {
   return Attribute<double>(group(), "POINT_RA");
 }
 
-Attribute<double> BeamGroup::pointDEC()
+Attribute<double> BF_BeamGroup::pointDEC()
 {
   return Attribute<double>(group(), "POINT_DEC");
 }
 
-Attribute<double> BeamGroup::pointOffsetRA()
+Attribute<double> BF_BeamGroup::pointOffsetRA()
 {
   return Attribute<double>(group(), "POINT_OFFSET_RA");
 }
 
-Attribute<double> BeamGroup::pointOffsetDEC()
+Attribute<double> BF_BeamGroup::pointOffsetDEC()
 {
   return Attribute<double>(group(), "POINT_OFFSET_DEC");
 }
 
-Attribute<bool> BeamGroup::foldedData()
+Attribute<bool> BF_BeamGroup::foldedData()
 {
   return Attribute<bool>(group(), "FOLDED_DATA");
 }
 
-Attribute<double> BeamGroup::foldPeriod()
+Attribute<double> BF_BeamGroup::foldPeriod()
 {
   return Attribute<double>(group(), "FOLD_PERIOD");
 }
 
-Attribute<string> BeamGroup::foldPeriodUnit()
+Attribute<string> BF_BeamGroup::foldPeriodUnit()
 {
   return Attribute<string>(group(), "FOLD_PERIOD_UNIT");
 }
 
-Attribute<string> BeamGroup::dedispersion()
+Attribute<string> BF_BeamGroup::dedispersion()
 {
   return Attribute<string>(group(), "DEDISPERSION");
 }
 
-Attribute<double> BeamGroup::dedispersionMeasure()
+Attribute<double> BF_BeamGroup::dedispersionMeasure()
 {
   return Attribute<double>(group(), "DEDISPERSION_MEASURE");
 }
 
-Attribute<string> BeamGroup::dedispersionMeasureUnit()
+Attribute<string> BF_BeamGroup::dedispersionMeasureUnit()
 {
   return Attribute<string>(group(), "DEDISPERSION_MEASURE_UNIT");
 }
 
-Attribute<unsigned> BeamGroup::nofStokes()
+Attribute<unsigned> BF_BeamGroup::nofStokes()
 {
   return Attribute<unsigned>(group(), "NOF_STOKES");
 }
 
-AttributeV<string> BeamGroup::stokesComponents()
+AttributeV<string> BF_BeamGroup::stokesComponents()
 {
   return AttributeV<string>(group(), "STOKES_COMPONENTS");
 }
 
-Attribute<bool> BeamGroup::complexVoltages()
+Attribute<bool> BF_BeamGroup::complexVoltages()
 {
   return Attribute<bool>(group(), "COMPLEX_VOLTAGES");
 }
 
-Attribute<string> BeamGroup::signalSum()
+Attribute<string> BF_BeamGroup::signalSum()
 {
   return Attribute<string>(group(), "SIGNAL_SUM");
 }
 
-StokesGroup BeamGroup::stokes( unsigned nr )
+BF_StokesDataset BF_BeamGroup::stokes( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "STOKES_%01u", nr);
 
-  return StokesGroup(group(), string(buf));
+  return BF_StokesDataset(group(), string(buf));
 }
 
-CoordinatesGroup BeamGroup::coordinates()
+CoordinatesGroup BF_BeamGroup::coordinates()
 {
   return CoordinatesGroup(group(), "COORDINATES");
 }
@@ -348,7 +348,7 @@ AttributeV<string> CoordinatesGroup::coordinateTypes()
   return AttributeV<string>(group(), "COORDINATE_TYPES");
 }
 
-CoordinateTypeGroup CoordinatesGroup::coordinate( unsigned nr )
+Coordinate CoordinatesGroup::coordinate( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "COORDINATE_%01u", nr);
@@ -360,89 +360,89 @@ CoordinateTypeGroup CoordinatesGroup::coordinate( unsigned nr )
 
   if (types.size() > nr) {
     if (types[nr] == "Time") {
-      return TimeCoordinateGroup(group(), string(buf));
+      return TimeCoordinate(group(), string(buf));
     }
 
     if (types[nr] == "Spectral") {
-      return SpectralCoordinateGroup(group(), string(buf));
+      return SpectralCoordinate(group(), string(buf));
     }
   }  
 
   // unknown type
-  return CoordinateTypeGroup(group(), string(buf));
+  return Coordinate(group(), string(buf));
 }
 
-Attribute<string> CoordinateTypeGroup::coordinateType()
+Attribute<string> Coordinate::coordinateType()
 {
   return Attribute<string>(group(), "COORDINATE_TYPE");
 }
 
-AttributeV<string> CoordinateTypeGroup::storageType()
+AttributeV<string> Coordinate::storageType()
 {
   return AttributeV<string>(group(), "STORAGE_TYPE");
 }
 
-Attribute<unsigned> CoordinateTypeGroup::nofAxes()
+Attribute<unsigned> Coordinate::nofAxes()
 {
   return Attribute<unsigned>(group(), "NOF_AXES");
 }
 
-AttributeV<string> CoordinateTypeGroup::axisNames()
+AttributeV<string> Coordinate::axisNames()
 {
   return AttributeV<string>(group(), "AXIS_NAMES");
 }
 
-AttributeV<string> CoordinateTypeGroup::axisUnits()
+AttributeV<string> Coordinate::axisUnits()
 {
   return AttributeV<string>(group(), "AXIS_UNITS");
 }
 
-AttributeV<double> CoordinateTypeGroup::referenceValue()
+AttributeV<double> Coordinate::referenceValue()
 {
   return AttributeV<double>(group(), "REFERENCE_VALUE");
 }
 
-AttributeV<double> CoordinateTypeGroup::referencePixel()
+AttributeV<double> Coordinate::referencePixel()
 {
   return AttributeV<double>(group(), "REFERENCE_PIXEL");
 }
 
-AttributeV<double> CoordinateTypeGroup::increment()
+AttributeV<double> Coordinate::increment()
 {
   return AttributeV<double>(group(), "INCREMENT");
 }
 
-AttributeV<double> CoordinateTypeGroup::pc()
+AttributeV<double> Coordinate::pc()
 {
   return AttributeV<double>(group(), "PC");
 }
 
-AttributeV<double> CoordinateTypeGroup::axisValuesPixel()
+AttributeV<double> Coordinate::axisValuesPixel()
 {
   return AttributeV<double>(group(), "AXIS_VALUES_PIXEL");
 }
 
-AttributeV<double> CoordinateTypeGroup::axisValuesWorld()
+AttributeV<double> Coordinate::axisValuesWorld()
 {
   return AttributeV<double>(group(), "AXIS_VALUES_WORLD");
 }
 
-Attribute<string> StokesGroup::stokesComponent()
+Attribute<string> BF_StokesDataset::stokesComponent()
 {
   return Attribute<string>(group(), "STOKES_COMPONENT");
 }
 
-AttributeV<unsigned> StokesGroup::nofChannels()
+AttributeV<unsigned> BF_StokesDataset::nofChannels()
 {
   return AttributeV<unsigned>(group(), "NOF_CHANNELS");
 }
 
-Attribute<unsigned> StokesGroup::nofSubbands()
+Attribute<unsigned> BF_StokesDataset::nofSubbands()
 {
   return Attribute<unsigned>(group(), "NOF_SUBBANDS");
 }
 
-Attribute<unsigned> StokesGroup::nofSamples()
+Attribute<unsigned> BF_StokesDataset::nofSamples()
 {
   return Attribute<unsigned>(group(), "NOF_SAMPLES");
 }
