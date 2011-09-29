@@ -3,6 +3,8 @@
 
 using namespace std;
 
+namespace LDA {
+
 HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 :
   HDF5Node(other._name),
@@ -65,5 +67,7 @@ hid_gc *HDF5GroupBase::open( hid_t parent, const string &name ) const
 Attribute<string> HDF5GroupBase::groupType()
 {
   return Attribute<string>(group(), "GROUPTYPE");
+}
+
 }
 

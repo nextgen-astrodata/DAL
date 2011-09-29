@@ -2,6 +2,8 @@
 
 using namespace std;
 
+namespace LDA {
+
 HDF5FileBase::HDF5FileBase( const string &filename, enum HDF5FileBase::fileMode mode )
 :
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
@@ -32,4 +34,6 @@ hid_t HDF5FileBase::open( const string &filename, enum HDF5FileBase::fileMode mo
 void HDF5FileBase::flush() const
 {
   H5Fflush(group(), H5F_SCOPE_GLOBAL);
+}
+
 }

@@ -3,6 +3,8 @@
 
 #include <hdf5.h>
 
+namespace LDA {
+
 // C->HDF5 translations of native types
 template<typename T> hid_t h5nativeType();
 
@@ -48,5 +50,6 @@ template<class T> hid_t h5dataType(bool) {
   return 0;
 }
 
+}
 
 #endif

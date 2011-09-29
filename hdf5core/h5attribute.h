@@ -8,6 +8,8 @@
 #include "h5typemap.h"
 #include "hid_gc.h"
 
+namespace LDA {
+
 /*
  * Represents an element inside a group.
  *
@@ -242,6 +244,8 @@ template<> inline std::vector<std::string> AttributeV<std::string>::get() const
   }
 
   return value;
+}
+
 }
 
 #endif

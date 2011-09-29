@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace LDA {
+
 /*
  * Represents a node in the HDF5 hierarchy (the root group or a subgroup).
  */
@@ -18,6 +20,8 @@ protected:
 private:
   HDF5Node &operator=( const HDF5Node & );
 };
+
+}
 
 #endif
 

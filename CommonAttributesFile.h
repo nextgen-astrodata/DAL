@@ -6,6 +6,8 @@
 #include "hdf5core/h5attribute.h"
 #include "HDF5FileBase.h"
 
+namespace LDA {
+
 /*
  * These classes implement the Common LOFAR Atttributes.
  */
@@ -55,6 +57,8 @@ public:
   Attribute<std::string>  ICDVersion();
   Attribute<std::string>  notes();
 };
+
+}
 
 #endif
 

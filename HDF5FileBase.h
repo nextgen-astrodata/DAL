@@ -7,6 +7,8 @@
 #include "hdf5core/h5attribute.h"
 #include "hdf5core/hid_gc.h"
 
+namespace LDA {
+
 class HDF5FileBase: public HDF5Node {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
@@ -25,6 +27,8 @@ protected:
 private:
   hid_t open( const std::string &filename, enum fileMode mode ) const;
 };
+
+}
 
 #endif
 

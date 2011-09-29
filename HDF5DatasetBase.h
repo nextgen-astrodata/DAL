@@ -8,6 +8,8 @@
 #include "hdf5core/hid_gc.h"
 #include "hdf5core/h5typemap.h"
 
+namespace LDA {
+
 template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
@@ -293,6 +295,8 @@ template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t
     if (H5Dwrite(group(), h5nativeType<T>(), memspace, dataspace, H5P_DEFAULT, buffer) < 0)
       throw HDF5Exception("Could not write data to dataset");
   }    
+}
+
 }
 
 #endif

@@ -13,6 +13,8 @@
  * format for Beam-Formed Data.
  */
 
+namespace LDA {
+
 class BeamFormedFile;
 class SysLog;
 class BF_ProcessingHistory;
@@ -213,6 +215,8 @@ protected:
 
   friend class BF_BeamGroup;
 };
+
+}
 
 #endif
 

@@ -13,7 +13,7 @@ typedef unsigned long size_t;
 %exception {
   try {
     $action
-  } catch (const HDF5Exception &e) {
+  } catch (const LDA::HDF5Exception &e) {
     SWIG_exception(SWIG_RuntimeError, e.what());
   } catch (const std::exception& e) {
     SWIG_exception(SWIG_RuntimeError, e.what());
@@ -28,6 +28,8 @@ typedef unsigned long size_t;
 %{
   #define SWIG_FILE_WITH_INIT
   #include "BeamFormedFile.h"
+
+  using namespace LDA;
 %}
 
 %include "numpy.i"
@@ -60,20 +62,24 @@ namespace std {
 
 %include hdf5core/h5attribute.h
 
-%template(AttributeBool)      Attribute<bool>;
-%template(AttributeUnsigned)  Attribute<unsigned>;
-%template(AttributeDouble)    Attribute<double>;
-%template(AttributeString)    Attribute<std::string>;
+namespace LDA {
+  %template(AttributeBool)      Attribute<bool>;
+  %template(AttributeUnsigned)  Attribute<unsigned>;
+  %template(AttributeDouble)    Attribute<double>;
+  %template(AttributeString)    Attribute<std::string>;
 
-%template(AttributeVUnsigned) AttributeV<unsigned>;
-%template(AttributeVString)   AttributeV<std::string>;
+  %template(AttributeVUnsigned) AttributeV<unsigned>;
+  %template(AttributeVString)   AttributeV<std::string>;
+}
 
 %include HDF5Node.h
 %include HDF5FileBase.h
 %include HDF5GroupBase.h
 %include HDF5DatasetBase.h
 
-%template(HDF5DatasetBaseFloat) HDF5DatasetBase<float>;
+namespace LDA {
+  %template(HDF5DatasetBaseFloat) HDF5DatasetBase<float>;
+}
 
 %include CommonAttributesFile.h
 %include BeamFormedFile.h

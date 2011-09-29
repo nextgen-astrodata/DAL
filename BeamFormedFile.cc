@@ -2,6 +2,8 @@
 
 using namespace std;
 
+namespace LDA {
+
 BeamFormedFile::BeamFormedFile( const string &filename, enum HDF5FileBase::fileMode mode )
 :
   CommonAttributesFile(filename, mode)
@@ -445,5 +447,7 @@ Attribute<unsigned> BF_StokesDataset::nofSubbands()
 Attribute<unsigned> BF_StokesDataset::nofSamples()
 {
   return Attribute<unsigned>(group(), "NOF_SAMPLES");
+}
+
 }
 

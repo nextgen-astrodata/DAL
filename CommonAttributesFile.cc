@@ -2,6 +2,8 @@
 
 using namespace std;
 
+namespace LDA {
+
 CommonAttributesFile::CommonAttributesFile( const string &filename, enum HDF5FileBase::fileMode mode )
 :
   HDF5FileBase(filename, mode)
@@ -166,4 +168,6 @@ Attribute<string> CommonAttributesFile::ICDVersion()
 Attribute<string> CommonAttributesFile::notes()
 {
   return Attribute<string>(group(), "NOTES");
+}
+
 }

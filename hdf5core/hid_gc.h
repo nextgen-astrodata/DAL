@@ -4,6 +4,8 @@
 #include <hdf5.h>
 #include "h5exception.h"
 
+namespace LDA {
+
 // Autocloses hid_t types using closefunc() on destruction, and keeps a reference count.
 class hid_gc
 {
@@ -58,6 +60,8 @@ private:
   const hid_t hid;
   hid_t (*const closefunc)(hid_t);
 };
+
+}
 
 #endif
 

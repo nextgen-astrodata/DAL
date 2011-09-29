@@ -7,6 +7,8 @@
 #include "hdf5core/h5attribute.h"
 #include "HDF5Node.h"
 
+namespace LDA {
+
 class HDF5GroupBase: public HDF5Node {
 public:
   HDF5GroupBase( const HDF5GroupBase &other );
@@ -35,6 +37,8 @@ protected:
 
   virtual hid_gc *open( hid_t parent, const std::string &name ) const;
 };
+
+}
 
 #endif
 
