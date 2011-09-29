@@ -7,20 +7,20 @@
 #include "hdf5core/h5attribute.h"
 #include "HDF5Node.h"
 
-class HDF5Group: public HDF5Node {
+class HDF5GroupBase: public HDF5Node {
 public:
-  HDF5Group( const HDF5Group &other );
-  virtual ~HDF5Group();
+  HDF5GroupBase( const HDF5GroupBase &other );
+  virtual ~HDF5GroupBase();
 
   virtual void create();
   bool exists() const;
   void remove() const;
-  void set( const HDF5Group &other, bool deepcopy );
+  void set( const HDF5GroupBase &other, bool deepcopy );
 
   Attribute<std::string> groupType();
 
 protected:
-  HDF5Group( const hid_gc &parent, const std::string &name );
+  HDF5GroupBase( const hid_gc &parent, const std::string &name );
 
   const hid_gc parent;
   hid_gc *_group;

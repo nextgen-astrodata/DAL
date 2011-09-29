@@ -1,8 +1,8 @@
-#include "HDF5File.h"
+#include "HDF5FileBase.h"
 
 using namespace std;
 
-HDF5File::HDF5File( const string &filename, enum HDF5File::fileMode mode )
+HDF5FileBase::HDF5FileBase( const string &filename, enum HDF5FileBase::fileMode mode )
 :
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
@@ -14,7 +14,7 @@ HDF5File::HDF5File( const string &filename, enum HDF5File::fileMode mode )
 {
 }
 
-hid_t HDF5File::open( const string &filename, enum HDF5File::fileMode mode ) const
+hid_t HDF5FileBase::open( const string &filename, enum HDF5FileBase::fileMode mode ) const
 {
   switch (mode) {
     case CREATE:
@@ -29,7 +29,7 @@ hid_t HDF5File::open( const string &filename, enum HDF5File::fileMode mode ) con
   }
 }
 
-void HDF5File::flush() const
+void HDF5FileBase::flush() const
 {
   H5Fflush(group(), H5F_SCOPE_GLOBAL);
 }

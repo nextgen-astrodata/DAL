@@ -69,11 +69,11 @@ namespace std {
 %template(AttributeVString)   AttributeV<std::string>;
 
 %include HDF5Node.h
-%include HDF5File.h
-%include HDF5Group.h
-%include HDF5Dataset.h
+%include HDF5FileBase.h
+%include HDF5GroupBase.h
+%include HDF5DatasetBase.h
 
-%template(HDF5DatasetFloat)   HDF5Dataset<float>;
+%template(HDF5DatasetBaseFloat) HDF5DatasetBase<float>;
 
 %include CommonAttributesFile.h
 %include BeamFormedFile.h

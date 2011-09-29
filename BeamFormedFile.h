@@ -5,8 +5,8 @@
 #include <hdf5.h>
 #include "hdf5core/h5attribute.h"
 #include "CommonAttributesFile.h"
-#include "HDF5Group.h"
-#include "HDF5Dataset.h"
+#include "HDF5GroupBase.h"
+#include "HDF5DatasetBase.h"
 
 /*
  * These classes implement the LOFAR ICD003, which describes the file
@@ -58,27 +58,27 @@ public:
   SysLog             sysLog();
 };
 
-class SysLog: public HDF5Group {
+class SysLog: public HDF5GroupBase {
 protected:
-  SysLog( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  SysLog( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   friend class BeamFormedFile;
 };
 
-class BF_ProcessingHistory: public HDF5Group {
+class BF_ProcessingHistory: public HDF5GroupBase {
 public:
   Attribute<bool>         parsetObs();
   Attribute<bool>         logPresto();
   Attribute<bool>         parFile();
 
 protected:
-  BF_ProcessingHistory( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  BF_ProcessingHistory( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   friend class BF_SubArrayPointing;
   friend class BF_BeamGroup;
 };
 
-class BF_SubArrayPointing: public HDF5Group {
+class BF_SubArrayPointing: public HDF5GroupBase {
 public:
   Attribute<unsigned>     nofStations();
   AttributeV<std::string> stationsList();
@@ -105,12 +105,12 @@ public:
   BF_BeamGroup               beam( unsigned nr );
 
 protected:
-  BF_SubArrayPointing( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  BF_SubArrayPointing( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   friend class BeamFormedFile;
 };
 
-class BF_BeamGroup: public HDF5Group {
+class BF_BeamGroup: public HDF5GroupBase {
 public:
   Attribute<unsigned>     nofStations();
   AttributeV<std::string> stationsList();
@@ -138,12 +138,12 @@ public:
   CoordinatesGroup        coordinates();
 
 protected:
-  BF_BeamGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  BF_BeamGroup( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   friend class BF_SubArrayPointing;
 };
 
-class CoordinatesGroup: public HDF5Group {
+class CoordinatesGroup: public HDF5GroupBase {
 public:
   AttributeV<double>      refLocationValue();
   AttributeV<std::string> refLocationUnit();
@@ -160,12 +160,12 @@ public:
   Coordinate     coordinate( unsigned nr );
 
 protected:
-  CoordinatesGroup( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  CoordinatesGroup( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   friend class BF_BeamGroup;
 };
 
-class Coordinate: public HDF5Group {
+class Coordinate: public HDF5GroupBase {
 public:
   Attribute<std::string>  coordinateType();
   AttributeV<std::string> storageType();
@@ -182,7 +182,7 @@ public:
   AttributeV<double>      axisValuesWorld();
 
 protected:
-  Coordinate( const hid_gc &parent, const std::string &name ): HDF5Group(parent, name) {}
+  Coordinate( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   friend class CoordinatesGroup;
 };
@@ -201,7 +201,7 @@ protected:
   friend class CoordinatesGroup;
 };
 
-class BF_StokesDataset: public HDF5Dataset<float> {
+class BF_StokesDataset: public HDF5DatasetBase<float> {
 public:
   Attribute<std::string>  stokesComponent();
   AttributeV<unsigned>    nofChannels();
@@ -209,7 +209,7 @@ public:
   Attribute<unsigned>     nofSamples();
 
 protected:
-  BF_StokesDataset( const hid_gc &parent, const std::string &name ): HDF5Dataset<float>(parent, name) {}
+  BF_StokesDataset( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<float>(parent, name) {}
 
   friend class BF_BeamGroup;
 };

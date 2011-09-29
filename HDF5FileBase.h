@@ -7,14 +7,14 @@
 #include "hdf5core/h5attribute.h"
 #include "hdf5core/hid_gc.h"
 
-class HDF5File: public HDF5Node {
+class HDF5FileBase: public HDF5Node {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
 
   void flush() const;
 
 protected:
-  HDF5File( const std::string &filename, enum fileMode mode );
+  HDF5FileBase( const std::string &filename, enum fileMode mode );
 
   const hid_gc _group;
   const std::string filename;

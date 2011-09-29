@@ -17,7 +17,7 @@ except AttributeError:
 
 
 BeamFormedFile_module = Extension('_BeamFormedFile',
-                           sources=['BeamFormedFile.i', 'CommonAttributesFile.cc', 'BeamFormedFile.cc', 'HDF5File.cc', 'HDF5Group.cc'],
+                           sources=['BeamFormedFile.i', 'CommonAttributesFile.cc', 'BeamFormedFile.cc', 'HDF5FileBase.cc', 'HDF5GroupBase.cc'],
                            include_dirs=['/data/sys/opt/cep/hdf5/include', numpy_include],
                            libraries=['hdf5'],
                            swig_opts=['-c++'],

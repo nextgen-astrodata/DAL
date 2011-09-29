@@ -2,7 +2,7 @@
 
 using namespace std;
 
-BeamFormedFile::BeamFormedFile( const string &filename, enum HDF5File::fileMode mode )
+BeamFormedFile::BeamFormedFile( const string &filename, enum HDF5FileBase::fileMode mode )
 :
   CommonAttributesFile(filename, mode)
 {

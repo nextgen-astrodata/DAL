@@ -4,13 +4,13 @@
 #include <string>
 #include <hdf5.h>
 #include "hdf5core/h5attribute.h"
-#include "HDF5File.h"
+#include "HDF5FileBase.h"
 
 /*
  * These classes implement the Common LOFAR Atttributes.
  */
 
-class CommonAttributesFile: public HDF5File {
+class CommonAttributesFile: public HDF5FileBase {
 public:
   CommonAttributesFile( const std::string &filename, enum fileMode mode = READ );
 

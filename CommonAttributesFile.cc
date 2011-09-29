@@ -2,9 +2,9 @@
 
 using namespace std;
 
-CommonAttributesFile::CommonAttributesFile( const string &filename, enum HDF5File::fileMode mode )
+CommonAttributesFile::CommonAttributesFile( const string &filename, enum HDF5FileBase::fileMode mode )
 :
-  HDF5File(filename, mode)
+  HDF5FileBase(filename, mode)
 {
 }
 
