@@ -2,6 +2,7 @@
 #define __CLAFILE__
 
 #include <string>
+#include <vector>
 #include <hdf5.h>
 #include "hdf5core/h5attribute.h"
 #include "HDF5FileBase.h"
@@ -41,7 +42,7 @@ public:
   Attribute<std::string>  observationEndTAI();
 
   Attribute<unsigned>     observationNofStations();
-  AttributeV<std::string> observationStationsList();
+  Attribute< std::vector<std::string> > observationStationsList();
 
   Attribute<unsigned>     observationNofBitsPerSample();
   Attribute<double>       clockFrequency();

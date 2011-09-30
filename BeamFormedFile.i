@@ -69,8 +69,8 @@ namespace LDA {
   %template(AttributeDouble)    Attribute<double>;
   %template(AttributeString)    Attribute<std::string>;
 
-  %template(AttributeVUnsigned) AttributeV<unsigned>;
-  %template(AttributeVString)   AttributeV<std::string>;
+  %template(AttributeVUnsigned) Attribute< std::vector<unsigned> >;
+  %template(AttributeVString)   Attribute< std::vector<std::string> >;
 }
 
 %include HDF5Node.h

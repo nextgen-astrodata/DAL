@@ -8,11 +8,6 @@
 #include "HDF5GroupBase.h"
 #include "HDF5DatasetBase.h"
 
-/*
- * These classes implement the LOFAR ICD003, which describes the file
- * format for Beam-Formed Data.
- */
-
 namespace LDA {
 
 class BeamFormedFile;
@@ -26,6 +21,10 @@ class TimeCoordinate;
 class SpectralCoordinate;
 class BF_StokesDataset;
 
+/*!
+ * \class BeamFormedFile
+ * \brief Interface for Beam-formed Data as described in ICD003.
+ */
 class BeamFormedFile: public CommonAttributesFile {
 public:
   BeamFormedFile( const std::string &filename, enum fileMode mode = READ );
@@ -50,12 +49,12 @@ public:
   Attribute<double>       bandwidth();
   Attribute<double>       beamDiameter();
 
-  AttributeV<double>      weatherTemperature();
-  AttributeV<double>      weatherHumidity();
-  AttributeV<double>      systemTemperature();
+  Attribute< std::vector<double> >      weatherTemperature();
+  Attribute< std::vector<double> >      weatherHumidity();
+  Attribute< std::vector<double> >      systemTemperature();
 
   Attribute<unsigned>     nofSubArrayPointings();
-  BF_SubArrayPointing                subArrayPointing( unsigned nr );
+  BF_SubArrayPointing     subArrayPointing( unsigned nr );
 
   SysLog             sysLog();
 };
@@ -83,7 +82,7 @@ protected:
 class BF_SubArrayPointing: public HDF5GroupBase {
 public:
   Attribute<unsigned>     nofStations();
-  AttributeV<std::string> stationsList();
+  Attribute< std::vector<std::string> > stationsList();
 
   Attribute<double>       pointRA();
   Attribute<double>       pointDEC();
@@ -104,7 +103,7 @@ public:
   Attribute<std::string>  channelWidthUnit();
 
   Attribute<unsigned>     nofBeams();
-  BF_BeamGroup               beam( unsigned nr );
+  BF_BeamGroup            beam( unsigned nr );
 
 protected:
   BF_SubArrayPointing( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
@@ -115,7 +114,7 @@ protected:
 class BF_BeamGroup: public HDF5GroupBase {
 public:
   Attribute<unsigned>     nofStations();
-  AttributeV<std::string> stationsList();
+  Attribute< std::vector<std::string> > stationsList();
 
   Attribute<double>       pointRA();
   Attribute<double>       pointDEC();
@@ -132,10 +131,10 @@ public:
   Attribute<std::string>  dedispersionMeasureUnit();
 
   Attribute<unsigned>     nofStokes();
-  AttributeV<std::string> stokesComponents();
+  Attribute< std::vector<std::string> > stokesComponents();
   Attribute<bool>         complexVoltages();
   Attribute<std::string>  signalSum();
-  BF_StokesDataset             stokes( unsigned nr );
+  BF_StokesDataset        stokes( unsigned nr );
 
   CoordinatesGroup        coordinates();
 
@@ -147,8 +146,8 @@ protected:
 
 class CoordinatesGroup: public HDF5GroupBase {
 public:
-  AttributeV<double>      refLocationValue();
-  AttributeV<std::string> refLocationUnit();
+  Attribute< std::vector<double> >      refLocationValue();
+  Attribute< std::vector<std::string> > refLocationUnit();
   Attribute<std::string>  refLocationFrame();
 
   Attribute<double>       refTimeValue();
@@ -157,9 +156,9 @@ public:
 
   Attribute<unsigned>     nofCoordinates();
   Attribute<unsigned>     nofAxes();
-  AttributeV<std::string> coordinateTypes();
+  Attribute< std::vector<std::string> > coordinateTypes();
 
-  Coordinate     coordinate( unsigned nr );
+  Coordinate              coordinate( unsigned nr );
 
 protected:
   CoordinatesGroup( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
@@ -170,18 +169,18 @@ protected:
 class Coordinate: public HDF5GroupBase {
 public:
   Attribute<std::string>  coordinateType();
-  AttributeV<std::string> storageType();
+  Attribute< std::vector<std::string> > storageType();
 
   Attribute<unsigned>     nofAxes();
-  AttributeV<std::string> axisNames();
-  AttributeV<std::string> axisUnits();
+  Attribute< std::vector<std::string> > axisNames();
+  Attribute< std::vector<std::string> > axisUnits();
 
-  AttributeV<double>      referenceValue();
-  AttributeV<double>      referencePixel();
-  AttributeV<double>      increment();
-  AttributeV<double>      pc();
-  AttributeV<double>      axisValuesPixel();
-  AttributeV<double>      axisValuesWorld();
+  Attribute< std::vector<double> >      referenceValue();
+  Attribute< std::vector<double> >      referencePixel();
+  Attribute< std::vector<double> >      increment();
+  Attribute< std::vector<double> >      pc();
+  Attribute< std::vector<double> >      axisValuesPixel();
+  Attribute< std::vector<double> >      axisValuesWorld();
 
 protected:
   Coordinate( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
@@ -206,7 +205,7 @@ protected:
 class BF_StokesDataset: public HDF5DatasetBase<float> {
 public:
   Attribute<std::string>  stokesComponent();
-  AttributeV<unsigned>    nofChannels();
+  Attribute< std::vector<unsigned> >    nofChannels();
   Attribute<unsigned>     nofSubbands();
   Attribute<unsigned>     nofSamples();
 

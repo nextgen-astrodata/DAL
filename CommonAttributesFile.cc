@@ -105,9 +105,9 @@ Attribute<unsigned> CommonAttributesFile::observationNofStations()
   return Attribute<unsigned>(group(), "OBSERVATION_NOF_STATIONS");
 }
 
-AttributeV<string> CommonAttributesFile::observationStationsList()
+Attribute< vector<string> > CommonAttributesFile::observationStationsList()
 {
-  return AttributeV<string>(group(), "OBSERVATION_STATIONS_LIST");
+  return Attribute< vector<string> >(group(), "OBSERVATION_STATIONS_LIST");
 }
 
 Attribute<unsigned> CommonAttributesFile::observationNofBitsPerSample()

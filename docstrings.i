@@ -2,16 +2,26 @@
 // File: index.xml
 
 // File: classLDA_1_1Attribute.xml
-%feature("docstring") LDA::Attribute "";
+%feature("docstring") LDA::Attribute "
+
+Represents an attribute containing a scalar or a string.
+
+C++ includes: h5attribute.h ";
 
 %feature("docstring")  LDA::Attribute::Attribute "LDA::Attribute< T
 >::Attribute(const hid_gc &container, const std::string &name) ";
 
 %feature("docstring")  LDA::Attribute::get "T LDA::Attribute< T
->::get() const ";
+>::get() const
+
+Returns the value of this attribute, retrieved from the HDF5 file. An
+exception is thrown if the attribute does not already exist. ";
 
 %feature("docstring")  LDA::Attribute::set "void LDA::Attribute< T
->::set(const T &value) const ";
+>::set(const T &value) const
+
+Stores the value of this attribute in the HDF5 file. The attribute is
+created if it does not already exist. ";
 
 %feature("docstring")  LDA::Attribute::set "void LDA::Attribute<
 std::string >::set(const std::string &value) const ";
@@ -19,28 +29,41 @@ std::string >::set(const std::string &value) const ";
 %feature("docstring")  LDA::Attribute::get "std::string
 LDA::Attribute< std::string >::get() const ";
 
+%feature("docstring")  LDA::Attribute::set "void LDA::Attribute<
+std::vector< std::string > >::set(const std::vector< std::string >
+&value) const ";
 
-// File: classLDA_1_1AttributeV.xml
-%feature("docstring") LDA::AttributeV "";
+%feature("docstring")  LDA::Attribute::get "std::vector< std::string
+> LDA::Attribute< std::vector< std::string > >::get() const ";
 
-%feature("docstring")  LDA::AttributeV::AttributeV "LDA::AttributeV<
-T >::AttributeV(const hid_gc &container, const std::string &name) ";
 
-%feature("docstring")  LDA::AttributeV::get "std::vector< U >
-LDA::AttributeV< U >::get() const ";
+// File: classLDA_1_1Attribute_3_01std_1_1vector_3_01T_01_4_01_4.xml
+%feature("docstring") LDA::Attribute< std::vector< T > > " ";
 
-%feature("docstring")  LDA::AttributeV::set "void LDA::AttributeV< T
->::set(const std::vector< T > &value) const ";
+%feature("docstring")  LDA::Attribute< std::vector< T > >::Attribute "
+LDA::Attribute< std::vector< T > >::Attribute(const hid_gc &container,
+const std::string &name) ";
 
-%feature("docstring")  LDA::AttributeV::set "void LDA::AttributeV<
-std::string >::set(const std::vector< std::string > &value) const ";
+%feature("docstring")  LDA::Attribute< std::vector< T > >::get "
+std::vector< T > LDA::Attribute< std::vector< T > >::get() const
 
-%feature("docstring")  LDA::AttributeV::get "std::vector< std::string
-> LDA::AttributeV< std::string >::get() const ";
+Returns the value of this attribute, retrieved from the HDF5 file. An
+exception is thrown if the attribute does not already exist. ";
+
+%feature("docstring")  LDA::Attribute< std::vector< T > >::set " void
+LDA::Attribute< std::vector< T > >::set(const std::vector< T > &value)
+const
+
+Stores the value of this attribute in the HDF5 file. The attribute is
+created if it does not already exist. ";
 
 
 // File: classLDA_1_1BeamFormedFile.xml
-%feature("docstring") LDA::BeamFormedFile "";
+%feature("docstring") LDA::BeamFormedFile "
+
+Interface for Beam-formed Data as described in ICD003.
+
+C++ includes: BeamFormedFile.h ";
 
 %feature("docstring")  LDA::BeamFormedFile::BeamFormedFile "LDA::BeamFormedFile::BeamFormedFile(const std::string &filename, enum
 fileMode mode=READ) ";
@@ -80,11 +103,14 @@ double > LDA::BeamFormedFile::bandwidth() ";
 %feature("docstring")  LDA::BeamFormedFile::beamDiameter "Attribute<
 double > LDA::BeamFormedFile::beamDiameter() ";
 
-%feature("docstring")  LDA::BeamFormedFile::weatherTemperature "AttributeV< double > LDA::BeamFormedFile::weatherTemperature() ";
+%feature("docstring")  LDA::BeamFormedFile::weatherTemperature "Attribute< vector< double > >
+LDA::BeamFormedFile::weatherTemperature() ";
 
-%feature("docstring")  LDA::BeamFormedFile::weatherHumidity "AttributeV< double > LDA::BeamFormedFile::weatherHumidity() ";
+%feature("docstring")  LDA::BeamFormedFile::weatherHumidity "Attribute< vector< double > > LDA::BeamFormedFile::weatherHumidity()
+";
 
-%feature("docstring")  LDA::BeamFormedFile::systemTemperature "AttributeV< double > LDA::BeamFormedFile::systemTemperature() ";
+%feature("docstring")  LDA::BeamFormedFile::systemTemperature "Attribute< vector< double > > LDA::BeamFormedFile::systemTemperature()
+";
 
 %feature("docstring")  LDA::BeamFormedFile::nofSubArrayPointings "Attribute< unsigned > LDA::BeamFormedFile::nofSubArrayPointings() ";
 
@@ -101,8 +127,8 @@ LDA::BeamFormedFile::sysLog() ";
 %feature("docstring")  LDA::BF_BeamGroup::nofStations "Attribute<
 unsigned > LDA::BF_BeamGroup::nofStations() ";
 
-%feature("docstring")  LDA::BF_BeamGroup::stationsList "AttributeV<
-string > LDA::BF_BeamGroup::stationsList() ";
+%feature("docstring")  LDA::BF_BeamGroup::stationsList "Attribute<
+vector< string > > LDA::BF_BeamGroup::stationsList() ";
 
 %feature("docstring")  LDA::BF_BeamGroup::pointRA "Attribute< double
 > LDA::BF_BeamGroup::pointRA() ";
@@ -135,7 +161,7 @@ string > LDA::BF_BeamGroup::dedispersion() ";
 %feature("docstring")  LDA::BF_BeamGroup::nofStokes "Attribute<
 unsigned > LDA::BF_BeamGroup::nofStokes() ";
 
-%feature("docstring")  LDA::BF_BeamGroup::stokesComponents "AttributeV< string > LDA::BF_BeamGroup::stokesComponents() ";
+%feature("docstring")  LDA::BF_BeamGroup::stokesComponents "Attribute< vector< string > > LDA::BF_BeamGroup::stokesComponents() ";
 
 %feature("docstring")  LDA::BF_BeamGroup::complexVoltages "Attribute<
 bool > LDA::BF_BeamGroup::complexVoltages() ";
@@ -165,7 +191,8 @@ bool > LDA::BF_ProcessingHistory::parFile() ";
 
 %feature("docstring")  LDA::BF_StokesDataset::stokesComponent "Attribute< string > LDA::BF_StokesDataset::stokesComponent() ";
 
-%feature("docstring")  LDA::BF_StokesDataset::nofChannels "AttributeV< unsigned > LDA::BF_StokesDataset::nofChannels() ";
+%feature("docstring")  LDA::BF_StokesDataset::nofChannels "Attribute<
+vector< unsigned > > LDA::BF_StokesDataset::nofChannels() ";
 
 %feature("docstring")  LDA::BF_StokesDataset::nofSubbands "Attribute<
 unsigned > LDA::BF_StokesDataset::nofSubbands() ";
@@ -179,7 +206,8 @@ unsigned > LDA::BF_StokesDataset::nofSamples() ";
 
 %feature("docstring")  LDA::BF_SubArrayPointing::nofStations "Attribute< unsigned > LDA::BF_SubArrayPointing::nofStations() ";
 
-%feature("docstring")  LDA::BF_SubArrayPointing::stationsList "AttributeV< string > LDA::BF_SubArrayPointing::stationsList() ";
+%feature("docstring")  LDA::BF_SubArrayPointing::stationsList "Attribute< vector< string > > LDA::BF_SubArrayPointing::stationsList()
+";
 
 %feature("docstring")  LDA::BF_SubArrayPointing::pointRA "Attribute<
 double > LDA::BF_SubArrayPointing::pointRA() ";
@@ -269,8 +297,9 @@ LDA::CommonAttributesFile::observationNofStations "Attribute<
 unsigned > LDA::CommonAttributesFile::observationNofStations() ";
 
 %feature("docstring")
-LDA::CommonAttributesFile::observationStationsList "AttributeV<
-string > LDA::CommonAttributesFile::observationStationsList() ";
+LDA::CommonAttributesFile::observationStationsList "Attribute<
+vector< string > >
+LDA::CommonAttributesFile::observationStationsList() ";
 
 %feature("docstring")
 LDA::CommonAttributesFile::observationNofBitsPerSample "Attribute<
@@ -307,43 +336,45 @@ string > LDA::CommonAttributesFile::notes() ";
 %feature("docstring")  LDA::Coordinate::coordinateType "Attribute<
 string > LDA::Coordinate::coordinateType() ";
 
-%feature("docstring")  LDA::Coordinate::storageType "AttributeV<
-string > LDA::Coordinate::storageType() ";
+%feature("docstring")  LDA::Coordinate::storageType "Attribute<
+vector< string > > LDA::Coordinate::storageType() ";
 
 %feature("docstring")  LDA::Coordinate::nofAxes "Attribute< unsigned
 > LDA::Coordinate::nofAxes() ";
 
-%feature("docstring")  LDA::Coordinate::axisNames "AttributeV< string
-> LDA::Coordinate::axisNames() ";
+%feature("docstring")  LDA::Coordinate::axisNames "Attribute< vector<
+string > > LDA::Coordinate::axisNames() ";
 
-%feature("docstring")  LDA::Coordinate::axisUnits "AttributeV< string
-> LDA::Coordinate::axisUnits() ";
+%feature("docstring")  LDA::Coordinate::axisUnits "Attribute< vector<
+string > > LDA::Coordinate::axisUnits() ";
 
-%feature("docstring")  LDA::Coordinate::referenceValue "AttributeV<
-double > LDA::Coordinate::referenceValue() ";
+%feature("docstring")  LDA::Coordinate::referenceValue "Attribute<
+vector< double > > LDA::Coordinate::referenceValue() ";
 
-%feature("docstring")  LDA::Coordinate::referencePixel "AttributeV<
-double > LDA::Coordinate::referencePixel() ";
+%feature("docstring")  LDA::Coordinate::referencePixel "Attribute<
+vector< double > > LDA::Coordinate::referencePixel() ";
 
-%feature("docstring")  LDA::Coordinate::increment "AttributeV< double
-> LDA::Coordinate::increment() ";
+%feature("docstring")  LDA::Coordinate::increment "Attribute< vector<
+double > > LDA::Coordinate::increment() ";
 
-%feature("docstring")  LDA::Coordinate::pc "AttributeV< double >
-LDA::Coordinate::pc() ";
+%feature("docstring")  LDA::Coordinate::pc "Attribute< vector< double
+> > LDA::Coordinate::pc() ";
 
-%feature("docstring")  LDA::Coordinate::axisValuesPixel "AttributeV<
-double > LDA::Coordinate::axisValuesPixel() ";
+%feature("docstring")  LDA::Coordinate::axisValuesPixel "Attribute<
+vector< double > > LDA::Coordinate::axisValuesPixel() ";
 
-%feature("docstring")  LDA::Coordinate::axisValuesWorld "AttributeV<
-double > LDA::Coordinate::axisValuesWorld() ";
+%feature("docstring")  LDA::Coordinate::axisValuesWorld "Attribute<
+vector< double > > LDA::Coordinate::axisValuesWorld() ";
 
 
 // File: classLDA_1_1CoordinatesGroup.xml
 %feature("docstring") LDA::CoordinatesGroup "";
 
-%feature("docstring")  LDA::CoordinatesGroup::refLocationValue "AttributeV< double > LDA::CoordinatesGroup::refLocationValue() ";
+%feature("docstring")  LDA::CoordinatesGroup::refLocationValue "Attribute< vector< double > >
+LDA::CoordinatesGroup::refLocationValue() ";
 
-%feature("docstring")  LDA::CoordinatesGroup::refLocationUnit "AttributeV< string > LDA::CoordinatesGroup::refLocationUnit() ";
+%feature("docstring")  LDA::CoordinatesGroup::refLocationUnit "Attribute< vector< string > > LDA::CoordinatesGroup::refLocationUnit()
+";
 
 %feature("docstring")  LDA::CoordinatesGroup::refLocationFrame "Attribute< string > LDA::CoordinatesGroup::refLocationFrame() ";
 
@@ -359,25 +390,38 @@ string > LDA::CoordinatesGroup::refTimeUnit() ";
 %feature("docstring")  LDA::CoordinatesGroup::nofAxes "Attribute<
 unsigned > LDA::CoordinatesGroup::nofAxes() ";
 
-%feature("docstring")  LDA::CoordinatesGroup::coordinateTypes "AttributeV< string > LDA::CoordinatesGroup::coordinateTypes() ";
+%feature("docstring")  LDA::CoordinatesGroup::coordinateTypes "Attribute< vector< string > > LDA::CoordinatesGroup::coordinateTypes()
+";
 
 %feature("docstring")  LDA::CoordinatesGroup::coordinate "Coordinate
 LDA::CoordinatesGroup::coordinate(unsigned nr) ";
 
 
 // File: classLDA_1_1Element.xml
-%feature("docstring") LDA::Element "";
+%feature("docstring") LDA::Element "
+
+Represents an element inside a group.
+
+The Element classes provide meta-functionality, such as
+get/set/exists/remove.
+
+C++ includes: h5attribute.h ";
 
 %feature("docstring")  LDA::Element::name "std::string
-LDA::Element::name() const ";
+LDA::Element::name() const
+
+Returns the name of this element in the HDF5 file. ";
 
 %feature("docstring")  LDA::Element::exists "bool
 LDA::Element::exists() const
 
-Return whether this attribute exists in the HDF5 file. ";
+Returns whether this element exists in the HDF5 file. ";
 
 %feature("docstring")  LDA::Element::remove "void
-LDA::Element::remove() const ";
+LDA::Element::remove() const
+
+Removes this element from the HDF5 file. Useful for porting,
+repairing, or otherwise modifying files on a structural level. ";
 
 
 // File: classLDA_1_1HDF5DatasetBase.xml
@@ -386,22 +430,47 @@ LDA::Element::remove() const ";
 %feature("docstring")  LDA::HDF5DatasetBase::create "void
 LDA::HDF5DatasetBase< T >::create(const std::vector< ssize_t > &dims,
 const std::vector< ssize_t > &maxdims, const std::string
-&filename=\"\", enum Endianness endianness=NATIVE) ";
+&filename=\"\", enum Endianness endianness=NATIVE)
+
+Creates a new dataset with dimensions sized `dims` and can be scaled
+up to `maxdims`. The rank of the dataset is dims.size() <=
+maxdims.size(). Any dimension d not mentioned in maxdims has its
+maximum set by dims[d]. A maximum of -1 represents an unbounded
+dimension.
+
+If a `filename` is given, that file will be used to store the data.
+The file can be provided by the user, or will be created upon the
+first write. Note that the filename cannot be changed after the
+dataset has been created (HDF5 1.8.7), so providing absolute paths
+will make the dataset difficult to copy or move across systems.
+
+`endianness` toggles whether the data is in big-endian format.
+Typically: NATIVE: use the endianness of the current machine LITTLE:
+use little-endian: ARM, x86, x86_64 BIG: use big-endian: MIPS, POWER,
+PowerPC, SPARC ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::create "virtual void
 LDA::HDF5DatasetBase< T >::create() const ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::ndims "size_t
-LDA::HDF5DatasetBase< T >::ndims() ";
+LDA::HDF5DatasetBase< T >::ndims()
+
+the rank of the dataset. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::dims "std::vector<
-ssize_t > LDA::HDF5DatasetBase< T >::dims() ";
+ssize_t > LDA::HDF5DatasetBase< T >::dims()
+
+the dimension sizes. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::maxdims "std::vector<
-ssize_t > LDA::HDF5DatasetBase< T >::maxdims() ";
+ssize_t > LDA::HDF5DatasetBase< T >::maxdims()
+
+the maximum dimension sizes to which this dataset can grow; elements
+of -1 represent unbounded dimensions. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::externalFiles "std::vector< std::string > LDA::HDF5DatasetBase< T >::externalFiles()
-";
+
+a list of the external files containing data for this dataset. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::getMatrix "void
 LDA::HDF5DatasetBase< T >::getMatrix(const std::vector< size_t > &pos,

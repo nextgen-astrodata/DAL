@@ -14,7 +14,7 @@ template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
 
-  /*
+  /*!
    * Creates a new dataset with dimensions sized `dims` and can be scaled up to `maxdims`. The
    * rank of the dataset is dims.size() <= maxdims.size(). Any dimension d not mentioned in maxdims
    * has its maximum set by dims[d]. A maximum of -1 represents an unbounded dimension.
@@ -32,17 +32,25 @@ public:
   void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename = "", enum Endianness endianness = NATIVE );
   virtual void create() const { throw HDF5Exception("create() not supported on a dataset"); }
 
-  // returns the rank
+  /*!
+   * \return the rank of the dataset.
+   */
   size_t ndims();
 
-  // returns the dimension sizes
+  /*!
+   * \return the dimension sizes.
+   */
   std::vector<ssize_t> dims();
 
-  // returns the maximum dimension sizes to which this dataset can grow;
-  // elements of -1 represent unbounded dimensions
+  /*!
+   * \return the maximum dimension sizes to which this dataset can grow;
+   * elements of -1 represent unbounded dimensions.
+   */
   std::vector<ssize_t> maxdims();
 
-  // returns a list of the files containing data
+  /*!
+   * \return a list of the external files containing data for this dataset.
+   */
   std::vector<std::string> externalFiles();
 
   // get/set a slice of values

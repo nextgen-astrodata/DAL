@@ -80,19 +80,19 @@ Attribute<double> BeamFormedFile::beamDiameter()
   return Attribute<double>(group(), "BEAM_DIAMETER");
 }
 
-AttributeV<double> BeamFormedFile::weatherTemperature()
+Attribute< vector<double> > BeamFormedFile::weatherTemperature()
 {
-  return AttributeV<double>(group(), "WEATHER_TEMPERATURE");
+  return Attribute< vector<double> >(group(), "WEATHER_TEMPERATURE");
 }
 
-AttributeV<double> BeamFormedFile::weatherHumidity()
+Attribute< vector<double> > BeamFormedFile::weatherHumidity()
 {
-  return AttributeV<double>(group(), "WEATHER_HUMIDITY");
+  return Attribute< vector<double> >(group(), "WEATHER_HUMIDITY");
 }
 
-AttributeV<double> BeamFormedFile::systemTemperature()
+Attribute< vector<double> > BeamFormedFile::systemTemperature()
 {
-  return AttributeV<double>(group(), "SYSTEM_TEMPERATURE");
+  return Attribute< vector<double> >(group(), "SYSTEM_TEMPERATURE");
 }
 
 Attribute<unsigned> BeamFormedFile::nofSubArrayPointings()
@@ -133,9 +133,9 @@ Attribute<unsigned> BF_SubArrayPointing::nofStations()
   return Attribute<unsigned>(group(), "NOF_STATIONS");
 }
 
-AttributeV<string> BF_SubArrayPointing::stationsList()
+Attribute< vector<string> > BF_SubArrayPointing::stationsList()
 {
-  return AttributeV<string>(group(), "STATIONS_LIST");
+  return Attribute< vector<string> >(group(), "STATIONS_LIST");
 }
 
 Attribute<double> BF_SubArrayPointing::pointRA()
@@ -217,9 +217,9 @@ Attribute<unsigned> BF_BeamGroup::nofStations()
   return Attribute<unsigned>(group(), "NOF_STATIONS");
 }
 
-AttributeV<string> BF_BeamGroup::stationsList()
+Attribute< vector<string> > BF_BeamGroup::stationsList()
 {
-  return AttributeV<string>(group(), "STATIONS_LIST");
+  return Attribute< vector<string> >(group(), "STATIONS_LIST");
 }
 
 Attribute<double> BF_BeamGroup::pointRA()
@@ -277,9 +277,9 @@ Attribute<unsigned> BF_BeamGroup::nofStokes()
   return Attribute<unsigned>(group(), "NOF_STOKES");
 }
 
-AttributeV<string> BF_BeamGroup::stokesComponents()
+Attribute< vector<string> > BF_BeamGroup::stokesComponents()
 {
-  return AttributeV<string>(group(), "STOKES_COMPONENTS");
+  return Attribute< vector<string> >(group(), "STOKES_COMPONENTS");
 }
 
 Attribute<bool> BF_BeamGroup::complexVoltages()
@@ -305,14 +305,14 @@ CoordinatesGroup BF_BeamGroup::coordinates()
   return CoordinatesGroup(group(), "COORDINATES");
 }
 
-AttributeV<double> CoordinatesGroup::refLocationValue()
+Attribute< vector<double> > CoordinatesGroup::refLocationValue()
 {
-  return AttributeV<double>(group(), "REF_LOCATION_VALUE");
+  return Attribute< vector<double> >(group(), "REF_LOCATION_VALUE");
 }
 
-AttributeV<string> CoordinatesGroup::refLocationUnit()
+Attribute< vector<string> > CoordinatesGroup::refLocationUnit()
 {
-  return AttributeV<string>(group(), "REF_LOCATION_UNIT");
+  return Attribute< vector<string> >(group(), "REF_LOCATION_UNIT");
 }
 
 Attribute<string> CoordinatesGroup::refLocationFrame()
@@ -345,9 +345,9 @@ Attribute<unsigned> CoordinatesGroup::nofAxes()
   return Attribute<unsigned>(group(), "NOF_AXES");
 }
 
-AttributeV<string> CoordinatesGroup::coordinateTypes()
+Attribute< vector<string> > CoordinatesGroup::coordinateTypes()
 {
-  return AttributeV<string>(group(), "COORDINATE_TYPES");
+  return Attribute< vector<string> >(group(), "COORDINATE_TYPES");
 }
 
 Coordinate CoordinatesGroup::coordinate( unsigned nr )
@@ -379,9 +379,9 @@ Attribute<string> Coordinate::coordinateType()
   return Attribute<string>(group(), "COORDINATE_TYPE");
 }
 
-AttributeV<string> Coordinate::storageType()
+Attribute< vector<string> > Coordinate::storageType()
 {
-  return AttributeV<string>(group(), "STORAGE_TYPE");
+  return Attribute< vector<string> >(group(), "STORAGE_TYPE");
 }
 
 Attribute<unsigned> Coordinate::nofAxes()
@@ -389,44 +389,44 @@ Attribute<unsigned> Coordinate::nofAxes()
   return Attribute<unsigned>(group(), "NOF_AXES");
 }
 
-AttributeV<string> Coordinate::axisNames()
+Attribute< vector<string> > Coordinate::axisNames()
 {
-  return AttributeV<string>(group(), "AXIS_NAMES");
+  return Attribute< vector<string> >(group(), "AXIS_NAMES");
 }
 
-AttributeV<string> Coordinate::axisUnits()
+Attribute< vector<string> > Coordinate::axisUnits()
 {
-  return AttributeV<string>(group(), "AXIS_UNITS");
+  return Attribute< vector<string> >(group(), "AXIS_UNITS");
 }
 
-AttributeV<double> Coordinate::referenceValue()
+Attribute< vector<double> > Coordinate::referenceValue()
 {
-  return AttributeV<double>(group(), "REFERENCE_VALUE");
+  return Attribute< vector<double> >(group(), "REFERENCE_VALUE");
 }
 
-AttributeV<double> Coordinate::referencePixel()
+Attribute< vector<double> > Coordinate::referencePixel()
 {
-  return AttributeV<double>(group(), "REFERENCE_PIXEL");
+  return Attribute< vector<double> >(group(), "REFERENCE_PIXEL");
 }
 
-AttributeV<double> Coordinate::increment()
+Attribute< vector<double> > Coordinate::increment()
 {
-  return AttributeV<double>(group(), "INCREMENT");
+  return Attribute< vector<double> >(group(), "INCREMENT");
 }
 
-AttributeV<double> Coordinate::pc()
+Attribute< vector<double> > Coordinate::pc()
 {
-  return AttributeV<double>(group(), "PC");
+  return Attribute< vector<double> >(group(), "PC");
 }
 
-AttributeV<double> Coordinate::axisValuesPixel()
+Attribute< vector<double> > Coordinate::axisValuesPixel()
 {
-  return AttributeV<double>(group(), "AXIS_VALUES_PIXEL");
+  return Attribute< vector<double> >(group(), "AXIS_VALUES_PIXEL");
 }
 
-AttributeV<double> Coordinate::axisValuesWorld()
+Attribute< vector<double> > Coordinate::axisValuesWorld()
 {
-  return AttributeV<double>(group(), "AXIS_VALUES_WORLD");
+  return Attribute< vector<double> >(group(), "AXIS_VALUES_WORLD");
 }
 
 Attribute<string> BF_StokesDataset::stokesComponent()
@@ -434,9 +434,9 @@ Attribute<string> BF_StokesDataset::stokesComponent()
   return Attribute<string>(group(), "STOKES_COMPONENT");
 }
 
-AttributeV<unsigned> BF_StokesDataset::nofChannels()
+Attribute< vector<unsigned> > BF_StokesDataset::nofChannels()
 {
-  return AttributeV<unsigned>(group(), "NOF_CHANNELS");
+  return Attribute< vector<unsigned> >(group(), "NOF_CHANNELS");
 }
 
 Attribute<unsigned> BF_StokesDataset::nofSubbands()
