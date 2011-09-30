@@ -6,6 +6,8 @@
 
 Represents an attribute containing a scalar or a string.
 
+Represents an attribute containing a vector of scalars or strings.
+
 C++ includes: h5attribute.h ";
 
 %feature("docstring")  LDA::Attribute::Attribute "LDA::Attribute< T
@@ -25,11 +27,7 @@ created if it does not already exist. ";
 
 
 // File: classLDA_1_1Attribute_3_01std_1_1vector_3_01T_01_4_01_4.xml
-%feature("docstring") LDA::Attribute< std::vector< T > > "
-
-Represents an attribute containing a vector of scalars or strings.
-
-C++ includes: h5attribute.h ";
+%feature("docstring") LDA::Attribute< std::vector< T > > " ";
 
 %feature("docstring")  LDA::Attribute< std::vector< T > >::Attribute "
 LDA::Attribute< std::vector< T > >::Attribute(const hid_gc &container,
@@ -259,7 +257,11 @@ LDA::BF_SubArrayPointing::beam(unsigned nr) ";
 
 
 // File: classLDA_1_1CommonAttributesFile.xml
-%feature("docstring") LDA::CommonAttributesFile "";
+%feature("docstring") LDA::CommonAttributesFile "
+
+Wraps an HDF5 file implementing the Common LOFAR Attributes.
+
+C++ includes: CommonAttributesFile.h ";
 
 %feature("docstring")  LDA::CommonAttributesFile::CommonAttributesFile
 "LDA::CommonAttributesFile::CommonAttributesFile(const std::string
@@ -413,7 +415,11 @@ LDA::CoordinatesGroup::coordinate(unsigned nr) ";
 
 
 // File: classLDA_1_1HDF5DatasetBase.xml
-%feature("docstring") LDA::HDF5DatasetBase "";
+%feature("docstring") LDA::HDF5DatasetBase "
+
+Provides generic functionality for HDF5 Datasets.
+
+C++ includes: HDF5DatasetBase.h ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::create "void
 LDA::HDF5DatasetBase< T >::create(const std::vector< ssize_t > &dims,
@@ -443,54 +449,76 @@ LDA::HDF5DatasetBase< T >::create() const ";
 %feature("docstring")  LDA::HDF5DatasetBase::ndims "size_t
 LDA::HDF5DatasetBase< T >::ndims()
 
-the rank of the dataset. ";
+Returns the rank of the dataset. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::dims "std::vector<
 ssize_t > LDA::HDF5DatasetBase< T >::dims()
 
-the dimension sizes. ";
+Returns the dimension sizes. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::maxdims "std::vector<
 ssize_t > LDA::HDF5DatasetBase< T >::maxdims()
 
-the maximum dimension sizes to which this dataset can grow; elements
-of -1 represent unbounded dimensions. ";
+Returns the maximum dimension sizes to which this dataset can grow;
+elements of -1 represent unbounded dimensions. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::externalFiles "std::vector< std::string > LDA::HDF5DatasetBase< T >::externalFiles()
 
-a list of the external files containing data for this dataset. ";
+Returns a list of the external files containing data for this dataset.
+";
 
 %feature("docstring")  LDA::HDF5DatasetBase::getMatrix "void
 LDA::HDF5DatasetBase< T >::getMatrix(const std::vector< size_t > &pos,
-const std::vector< size_t > &size, T *buffer) ";
+const std::vector< size_t > &size, T *buffer)
+
+Retrieves any matrix of data of sizes `size` from position `pos`.
+`buffer` must point to a memory block large enough to hold the result.
+";
 
 %feature("docstring")  LDA::HDF5DatasetBase::setMatrix "void
 LDA::HDF5DatasetBase< T >::setMatrix(const std::vector< size_t > &pos,
-const std::vector< size_t > &size, const T *buffer) ";
+const std::vector< size_t > &size, const T *buffer)
+
+Stores any matrix of data of sizes `size` at position `pos`. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::get2D "void
 LDA::HDF5DatasetBase< T >::get2D(const std::vector< size_t > &pos, int
-dim1, int dim2, T *outbuffer2) ";
+dim1, int dim2, T *outbuffer2)
+
+Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
+`buffer` must point to a memory block large enough to hold the result.
+";
 
 %feature("docstring")  LDA::HDF5DatasetBase::set2D "void
 LDA::HDF5DatasetBase< T >::set2D(const std::vector< size_t > &pos, int
-dim1, int dim2, const T *inbuffer2) ";
+dim1, int dim2, const T *inbuffer2)
+
+Stores a 2D matrix of data from a 2D dataset at position `pos`. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::get1D "void
 LDA::HDF5DatasetBase< T >::get1D(const std::vector< size_t > &pos, int
-dim1, T *outbuffer1) ";
+dim1, T *outbuffer1)
+
+Retrieves a 1D matrix of data from a 1D dataset from position `pos`.
+`buffer` must point to a memory block large enough to hold the result.
+";
 
 %feature("docstring")  LDA::HDF5DatasetBase::set1D "void
 LDA::HDF5DatasetBase< T >::set1D(const std::vector< size_t > &pos, int
-dim1, const T *inbuffer1) ";
+dim1, const T *inbuffer1)
+
+Stores a 1D matrix of data from a 1D dataset at position `pos`. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::getScalar "T
 LDA::HDF5DatasetBase< T >::getScalar(const std::vector< size_t > &pos)
-";
+
+Retrieves a single value from the dataset from position `pos`. ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::setScalar "void
 LDA::HDF5DatasetBase< T >::setScalar(const std::vector< size_t > &pos,
-const T &value) ";
+const T &value)
+
+Stores a single value into the dataset at position `pos`. ";
 
 
 // File: classLDA_1_1HDF5Exception.xml

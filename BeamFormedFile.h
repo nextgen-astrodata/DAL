@@ -23,6 +23,7 @@ class BF_StokesDataset;
 
 /*!
  * \class BeamFormedFile
+ *
  * \brief Interface for Beam-formed Data as described in ICD003.
  */
 class BeamFormedFile: public CommonAttributesFile {

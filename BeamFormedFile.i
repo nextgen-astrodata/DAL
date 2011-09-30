@@ -80,6 +80,10 @@ namespace LDA {
 
 namespace LDA {
   %template(HDF5DatasetBaseFloat) HDF5DatasetBase<float>;
+
+  // we can't marshall the raw pointers for these
+  %ignore HDF5Dataset::getMatrix;
+  %ignore HDF5Dataset::setMatrix;
 }
 
 %include CommonAttributesFile.h

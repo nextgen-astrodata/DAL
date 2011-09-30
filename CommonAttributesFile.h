@@ -9,10 +9,11 @@
 
 namespace LDA {
 
-/*
- * These classes implement the Common LOFAR Atttributes.
+/*!
+ * \class CommonAttributesFile
+ *
+ * Wraps an HDF5 file implementing the Common LOFAR Attributes.
  */
-
 class CommonAttributesFile: public HDF5FileBase {
 public:
   CommonAttributesFile( const std::string &filename, enum fileMode mode = READ );

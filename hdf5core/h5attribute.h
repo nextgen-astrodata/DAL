@@ -11,6 +11,8 @@
 namespace LDA {
 
 /*!
+ * \class AttributeBase
+ *
  * Represents core functionality for an attribute inside a group.
  */
 class AttributeBase {
@@ -44,6 +46,8 @@ protected:
 };
 
 /*!
+ * \class Attribute
+ *
  * Represents an attribute containing a scalar or a string.
  */
 template<typename T> class Attribute: public AttributeBase {
@@ -64,6 +68,8 @@ public:
 };
 
 /*!
+ * \class Attribute
+ *
  * Represents an attribute containing a vector of scalars or strings.
  */
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {

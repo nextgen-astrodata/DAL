@@ -10,6 +10,11 @@
 
 namespace LDA {
 
+/*!
+ * \class HDF5DatasetBase
+ *
+ * Provides generic functionality for HDF5 Datasets.
+ */
 template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
@@ -33,40 +38,67 @@ public:
   virtual void create() const { throw HDF5Exception("create() not supported on a dataset"); }
 
   /*!
-   * \return the rank of the dataset.
+   * Returns the rank of the dataset.
    */
   size_t ndims();
 
   /*!
-   * \return the dimension sizes.
+   * Returns the dimension sizes.
    */
   std::vector<ssize_t> dims();
 
   /*!
-   * \return the maximum dimension sizes to which this dataset can grow;
+   * Returns the maximum dimension sizes to which this dataset can grow;
    * elements of -1 represent unbounded dimensions.
    */
   std::vector<ssize_t> maxdims();
 
   /*!
-   * \return a list of the external files containing data for this dataset.
+   * Returns a list of the external files containing data for this dataset.
    */
   std::vector<std::string> externalFiles();
 
-  // get/set a slice of values
+  /*!
+   * Retrieves any matrix of data of sizes `size` from position `pos`.
+   * `buffer` must point to a memory block large enough to hold the result.
+   */
   void getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer );
+
+  /*!
+   * Stores any matrix of data of sizes `size` at position `pos`.
+   */
   void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
 
-  // get/set a 2D slice of values (macro for SWIG/numpy binding)
+  /*!
+   * Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
+   * `buffer` must point to a memory block large enough to hold the result.
+   */
   void get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2 );
+
+  /*!
+   * Stores a 2D matrix of data from a 2D dataset at position `pos`.
+   */
   void set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2 );
 
-  // get/set a 1D slice of values (macro for SWIG/numpy binding)
+  /*!
+   * Retrieves a 1D matrix of data from a 1D dataset from position `pos`.
+   * `buffer` must point to a memory block large enough to hold the result.
+   */
   void get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1 );
+
+  /*!
+   * Stores a 1D matrix of data from a 1D dataset at position `pos`.
+   */
   void set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1 );
 
-  // get/set a single value
+  /*!
+   * Retrieves a single value from the dataset from position `pos`.
+   */
   T getScalar( const std::vector<size_t> &pos );
+
+  /*!
+   * Stores a single value into the dataset at position `pos`.
+   */
   void setScalar( const std::vector<size_t> &pos, const T &value );
 
 protected:
