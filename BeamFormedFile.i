@@ -1,5 +1,6 @@
 %module BeamFormedFile
-%feature("autodoc", "1");
+
+%include "docstrings.i"
 
 typedef long ssize_t;
 typedef unsigned long size_t;
@@ -32,7 +33,7 @@ typedef unsigned long size_t;
   using namespace LDA;
 %}
 
-%include "numpy.i"
+%include "external/numpy.i"
 
 %init %{
   import_array();
@@ -83,4 +84,3 @@ namespace LDA {
 
 %include CommonAttributesFile.h
 %include BeamFormedFile.h
-
