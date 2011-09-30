@@ -23,22 +23,13 @@ exception is thrown if the attribute does not already exist. ";
 Stores the value of this attribute in the HDF5 file. The attribute is
 created if it does not already exist. ";
 
-%feature("docstring")  LDA::Attribute::set "void LDA::Attribute<
-std::string >::set(const std::string &value) const ";
-
-%feature("docstring")  LDA::Attribute::get "std::string
-LDA::Attribute< std::string >::get() const ";
-
-%feature("docstring")  LDA::Attribute::set "void LDA::Attribute<
-std::vector< std::string > >::set(const std::vector< std::string >
-&value) const ";
-
-%feature("docstring")  LDA::Attribute::get "std::vector< std::string
-> LDA::Attribute< std::vector< std::string > >::get() const ";
-
 
 // File: classLDA_1_1Attribute_3_01std_1_1vector_3_01T_01_4_01_4.xml
-%feature("docstring") LDA::Attribute< std::vector< T > > " ";
+%feature("docstring") LDA::Attribute< std::vector< T > > "
+
+Represents an attribute containing a vector of scalars or strings.
+
+C++ includes: h5attribute.h ";
 
 %feature("docstring")  LDA::Attribute< std::vector< T > >::Attribute "
 LDA::Attribute< std::vector< T > >::Attribute(const hid_gc &container,
@@ -56,6 +47,30 @@ const
 
 Stores the value of this attribute in the HDF5 file. The attribute is
 created if it does not already exist. ";
+
+
+// File: classLDA_1_1AttributeBase.xml
+%feature("docstring") LDA::AttributeBase "
+
+Represents core functionality for an attribute inside a group.
+
+C++ includes: h5attribute.h ";
+
+%feature("docstring")  LDA::AttributeBase::name "std::string
+LDA::AttributeBase::name() const
+
+Returns the name of this element in the HDF5 file. ";
+
+%feature("docstring")  LDA::AttributeBase::exists "bool
+LDA::AttributeBase::exists() const
+
+Returns whether this element exists in the HDF5 file. ";
+
+%feature("docstring")  LDA::AttributeBase::remove "void
+LDA::AttributeBase::remove() const
+
+Removes this element from the HDF5 file. Useful for porting,
+repairing, or otherwise modifying files on a structural level. ";
 
 
 // File: classLDA_1_1BeamFormedFile.xml
@@ -395,33 +410,6 @@ unsigned > LDA::CoordinatesGroup::nofAxes() ";
 
 %feature("docstring")  LDA::CoordinatesGroup::coordinate "Coordinate
 LDA::CoordinatesGroup::coordinate(unsigned nr) ";
-
-
-// File: classLDA_1_1Element.xml
-%feature("docstring") LDA::Element "
-
-Represents an element inside a group.
-
-The Element classes provide meta-functionality, such as
-get/set/exists/remove.
-
-C++ includes: h5attribute.h ";
-
-%feature("docstring")  LDA::Element::name "std::string
-LDA::Element::name() const
-
-Returns the name of this element in the HDF5 file. ";
-
-%feature("docstring")  LDA::Element::exists "bool
-LDA::Element::exists() const
-
-Returns whether this element exists in the HDF5 file. ";
-
-%feature("docstring")  LDA::Element::remove "void
-LDA::Element::remove() const
-
-Removes this element from the HDF5 file. Useful for porting,
-repairing, or otherwise modifying files on a structural level. ";
 
 
 // File: classLDA_1_1HDF5DatasetBase.xml

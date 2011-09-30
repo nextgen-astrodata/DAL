@@ -131,6 +131,8 @@ inline hid_t h5stringType()
   return datatype;
 }
 
+// generic versions
+
 template<typename T> inline void Attribute<T>::set( const T &value ) const
 {
   const bool create = !exists();
@@ -190,6 +192,8 @@ template<typename T> inline std::vector<T> Attribute< std::vector<T> >::get() co
 }
 
 // specialisations for std::string
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 template<> inline void Attribute<std::string>::set( const std::string &value ) const
 {
@@ -272,6 +276,8 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
 
   return value;
 }
+
+#endif
 
 }
 
