@@ -21,8 +21,7 @@ public:
 
   /*!
    * Creates a new dataset with dimensions sized `dims` and can be scaled up to `maxdims`. The
-   * rank of the dataset is dims.size() <= maxdims.size(). Any dimension d not mentioned in maxdims
-   * has its maximum set by dims[d]. A maximum of -1 represents an unbounded dimension.
+   * rank of the dataset is dims.size() == maxdims.size(). A maximum of -1 represents an unbounded dimension.
    *
    * If a `filename` is given, that file will be used to store the data. The file can be provided by
    * the user, or will be created upon the first write. Note that the filename cannot be changed
@@ -61,43 +60,91 @@ public:
   /*!
    * Retrieves any matrix of data of sizes `size` from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
+   *
+   * Requires:
+   *    pos.size() == size.size() == ndims()
    */
   void getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer );
 
   /*!
    * Stores any matrix of data of sizes `size` at position `pos`.
+   *
+   * Requires:
+   *    pos.size() == size.size() == ndims()
    */
   void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
 
   /*!
    * Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
+   *
+   * pos:                       position of the first sample
+   * dim1, dim2, outbuffer2:    2D array, the size of which determines the amount of data to retrieve
+   * dim1index, dim2index:      indices of the dimensions to query
+   *
+   * Requires:
+   *    ndims() >= 2
+   *    pos.size() == ndims()
+   *    dim1index < dim2index < ndims()
    */
-  void get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2 );
+  void get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
    * Stores a 2D matrix of data from a 2D dataset at position `pos`.
+   *
+   * pos:                       position of the first sample
+   * dim1, dim2, outbuffer2:    2D array, the size of which determines the amount of data to write
+   * dim1index, dim2index:      indices of the dimensions to query
+   *
+   * Requires:
+   *    ndims() >= 2
+   *    pos.size() == ndims()
+   *    dim1index < dim2index < ndims()
    */
-  void set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2 );
+  void set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
    * Retrieves a 1D matrix of data from a 1D dataset from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
+   *
+   * pos:                       position of the first sample
+   * dim1, outbuffer1:          1D array, the size of which determines the amount of data to write
+   * dim1index:                 index of the dimension to query
+   *
+   * Requires:
+   *    ndims() >= 1
+   *    pos.size() == ndims()
+   *    dim1index < ndims()
    */
-  void get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1 );
+  void get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1, unsigned dim1index = 0 );
 
   /*!
    * Stores a 1D matrix of data from a 1D dataset at position `pos`.
+   *
+   * pos:                       position of the first sample
+   * dim1, outbuffer1:          1D array, the size of which determines the amount of data to write
+   * dim1index:                 index of the dimension to query
+   *
+   * Requires:
+   *    ndims() >= 1
+   *    pos.size() == ndims()
+   *    dim1index < ndims()
    */
-  void set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1 );
+  void set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1, unsigned dim1index = 0 );
 
   /*!
    * Retrieves a single value from the dataset from position `pos`.
+   *
+   * Requires:
+   *    pos.size() == ndims()
    */
   T getScalar( const std::vector<size_t> &pos );
 
   /*!
    * Stores a single value into the dataset at position `pos`.
+   *
+   * Requires:
+   *    pos.size() == ndims()
    */
   void setScalar( const std::vector<size_t> &pos, const T &value );
 
@@ -117,6 +164,9 @@ private:
 template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
 
   const size_t rank = dims.size();
+
+  if (maxdims.size() != rank)
+    throw HDF5Exception("Current and maximum dimensions vectors must have equal length");
 
   // convert from ssize_t -> hsize_t
   std::vector<hsize_t> hdims(rank), hmaxdims(rank);
@@ -145,7 +195,11 @@ template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t>
 
 template<typename T> size_t HDF5DatasetBase<T>::ndims()
 {
-  hid_gc dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset");
+  // TODO: this routine is often used for bounds checks. However, caching
+  // ndims() might lead to concurrency issues. Maybe only cache if data
+  // is read-only or only allow access through this API?
+
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset");
 
   int rank = H5Sget_simple_extent_ndims(dataspace);
 
@@ -161,7 +215,7 @@ template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::dims()
   std::vector<hsize_t> dims(rank);
   std::vector<ssize_t> result(rank);
 
-  hid_gc dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset");
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset");
 
   if (H5Sget_simple_extent_dims(dataspace, &dims[0], NULL) < 0)
     throw HDF5Exception("Could not obtain dimensions of dataspace");
@@ -179,7 +233,7 @@ template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::maxdims()
   std::vector<hsize_t> maxdims(rank);
   std::vector<ssize_t> result(rank);
 
-  hid_gc dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset");
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset");
 
   if (H5Sget_simple_extent_dims(dataspace, &maxdims[0], NULL) < 0)
     throw HDF5Exception("Could not obtain maximum dimensions of dataspace");
@@ -193,7 +247,7 @@ template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::maxdims()
 
 template<typename T> std::vector<std::string> HDF5DatasetBase<T>::externalFiles()
 {
-  hid_gc dcpl(H5Dget_create_plist(group()), H5Pclose, "Could not open dataset creation property list (dcpl)");
+  hid_gc_noref dcpl(H5Dget_create_plist(group()), H5Pclose, "Could not open dataset creation property list (dcpl)");
 
   int numfiles = H5Pget_external_count(dcpl);
 
@@ -226,40 +280,72 @@ template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_
   matrixIO(pos, size, const_cast<T *>(buffer), false);
 }
 
-template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2 )
+template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
 {
-  std::vector<size_t> size(pos.size(),1);
+  std::vector<size_t> size(ndims(),1);
 
-  size[0] = dim1;
-  size[1] = dim2;
+  if (size.size() < 2)
+    throw HDF5Exception("get2D requires a dataset of at least 2 dimensions");
+
+  if (dim1index >= size.size())
+    throw HDF5Exception("First dimension index exceeds the dataset rank");
+
+  if (dim2index >= size.size())
+    throw HDF5Exception("Second dimension index exceeds the dataset rank");
+
+  // we don't do transposes
+  if (dim1index >= dim2index)
+    throw HDF5Exception("Dimensions must be addressed in-order");
+
+  size[dim1index] = dim1;
+  size[dim2index] = dim2;
 
   getMatrix(pos, size, outbuffer2);
 }
 
-template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2 )
+template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
 {
-  std::vector<size_t> size(pos.size(),1);
+  std::vector<size_t> size(ndims(),1);
 
-  size[0] = dim1;
-  size[1] = dim2;
+  if (size.size() < 2)
+    throw HDF5Exception("set2D requires a dataset of at least 2 dimensions");
+
+  if (dim1index >= size.size())
+    throw HDF5Exception("First dimension index exceeds the dataset rank");
+
+  if (dim2index >= size.size())
+    throw HDF5Exception("Second dimension index exceeds the dataset rank");
+
+  // we don't do transposes
+  if (dim1index >= dim2index)
+    throw HDF5Exception("Dimensions must be addressed in-order");
+
+  size[dim1index] = dim1;
+  size[dim2index] = dim2;
 
   setMatrix(pos, size, inbuffer2);
 }
 
-template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1 )
+template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1, unsigned dim1index )
 {
-  std::vector<size_t> size(pos.size(),1);
+  std::vector<size_t> size(ndims(),1);
 
-  size[0] = dim1;
+  if (dim1index >= size.size())
+    throw HDF5Exception("Dimension index exceeds the dataset rank");
+
+  size[dim1index] = dim1;
 
   getMatrix(pos, size, outbuffer1);
 }
 
-template<typename T> void HDF5DatasetBase<T>::set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1 )
+template<typename T> void HDF5DatasetBase<T>::set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1, unsigned dim1index )
 {
-  std::vector<size_t> size(pos.size(),1);
+  std::vector<size_t> size(ndims(),1);
 
-  size[0] = dim1;
+  if (dim1index >= size.size())
+    throw HDF5Exception("Dimension index exceeds the dataset rank");
+
+  size[dim1index] = dim1;
 
   setMatrix(pos, size, inbuffer1);
 }
@@ -307,6 +393,12 @@ template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t
   const size_t rank = ndims();
 
   std::vector<hsize_t> offset(rank), count(rank);
+
+  if (pos.size() != rank)
+    throw HDF5Exception("Specified position does not match dimensionality of dataset");
+
+  if (size.size() != rank)
+    throw HDF5Exception("Specified block size does not match dimensionality of dataset");
 
   for (size_t i = 0; i < rank; i++) {
     offset[i] = pos[i];
