@@ -14,3 +14,6 @@ To build in-place and test:
         cd test
         python example.py
 
+To regenerate the docstrings and doxygen documentation, you need to install doxygen, and run
+        make clean
+        make docstrings.i
