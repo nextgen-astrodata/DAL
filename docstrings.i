@@ -427,10 +427,8 @@ const std::vector< ssize_t > &maxdims, const std::string
 &filename=\"\", enum Endianness endianness=NATIVE)
 
 Creates a new dataset with dimensions sized `dims` and can be scaled
-up to `maxdims`. The rank of the dataset is dims.size() <=
-maxdims.size(). Any dimension d not mentioned in maxdims has its
-maximum set by dims[d]. A maximum of -1 represents an unbounded
-dimension.
+up to `maxdims`. The rank of the dataset is dims.size() ==
+maxdims.size(). A maximum of -1 represents an unbounded dimension.
 
 If a `filename` is given, that file will be used to store the data.
 The file can be provided by the user, or will be created upon the
@@ -473,52 +471,85 @@ const std::vector< size_t > &size, T *buffer)
 
 Retrieves any matrix of data of sizes `size` from position `pos`.
 `buffer` must point to a memory block large enough to hold the result.
-";
+
+Requires: pos.size() == size.size() == ndims() ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::setMatrix "void
 LDA::HDF5DatasetBase< T >::setMatrix(const std::vector< size_t > &pos,
 const std::vector< size_t > &size, const T *buffer)
 
-Stores any matrix of data of sizes `size` at position `pos`. ";
+Stores any matrix of data of sizes `size` at position `pos`.
+
+Requires: pos.size() == size.size() == ndims() ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::get2D "void
 LDA::HDF5DatasetBase< T >::get2D(const std::vector< size_t > &pos, int
-dim1, int dim2, T *outbuffer2)
+dim1, int dim2, T *outbuffer2, unsigned dim1index=0, unsigned
+dim2index=1)
 
 Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
 `buffer` must point to a memory block large enough to hold the result.
-";
+
+pos: position of the first sample dim1, dim2, outbuffer2: 2D array,
+the size of which determines the amount of data to retrieve dim1index,
+dim2index: indices of the dimensions to query
+
+Requires: ndims() >= 2 pos.size() == ndims() dim1index < dim2index <
+ndims() ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::set2D "void
 LDA::HDF5DatasetBase< T >::set2D(const std::vector< size_t > &pos, int
-dim1, int dim2, const T *inbuffer2)
+dim1, int dim2, const T *inbuffer2, unsigned dim1index=0, unsigned
+dim2index=1)
 
-Stores a 2D matrix of data from a 2D dataset at position `pos`. ";
+Stores a 2D matrix of data from a 2D dataset at position `pos`.
+
+pos: position of the first sample dim1, dim2, outbuffer2: 2D array,
+the size of which determines the amount of data to write dim1index,
+dim2index: indices of the dimensions to query
+
+Requires: ndims() >= 2 pos.size() == ndims() dim1index < dim2index <
+ndims() ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::get1D "void
 LDA::HDF5DatasetBase< T >::get1D(const std::vector< size_t > &pos, int
-dim1, T *outbuffer1)
+dim1, T *outbuffer1, unsigned dim1index=0)
 
 Retrieves a 1D matrix of data from a 1D dataset from position `pos`.
 `buffer` must point to a memory block large enough to hold the result.
-";
+
+pos: position of the first sample dim1, outbuffer1: 1D array, the size
+of which determines the amount of data to write dim1index: index of
+the dimension to query
+
+Requires: ndims() >= 1 pos.size() == ndims() dim1index < ndims() ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::set1D "void
 LDA::HDF5DatasetBase< T >::set1D(const std::vector< size_t > &pos, int
-dim1, const T *inbuffer1)
+dim1, const T *inbuffer1, unsigned dim1index=0)
 
-Stores a 1D matrix of data from a 1D dataset at position `pos`. ";
+Stores a 1D matrix of data from a 1D dataset at position `pos`.
+
+pos: position of the first sample dim1, outbuffer1: 1D array, the size
+of which determines the amount of data to write dim1index: index of
+the dimension to query
+
+Requires: ndims() >= 1 pos.size() == ndims() dim1index < ndims() ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::getScalar "T
 LDA::HDF5DatasetBase< T >::getScalar(const std::vector< size_t > &pos)
 
-Retrieves a single value from the dataset from position `pos`. ";
+Retrieves a single value from the dataset from position `pos`.
+
+Requires: pos.size() == ndims() ";
 
 %feature("docstring")  LDA::HDF5DatasetBase::setScalar "void
 LDA::HDF5DatasetBase< T >::setScalar(const std::vector< size_t > &pos,
 const T &value)
 
-Stores a single value into the dataset at position `pos`. ";
+Stores a single value into the dataset at position `pos`.
+
+Requires: pos.size() == ndims() ";
 
 
 // File: classLDA_1_1HDF5Exception.xml

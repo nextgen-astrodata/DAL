@@ -1,5 +1,8 @@
 all:	docstrings.i
 
+clean:
+	rm -rf xml docstrings.i
+
 xml/index.xml:
 	doxygen doxygen.conf
 
