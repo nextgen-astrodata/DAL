@@ -86,9 +86,28 @@ namespace LDA {
   %template(HDF5DatasetBaseFloat) HDF5DatasetBase<float>;
 
   // we can't marshall the raw pointers for these
-  %ignore HDF5Dataset::getMatrix;
-  %ignore HDF5Dataset::setMatrix;
+  // TODO: Fix? Still show up for BF_StokesDataset for example
+  %ignore HDF5DatasetBaseFloat::getMatrix;
+  %ignore HDF5DatasetBaseFloat::setMatrix;
 }
 
 %include CommonAttributesFile.h
 %include BeamFormedFile.h
+
+namespace LDA {
+  // we can't marshall the raw pointers for these
+  // TODO: Fix? Still show up for BF_StokesDataset for example
+  %ignore BF_StokesDataset::getMatrix;
+  %ignore BF_StokesDataset::setMatrix;
+}
+
+%pythoncode %{
+  import numpy
+
+  # record the numpy datatypes used in the various datasets
+  # TODO: automatically generate this somehow?
+  BF_StokesDataset.dtype = numpy.float32
+
+  del numpy
+%}
+

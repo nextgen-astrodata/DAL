@@ -51,8 +51,8 @@ for sapnr in count():
       # The dimensions of the provided numpy arrays determine the amount of data
       # that has to be read or written. The dimensionality must be the same as of
       # the dataset. Care must be taken that the numpy array
-      # is of the correct type (numpy.float32 in this case).
-      x = numpy.array([[0,0],[0,0]], dtype=numpy.float32)
+      # is of the correct type (stokes.dtype == numpy.float32 in this case).
+      x = numpy.array([[0,0],[0,0]], dtype=stokes.dtype)
 
       # get2D(pos,array) reads `array` at position `pos`.
       stokes.get2D([0,0],x);
