@@ -239,12 +239,12 @@ class Doxy2SWIG:
         cdef_kind = compdef.attributes['kind'].value
         
         if prot == 'public':
-            first = self.get_specific_nodes(node, ('definition', 'name'))
+            first = self.get_specific_nodes(node, ('definition', 'name', 'argsstring'))
             name = first['name'].firstChild.data
             if name[:8] == 'operator': # Don't handle operators yet.
                 return
 
-            defn = first['definition'].firstChild.data
+            defn = "" #first['definition'].firstChild.data
             self.add_text('\n')
             self.add_text('%feature("docstring") ')
             

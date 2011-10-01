@@ -1,5 +1,9 @@
 %module BeamFormedFile
 
+// first generate signatures using SWIG's knowledge
+%feature("autodoc",1);
+
+// then append documentation using doxygen's knowledge
 %include "docstrings.i"
 
 typedef long ssize_t;
@@ -52,10 +56,10 @@ typedef unsigned long size_t;
 
 %include "std_vector.i"
 namespace std {
+  %template(VectorSizeT)        vector<size_t>;
+  %template(VectorSSizeT)       vector<ssize_t>;
   %template(VectorUnsigned)     vector<unsigned>;
   %template(VectorInt)          vector<int>;
-  %template(VectorUnsignedLong) vector<unsigned long>;
-  %template(VectorLong)         vector<long>;
   %template(VectorString)       vector<string>;
 };
 
