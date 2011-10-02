@@ -85,7 +85,8 @@ namespace std {
 
 %rename(get_hid_t) operator hid_t;
 
-%include hdf5core/h5attribute.h
+%include HDF5Node.h
+%include HDF5Attribute.h
 
 namespace LDA {
   %template(AttributeBool)      Attribute<bool>;
@@ -103,7 +104,6 @@ namespace LDA {
 %ignore *::getMatrix;
 %ignore *::setMatrix;
 
-%include HDF5Node.h
 %include HDF5FileBase.h
 %include HDF5GroupBase.h
 %include HDF5DatasetBase.h

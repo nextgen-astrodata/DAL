@@ -12,6 +12,9 @@ class HDF5Node {
 public:
   HDF5Node( const std::string &name ): _name(name) {}
 
+  /*!
+   * Returns the HDF5 name of this node.
+   */
   std::string name() const { return _name; }
 
 protected:

@@ -5,23 +5,19 @@
 #include <vector>
 #include <cstdlib>
 #include <hdf5.h>
-#include "h5typemap.h"
-#include "hid_gc.h"
+#include "HDF5Node.h"
+#include "hdf5core/h5typemap.h"
+#include "hdf5core/hid_gc.h"
 
 namespace LDA {
 
 /*!
  * Represents core functionality for an attribute inside a group.
  */
-class AttributeBase {
+class AttributeBase: public HDF5Node {
 public:
   /*!
-   * Returns the name of this element in the HDF5 file.
-   */
-  std::string name() const { return _name; }
-
-  /*!
-   * Returns whether this element exists in the HDF5 file.
+   * Returns whether this attribute exists in the HDF5 file.
    */
   bool exists() const { return H5Aexists(container, _name.c_str()) > 0; }
 
@@ -32,7 +28,7 @@ public:
   void remove() const { if (H5Adelete(container, _name.c_str()) < 0) throw HDF5Exception("Could not delete element"); }
 
 protected:
-  AttributeBase( const hid_gc &container, const std::string &name ): container(container), _name(name) {}
+  AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
 
   /*!
    * Returns the number of data points in this element (1 for a scalar, >= 0 for a vector)
@@ -40,7 +36,6 @@ protected:
   size_t size() const;
 
   const hid_gc container;
-  const std::string _name;
 };
 
 /*!
