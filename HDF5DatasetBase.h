@@ -87,7 +87,7 @@ public:
    *    pos.size() == ndims()
    *    dim1index < dim2index < ndims()
    */
-  void get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
+  void get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
    * Stores a 2D matrix of data from a 2D dataset at position `pos`.
@@ -101,7 +101,7 @@ public:
    *    pos.size() == ndims()
    *    dim1index < dim2index < ndims()
    */
-  void set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
+  void set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
    * Retrieves a 1D matrix of data from a 1D dataset from position `pos`.
@@ -116,7 +116,7 @@ public:
    *    pos.size() == ndims()
    *    dim1index < ndims()
    */
-  void get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1, unsigned dim1index = 0 );
+  void get1D( const std::vector<size_t> &pos, size_t dim1, T *outbuffer1, unsigned dim1index = 0 );
 
   /*!
    * Stores a 1D matrix of data from a 1D dataset at position `pos`.
@@ -130,7 +130,7 @@ public:
    *    pos.size() == ndims()
    *    dim1index < ndims()
    */
-  void set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1, unsigned dim1index = 0 );
+  void set1D( const std::vector<size_t> &pos, size_t dim1, const T *inbuffer1, unsigned dim1index = 0 );
 
   /*!
    * Retrieves a single value from the dataset from position `pos`.
@@ -280,7 +280,7 @@ template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_
   matrixIO(pos, size, const_cast<T *>(buffer), false);
 }
 
-template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &pos, int dim1, int dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
+template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
 {
   std::vector<size_t> size(ndims(),1);
 
@@ -303,7 +303,7 @@ template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &
   getMatrix(pos, size, outbuffer2);
 }
 
-template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &pos, int dim1, int dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
+template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
 {
   std::vector<size_t> size(ndims(),1);
 
@@ -326,7 +326,7 @@ template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &
   setMatrix(pos, size, inbuffer2);
 }
 
-template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &pos, int dim1, T *outbuffer1, unsigned dim1index )
+template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &pos, size_t dim1, T *outbuffer1, unsigned dim1index )
 {
   std::vector<size_t> size(ndims(),1);
 
@@ -338,7 +338,7 @@ template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &
   getMatrix(pos, size, outbuffer1);
 }
 
-template<typename T> void HDF5DatasetBase<T>::set1D( const std::vector<size_t> &pos, int dim1, const T *inbuffer1, unsigned dim1index )
+template<typename T> void HDF5DatasetBase<T>::set1D( const std::vector<size_t> &pos, size_t dim1, const T *inbuffer1, unsigned dim1index )
 {
   std::vector<size_t> size(ndims(),1);
 

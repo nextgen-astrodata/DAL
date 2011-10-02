@@ -47,14 +47,16 @@ typedef unsigned long size_t;
   import_array();
 %}
 
+%numpy_typemaps(float, NPY_FLOAT, size_t)
+
 // SWIG does not allow syntax for numpy.i supporting true
 // multidimentional output arrays. So we use INPLACE_ARRAY for everything
 // for consistency.
-%apply (int DIM1, float* INPLACE_ARRAY1) {(int dim1, float *outbuffer1)}
-%apply (int DIM1, int DIM2, float* INPLACE_ARRAY2) {(int dim1, int dim2, float *outbuffer2)}
+%apply (size_t DIM1, float* INPLACE_ARRAY1) {(size_t dim1, float *outbuffer1)}
+%apply (size_t DIM1, size_t DIM2, float* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, float *outbuffer2)}
 
-%apply (int DIM1, float* IN_ARRAY1) {(int dim1, const float *inbuffer1)}
-%apply (int DIM1, int DIM2, float* IN_ARRAY2) {(int dim1, int dim2, const float *inbuffer2)}
+%apply (size_t DIM1, float* IN_ARRAY1) {(size_t dim1, const float *inbuffer1)}
+%apply (size_t DIM1, size_t DIM2, float* IN_ARRAY2) {(size_t dim1, size_t dim2, const float *inbuffer2)}
 
 // -------------------------------
 // STL templates
