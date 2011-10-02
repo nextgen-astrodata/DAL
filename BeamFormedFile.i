@@ -1,13 +1,18 @@
 %module BeamFormedFile
 
+// -------------------------------
+// Documentation
+// -------------------------------
+
 // first generate signatures using SWIG's knowledge
 %feature("autodoc",1);
 
 // then append documentation using doxygen's knowledge
 %include "docstrings.i"
 
-typedef long ssize_t;
-typedef unsigned long size_t;
+// -------------------------------
+// Exception handling
+// -------------------------------
 
 %include "exception.i"
 
@@ -25,16 +30,15 @@ typedef unsigned long size_t;
   }
 }
 
-// use carrays for arrays for now. primitive, but better than nothing.
-// (use if numpy is not available)
-//%include "carrays.i"
-//%array_class(float,ArrayFloat);
+// -------------------------------
+// Type marshalling
+// -------------------------------
+
+typedef long ssize_t;
+typedef unsigned long size_t;
 
 %{
   #define SWIG_FILE_WITH_INIT
-  #include "BeamFormedFile.h"
-
-  using namespace LDA;
 %}
 
 %include "external/numpy.i"
@@ -52,9 +56,14 @@ typedef unsigned long size_t;
 %apply (int DIM1, float* IN_ARRAY1) {(int dim1, const float *inbuffer1)}
 %apply (int DIM1, int DIM2, float* IN_ARRAY2) {(int dim1, int dim2, const float *inbuffer2)}
 
+// -------------------------------
+// STL templates
+// -------------------------------
+
 %include "std_string.i"
 
 %include "std_vector.i"
+
 namespace std {
   %template(VectorSizeT)        vector<size_t>;
   %template(VectorSSizeT)       vector<ssize_t>;
@@ -62,6 +71,16 @@ namespace std {
   %template(VectorInt)          vector<int>;
   %template(VectorString)       vector<string>;
 };
+
+// -------------------------------
+// LDA classes and templates
+// -------------------------------
+
+%{
+  #include "BeamFormedFile.h"
+
+  using namespace LDA;
+%}
 
 %rename(get_hid_t) operator hid_t;
 
@@ -94,6 +113,10 @@ namespace LDA {
 
 %include CommonAttributesFile.h
 %include BeamFormedFile.h
+
+// -------------------------------
+// Class extensions for bindings
+// -------------------------------
 
 %pythoncode %{
   import numpy
