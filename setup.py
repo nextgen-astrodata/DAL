@@ -36,7 +36,7 @@ BeamFormedFile_module = Extension('_BeamFormedFile',
                            library_dirs=[hdf5_lib],
                            extra_compile_args=['-include','%s/hdf5.h' % hdf5_include], # force right hdf5.h instead of from /usr/include
                            libraries=['hdf5'],
-                           swig_opts=['-c++'],
+                           swig_opts=['-c++','-Wall'],
                            language='c++',
                            )
 
