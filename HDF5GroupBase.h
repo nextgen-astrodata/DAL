@@ -9,14 +9,36 @@
 
 namespace LDA {
 
+/*!
+ * Wraps an HDF5 group, providing core functionality.
+ */
 class HDF5GroupBase: public HDF5Node {
 public:
   HDF5GroupBase( const HDF5GroupBase &other );
   virtual ~HDF5GroupBase();
 
+  /*!
+   * Add this group to the HDF5 file.
+   *
+   * Note: any attributes and subgroups must be added separately.
+   */
   virtual void create();
+
+  /*!
+   * Returns whether this group exists in the HDF5 file.
+   */
   bool exists() const;
+
+  /*!
+   * Removes this group from the HDF5 file.
+   */
   void remove() const;
+
+  /*!
+   * Copies all members from another group into this one.
+   *
+   * If `deepcopy` is set, subgroups and datasets are copied as well.
+   */
   void set( const HDF5GroupBase &other, bool deepcopy );
 
   Attribute<std::string> groupType();

@@ -13,6 +13,9 @@ class HDF5FileBase: public HDF5Node {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
 
+  /*!
+   * Commit any changes to disk.
+   */
   void flush() const;
 
 protected:

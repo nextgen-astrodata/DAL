@@ -10,8 +10,6 @@
 namespace LDA {
 
 /*!
- * \class CommonAttributesFile
- *
  * Wraps an HDF5 file implementing the Common LOFAR Attributes.
  */
 class CommonAttributesFile: public HDF5FileBase {

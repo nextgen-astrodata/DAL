@@ -22,12 +22,13 @@ class SpectralCoordinate;
 class BF_StokesDataset;
 
 /*!
- * \class BeamFormedFile
- *
- * \brief Interface for Beam-formed Data as described in ICD003.
+ * Interface for Beam-formed Data as described in ICD003.
  */
 class BeamFormedFile: public CommonAttributesFile {
 public:
+  /*!
+   * Open `filename` for reading/writing/creation.
+   */
   BeamFormedFile( const std::string &filename, enum fileMode mode = READ );
 
   Attribute<std::string>  createOfflineOnline();

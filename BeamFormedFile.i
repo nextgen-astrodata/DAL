@@ -70,7 +70,6 @@ namespace std {
   %template(VectorSizeT)        vector<size_t>;
   %template(VectorSSizeT)       vector<ssize_t>;
   %template(VectorUnsigned)     vector<unsigned>;
-  %template(VectorInt)          vector<int>;
   %template(VectorString)       vector<string>;
 };
 
