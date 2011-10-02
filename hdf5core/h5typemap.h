@@ -2,53 +2,63 @@
 #define __H5TYPEMAP__
 
 #include <hdf5.h>
+#include "hid_gc.h"
+#include "h5complex.h"
 
 namespace LDA {
 
-// C->HDF5 translations of native types
-template<typename T> hid_t h5nativeType();
+template<typename T> struct h5typemap {
+  /*!
+   * HDF5 type identifier for type T in memory (the native C++ type)
+   */
+  hid_t memoryType(); 
 
-template<> inline hid_t h5nativeType<float>()    { return H5T_NATIVE_FLOAT;  }
-template<> inline hid_t h5nativeType<double>()   { return H5T_NATIVE_DOUBLE; }
-template<> inline hid_t h5nativeType<unsigned>() { return H5T_NATIVE_UINT;   }
-template<> inline hid_t h5nativeType<int>()      { return H5T_NATIVE_INT;    }
-template<> inline hid_t h5nativeType<bool>()     { return H5T_NATIVE_CHAR;   } // assuming sizeof(bool) == 1
+  /*!
+   * HDF5 type identifier for attributes of type T on disk
+   */
+  hid_t attributeType();
 
-// C->HDF5 translations of types to use in header (ICD 003)
-template<typename T> hid_t h5writeType();
+  /*!
+   * HDF5 type identifier for datasets of type T on disk
+   */
+  hid_t dataType( bool bigEndian );
+};
 
-template<> inline hid_t h5writeType<float>()    { return H5T_IEEE_F32LE; }
-template<> inline hid_t h5writeType<double>()   { return H5T_IEEE_F64LE; }
-template<> inline hid_t h5writeType<unsigned>() { return H5T_STD_U32LE;  }
-template<> inline hid_t h5writeType<int>()      { return H5T_STD_I32LE;  }
-template<> inline hid_t h5writeType<bool>()     { return H5T_STD_I32LE;  } // emulate bool with a 32-bit int
+template<> struct h5typemap<float> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_FLOAT; }
+  static inline hid_t attributeType()            { return H5T_IEEE_F32LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_IEEE_F32BE : H5T_IEEE_F32LE; }
+};
 
-// C->HDF5 translations of types to use for data (CNProc endianness)
-template<typename T> hid_t h5dataType( bool bigEndian );
+template<> struct h5typemap<double> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_DOUBLE; }
+  static inline hid_t attributeType()            { return H5T_IEEE_F64LE;    }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_IEEE_F64BE : H5T_IEEE_F64LE; }
+};
 
-template<> inline hid_t h5dataType<float>( bool bigEndian ) {
-  return bigEndian ? H5T_IEEE_F32BE : H5T_IEEE_F32LE;
-}
+template<> struct h5typemap<unsigned> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_UINT; }
+  static inline hid_t attributeType()            { return H5T_STD_U32LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_U32BE : H5T_STD_U32LE; }
+};
 
+template<> struct h5typemap<int> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_INT; }
+  static inline hid_t attributeType()            { return H5T_STD_I32LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I32BE : H5T_STD_I32LE; }
+};
 
-// DEBUG: let the compiler warn when it tries to use undefined T
-template<class T> hid_t h5nativeType() {
-  T::lol_no_this_wont_compile();
+template<> struct h5typemap<bool> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_CHAR; } // assumes sizeof(bool) == 1
+  static inline hid_t attributeType()            { return H5T_STD_I32LE;   } // emulate a bool as a 32-bit signed integer
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I32BE : H5T_STD_I32LE; }
+};
 
-  return 0;
-}
-
-template<class T> hid_t h5writeType() {
-  T::lol_no_this_wont_compile();
-
-  return 0;
-}
-
-template<class T> hid_t h5dataType(bool) {
-  T::lol_no_this_wont_compile();
-
-  return 0;
-}
+template<typename T> struct h5typemap< std::complex<T> > {
+  static inline hid_gc memoryType()               { return h5complexType( h5typemap<T>::memoryType() );        }
+  static inline hid_gc attributeType()            { return h5complexType( h5typemap<T>::attributeType() );     }
+  static inline hid_gc dataType( bool bigEndian ) { return h5complexType( h5typemap<T>::dataType(bigEndian) ); }
+};
 
 }
 

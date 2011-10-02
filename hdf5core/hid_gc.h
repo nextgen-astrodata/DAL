@@ -23,7 +23,7 @@ public:
   }
 
   ~hid_gc() {
-    if (H5Idec_ref(hid) == 1) {
+    if (H5Idec_ref(hid) == 1 && closefunc) {
       closefunc(hid);
     }
   }
@@ -49,7 +49,9 @@ public:
   }
 
   ~hid_gc_noref() {
-    closefunc(hid);
+    if (closefunc) {
+      closefunc(hid);
+    }  
   }
 
   operator hid_t() const { return hid; }

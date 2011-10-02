@@ -135,13 +135,13 @@ template<typename T> inline void Attribute<T>::set( const T &value ) const
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
 
   hid_gc_noref attr(
-    create ? H5Acreate2(container, _name.c_str(), h5writeType<T>(), dataspace, H5P_DEFAULT, H5P_DEFAULT)
+    create ? H5Acreate2(container, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT)
            : H5Aopen(container, _name.c_str(), H5P_DEFAULT)
     , H5Aclose, 
     create ? "Could not create atttribute"
            : "Could not open attribute");
 
-  if (H5Awrite(attr, h5nativeType<T>(), &value) < 0)
+  if (H5Awrite(attr, h5typemap<T>::memoryType(), &value) < 0)
     throw HDF5Exception("Could not write attribute");
 }
 
@@ -151,7 +151,7 @@ template<typename T> inline T Attribute<T>::get() const
 
   hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
-  if (H5Aread(attr, h5nativeType<T>(), &value) < 0)
+  if (H5Aread(attr, h5typemap<T>::memoryType(), &value) < 0)
     throw HDF5Exception("Could not read attribute");
 
   return value;
@@ -164,13 +164,13 @@ template<typename T> inline void Attribute< std::vector<T> >::set( const std::ve
   hid_gc_noref dataspace(h5array(value.size()), H5Sclose, "Could not create simple dataspace");
 
   hid_gc_noref attr(
-    create ? H5Acreate2(container, _name.c_str(), h5writeType<T>(), dataspace, H5P_DEFAULT, H5P_DEFAULT)
+    create ? H5Acreate2(container, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT)
            : H5Aopen(container, _name.c_str(), H5P_DEFAULT)
     , H5Aclose,
     create ? "Could not create atttribute"
            : "Could not open attribute");
 
-  if (H5Awrite(attr, h5nativeType<T>(), &value[0]) < 0)
+  if (H5Awrite(attr, h5typemap<T>::memoryType(), &value[0]) < 0)
     throw HDF5Exception("Could not write to attribute");
 }
 
@@ -180,7 +180,7 @@ template<typename T> inline std::vector<T> Attribute< std::vector<T> >::get() co
 
   std::vector<T> value(size());
 
-  if (H5Aread(attr, h5nativeType<T>(), &value[0]) < 0)
+  if (H5Aread(attr, h5typemap<T>::memoryType(), &value[0]) < 0)
     throw HDF5Exception("Could not read attribute");
 
   return value;

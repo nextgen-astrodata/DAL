@@ -31,6 +31,24 @@
 }
 
 // -------------------------------
+// STL/C++ templates
+// -------------------------------
+
+%include "std_complex.i"
+
+%include "std_string.i"
+
+%include "std_vector.i"
+
+namespace std {
+  %template(VectorSizeT)        vector<size_t>;
+  %template(VectorSSizeT)       vector<ssize_t>;
+  %template(VectorUnsigned)     vector<unsigned>;
+  %template(VectorString)       vector<string>;
+};
+
+
+// -------------------------------
 // Type marshalling
 // -------------------------------
 
@@ -48,30 +66,22 @@ typedef unsigned long size_t;
 %}
 
 %numpy_typemaps(float, NPY_FLOAT, size_t)
+%numpy_typemaps(std::complex<float>, NPY_COMPLEX64, size_t)
 
 // SWIG does not allow syntax for numpy.i supporting true
-// multidimentional output arrays. So we use INPLACE_ARRAY for everything
-// for consistency.
+// multidimentional output arrays. So we use INPLACE_ARRAY.
+// Also for 1D arrays, to maintain API consistency.
 %apply (size_t DIM1, float* INPLACE_ARRAY1) {(size_t dim1, float *outbuffer1)}
 %apply (size_t DIM1, size_t DIM2, float* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, float *outbuffer2)}
 
 %apply (size_t DIM1, float* IN_ARRAY1) {(size_t dim1, const float *inbuffer1)}
 %apply (size_t DIM1, size_t DIM2, float* IN_ARRAY2) {(size_t dim1, size_t dim2, const float *inbuffer2)}
 
-// -------------------------------
-// STL templates
-// -------------------------------
+%apply (size_t DIM1, std::complex<float>* INPLACE_ARRAY1) {(size_t dim1, std::complex<float> *outbuffer1)}
+%apply (size_t DIM1, size_t DIM2, std::complex<float>* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, std::complex<float> *outbuffer2)}
 
-%include "std_string.i"
-
-%include "std_vector.i"
-
-namespace std {
-  %template(VectorSizeT)        vector<size_t>;
-  %template(VectorSSizeT)       vector<ssize_t>;
-  %template(VectorUnsigned)     vector<unsigned>;
-  %template(VectorString)       vector<string>;
-};
+%apply (size_t DIM1, std::complex<float>* IN_ARRAY1) {(size_t dim1, const std::complex<float> *inbuffer1)}
+%apply (size_t DIM1, size_t DIM2, std::complex<float>* IN_ARRAY2) {(size_t dim1, size_t dim2, const std::complex<float> *inbuffer2)}
 
 // -------------------------------
 // LDA classes and templates
@@ -89,13 +99,15 @@ namespace std {
 %include HDF5Attribute.h
 
 namespace LDA {
+  using namespace std;
+
   %template(AttributeBool)      Attribute<bool>;
   %template(AttributeUnsigned)  Attribute<unsigned>;
   %template(AttributeDouble)    Attribute<double>;
-  %template(AttributeString)    Attribute<std::string>;
+  %template(AttributeString)    Attribute<string>;
 
-  %template(AttributeVUnsigned) Attribute< std::vector<unsigned> >;
-  %template(AttributeVString)   Attribute< std::vector<std::string> >;
+  %template(AttributeVUnsigned) Attribute< vector<unsigned> >;
+  %template(AttributeVString)   Attribute< vector<string> >;
 }
 
 // we can't marshall the raw pointers for these.
@@ -109,7 +121,8 @@ namespace LDA {
 %include HDF5DatasetBase.h
 
 namespace LDA {
-  %template(HDF5DatasetBaseFloat) HDF5DatasetBase<float>;
+  %template(HDF5DatasetBaseFloat)        HDF5DatasetBase<float>;
+  %template(HDF5DatasetBaseComplexFloat) HDF5DatasetBase< std::complex<float> >;
 }
 
 %include CommonAttributesFile.h
@@ -124,6 +137,7 @@ namespace LDA {
 
   # record the numpy datatypes used in the various datasets
   HDF5DatasetBaseFloat.dtype = numpy.float32
+  HDF5DatasetBaseComplexFloat.dtype = numpy.complex64
 
   del numpy
 %}
