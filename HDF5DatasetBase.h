@@ -19,6 +19,8 @@ template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
 
+  HDF5DatasetBase( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+
   /*!
    * Creates a new dataset with dimensions sized `dims` and can be scaled up to `maxdims`. The
    * rank of the dataset is dims.size() == maxdims.size(). A maximum of -1 represents an unbounded dimension.
@@ -149,8 +151,6 @@ public:
   void setScalar( const std::vector<size_t> &pos, const T &value );
 
 protected:
-  HDF5DatasetBase( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
   virtual hid_gc *open( hid_t parent, const std::string &name ) const {
     return new hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset");
   }

@@ -9,7 +9,7 @@ HDF5FileBase::HDF5FileBase( const string &filename, enum HDF5FileBase::fileMode 
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
   // completed: any open group identifiers (etc) will remain functioning)
-  HDF5Node(""),
+  HDF5NodeSet(""),
   _group(hid_gc(open(filename, mode), H5Fclose, mode == CREATE ? "Could not create file" : "Could not open file")),
   filename(filename),
   fileMode(mode)
@@ -31,7 +31,7 @@ hid_t HDF5FileBase::open( const string &filename, enum HDF5FileBase::fileMode mo
   }
 }
 
-void HDF5FileBase::flush() const
+void HDF5FileBase::flush()
 {
   H5Fflush(group(), H5F_SCOPE_GLOBAL);
 }

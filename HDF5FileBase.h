@@ -9,14 +9,16 @@
 
 namespace LDA {
 
-class HDF5FileBase: public HDF5Node {
+class HDF5FileBase: public HDF5NodeSet {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
 
   /*!
    * Commit any changes to disk.
    */
-  void flush() const;
+  void flush();
+
+  virtual const hid_gc &group() { return _group; }
 
 protected:
   HDF5FileBase( const std::string &filename, enum fileMode mode );
@@ -24,8 +26,6 @@ protected:
   const hid_gc _group;
   const std::string filename;
   const fileMode fileMode;
-
-  const hid_gc &group() const { return _group; }
 
 private:
   hid_t open( const std::string &filename, enum fileMode mode ) const;

@@ -31,6 +31,13 @@
 }
 
 // -------------------------------
+// Type marshalling - scalars
+// -------------------------------
+
+typedef long ssize_t;
+typedef unsigned long size_t;
+
+// -------------------------------
 // STL/C++ templates
 // -------------------------------
 
@@ -49,11 +56,8 @@ namespace std {
 
 
 // -------------------------------
-// Type marshalling
+// Type marshalling - arrays
 // -------------------------------
-
-typedef long ssize_t;
-typedef unsigned long size_t;
 
 %{
   #define SWIG_FILE_WITH_INIT
@@ -65,12 +69,11 @@ typedef unsigned long size_t;
   import_array();
 %}
 
+// tell numpy which combinations of data types and index types we use
 %numpy_typemaps(float, NPY_FLOAT, size_t)
 %numpy_typemaps(std::complex<float>, NPY_COMPLEX64, size_t)
 
-// SWIG does not allow syntax for numpy.i supporting true
-// multidimentional output arrays. So we use INPLACE_ARRAY.
-// Also for 1D arrays, to maintain API consistency.
+// tell SWIG how we call our dimension and array parameters
 %apply (size_t DIM1, float* INPLACE_ARRAY1) {(size_t dim1, float *outbuffer1)}
 %apply (size_t DIM1, size_t DIM2, float* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, float *outbuffer2)}
 
@@ -93,10 +96,20 @@ typedef unsigned long size_t;
   using namespace LDA;
 %}
 
-%rename(get_hid_t) operator hid_t;
+// rename otherwise unreachable functions
+%rename(get_hid_t)  operator hid_t;
+%rename(get_hid_gc) operator hid_gc;
+
+// ignore functions that contain raw pointers that
+// cannot be marshalled.
+%ignore *::getMatrix;
+%ignore *::setMatrix;
 
 %include HDF5Node.h
 %include HDF5Attribute.h
+%include HDF5FileBase.h
+%include HDF5GroupBase.h
+%include HDF5DatasetBase.h
 
 namespace LDA {
   using namespace std;
@@ -108,19 +121,7 @@ namespace LDA {
 
   %template(AttributeVUnsigned) Attribute< vector<unsigned> >;
   %template(AttributeVString)   Attribute< vector<string> >;
-}
 
-// we can't marshall the raw pointers for these.
-// use a wildcard to match all subclasses of HDF5DatasetBase
-// as well.
-%ignore *::getMatrix;
-%ignore *::setMatrix;
-
-%include HDF5FileBase.h
-%include HDF5GroupBase.h
-%include HDF5DatasetBase.h
-
-namespace LDA {
   %template(HDF5DatasetBaseFloat)        HDF5DatasetBase<float>;
   %template(HDF5DatasetBaseComplexFloat) HDF5DatasetBase< std::complex<float> >;
 }

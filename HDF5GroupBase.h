@@ -12,9 +12,12 @@ namespace LDA {
 /*!
  * Wraps an HDF5 group, providing core functionality.
  */
-class HDF5GroupBase: public HDF5Node {
+class HDF5GroupBase: public HDF5NodeSet {
 public:
+  HDF5GroupBase( const hid_gc &parent, const std::string &name );
+
   HDF5GroupBase( const HDF5GroupBase &other );
+
   virtual ~HDF5GroupBase();
 
   /*!
@@ -43,19 +46,17 @@ public:
 
   Attribute<std::string> groupType();
 
-protected:
-  HDF5GroupBase( const hid_gc &parent, const std::string &name );
-
-  const hid_gc parent;
-  hid_gc *_group;
-
-  const hid_gc &group() {
+  virtual const hid_gc &group() {
     // deferred opening of group, as it may need to be created first
     if (!_group)
       _group = open(parent, _name);
 
     return *_group;
   }
+
+protected:
+  const hid_gc parent;
+  hid_gc *_group;
 
   virtual hid_gc *open( hid_t parent, const std::string &name ) const;
 };

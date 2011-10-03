@@ -7,7 +7,7 @@ namespace LDA {
 
 HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 :
-  HDF5Node(other._name),
+  HDF5NodeSet(other._name),
   parent(other.parent),
   _group(other._group ? new hid_gc(*other._group) : 0)
 {
@@ -15,7 +15,7 @@ HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 
 HDF5GroupBase::HDF5GroupBase( const hid_gc &parent, const string &name )
 :
-  HDF5Node(name),
+  HDF5NodeSet(name),
   parent(parent),
   _group(0)
 {
