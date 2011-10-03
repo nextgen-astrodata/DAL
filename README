@@ -11,8 +11,9 @@ To install:
 To build in-place and test:
         python setup.py build
         export PYTHONPATH=$PYTHONPATH:`echo $PWD/build/lib*` # just a way to add build/lib-platform/
-        cd test
-        python example.py
+        cd examples
+        python example-bf-read.py
+        python example-custom-write.py
 
 To regenerate the docstrings and doxygen documentation, you need to install doxygen, and run
         make clean
