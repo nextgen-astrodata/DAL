@@ -34,7 +34,8 @@ public:
   HDF5NodeSet( const std::string &name ): HDF5Node(name) {}
 
   /*!
-   * Returns the HDF5 identifier for this set.
+   * Returns the HDF5 identifier for this set, which is required
+   * when accessing substructures.
    */
   virtual const hid_gc &group() = 0;
 };

@@ -30,6 +30,8 @@ public:
    * after the dataset has been created (HDF5 1.8.7), so providing absolute paths will make the
    * dataset difficult to copy or move across systems.
    *
+   * If no `filename' is given, dims == maxdims is required due to limitations of HDF5.
+   *
    * `endianness` toggles whether the data is in big-endian format. Typically:
    *  NATIVE: use the endianness of the current machine
    *  LITTLE: use little-endian: ARM, x86, x86_64
@@ -53,6 +55,15 @@ public:
    * elements of -1 represent unbounded dimensions.
    */
   std::vector<ssize_t> maxdims();
+
+  /*!
+   * Changes the dimensionality of the dataset. Elements of -1 represent unbounded dimensions.
+   * If this dataset uses internal storage (i.e. externalFiles() is empty), dimensions
+   * cannot be unbounded due to limitations of HDF5.
+   *
+   * For now, resizing is only supported if external files are used.
+   */
+  void resize( const std::vector<ssize_t> &newdims );
 
   /*!
    * Returns a list of the external files containing data for this dataset.
@@ -243,6 +254,22 @@ template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::maxdims()
   }
 
   return result;
+}
+
+template<typename T> void HDF5DatasetBase<T>::resize( const std::vector<ssize_t> &newdims )
+{
+  const size_t rank = ndims();
+  std::vector<hsize_t> newdims_hsize_t(rank);
+
+  if (newdims.size() != rank)
+    throw HDF5Exception("resize() cannot change the number of dimensions");
+
+  for (size_t i = 0; i < rank; i++ ) {
+    newdims_hsize_t[i] = newdims[i];
+  }
+
+  if (H5Dset_extent(group(), &newdims_hsize_t[0]) < 0)
+    throw HDF5Exception("Could not resize dataset");
 }
 
 template<typename T> std::vector<std::string> HDF5DatasetBase<T>::externalFiles()

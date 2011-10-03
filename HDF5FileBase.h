@@ -14,6 +14,11 @@ public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
 
   /*!
+   * Open or create an HDF5 file called `filename`.
+   */
+  HDF5FileBase( const std::string &filename, enum fileMode mode );
+
+  /*!
    * Commit any changes to disk.
    */
   void flush();
@@ -21,8 +26,6 @@ public:
   virtual const hid_gc &group() { return _group; }
 
 protected:
-  HDF5FileBase( const std::string &filename, enum fileMode mode );
-
   const hid_gc _group;
   const std::string filename;
   const fileMode fileMode;
