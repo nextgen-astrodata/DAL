@@ -2,7 +2,7 @@
 #define __HDF5DATASET__
 
 // Enable for casa array support in getMatrix and setMatrix
-//#define HAVE_CASA
+#define HAVE_CASA
 
 #include <string>
 #include <vector>
@@ -351,8 +351,9 @@ template<typename T> void HDF5DatasetBase<T>::getMatrix( const std::vector<size_
     throw HDF5Exception("Specified casacore array does not match dimensionality of dataset");
 
   for (size_t i = 0; i < rank; i++) {
-    size[i] = shape[i];
-    strides[i] = steps[i];
+    // casacore uses FORTRAN indexation, so swap the order of the dimensions
+    size[i] = shape[rank-1 -i];
+    strides[i] = steps[rank-1 -i];
   }
 
   matrixIO(pos, size, strides, buffer.data(), true);
@@ -370,8 +371,9 @@ template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_
     throw HDF5Exception("Specified casacore array does not match dimensionality of dataset");
 
   for (size_t i = 0; i < rank; i++) {
-    size[i] = shape[i];
-    strides[i] = steps[i];
+    // casacore uses FORTRAN indexation, so swap the order of the dimensions
+    size[i] = shape[rank-1 -i];
+    strides[i] = steps[rank-1 -i];
   }
 
   matrixIO(pos, size, strides, const_cast<T *>(buffer.data()), false);
@@ -520,8 +522,8 @@ template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t
         // no need to extend the last dimension
         count[i] = size[i];
       } else {  
-        count[i] = strides[i+1] / strides[i];
-      }  
+        count[i] = strides[i] / strides[i+1];
+      }
     }
   } else {
     for (size_t i = 0; i < rank; i++) {
