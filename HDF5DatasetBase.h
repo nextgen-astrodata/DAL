@@ -1,12 +1,19 @@
 #ifndef __HDF5DATASET__
 #define __HDF5DATASET__
 
+// Enable for casa array support in getMatrix and setMatrix
+//#define HAVE_CASA
+
 #include <string>
 #include <vector>
 #include <hdf5.h>
 #include "HDF5GroupBase.h"
 #include "hdf5core/hid_gc.h"
 #include "hdf5core/h5typemap.h"
+
+#ifdef HAVE_CASA
+#include <casa/Arrays/Array.h>
+#endif
 
 namespace LDA {
 
@@ -86,6 +93,25 @@ public:
    *    pos.size() == size.size() == ndims()
    */
   void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
+
+#ifdef HAVE_CASA
+  /*!
+   * Retrieves any matrix from position `pos`.
+   *
+   * Requires:
+   *    buffer.ndim() == ndims()
+   */
+  void getMatrix( const std::vector<size_t> &pos, casa::Array<T> &buffer );
+
+  /*!
+   * Stores any matrix of data of sizes `size` at position `pos`.
+   *
+   * Requires:
+   *    pos.size() == size.size() == ndims()
+   */
+  void setMatrix( const std::vector<size_t> &pos, const casa::Array<T> &buffer );
+
+#endif
 
   /*!
    * Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
@@ -169,7 +195,8 @@ protected:
 private:
   bool bigEndian( enum Endianness endianness ) const;
 
-  void matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer, bool read );
+  // if the strides vector is empty, a continuous array is assumed
+  void matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read );
 };
 
 template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
@@ -299,13 +326,57 @@ template<typename T> std::vector<std::string> HDF5DatasetBase<T>::externalFiles(
 
 template<typename T> void HDF5DatasetBase<T>::getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer )
 {
-  matrixIO(pos, size, buffer, true);
+  const std::vector<size_t> strides(0);
+
+  matrixIO(pos, size, strides, buffer, true);
 }
 
 template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer )
 {
-  matrixIO(pos, size, const_cast<T *>(buffer), false);
+  const std::vector<size_t> strides(0);
+
+  matrixIO(pos, size, strides, const_cast<T *>(buffer), false);
 }
+
+#ifdef HAVE_CASA
+template<typename T> void HDF5DatasetBase<T>::getMatrix( const std::vector<size_t> &pos, casa::Array<T> &buffer )
+{
+  const size_t rank = ndims();
+  std::vector<size_t> size(rank), strides(rank);
+
+  const casa::IPosition &shape = buffer.shape();
+  const casa::IPosition &steps = buffer.steps();
+
+  if (shape.size() != rank)
+    throw HDF5Exception("Specified casacore array does not match dimensionality of dataset");
+
+  for (size_t i = 0; i < rank; i++) {
+    size[i] = shape[i];
+    strides[i] = steps[i];
+  }
+
+  matrixIO(pos, size, strides, buffer.data(), true);
+}
+
+template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_t> &pos, const casa::Array<T> &buffer )
+{
+  const size_t rank = ndims();
+  std::vector<size_t> size(rank), strides(rank);
+
+  const casa::IPosition &shape = buffer.shape();
+  const casa::IPosition &steps = buffer.steps();
+
+  if (shape.size() != rank)
+    throw HDF5Exception("Specified casacore array does not match dimensionality of dataset");
+
+  for (size_t i = 0; i < rank; i++) {
+    size[i] = shape[i];
+    strides[i] = steps[i];
+  }
+
+  matrixIO(pos, size, strides, const_cast<T *>(buffer.data()), false);
+}
+#endif
 
 template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
 {
@@ -415,11 +486,12 @@ template<typename T>  bool HDF5DatasetBase<T>::bigEndian( enum Endianness endian
   };
 }
 
-template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer, bool read )
+template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read )
 {
   const size_t rank = ndims();
+  const bool use_strides = strides.size() == rank;
 
-  std::vector<hsize_t> offset(rank), count(rank);
+  std::vector<hsize_t> offset(rank), count(rank), stride(rank);
 
   if (pos.size() != rank)
     throw HDF5Exception("Specified position does not match dimensionality of dataset");
@@ -437,11 +509,32 @@ template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t
   if (H5Sselect_hyperslab(dataspace, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL) < 0)
     throw HDF5Exception("Could not select hyperslab in dataspace");
 
-  for (size_t i = 0; i < rank; i++) {
-    offset[i] = 0;
+  if (use_strides) {
+    // HDF5 doesn't support strides directly (*), so we present it with a larger continuous array which matches
+    // the strides. By subsequently only requesting to read a small portion of the array, everything works out.
+    
+    // (*) The strides in H5Sselect_hyperslab actually indicate how many elements to skip in each dimension,
+    //     /not/ the distance between neighbouring elements in memory.
+    for (size_t i = 0; i < rank; i++) {
+      if (i == rank - 1) {
+        // no need to extend the last dimension
+        count[i] = size[i];
+      } else {  
+        count[i] = strides[i+1] / strides[i];
+      }  
+    }
+  } else {
+    for (size_t i = 0; i < rank; i++) {
+      count[i]  = size[i];
+    }
   }
 
   hid_gc_noref memspace(H5Screate_simple(rank, &count[0], NULL), H5Sclose, "Could not create simple dataspace");
+
+  for (size_t i = 0; i < rank; i++) {
+    offset[i] = 0;
+    count[i]  = size[i];
+  }
 
   if (H5Sselect_hyperslab(memspace, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL) < 0)
     throw HDF5Exception("Could not select hyperslab in dataspace");
