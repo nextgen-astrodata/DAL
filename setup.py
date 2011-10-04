@@ -30,8 +30,8 @@ else:
   hdf5_include = "/opt/cep/hdf5/include"
   hdf5_lib     = "/opt/cep/hdf5/lib"
 
-BeamFormedFile_module = Extension('_BeamFormedFile',
-                           sources=['BeamFormedFile.i', 'CommonAttributesFile.cc', 'BeamFormedFile.cc', 'HDF5FileBase.cc', 'HDF5GroupBase.cc'],
+LDA_module = Extension('_LDA',
+                           sources=['LDA.i', 'CommonAttributesFile.cc', 'BeamFormedFile.cc', 'HDF5FileBase.cc', 'HDF5GroupBase.cc'],
                            include_dirs=[hdf5_include, numpy_include],
                            library_dirs=[hdf5_lib],
                            extra_compile_args=['-include','%s/hdf5.h' % hdf5_include], # force right hdf5.h instead of from /usr/include
@@ -40,13 +40,13 @@ BeamFormedFile_module = Extension('_BeamFormedFile',
                            language='c++',
                            )
 
-dist = setup (name = 'BeamFormedFile',
+dist = setup (name = 'LDA',
        version = '1.0',
        author       = "dr. Jan David Mol, ASTRON, the Netherlands",
        author_email = "mol@astron.nl",
        description = """Bindings of LDA""",
-       ext_modules = [BeamFormedFile_module],
-       py_modules = ["BeamFormedFile"],
+       ext_modules = [LDA_module],
+       py_modules = ["LDA"],
        )
 
 # Because while SWIG support is 'native' to python, it refuses to

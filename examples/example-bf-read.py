@@ -1,9 +1,9 @@
-import BeamFormedFile
+import LDA
 import numpy
 from itertools import count
 
 # open the file for reading
-f = BeamFormedFile.BeamFormedFile("test.h5")
+f = LDA.BeamFormedFile("test.h5")
 
 # functions like f.observationID() return attribute objects, which support the following
 # methods:

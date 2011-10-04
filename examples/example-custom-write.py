@@ -1,19 +1,19 @@
-import BeamFormedFile
+import LDA
 
 # create the file
-f = BeamFormedFile.BeamFormedFile("foo.h5", BeamFormedFile.BeamFormedFile.CREATE)
+f = LDA.BeamFormedFile("foo.h5", BeamFormedFile.BeamFormedFile.CREATE)
 
 # create an attribute
-a = BeamFormedFile.AttributeString(f.group(), "MY_ATTRIBUTE")
+a = LDA.AttributeString(f.group(), "MY_ATTRIBUTE")
 a.set("hello world!")
 
 # create and destroy a second attribute
-b = BeamFormedFile.AttributeString(f.group(), "FAULTY_ATTRIBUTE")
+b = LDA.AttributeString(f.group(), "FAULTY_ATTRIBUTE")
 b.set("hello world!")
 b.remove()
 
 # create a dataset
-d = BeamFormedFile.HDF5DatasetBaseComplexFloat(f.group(), "MY_DATASET")
+d = LDA.HDF5DatasetBaseComplexFloat(f.group(), "MY_DATASET")
 d.create([4,4],[4,4])
 
 # insert some data points

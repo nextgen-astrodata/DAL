@@ -1,4 +1,4 @@
-%module BeamFormedFile
+%module LDA
 
 // -------------------------------
 // Documentation
