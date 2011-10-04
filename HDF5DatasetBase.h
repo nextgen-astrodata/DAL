@@ -2,7 +2,7 @@
 #define __HDF5DATASET__
 
 // Enable for casa array support in getMatrix and setMatrix
-#define HAVE_CASA
+//#define HAVE_CASA
 
 #include <string>
 #include <vector>
