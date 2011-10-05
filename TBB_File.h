@@ -1,5 +1,5 @@
-#ifndef __TBBFILE__
-#define __TBBFILE__
+#ifndef __TBB_FILE__
+#define __TBB_FILE__
 
 #include <string>
 #include <hdf5.h>
@@ -10,23 +10,23 @@
 
 namespace LDA {
 
-class TBBFile;
+class TBB_File;
 class TBB_SysLog;
 class TBB_Station;
+class TBB_DipoleDataset;
 class TBB_Trigger;
 class TBB_UnknownTrigger;
 class TBB_VHECRTrigger;
-class TBB_Dipole;
 
 /*!
  * Interface for TBB Time-Series Data as described in ICD001.
  */
-class TBBFile: public CommonAttributesFile {
+class TBB_File: public CommonAttributesFile {
 public:
   /*!
    * Open `filename` for reading/writing/creation.
    */
-  TBBFile( const std::string &filename, enum fileMode mode = READ );
+  TBB_File( const std::string &filename, enum fileMode mode = READ );
 
   TBB_SysLog             sysLog();
   TBB_Station            station( unsigned nr );
@@ -39,7 +39,7 @@ class TBB_SysLog: public HDF5GroupBase {
 protected:
   TBB_SysLog( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
-  friend class TBBFile;
+  friend class TBB_File;
 };
 
 class TBB_Station: public HDF5GroupBase {
@@ -61,17 +61,17 @@ public:
 
   Attribute<unsigned>                   nofDipoles();
 
-  TBB_Dipole                            dipole( unsigned station, unsigned rsp, unsigned rcu );
+  TBB_DipoleDataset                     dipole( unsigned station, unsigned rsp, unsigned rcu );
 
 protected:
   TBB_Station( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
-  friend class TBBFile;
+  friend class TBB_File;
 };
 
-class TBB_Dipole: public HDF5DatasetBase<short> {
+class TBB_DipoleDataset: public HDF5DatasetBase<short> {
 protected:
-  TBB_Dipole( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
+  TBB_DipoleDataset( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
 
   friend class TBB_Station;
 };
@@ -80,7 +80,7 @@ class TBB_Trigger: public HDF5GroupBase {
 protected:
   TBB_Trigger( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
-  friend class TBBFile;
+  friend class TBB_File;
 };
 
 class TBB_UnknownTrigger: public TBB_Trigger {
@@ -90,7 +90,7 @@ public:
 protected:
   TBB_UnknownTrigger( const hid_gc &parent, const std::string &name ): TBB_Trigger(parent, name) {}
 
-  friend class TBBFile;
+  friend class TBB_File;
 };
 
 class TBB_VHECRTrigger: public TBB_Trigger {
@@ -129,7 +129,7 @@ public:
 protected:
   TBB_VHECRTrigger( const hid_gc &parent, const std::string &name ): TBB_Trigger(parent, name) {}
 
-  friend class TBBFile;
+  friend class TBB_File;
 };
 
 

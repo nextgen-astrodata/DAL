@@ -1,7 +1,7 @@
 import LDA
 
 # create the file
-f = LDA.BeamFormedFile("foo.h5", BeamFormedFile.BeamFormedFile.CREATE)
+f = LDA.HDF5FileBase("foo.h5", LDA.HDF5FileBase.CREATE)
 
 # create an attribute
 a = LDA.AttributeString(f.group(), "MY_ATTRIBUTE")

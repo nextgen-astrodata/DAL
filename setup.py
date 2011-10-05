@@ -31,7 +31,7 @@ else:
   hdf5_lib     = "/opt/cep/hdf5/lib"
 
 LDA_module = Extension('_LDA',
-                           sources=['LDA.i', 'CommonAttributesFile.cc', 'BeamFormedFile.cc', 'TBBFile.cc', 'HDF5FileBase.cc', 'HDF5GroupBase.cc'],
+                           sources=['LDA.i', 'CommonAttributesFile.cc', 'BF_File.cc', 'TBB_File.cc', 'HDF5FileBase.cc', 'HDF5GroupBase.cc'],
                            include_dirs=[hdf5_include, numpy_include],
                            library_dirs=[hdf5_lib],
                            extra_compile_args=['-include','%s/hdf5.h' % hdf5_include], # force right hdf5.h instead of from /usr/include

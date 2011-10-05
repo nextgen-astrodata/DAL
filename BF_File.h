@@ -1,5 +1,5 @@
-#ifndef __BEAMFORMEDFILE__
-#define __BEAMFORMEDFILE__
+#ifndef __BF_FILE__
+#define __BF_FILE__
 
 #include <string>
 #include <hdf5.h>
@@ -10,7 +10,7 @@
 
 namespace LDA {
 
-class BeamFormedFile;
+class BF_File;
 class BF_SysLog;
 class BF_ProcessingHistory;
 class BF_SubArrayPointing;
@@ -24,12 +24,12 @@ class BF_StokesDataset;
 /*!
  * Interface for Beam-formed Data as described in ICD003.
  */
-class BeamFormedFile: public CommonAttributesFile {
+class BF_File: public CommonAttributesFile {
 public:
   /*!
    * Open `filename` for reading/writing/creation.
    */
-  BeamFormedFile( const std::string &filename, enum fileMode mode = READ );
+  BF_File( const std::string &filename, enum fileMode mode = READ );
 
   Attribute<std::string>  createOfflineOnline();
   Attribute<std::string>  BFFormat();
@@ -65,7 +65,7 @@ class BF_SysLog: public HDF5GroupBase {
 protected:
   BF_SysLog( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
-  friend class BeamFormedFile;
+  friend class BF_File;
 };
 
 class BF_ProcessingHistory: public HDF5GroupBase {
@@ -110,7 +110,7 @@ public:
 protected:
   BF_SubArrayPointing( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
-  friend class BeamFormedFile;
+  friend class BF_File;
 };
 
 class BF_BeamGroup: public HDF5GroupBase {

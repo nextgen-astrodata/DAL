@@ -1,16 +1,16 @@
-#include "TBBFile.h"
+#include "TBB_File.h"
 
 using namespace std;
 
 namespace LDA {
 
-TBBFile::TBBFile( const string &filename, enum HDF5FileBase::fileMode mode )
+TBB_File::TBB_File( const string &filename, enum HDF5FileBase::fileMode mode )
 :
   CommonAttributesFile(filename, mode)
 {
 }
 
-TBB_Station TBBFile::station( unsigned nr )
+TBB_Station TBB_File::station( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "Station_%03u", nr);
@@ -18,12 +18,12 @@ TBB_Station TBBFile::station( unsigned nr )
   return TBB_Station(group(), string(buf));
 }
 
-Attribute<string> TBBFile::triggerType()
+Attribute<string> TBB_File::triggerType()
 {
   return Attribute<string>(group(), "TRIGGER_TYPE");
 }
 
-TBB_Trigger TBBFile::triggerData()
+TBB_Trigger TBB_File::triggerData()
 {
   char buf[128];
   snprintf(buf, sizeof buf, "TRIGGER_DATA");
@@ -41,7 +41,7 @@ TBB_Trigger TBBFile::triggerData()
   return TBB_Trigger(group(), string(buf));
 }
 
-TBB_SysLog TBBFile::sysLog()
+TBB_SysLog TBB_File::sysLog()
 {
   return TBB_SysLog(group(), "SYS_LOG");
 }
@@ -101,12 +101,12 @@ Attribute<unsigned> TBB_Station::nofDipoles()
   return Attribute<unsigned>(group(), "NOF_DIPOLES");
 }
 
-TBB_Dipole TBB_Station::dipole( unsigned station, unsigned rsp, unsigned rcu )
+TBB_DipoleDataset TBB_Station::dipole( unsigned station, unsigned rsp, unsigned rcu )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "Dipole_%03u%03u%03u", station, rsp, rcu);
 
-  return TBB_Dipole(group(), string(buf));
+  return TBB_DipoleDataset(group(), string(buf));
 }
 
 Attribute<string> TBB_UnknownTrigger::metadata()

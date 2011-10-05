@@ -3,7 +3,7 @@ import numpy
 from itertools import count
 
 # open the file for reading
-f = LDA.BeamFormedFile("test.h5")
+f = LDA.BF_File("test.h5")
 
 # functions like f.observationID() return attribute objects, which support the following
 # methods:

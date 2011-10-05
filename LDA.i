@@ -69,37 +69,32 @@ namespace std {
   import_array();
 %}
 
+%define DATASETTYPE( datatype, numpytype, indextype )
+
 // tell numpy which combinations of data types and index types we use
-%numpy_typemaps(short, NPY_INT16, size_t)
-%numpy_typemaps(float, NPY_FLOAT32, size_t)
-%numpy_typemaps(std::complex<float>, NPY_COMPLEX64, size_t)
+%numpy_typemaps(datatype, numpytype, indextype)
 
 // tell SWIG how we call our dimension and array parameters
-%apply (size_t DIM1, short* INPLACE_ARRAY1) {(size_t dim1, short *outbuffer1)}
-%apply (size_t DIM1, size_t DIM2, short* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, short *outbuffer2)}
+%apply (indextype DIM1, datatype* INPLACE_ARRAY1) {(indextype dim1, datatype *outbuffer1)}
+%apply (indextype DIM1, indextype DIM2, datatype* INPLACE_ARRAY2) {(indextype dim1, indextype dim2, datatype *outbuffer2)}
 
-%apply (size_t DIM1, short* IN_ARRAY1) {(size_t dim1, const short *inbuffer1)}
-%apply (size_t DIM1, size_t DIM2, short* IN_ARRAY2) {(size_t dim1, size_t dim2, const short *inbuffer2)}
+%apply (indextype DIM1, datatype* IN_ARRAY1) {(indextype dim1, const datatype *inbuffer1)}
+%apply (indextype DIM1, indextype DIM2, datatype* IN_ARRAY2) {(indextype dim1, indextype dim2, const datatype *inbuffer2)}
 
-%apply (size_t DIM1, float* INPLACE_ARRAY1) {(size_t dim1, float *outbuffer1)}
-%apply (size_t DIM1, size_t DIM2, float* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, float *outbuffer2)}
+%enddef
 
-%apply (size_t DIM1, float* IN_ARRAY1) {(size_t dim1, const float *inbuffer1)}
-%apply (size_t DIM1, size_t DIM2, float* IN_ARRAY2) {(size_t dim1, size_t dim2, const float *inbuffer2)}
-
-%apply (size_t DIM1, std::complex<float>* INPLACE_ARRAY1) {(size_t dim1, std::complex<float> *outbuffer1)}
-%apply (size_t DIM1, size_t DIM2, std::complex<float>* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, std::complex<float> *outbuffer2)}
-
-%apply (size_t DIM1, std::complex<float>* IN_ARRAY1) {(size_t dim1, const std::complex<float> *inbuffer1)}
-%apply (size_t DIM1, size_t DIM2, std::complex<float>* IN_ARRAY2) {(size_t dim1, size_t dim2, const std::complex<float> *inbuffer2)}
+// enumerate all the dataset types that we refer to
+DATASETTYPE(short, NPY_INT16, size_t);
+DATASETTYPE(float, NPY_FLOAT32, size_t);
+DATASETTYPE(std::complex<float>, NPY_COMPLEX64, size_t);
 
 // -------------------------------
 // LDA classes and templates
 // -------------------------------
 
 %{
-  #include "BeamFormedFile.h"
-  #include "TBBFile.h"
+  #include "BF_File.h"
+  #include "TBB_File.h"
 
   using namespace LDA;
 %}
@@ -136,8 +131,8 @@ namespace LDA {
 }
 
 %include CommonAttributesFile.h
-%include BeamFormedFile.h
-%include TBBFile.h
+%include BF_File.h
+%include TBB_File.h
 
 // -------------------------------
 // Class extensions for bindings
