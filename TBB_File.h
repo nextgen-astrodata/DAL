@@ -70,6 +70,45 @@ protected:
 };
 
 class TBB_DipoleDataset: public HDF5DatasetBase<short> {
+public:
+  Attribute<unsigned>                   stationID();
+  Attribute<unsigned>                   rspID();
+  Attribute<unsigned>                   rcuID();
+
+  Attribute<double>                     sampleFrequencyValue();
+  Attribute<std::string>                sampleFrequencyUnit();
+
+  Attribute<unsigned>                   time();
+  Attribute<unsigned>                   sampleNumber();
+
+  Attribute<unsigned>                   samplesPerFrame();
+  Attribute<unsigned>                   dataLength();
+  Attribute<unsigned>                   nyquistZone();
+  Attribute<double>                     ADC2Voltage();
+
+  Attribute<double>                     cableDelay();
+  Attribute<std::string>                cableDelayUnit();
+
+  Attribute<std::string>                feed();
+  Attribute< std::vector<double> >      antennaPositionValue();
+  Attribute<std::string>                antennaPositionUnit();
+  Attribute<std::string>                antennaPositionFrame();
+
+  Attribute< std::vector<double> >      antennaOrientationValue();
+  Attribute<std::string>                antennaOrientationUnit();
+  Attribute<std::string>                antennaOrientationFrame();
+
+  Attribute< std::vector<double> >      tileBeamValue();
+  Attribute<std::string>                tileBeamUnit();
+  Attribute<std::string>                tileBeamFrame();
+
+  Attribute<std::string>                tileCoefUnit();
+  Attribute< std::vector<unsigned> >    tileBeamCoefs();
+
+  Attribute< std::vector<double> >      tileDipolePositionValue(); // todo: make this a 3D vector
+  Attribute<std::string>                tileDipolePositionUnit();
+  Attribute<std::string>                tileDipolePositionFrame();
+
 protected:
   TBB_DipoleDataset( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
 

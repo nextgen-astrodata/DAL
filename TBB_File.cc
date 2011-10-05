@@ -109,6 +109,146 @@ TBB_DipoleDataset TBB_Station::dipole( unsigned station, unsigned rsp, unsigned 
   return TBB_DipoleDataset(group(), string(buf));
 }
 
+Attribute<unsigned> TBB_DipoleDataset::stationID()
+{
+  return Attribute<unsigned>(group(), "STATION_ID");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::rspID()
+{
+  return Attribute<unsigned>(group(), "RSP_ID");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::rcuID()
+{
+  return Attribute<unsigned>(group(), "RCU_ID");
+}
+
+Attribute<double> TBB_DipoleDataset::sampleFrequencyValue()
+{
+  return Attribute<double>(group(), "SAMPLE_FREQUENCY_VALUE");
+}
+
+Attribute<string> TBB_DipoleDataset::sampleFrequencyUnit()
+{
+  return Attribute<string>(group(), "SAMPLE_FREQUENCY_UNIT");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::time()
+{
+  return Attribute<unsigned>(group(), "TIME");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::sampleNumber()
+{
+  return Attribute<unsigned>(group(), "SAMPLE_NUMBER");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::samplesPerFrame()
+{
+  return Attribute<unsigned>(group(), "SAMPLES_PER_FRAME");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::dataLength()
+{
+  return Attribute<unsigned>(group(), "DATA_LENGTH");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::nyquistZone()
+{
+  return Attribute<unsigned>(group(), "NYQUIST_ZONE");
+}
+
+Attribute<double> TBB_DipoleDataset::ADC2Voltage()
+{
+  return Attribute<double>(group(), "ADC2VOLTAGE");
+}
+
+Attribute<double> TBB_DipoleDataset::cableDelay()
+{
+  return Attribute<double>(group(), "CABLE_DELAY");
+}
+
+Attribute<string> TBB_DipoleDataset::cableDelayUnit()
+{
+  return Attribute<string>(group(), "CABLE_DELAY_UNIT");
+}
+
+Attribute<string> TBB_DipoleDataset::feed()
+{
+  return Attribute<string>(group(), "FEED");
+}
+
+Attribute< vector<double> > TBB_DipoleDataset::antennaPositionValue()
+{
+  return Attribute< vector<double> >(group(), "ANTENNA_POSITION_VALUE");
+}
+
+Attribute<string> TBB_DipoleDataset::antennaPositionUnit()
+{
+  return Attribute<string>(group(), "ANTENNA_POSITION_UNIT");
+}
+
+Attribute<string> TBB_DipoleDataset::antennaPositionFrame()
+{
+  return Attribute<string>(group(), "ANTENNA_POSITION_FRAME");
+}
+
+Attribute< vector<double> > TBB_DipoleDataset::antennaOrientationValue()
+{
+  return Attribute< vector<double> >(group(), "ANTENNA_ORIENTATION_VALUE");
+}
+
+Attribute<string> TBB_DipoleDataset::antennaOrientationUnit()
+{
+  return Attribute<string>(group(), "ANTENNA_ORIENTATION_UNIT");
+}
+
+Attribute<string> TBB_DipoleDataset::antennaOrientationFrame()
+{
+  return Attribute<string>(group(), "ANTENNA_ORIENTATION_FRAME");
+}
+
+Attribute< vector<double> > TBB_DipoleDataset::tileBeamValue()
+{
+  return Attribute< vector<double> >(group(), "TILE_BEAM_VALUE");
+}
+
+Attribute<string> TBB_DipoleDataset::tileBeamUnit()
+{
+  return Attribute<string>(group(), "TILE_BEAM_UNIT");
+}
+
+Attribute<string> TBB_DipoleDataset::tileBeamFrame()
+{
+  return Attribute<string>(group(), "TILE_BEAM_FRAME");
+}
+
+Attribute<string> TBB_DipoleDataset::tileCoefUnit()
+{
+  return Attribute<string>(group(), "TILE_COEF_UNIT");
+}
+
+Attribute< vector<unsigned> > TBB_DipoleDataset::tileBeamCoefs()
+{
+  return Attribute< vector<unsigned> >(group(), "TILE_BEAM_COEFS");
+}
+
+Attribute< vector<double> > TBB_DipoleDataset::tileDipolePositionValue()
+{
+  return Attribute< vector<double> >(group(), "TILE_DIPOLE_POSITION_VALUE");
+}
+
+Attribute<string> TBB_DipoleDataset::tileDipolePositionUnit()
+{
+  return Attribute<string>(group(), "TILE_DIPOLE_POSITION_UNIT");
+}
+
+Attribute<string> TBB_DipoleDataset::tileDipolePositionFrame()
+{
+  return Attribute<string>(group(), "TILE_DIPOLE_POSITION_FRAME");
+}
+
 Attribute<string> TBB_UnknownTrigger::metadata()
 {
   return Attribute<string>(group(), "METADATA");
