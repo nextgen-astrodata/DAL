@@ -62,27 +62,23 @@ public:
 };
 
 class BF_SysLog: public HDF5GroupBase {
-protected:
+public:
   BF_SysLog( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class BF_File;
 };
 
 class BF_ProcessingHistory: public HDF5GroupBase {
 public:
+  BF_ProcessingHistory( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+
   Attribute<bool>         parsetObs();
   Attribute<bool>         logPresto();
   Attribute<bool>         parFile();
-
-protected:
-  BF_ProcessingHistory( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class BF_SubArrayPointing;
-  friend class BF_BeamGroup;
 };
 
 class BF_SubArrayPointing: public HDF5GroupBase {
 public:
+  BF_SubArrayPointing( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
 
@@ -106,15 +102,12 @@ public:
 
   Attribute<unsigned>     nofBeams();
   BF_BeamGroup            beam( unsigned nr );
-
-protected:
-  BF_SubArrayPointing( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class BF_File;
 };
 
 class BF_BeamGroup: public HDF5GroupBase {
 public:
+  BF_BeamGroup( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
 
@@ -139,15 +132,12 @@ public:
   BF_StokesDataset        stokes( unsigned nr );
 
   CoordinatesGroup        coordinates();
-
-protected:
-  BF_BeamGroup( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class BF_SubArrayPointing;
 };
 
 class CoordinatesGroup: public HDF5GroupBase {
 public:
+  CoordinatesGroup( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+
   Attribute< std::vector<double> >      refLocationValue();
   Attribute< std::vector<std::string> > refLocationUnit();
   Attribute<std::string>  refLocationFrame();
@@ -161,15 +151,12 @@ public:
   Attribute< std::vector<std::string> > coordinateTypes();
 
   Coordinate              coordinate( unsigned nr );
-
-protected:
-  CoordinatesGroup( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class BF_BeamGroup;
 };
 
 class Coordinate: public HDF5GroupBase {
 public:
+  Coordinate( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+
   Attribute<std::string>  coordinateType();
   Attribute< std::vector<std::string> > storageType();
 
@@ -183,38 +170,26 @@ public:
   Attribute< std::vector<double> >      pc();
   Attribute< std::vector<double> >      axisValuesPixel();
   Attribute< std::vector<double> >      axisValuesWorld();
-
-protected:
-  Coordinate( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class CoordinatesGroup;
 };
 
 class TimeCoordinate: public Coordinate {
-protected:
+public:
   TimeCoordinate( const hid_gc &parent, const std::string &name ): Coordinate(parent, name) {}
-
-  friend class CoordinatesGroup;
 };
 
 class SpectralCoordinate: public Coordinate {
-protected:
+public:
   SpectralCoordinate( const hid_gc &parent, const std::string &name ): Coordinate(parent, name) {}
-
-  friend class CoordinatesGroup;
 };
 
 class BF_StokesDataset: public HDF5DatasetBase<float> {
 public:
+  BF_StokesDataset( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<float>(parent, name) {}
+
   Attribute<std::string>  stokesComponent();
   Attribute< std::vector<unsigned> >    nofChannels();
   Attribute<unsigned>     nofSubbands();
   Attribute<unsigned>     nofSamples();
-
-protected:
-  BF_StokesDataset( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<float>(parent, name) {}
-
-  friend class BF_BeamGroup;
 };
 
 }

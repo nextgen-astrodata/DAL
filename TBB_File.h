@@ -36,14 +36,14 @@ public:
 };
 
 class TBB_SysLog: public HDF5GroupBase {
-protected:
+public:
   TBB_SysLog( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class TBB_File;
 };
 
 class TBB_Station: public HDF5GroupBase {
 public:
+  TBB_Station( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+
   Attribute<std::string>                stationName();
 
   Attribute< std::vector<double> >      stationPositionValue();
@@ -62,15 +62,12 @@ public:
   Attribute<unsigned>                   nofDipoles();
 
   TBB_DipoleDataset                     dipole( unsigned station, unsigned rsp, unsigned rcu );
-
-protected:
-  TBB_Station( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class TBB_File;
 };
 
 class TBB_DipoleDataset: public HDF5DatasetBase<short> {
 public:
+  TBB_DipoleDataset( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
+
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();
   Attribute<unsigned>                   rcuID();
@@ -108,32 +105,24 @@ public:
   Attribute< std::vector<double> >      tileDipolePositionValue(); // todo: make this a 3D vector
   Attribute<std::string>                tileDipolePositionUnit();
   Attribute<std::string>                tileDipolePositionFrame();
-
-protected:
-  TBB_DipoleDataset( const hid_gc &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
-
-  friend class TBB_Station;
 };
 
 class TBB_Trigger: public HDF5GroupBase {
-protected:
+public:
   TBB_Trigger( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
-
-  friend class TBB_File;
 };
 
 class TBB_UnknownTrigger: public TBB_Trigger {
 public:
-  Attribute<std::string> metadata();
-
-protected:
   TBB_UnknownTrigger( const hid_gc &parent, const std::string &name ): TBB_Trigger(parent, name) {}
 
-  friend class TBB_File;
+  Attribute<std::string> metadata();
 };
 
 class TBB_VHECRTrigger: public TBB_Trigger {
 public:
+  TBB_VHECRTrigger( const hid_gc &parent, const std::string &name ): TBB_Trigger(parent, name) {}
+
   Attribute<std::string> triggerSource();
 
   Attribute<unsigned>    triggerTime();
@@ -164,11 +153,6 @@ public:
   Attribute<double>      fitDirectionElevation();
   Attribute<double>      fitDirectionDistance();
   Attribute<double>      fitDirectionVariance();
-
-protected:
-  TBB_VHECRTrigger( const hid_gc &parent, const std::string &name ): TBB_Trigger(parent, name) {}
-
-  friend class TBB_File;
 };
 
 
