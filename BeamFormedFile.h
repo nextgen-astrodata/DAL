@@ -11,7 +11,7 @@
 namespace LDA {
 
 class BeamFormedFile;
-class SysLog;
+class BF_SysLog;
 class BF_ProcessingHistory;
 class BF_SubArrayPointing;
 class BF_BeamGroup;
@@ -58,12 +58,12 @@ public:
   Attribute<unsigned>     nofSubArrayPointings();
   BF_SubArrayPointing     subArrayPointing( unsigned nr );
 
-  SysLog             sysLog();
+  BF_SysLog             sysLog();
 };
 
-class SysLog: public HDF5GroupBase {
+class BF_SysLog: public HDF5GroupBase {
 protected:
-  SysLog( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_SysLog( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   friend class BeamFormedFile;
 };

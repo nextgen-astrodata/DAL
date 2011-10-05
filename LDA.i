@@ -70,10 +70,17 @@ namespace std {
 %}
 
 // tell numpy which combinations of data types and index types we use
-%numpy_typemaps(float, NPY_FLOAT, size_t)
+%numpy_typemaps(short, NPY_INT16, size_t)
+%numpy_typemaps(float, NPY_FLOAT32, size_t)
 %numpy_typemaps(std::complex<float>, NPY_COMPLEX64, size_t)
 
 // tell SWIG how we call our dimension and array parameters
+%apply (size_t DIM1, short* INPLACE_ARRAY1) {(size_t dim1, short *outbuffer1)}
+%apply (size_t DIM1, size_t DIM2, short* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, short *outbuffer2)}
+
+%apply (size_t DIM1, short* IN_ARRAY1) {(size_t dim1, const short *inbuffer1)}
+%apply (size_t DIM1, size_t DIM2, short* IN_ARRAY2) {(size_t dim1, size_t dim2, const short *inbuffer2)}
+
 %apply (size_t DIM1, float* INPLACE_ARRAY1) {(size_t dim1, float *outbuffer1)}
 %apply (size_t DIM1, size_t DIM2, float* INPLACE_ARRAY2) {(size_t dim1, size_t dim2, float *outbuffer2)}
 
@@ -92,6 +99,7 @@ namespace std {
 
 %{
   #include "BeamFormedFile.h"
+  #include "TBBFile.h"
 
   using namespace LDA;
 %}
@@ -122,12 +130,14 @@ namespace LDA {
   %template(AttributeVUnsigned) Attribute< vector<unsigned> >;
   %template(AttributeVString)   Attribute< vector<string> >;
 
+  %template(HDF5DatasetBaseShort)        HDF5DatasetBase<short>;
   %template(HDF5DatasetBaseFloat)        HDF5DatasetBase<float>;
   %template(HDF5DatasetBaseComplexFloat) HDF5DatasetBase< std::complex<float> >;
 }
 
 %include CommonAttributesFile.h
 %include BeamFormedFile.h
+%include TBBFile.h
 
 // -------------------------------
 // Class extensions for bindings
@@ -137,6 +147,7 @@ namespace LDA {
   import numpy
 
   # record the numpy datatypes used in the various datasets
+  HDF5DatasetBaseShort.dtype = numpy.int16
   HDF5DatasetBaseFloat.dtype = numpy.float32
   HDF5DatasetBaseComplexFloat.dtype = numpy.complex64
 

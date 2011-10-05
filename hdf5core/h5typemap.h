@@ -48,8 +48,14 @@ template<> struct h5typemap<int> {
   static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I32BE : H5T_STD_I32LE; }
 };
 
+template<> struct h5typemap<short> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_SHORT; }
+  static inline hid_t attributeType()            { return H5T_STD_I16LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I16BE : H5T_STD_I16LE; }
+};
+
 template<> struct h5typemap<bool> {
-  static inline hid_t memoryType()               { return H5T_NATIVE_CHAR; } // assumes sizeof(bool) == 1
+  static inline hid_t memoryType()               { return sizeof (bool) == 1 ? H5T_NATIVE_CHAR : H5T_NATIVE_INT; } // assumes bool is either a char or an int
   static inline hid_t attributeType()            { return H5T_STD_I32LE;   } // emulate a bool as a 32-bit signed integer
   static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I32BE : H5T_STD_I32LE; }
 };

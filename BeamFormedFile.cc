@@ -108,9 +108,9 @@ BF_SubArrayPointing BeamFormedFile::subArrayPointing( unsigned nr )
   return BF_SubArrayPointing(group(), string(buf));
 }
 
-SysLog BeamFormedFile::sysLog()
+BF_SysLog BeamFormedFile::sysLog()
 {
-  return SysLog(group(), "SYS_LOG");
+  return BF_SysLog(group(), "SYS_LOG");
 }
 
 Attribute<bool> BF_ProcessingHistory::parsetObs()
