@@ -1,19 +1,12 @@
 #ifndef __HDF5DATASET__
 #define __HDF5DATASET__
 
-// Enable for casa array support in getMatrix and setMatrix
-//#define HAVE_CASA
-
 #include <string>
 #include <vector>
 #include <hdf5.h>
 #include "HDF5GroupBase.h"
 #include "hdf5core/hid_gc.h"
 #include "hdf5core/h5typemap.h"
-
-#ifdef HAVE_CASA
-#include <casa/Arrays/Array.h>
-#endif
 
 namespace LDA {
 
@@ -94,33 +87,6 @@ public:
    */
   void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
 
-#ifdef HAVE_CASA
-  /*!
-   * Retrieves any matrix from position `pos`.
-   *
-   * Note that casa objects use FORTRAN dimension ordering, as opposed
-   * to the C dimension ordering used throughout the rest of this
-   * library.
-   *
-   * Requires:
-   *    buffer.ndim() == ndims()
-   */
-  void getMatrix( const casa::IPosition &pos, casa::Array<T> &buffer );
-
-  /*!
-   * Stores any matrix of data of sizes `size` at position `pos`.
-   *
-   * Note that casa objects use FORTRAN dimension ordering, as opposed
-   * to the C dimension ordering used throughout the rest of this
-   * library.
-   *
-   * Requires:
-   *    pos.size() == size.size() == ndims()
-   */
-  void setMatrix( const casa::IPosition &pos, const casa::Array<T> &buffer );
-
-#endif
-
   /*!
    * Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
@@ -200,7 +166,6 @@ protected:
     return new hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset");
   }
 
-private:
   bool bigEndian( enum Endianness endianness ) const;
 
   // if the strides vector is empty, a continuous array is assumed
@@ -345,50 +310,6 @@ template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_
 
   matrixIO(pos, size, strides, const_cast<T *>(buffer), false);
 }
-
-#ifdef HAVE_CASA
-template<typename T> void HDF5DatasetBase<T>::getMatrix( const casa::IPosition &pos, casa::Array<T> &buffer )
-{
-  const size_t rank = ndims();
-  std::vector<size_t> dpos(rank), dsize(rank), dstrides(rank);
-
-  const casa::IPosition &shape = buffer.shape();
-  const casa::IPosition &steps = buffer.steps();
-
-  if (shape.size() != rank)
-    throw HDF5Exception("Specified casacore array does not match dimensionality of dataset");
-
-  for (size_t i = 0; i < rank; i++) {
-    // casacore uses FORTRAN indexation, so swap the order of the dimensions
-    dpos[i]  = pos[rank-1 -i];
-    dsize[i] = shape[rank-1 -i];
-    dstrides[i] = steps[rank-1 -i];
-  }
-
-  matrixIO(dpos, dsize, dstrides, buffer.data(), true);
-}
-
-template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_t> &pos, const casa::Array<T> &buffer )
-{
-  const size_t rank = ndims();
-  std::vector<size_t> dpos(rank), dsize(rank), dstrides(rank);
-
-  const casa::IPosition &shape = buffer.shape();
-  const casa::IPosition &steps = buffer.steps();
-
-  if (shape.size() != rank)
-    throw HDF5Exception("Specified casacore array does not match dimensionality of dataset");
-
-  for (size_t i = 0; i < rank; i++) {
-    // casacore uses FORTRAN indexation, so swap the order of the dimensions
-    dpos[i]  = pos[rank-1 -i];
-    dsize[i] = shape[rank-1 -i];
-    dstrides[i] = steps[rank-1 -i];
-  }
-
-  matrixIO(dpos, dsize, dstrides, const_cast<T *>(buffer.data()), false);
-}
-#endif
 
 template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
 {
