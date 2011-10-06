@@ -1,14 +1,18 @@
-#ifndef __CASADATASETBASE__
-#define __CASADATASETBASE__
+#ifndef __CASADATASETEXTEND__
+#define __CASADATASETEXTEND__
 
 #include <casa/Arrays/Array.h>
+#include "hdf5core/h5exception.h"
 #include "HDF5DatasetBase.h"
 
 namespace LDA {
 
-template<typename T> class CasaDatasetBase: public HDF5DatasetBase<T> {
+/*!
+ * Adds casacore functionality to an HDF5DatasetBase<T> class or any of its derivatives.
+ */
+template<typename T, typename BASE = HDF5DatasetBase<T> > class CasaDatasetExtend: public BASE {
 public:
-  CasaDatasetBase( const HDF5DatasetBase<T> &other ): HDF5DatasetBase<T>(other) {}
+  CasaDatasetExtend( const BASE &other ): BASE(other) {}
 
   /*!
    * Retrieves any matrix from position `pos`.
@@ -35,9 +39,9 @@ public:
   void setMatrix( const casa::IPosition &pos, const casa::Array<T> &buffer );
 };
 
-template<typename T> void CasaDatasetBase<T>::getMatrix( const casa::IPosition &pos, casa::Array<T> &buffer )
+template<typename T, typename BASE> void CasaDatasetExtend<T,BASE>::getMatrix( const casa::IPosition &pos, casa::Array<T> &buffer )
 {
-  const size_t rank = this->ndims();
+  const size_t rank = BASE::ndims();
   std::vector<size_t> dpos(rank), dsize(rank), dstrides(rank);
 
   const casa::IPosition &shape = buffer.shape();
@@ -56,9 +60,9 @@ template<typename T> void CasaDatasetBase<T>::getMatrix( const casa::IPosition &
   matrixIO(dpos, dsize, dstrides, buffer.data(), true);
 }
 
-template<typename T> void CasaDatasetBase<T>::setMatrix( const casa::IPosition &pos, const casa::Array<T> &buffer )
+template<typename T, typename BASE> void CasaDatasetExtend<T,BASE>::setMatrix( const casa::IPosition &pos, const casa::Array<T> &buffer )
 {
-  const size_t rank = this->ndims();
+  const size_t rank = BASE::ndims();
   std::vector<size_t> dpos(rank), dsize(rank), dstrides(rank);
 
   const casa::IPosition &shape = buffer.shape();
