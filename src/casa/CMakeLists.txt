@@ -1,9 +1,9 @@
-if(CASA_FOUND)
+if(CASACORE_FOUND)
   install (FILES
     CasaDatasetExtend.h
     CasaTBBFileExtend.h
 
     DESTINATION include/casa
   )
-endif(CASA_FOUND)
+endif(CASACORE_FOUND)
 
