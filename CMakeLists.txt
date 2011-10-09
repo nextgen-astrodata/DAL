@@ -18,36 +18,32 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 # Mandatory: HDF5 support for core library
 
 find_package(HDF5 REQUIRED)
-if(HDF5_FOUND)
-  include_directories(${HDF5_INCLUDE_DIRS})
-  #list(APPEND lda_link_libraries ${HDF5_LIBRARIES})
-endif(HDF5_FOUND)
+include_directories(${HDF5_INCLUDE_DIRS})
 
 # Optional: Casacore bindings for C++
+option(CASACORE_INTERFACE "Generate casacore interface" OFF)
 
-find_package(Casacore COMPONENTS casa measures)
-if(CASACORE_FOUND)
+if(CASACORE_INTERFACE)
+  find_package(Casacore REQUIRED COMPONENTS casa measures)
   include_directories(${CASACORE_INCLUDES})
-  #list(APPEND lda_link_libraries ${CASACORE_LIBRARIES})
-endif(CASACORE_FOUND)
+endif(CASACORE_INTERFACE)
 
 # Optional: Doxygen generation (including python docstrings generation)
 
 find_package(Doxygen)
 
 # Optional: Python bindings through SWIG
+option(PYTHON_BINDINGS "Generate python bindings" ON)
 
-find_package(SWIG)
-if(SWIG_FOUND)
+if(PYTHON_BINDINGS)
+  find_package(SWIG REQUIRED)
   include(${SWIG_USE_FILE})
 
   # For now, we assume python bindings only
   find_package(PythonLibs REQUIRED)
 
   set(PYTHON_DEST "lib/python${PYTHON_VERSION}/site-packages")
-
-  set(PYTHON_BINDINGS TRUE)
-endif(SWIG_FOUND)
+endif(PYTHON_BINDINGS)  
 
 # Start processing the source tree
 
