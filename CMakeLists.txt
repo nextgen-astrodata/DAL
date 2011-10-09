@@ -31,6 +31,10 @@ if(CASACORE_FOUND)
   #list(APPEND lda_link_libraries ${CASACORE_LIBRARIES})
 endif(CASACORE_FOUND)
 
+# Optional: Doxygen generation (including python docstrings generation)
+
+find_package(Doxygen)
+
 # Optional: Python bindings through SWIG
 
 find_package(SWIG)
