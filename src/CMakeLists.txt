@@ -36,58 +36,19 @@ add_library (lda
 
 target_link_libraries(lda ${HDF5_LIBRARIES})
 
-add_subdirectory(hdf5core)
-
-if(CASACORE_INTERFACE)
-  add_subdirectory(casa)
-  target_link_libraries(lda ${CASACORE_LIBRARIES})
-endif(CASACORE_INTERFACE)
-
 install (TARGETS
   lda
 
   DESTINATION lib
 )
 
-
-# Doxygen documentation
-
-if(DOXYGEN_FOUND)
-  configure_file (
-    "${CMAKE_CURRENT_SOURCE_DIR}/doxygen.conf.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/doxygen.conf"
-    @ONLY
-  )
-
-  # make a html dir so that install won't fail if documentation
-  # hasn't been generated
-  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html)
-
-  set_property (DIRECTORY
-    APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/html
-    )
-
-  # run "make doc" to generate doxygen documentation
-  add_custom_target(doc
-    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doxygen.conf
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  )
-
-  install(DIRECTORY
-    ${CMAKE_CURRENT_BINARY_DIR}/html
-
-    DESTINATION share/doc/lda
-  )  
-endif(DOXYGEN_FOUND)  
-
 # Python bindings through SWIG
 
 if(PYTHON_BINDINGS)
-  include_directories(${PYTHON_INCLUDE_PATH})
+  list(APPEND CMAKE_SWIG_FLAGS -Wall)
   set_source_files_properties(LDA.i PROPERTIES CPLUSPLUS ON)
-  set_source_files_properties(LDA.i PROPERTIES SWIG_FLAGS "-Wall")
   swig_add_module(LDA python LDA.i ${lda_sources})
+  add_dependencies(${SWIG_MODULE_LDA_REAL_NAME} generate_docstrings)
   swig_link_libraries(LDA ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
 
   install(TARGETS
@@ -101,3 +62,10 @@ if(PYTHON_BINDINGS)
   )  
 endif(PYTHON_BINDINGS)
 
+add_subdirectory(hdf5core)
+add_subdirectory(doc)
+
+if(CASACORE_INTERFACE)
+  add_subdirectory(casa)
+  target_link_libraries(lda ${CASACORE_LIBRARIES})
+endif(CASACORE_INTERFACE)

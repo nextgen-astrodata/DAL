@@ -1,5 +1,5 @@
 # The files and directories to parse
-INPUT = @CMAKE_CURRENT_SOURCE_DIR@ @CMAKE_CURRENT_SOURCE_DIR@/hdf5core
+INPUT = @CMAKE_SOURCE_DIR@/src @CMAKE_SOURCE_DIR@/src/hdf5core
 
 # Where to put the results
 OUTPUT_DIRECTORY = @CMAKE_CURRENT_BINARY_DIR@
@@ -9,3 +9,10 @@ GENERATE_XML = YES
 
 # Skip code marked as such
 PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS
+
+# Don't flood us with warnings
+# (remove once (almost) all functions are documented
+WARN_IF_UNDOCUMENTED = NO
+
+# Don't spam us
+QUIET = YES

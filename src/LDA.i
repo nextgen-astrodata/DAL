@@ -8,7 +8,7 @@
 %feature("autodoc",1);
 
 // then append documentation using doxygen's knowledge
-%include "docstrings.i"
+%include "doc/docstrings.i"
 
 // -------------------------------
 // Exception handling

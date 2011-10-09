@@ -24,7 +24,7 @@ option(CASACORE_INTERFACE "Generate casacore interface" OFF)
 
 if(CASACORE_INTERFACE)
   find_package(Casacore REQUIRED COMPONENTS casa measures)
-  include_directories(${CASACORE_INCLUDES})
+  include_directories(${CASACORE_INCLUDE_DIRS})
 endif(CASACORE_INTERFACE)
 
 # Optional: Doxygen generation (including python docstrings generation)
@@ -40,9 +40,15 @@ if(PYTHON_BINDINGS)
 
   # For now, we assume python bindings only
   find_package(PythonLibs REQUIRED)
+  include_directories(${PYTHON_INCLUDE_DIRS})
 
   set(PYTHON_DEST "lib/python${PYTHON_VERSION}/site-packages")
 endif(PYTHON_BINDINGS)  
+
+# Doxygen documentation
+# Generate before processing source, as we need
+# docstrings.i for the python bindings.
+option(GENERATE_DOCS "Generate documentation and regenerate docstrings using Doxygen" ${DOXYGEN_FOUND})
 
 # Start processing the source tree
 
@@ -50,4 +56,3 @@ add_subdirectory(src)
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif(BUILD_TESTING)
-
