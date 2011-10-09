@@ -1,17 +1,21 @@
 Requirements:
+        - cmake 2.8+
         - swig
         - python-dev
         - numpy
         - libhdf5-*-dev
         - libhdf5-*
+Optional:
+        - doxygen (for documentation and python docstring support)
 
-To install:
-        python setup.py install
+To build:
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=$PWD -DPYTHON_DEST=$PWD/python && make install
 
-To build in-place and test:
-        python setup.py build
-        export PYTHONPATH=$PYTHONPATH:`echo $PWD/build/lib*` # just a way to add build/lib-platform/
-        cd examples
+To test:
+        export PYTHONPATH=$PYTHONPATH:$PWD/python
+        cd ../examples
         python example-bf-read.py
         python example-custom-write.py
 

@@ -42,7 +42,10 @@ if(PYTHON_BINDINGS)
   find_package(PythonLibs REQUIRED)
   include_directories(${PYTHON_INCLUDE_DIRS})
 
-  set(PYTHON_DEST "lib/python${PYTHON_VERSION}/site-packages")
+  # Obtain location of 'site-packages' directory (doesn't work when cross-compiling)
+  execute_process(COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  option(PYTHON_DEST "Target directory for python bindings" ${PYTHON_SITE_PACKAGES})
 endif(PYTHON_BINDINGS)  
 
 # Doxygen documentation
