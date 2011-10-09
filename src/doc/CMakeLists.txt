@@ -1,3 +1,10 @@
+# Optional: Doxygen generation (including python docstrings generation)
+
+find_package(Doxygen)
+
+# Doxygen documentation
+option(GENERATE_DOCS "Generate documentation and regenerate docstrings using Doxygen" ${DOXYGEN_FOUND})
+
 if(GENERATE_DOCS)
   configure_file (
     "${CMAKE_CURRENT_SOURCE_DIR}/doxygen.conf.in"
