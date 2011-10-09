@@ -3,9 +3,9 @@
 project (LDA)
 
 ## Project release version
-set (LDA_VERSION_MAJOR 0)
-set (LDA_VERSION_MINOR 1)
-set (LDA_VERSION_PATCH 7)
+set (LDA_VERSION_MAJOR 1)
+set (LDA_VERSION_MINOR 0)
+set (LDA_VERSION_PATCH 0)
 set (LDA_VERSION "${LDA_VERSION_MAJOR}.${LDA_VERSION_MINOR}.${LDA_VERSION_PATCH}")
 
 ## Minimum required version of CMake to configure the project
@@ -16,7 +16,6 @@ cmake_minimum_required (VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Mandatory: HDF5 support for core library
-
 find_package(HDF5 REQUIRED)
 include_directories(${HDF5_INCLUDE_DIRS})
 
