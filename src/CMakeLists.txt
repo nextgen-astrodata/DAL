@@ -2,6 +2,8 @@
 find_package(HDF5 REQUIRED)
 include_directories(${HDF5_INCLUDE_DIRS})
 
+include(TestHDF5)
+
 include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR} # to find regular headers
   ${CMAKE_CURRENT_BINARY_DIR} # to find generated headers
