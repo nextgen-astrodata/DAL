@@ -83,9 +83,9 @@ namespace std {
 
 %enddef
 
-// enumerate all the dataset types that we refer to
-DATASETTYPE(short, NPY_INT16, size_t);
-DATASETTYPE(float, NPY_FLOAT32, size_t);
+// enumerate all the dataset types that we refer to (we use native types, so do not fix their size)
+DATASETTYPE(short, NPY_SHORT, size_t);
+DATASETTYPE(float, NPY_SINGLE, size_t);
 DATASETTYPE(std::complex<float>, NPY_COMPLEX64, size_t);
 
 // -------------------------------
@@ -142,9 +142,9 @@ namespace LDA {
   import numpy
 
   # record the numpy datatypes used in the various datasets
-  HDF5DatasetBaseShort.dtype = numpy.int16
-  HDF5DatasetBaseFloat.dtype = numpy.float32
-  HDF5DatasetBaseComplexFloat.dtype = numpy.complex64
+  HDF5DatasetBaseShort.dtype = numpy.short
+  HDF5DatasetBaseFloat.dtype = numpy.single
+  HDF5DatasetBaseComplexFloat.dtype = numpy.csingle
 
   del numpy
 %}
