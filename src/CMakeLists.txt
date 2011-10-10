@@ -25,7 +25,7 @@ install (FILES
   HDF5Node.h
   TBB_File.h
 
-  DESTINATION include
+  DESTINATION include/lda
 )
 
 set(lda_sources

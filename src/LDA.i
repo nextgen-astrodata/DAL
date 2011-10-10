@@ -85,8 +85,8 @@ namespace std {
 
 // enumerate all the dataset types that we refer to (we use native types, so do not fix their size)
 DATASETTYPE(short, NPY_SHORT, size_t);
-DATASETTYPE(float, NPY_SINGLE, size_t);
-DATASETTYPE(std::complex<float>, NPY_COMPLEX64, size_t);
+DATASETTYPE(float, NPY_FLOAT, size_t);
+DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 
 // -------------------------------
 // LDA classes and templates
