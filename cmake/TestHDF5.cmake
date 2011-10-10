@@ -12,7 +12,9 @@ if(NOT TEST_HDF5_COMPILE)
     "Could not compile HDF5 test program:\n\n${TEST_HDF5_COMPILE_OUTPUT}")
 endif(NOT TEST_HDF5_COMPILE)
 
-if(TEST_HDF5_RESULT GREATER 0)
-  message(FATAL_ERROR
-    "Version mismatch between HDF5 headers and HDF5 library:\n${TEST_HDF5_RUN_OUTPUT}\n\n${TEST_HDF5_COMPILE_OUTPUT}")
-endif(TEST_HDF5_RESULT GREATER 0)
+if(NOT CMAKE_CROSSCOMPILING)
+  if(TEST_HDF5_RESULT GREATER 0)
+    message(FATAL_ERROR
+      "Version mismatch between HDF5 headers and HDF5 library:\n${TEST_HDF5_RUN_OUTPUT}\n\n${TEST_HDF5_COMPILE_OUTPUT}")
+  endif(TEST_HDF5_RESULT GREATER 0)
+endif(NOT CMAKE_CROSSCOMPILING)  
