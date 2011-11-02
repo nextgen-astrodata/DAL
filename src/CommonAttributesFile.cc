@@ -110,6 +110,26 @@ Attribute< vector<string> > CommonAttributesFile::observationStationsList()
   return Attribute< vector<string> >(group(), "OBSERVATION_STATIONS_LIST");
 }
 
+Attribute<double> CommonAttributesFile::observationFrequencyMax()
+{
+  return Attribute<double>(group(), "OBSERVATION_FREQUENCY_MAX");
+}
+
+Attribute<double> CommonAttributesFile::observationFrequencyMin()
+{
+  return Attribute<double>(group(), "OBSERVATION_FREQUENCY_MIN");
+}
+
+Attribute<double> CommonAttributesFile::observationFrequencyCenter()
+{
+  return Attribute<double>(group(), "OBSERVATION_FREQUENCY_CENTER");
+}
+
+Attribute<string> CommonAttributesFile::observationFrequencyUnit()
+{
+  return Attribute<string>(group(), "OBSERVATION_FREQUENCY_UNIT");
+}
+
 Attribute<unsigned> CommonAttributesFile::observationNofBitsPerSample()
 {
   return Attribute<unsigned>(group(), "OBSERVATION_NOF_BITS_PER_SAMPLE");

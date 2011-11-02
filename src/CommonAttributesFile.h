@@ -43,6 +43,11 @@ public:
   Attribute<unsigned>     observationNofStations();
   Attribute< std::vector<std::string> > observationStationsList();
 
+  Attribute<double>       observationFrequencyMax();
+  Attribute<double>       observationFrequencyMin();
+  Attribute<double>       observationFrequencyCenter();
+  Attribute<std::string>  observationFrequencyUnit();
+
   Attribute<unsigned>     observationNofBitsPerSample();
   Attribute<double>       clockFrequency();
   Attribute<std::string>  clockFrequencyUnit();
