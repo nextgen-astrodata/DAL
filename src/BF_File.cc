@@ -173,6 +173,16 @@ Attribute<string> BF_SubArrayPointing::samplingRateUnit()
   return Attribute<string>(group(), "SAMPLING_RATE_UNIT");
 }
 
+Attribute<double> BF_SubArrayPointing::samplingTime()
+{
+  return Attribute<double>(group(), "SAMPLING_TIME");
+}
+
+Attribute<string> BF_SubArrayPointing::samplingTimeUnit()
+{
+  return Attribute<string>(group(), "SAMPLING_TIME_UNIT");
+}
+
 Attribute<unsigned> BF_SubArrayPointing::channelsPerSubband()
 {
   return Attribute<unsigned>(group(), "CHANNELS_PER_SUBBAND");

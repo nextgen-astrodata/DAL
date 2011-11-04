@@ -91,6 +91,8 @@ public:
   Attribute<unsigned>     nofSamples();
   Attribute<double>       samplingRate();
   Attribute<std::string>  samplingRateUnit();
+  Attribute<double>       samplingTime();
+  Attribute<std::string>  samplingTimeUnit();
 
   Attribute<unsigned>     channelsPerSubband();
 
