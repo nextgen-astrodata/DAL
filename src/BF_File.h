@@ -117,6 +117,11 @@ public:
   Attribute<double>       pointOffsetRA();
   Attribute<double>       pointOffsetDEC();
 
+  Attribute<double>       beamDiameterRA();
+  Attribute<double>       beamDiameterDEC();
+  Attribute<double>       beamFrequencyCenter();
+  Attribute<std::string>  beamFrequencyCenterUnit();
+
   Attribute<bool>         foldedData();
   Attribute<double>       foldPeriod();
   Attribute<std::string>  foldPeriodUnit();
@@ -124,6 +129,8 @@ public:
   Attribute<std::string>  dedispersion();
   Attribute<double>       dedispersionMeasure();
   Attribute<std::string>  dedispersionMeasureUnit();
+
+  Attribute<bool>         barycenter();
 
   Attribute<unsigned>     nofStokes();
   Attribute< std::vector<std::string> > stokesComponents();

@@ -242,6 +242,26 @@ Attribute<double> BF_BeamGroup::pointOffsetDEC()
   return Attribute<double>(group(), "POINT_OFFSET_DEC");
 }
 
+Attribute<double> BF_BeamGroup::beamDiameterRA()
+{
+  return Attribute<double>(group(), "BEAM_DIAMETER_RA");
+}
+
+Attribute<double> BF_BeamGroup::beamDiameterDEC()
+{
+  return Attribute<double>(group(), "BEAM_DIAMETER_DEC");
+}
+
+Attribute<double> BF_BeamGroup::beamFrequencyCenter()
+{
+  return Attribute<double>(group(), "BEAM_FREQUENCY_CENTER");
+}
+
+Attribute<string> BF_BeamGroup::beamFrequencyCenterUnit()
+{
+  return Attribute<string>(group(), "BEAM_FREQUENCY_CENTER_UNIT");
+}
+
 Attribute<bool> BF_BeamGroup::foldedData()
 {
   return Attribute<bool>(group(), "FOLDED_DATA");
@@ -270,6 +290,11 @@ Attribute<double> BF_BeamGroup::dedispersionMeasure()
 Attribute<string> BF_BeamGroup::dedispersionMeasureUnit()
 {
   return Attribute<string>(group(), "DEDISPERSION_MEASURE_UNIT");
+}
+
+Attribute<bool> BF_BeamGroup::barycenter()
+{
+  return Attribute<bool>(group(), "BARYCENTER");
 }
 
 Attribute<unsigned> BF_BeamGroup::nofStokes()
