@@ -13,7 +13,7 @@ HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 {
 }
 
-HDF5GroupBase::HDF5GroupBase( const hid_gc &parent, const string &name )
+HDF5GroupBase::HDF5GroupBase( const hid_gc &parent, const std::string &name )
 :
   HDF5NodeSet(name),
   parent(parent),
@@ -59,7 +59,7 @@ void HDF5GroupBase::set( const HDF5GroupBase &other, bool deepcopy ) {
     throw HDF5Exception("Could not copy element");
 }
 
-hid_gc *HDF5GroupBase::open( hid_t parent, const string &name ) const
+hid_gc *HDF5GroupBase::open( hid_t parent, const std::string &name ) const
 {
   return new hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group");
 }

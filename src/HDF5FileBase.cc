@@ -4,7 +4,7 @@ using namespace std;
 
 namespace LDA {
 
-HDF5FileBase::HDF5FileBase( const string &filename, enum HDF5FileBase::fileMode mode )
+HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::fileMode mode )
 :
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
@@ -16,7 +16,7 @@ HDF5FileBase::HDF5FileBase( const string &filename, enum HDF5FileBase::fileMode 
 {
 }
 
-hid_t HDF5FileBase::open( const string &filename, enum HDF5FileBase::fileMode mode ) const
+hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMode mode ) const
 {
   switch (mode) {
     case CREATE:

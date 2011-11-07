@@ -4,7 +4,7 @@ using namespace std;
 
 namespace LDA {
 
-CommonAttributesFile::CommonAttributesFile( const string &filename, enum HDF5FileBase::fileMode mode )
+CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum HDF5FileBase::fileMode mode )
 :
   HDF5FileBase(filename, mode)
 {

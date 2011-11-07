@@ -4,7 +4,7 @@ using namespace std;
 
 namespace LDA {
 
-TBB_File::TBB_File( const string &filename, enum HDF5FileBase::fileMode mode )
+TBB_File::TBB_File( const std::string &filename, enum HDF5FileBase::fileMode mode )
 :
   CommonAttributesFile(filename, mode)
 {
