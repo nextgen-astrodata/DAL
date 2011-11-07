@@ -38,7 +38,7 @@ public:
    *  BIG:    use big-endian:    MIPS, POWER, PowerPC, SPARC
    */
   void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename = "", enum Endianness endianness = NATIVE );
-  virtual void create() const { throw HDF5Exception("create() not supported on a dataset"); }
+  virtual void create() { throw HDF5Exception("create() not supported on a dataset"); }
 
   /*!
    * Returns the rank of the dataset.
