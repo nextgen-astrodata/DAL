@@ -13,7 +13,7 @@ The contents of the LDA is as follows:
         Features
         -----------------
 
-1. ICDs: the LDA aims to implement ICD001 (TBB Time-Series Data) and ICD004 (Beam-Formed Data).
+1. ICDs: the LDA aims to implement ICD001 (TBB Time-Series Data) and ICD003 (Beam-Formed Data).
 
 2. Python bindings are available, closely matching the C++ API. Docstrings are generated from the comments included in the header files. Numpy is used for marshalling data sets.
 
@@ -28,12 +28,34 @@ The LDA uses CMake to build and install. The following packages are requires:
         - libhdf5-*-dev
         - libhdf5-*
 
-For the python bindings, additional packages are needed:        
+For the python bindings (optional), additional packages are needed:
         - python-dev
         - numpy
 
-To generate documentation and python docstrings:
+To generate documentation and python docstrings (both optional):
         - doxygen
+
+        Scope and Software stack
+        ------------------------
+
+The LDA implements the astronomical data format description as described by the ICD documents, and provides functions to implement similar file structures. In diagram form:
+
+        
+        +---------------------------+
+        | Application               |
+        +---------------------------+
+        | High-level interpretation |
+        +---------------------------+
+        | Low-level interpretation  |
+        +---------------------------+
+        | Structure format          | - provided by the LDA
+        +---------------------------+
+        | File format               | - provided by the HDF5 library
+        +---------------------------+
+        | File-system access        | - provided by the Operating System
+        +---------------------------+
+
+As the diagram shows, the LDA currently lacks any level of data interpretation (other than type-safety and interface conformance). Low-level interpretation would involve a basic coupling of data fields, to provide physical units instead of C++ data types (for example, jointly interpreting a value field X and a unit field X_UNIT). High-level interpretation would involve expensive calculations based on values across many data fields (for example, generate an image).
 
         HDF5 in the LDA
         -----------------
@@ -159,15 +181,10 @@ The LDA ships with classes that wrap the HDF5 structures as described in the ICD
 For the ICDs, the following wrappers are available:
 
         ICD001 - TBB Time-Series Data - LDA class TBB_File
-        ICD004 - Beam-Formed Data     - LDA class BF_File
+        ICD003 - Beam-Formed Data     - LDA class BF_File
 
         Python Bindings
         -----------------
 
 The Python bindings of the LDA are generated using SWIG, which parses the C++ header files to define the Python classes. The main advantage of this approach is its light weight, making the bindings easy to maintain.
-
-        Extending the LDA
-        -----------------
-
-The HDF5 file-format wrappers provide only low-level access to the astronomical data that the ICDs describe. The LDA classes describing the ICD file formats (TBB_File et al.) can be extended to provide higher-level functionality.
 
