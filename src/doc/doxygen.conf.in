@@ -1,5 +1,5 @@
 # The files and directories to parse
-INPUT = @CMAKE_SOURCE_DIR@/src @CMAKE_SOURCE_DIR@/src/hdf5core
+INPUT = @CMAKE_SOURCE_DIR@/src @CMAKE_SOURCE_DIR@/src/hdf5 @CMAKE_SOURCE_DIR@/src/lofar 
 
 # Where to put the results
 OUTPUT_DIRECTORY = @CMAKE_CURRENT_BINARY_DIR@

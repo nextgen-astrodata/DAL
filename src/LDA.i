@@ -17,7 +17,7 @@
 %include "exception.i"
 
 %{
-#include "hdf5core/h5exception.h"
+#include "hdf5/types/h5exception.h"
 %}
 
 %exception {
@@ -93,8 +93,8 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 // -------------------------------
 
 %{
-  #include "BF_File.h"
-  #include "TBB_File.h"
+  #include "lofar/BF_File.h"
+  #include "lofar/TBB_File.h"
 
   using namespace LDA;
 %}
@@ -108,11 +108,11 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 %ignore *::getMatrix;
 %ignore *::setMatrix;
 
-%include HDF5Node.h
-%include HDF5Attribute.h
-%include HDF5FileBase.h
-%include HDF5GroupBase.h
-%include HDF5DatasetBase.h
+%include hdf5/HDF5Node.h
+%include hdf5/HDF5Attribute.h
+%include hdf5/HDF5FileBase.h
+%include hdf5/HDF5GroupBase.h
+%include hdf5/HDF5DatasetBase.h
 
 namespace LDA {
   using namespace std;
@@ -130,9 +130,9 @@ namespace LDA {
   %template(HDF5DatasetBaseComplexFloat) HDF5DatasetBase< std::complex<float> >;
 }
 
-%include CommonAttributesFile.h
-%include BF_File.h
-%include TBB_File.h
+%include lofar/CommonAttributesFile.h
+%include lofar/BF_File.h
+%include lofar/TBB_File.h
 
 // -------------------------------
 // Class extensions for bindings

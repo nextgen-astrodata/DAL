@@ -1,9 +1,3 @@
-# Mandatory: HDF5 support for core library
-find_package(HDF5 REQUIRED)
-include_directories(${HDF5_INCLUDE_DIR})
-
-include(TestHDF5)
-
 include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR} # to find regular headers
   ${CMAKE_CURRENT_BINARY_DIR} # to find generated headers
@@ -16,24 +10,17 @@ configure_file (
 
 install (FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lda_config.h
-  BF_File.h
-  CommonAttributesFile.h
-  HDF5Attribute.h
-  HDF5DatasetBase.h
-  HDF5FileBase.h
-  HDF5GroupBase.h
-  HDF5Node.h
-  TBB_File.h
 
   DESTINATION include/lda
 )
 
 set(lda_sources
-  BF_File.cc
-  CommonAttributesFile.cc
-  HDF5FileBase.cc
-  HDF5GroupBase.cc
-  TBB_File.cc
+  hdf5/HDF5FileBase.cc
+  hdf5/HDF5GroupBase.cc
+
+  lofar/BF_File.cc
+  lofar/CommonAttributesFile.cc
+  lofar/TBB_File.cc
 )
 
 add_library (lda 
@@ -84,5 +71,6 @@ endif(PYTHON_BINDINGS)
 
 add_subdirectory(casa)
 add_subdirectory(doc)
-add_subdirectory(hdf5core)
+add_subdirectory(hdf5)
+add_subdirectory(lofar)
 

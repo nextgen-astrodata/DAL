@@ -3,10 +3,10 @@
 
 #include <string>
 #include <hdf5.h>
-#include "HDF5Attribute.h"
-#include "CommonAttributesFile.h"
-#include "HDF5GroupBase.h"
-#include "HDF5DatasetBase.h"
+#include "hdf5/HDF5Attribute.h"
+#include "hdf5/HDF5GroupBase.h"
+#include "hdf5/HDF5DatasetBase.h"
+#include "lofar/CommonAttributesFile.h"
 
 namespace LDA {
 

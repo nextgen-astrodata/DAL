@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "HDF5Attribute.h"
-#include "HDF5FileBase.h"
+#include "hdf5/HDF5Attribute.h"
+#include "hdf5/HDF5FileBase.h"
 
 namespace LDA {
 
