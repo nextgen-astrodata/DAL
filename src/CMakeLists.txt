@@ -10,11 +10,14 @@ configure_file (
 
 install (FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lda_config.h
+  lda_version.h
 
   DESTINATION include/lda
 )
 
 set(lda_sources
+  lda_version.cc
+
   hdf5/HDF5FileBase.cc
   hdf5/HDF5GroupBase.cc
 
