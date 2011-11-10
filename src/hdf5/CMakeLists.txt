@@ -1,9 +1,3 @@
-# Mandatory: HDF5 support for core library
-find_package(HDF5 REQUIRED)
-include_directories(${HDF5_INCLUDE_DIR})
-
-include(TestHDF5)
-
 install (FILES
   HDF5Attribute.h
   HDF5DatasetBase.h
