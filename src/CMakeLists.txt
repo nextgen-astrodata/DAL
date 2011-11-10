@@ -53,12 +53,14 @@ if(PYTHON_BINDINGS)
   find_package(SWIG REQUIRED)
   include(${SWIG_USE_FILE})
 
-  # For now, we assume python bindings only
   find_package(PythonLibs REQUIRED)
   include_directories(${PYTHON_INCLUDE_DIRS})
 
+  find_package(Numpy REQUIRED)
+  include_directories(${NUMPY_INCLUDE_DIRS})
+
   # Obtain location of 'site-packages' directory (doesn't work when cross-compiling)
-  execute_process(COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
   set(PYTHON_DEST ${PYTHON_SITE_PACKAGES} CACHE PATH "Target directory for python bindings")
 
   list(APPEND CMAKE_SWIG_FLAGS -Wall)
