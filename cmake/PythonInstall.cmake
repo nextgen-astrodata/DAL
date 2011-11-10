@@ -30,7 +30,7 @@ find_package(PythonInterp)
 if(PYTHON_EXECUTABLE)
   set(_cmd
     "from distutils.sysconfig import get_python_lib"
-    "print get_python_lib(plat_specific=True, prefix='')")
+    "print(get_python_lib(plat_specific=True, prefix=''))")
   execute_process(
     COMMAND "${PYTHON_EXECUTABLE}" "-c" "${_cmd}"
     OUTPUT_VARIABLE _pydir
@@ -83,7 +83,7 @@ macro(python_install)
     install(FILES ${_py} DESTINATION ${_inst_dir}/${_py_path})
     set(_py_code
       "import py_compile"
-      "print '-- Byte-compiling: ${_inst_dir}/${_py}'"
+      "print('-- Byte-compiling: ${_inst_dir}/${_py}')"
       "py_compile.compile('${_inst_dir}/${_py}')")
     install(CODE 
       "execute_process(COMMAND ${PYTHON_EXECUTABLE} -c \"${_py_code}\")")
