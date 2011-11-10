@@ -27,6 +27,7 @@
 find_package(PythonInterp)
 
 if(NOT NUMPY_FOUND)
+
   if(PYTHON_EXECUTABLE)
     execute_process(
       COMMAND "${PYTHON_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/cmake/FindNumpy.py"
@@ -36,10 +37,14 @@ if(NOT NUMPY_FOUND)
     if(_pyerr)
       message(FATAL_ERROR "Numpy: Python command failed:\n${_pyerr}")
     endif(_pyerr)
+
     set(NUMPY_INCLUDE_DIR "${_numpydir}")
-    set(NUMPY_FOUND TRUE)
+
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(NUMPY DEFAULT_MSG NUMPY_INCLUDE_DIR)
+
+    set(NUMPY_INCLUDE_DIRS ${NUMPY_INCLUDE_DIR})
   endif(PYTHON_EXECUTABLE)
 
-  set(NUMPY_INCLUDE_DIRS ${NUMPY_INCLUDE_DIR})
 endif(NOT NUMPY_FOUND)
 
