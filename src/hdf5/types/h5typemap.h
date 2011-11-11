@@ -2,8 +2,8 @@
 #define __H5TYPEMAP__
 
 #include <hdf5.h>
-#include "hid_gc.h"
-#include "h5complex.h"
+#include "hdf5/types/hid_gc.h"
+#include "hdf5/types/h5complex.h"
 
 namespace LDA {
 

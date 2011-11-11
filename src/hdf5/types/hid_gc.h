@@ -2,7 +2,7 @@
 #define __HIDGC__
 
 #include <hdf5.h>
-#include "h5exception.h"
+#include "hdf5/types/h5exception.h"
 
 namespace LDA {
 

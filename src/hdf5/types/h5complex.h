@@ -3,9 +3,9 @@
 
 #include <complex>
 #include <hdf5.h>
-#include "h5typemap.h"
-#include "hid_gc.h"
-#include "h5exception.h"
+#include "hdf5/types/h5typemap.h"
+#include "hdf5/types/hid_gc.h"
+#include "hdf5/types/h5exception.h"
 
 namespace LDA {
 
