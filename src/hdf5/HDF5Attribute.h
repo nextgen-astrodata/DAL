@@ -3,9 +3,13 @@
 
 #include <string>
 #include <vector>
-#include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/HDF5Node.h"
+
+/*
+ * NOTE: Setting attributes is not thread-safe if the same attribute is modified by multiple
+ * threads in parallel!
+ */
 
 namespace LDA {
 
@@ -17,13 +21,13 @@ public:
   /*!
    * Returns whether this attribute exists in the HDF5 file.
    */
-  bool exists() const { return H5Aexists(container, _name.c_str()) > 0; }
+  bool exists() const;
 
   /*!
    * Removes this element from the HDF5 file. Useful for porting, 
    * repairing, or otherwise modifying files on a structural level.
    */
-  void remove() const { if (H5Adelete(container, _name.c_str()) < 0) throw HDF5Exception("Could not delete element"); }
+  void remove() const;
 
 protected:
   AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
@@ -42,6 +46,8 @@ protected:
 template<typename T> class Attribute: public AttributeBase {
 public:
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
+
+  void create() const;
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
@@ -62,6 +68,8 @@ public:
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {
 public:
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
+
+  void create( size_t length ) const;
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
