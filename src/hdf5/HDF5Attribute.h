@@ -47,8 +47,6 @@ template<typename T> class Attribute: public AttributeBase {
 public:
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
 
-  void create() const;
-
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
    * is thrown if the attribute does not already exist.
@@ -60,6 +58,9 @@ public:
    * if it does not already exist.
    */
   void set( const T &value ) const;
+
+protected:
+  void create() const;
 };
 
 /*!
@@ -68,8 +69,6 @@ public:
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {
 public:
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
-
-  void create( size_t length ) const;
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
@@ -82,6 +81,9 @@ public:
    * if it does not already exist.
    */
   void set( const std::vector<T> &value ) const;
+
+protected:
+  void create( size_t length ) const;
 };
 
 }
