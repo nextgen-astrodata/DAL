@@ -100,12 +100,17 @@ Attribute<unsigned> BF_File::nofSubArrayPointings()
   return Attribute<unsigned>(group(), "NOF_SUB_ARRAY_POINTINGS");
 }
 
-BF_SubArrayPointing BF_File::subArrayPointing( unsigned nr )
+string BF_File::subArrayPointingName( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "SUB_ARRAY_POINTING_%03u", nr);
 
-  return BF_SubArrayPointing(group(), string(buf));
+  return string(buf);
+}
+
+BF_SubArrayPointing BF_File::subArrayPointing( unsigned nr )
+{
+  return BF_SubArrayPointing(group(), subArrayPointingName(nr));
 }
 
 BF_SysLog BF_File::sysLog()
@@ -208,18 +213,22 @@ Attribute<string> BF_SubArrayPointing::channelWidthUnit()
   return Attribute<string>(group(), "CHANNEL_WIDTH_UNIT");
 }
 
-
 Attribute<unsigned> BF_SubArrayPointing::nofBeams()
 {
   return Attribute<unsigned>(group(), "NOF_BEAMS");
 }
 
-BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
+string BF_SubArrayPointing::beamName( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "BEAM_%03u", nr);
 
-  return BF_BeamGroup(group(), string(buf));
+  return string(buf);
+}
+
+BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
+{
+  return BF_BeamGroup(group(), beamName(nr));
 }
 
 Attribute<unsigned> BF_BeamGroup::nofStations()
@@ -327,17 +336,27 @@ Attribute<string> BF_BeamGroup::signalSum()
   return Attribute<string>(group(), "SIGNAL_SUM");
 }
 
-BF_StokesDataset BF_BeamGroup::stokes( unsigned nr )
+string BF_BeamGroup::stokesName( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "STOKES_%01u", nr);
 
-  return BF_StokesDataset(group(), string(buf));
+  return string(buf);
+}
+
+string BF_BeamGroup::coordinatesName()
+{
+  return "COORDINATES";
+}
+
+BF_StokesDataset BF_BeamGroup::stokes( unsigned nr )
+{
+  return BF_StokesDataset(group(), stokesName(nr));
 }
 
 CoordinatesGroup BF_BeamGroup::coordinates()
 {
-  return CoordinatesGroup(group(), "COORDINATES");
+  return CoordinatesGroup(group(), coordinatesName());
 }
 
 Attribute< vector<double> > CoordinatesGroup::refLocationValue()
@@ -385,28 +404,40 @@ Attribute< vector<string> > CoordinatesGroup::coordinateTypes()
   return Attribute< vector<string> >(group(), "COORDINATE_TYPES");
 }
 
-Coordinate CoordinatesGroup::coordinate( unsigned nr )
+string CoordinatesGroup::coordinateName( unsigned nr )
 {
   char buf[128];
   snprintf(buf, sizeof buf, "COORDINATE_%01u", nr);
 
-  const vector<string> types =
-    coordinateTypes().exists()
-        ? coordinateTypes().get()
-        : vector<string>();
+  return string(buf);
+}
 
-  if (types.size() > nr) {
-    if (types[nr] == "Time") {
-      return TimeCoordinate(group(), string(buf));
-    }
+string CoordinatesGroup::coordinateType( unsigned nr )
+{
+  if (!coordinateTypes().exists())
+    return "";
 
-    if (types[nr] == "Spectral") {
-      return SpectralCoordinate(group(), string(buf));
-    }
-  }  
+  const vector<string> types = coordinateTypes().get();
+
+  if (nr >= types.size())
+    return "";
+
+  return types[nr];
+}
+
+Coordinate CoordinatesGroup::coordinate( unsigned nr )
+{
+  const string type = coordinateType(nr);
+  const string name = coordinateName(nr);
+
+  if (type == "Time")
+    return TimeCoordinate(group(), name);
+
+  if (type == "Spectral")
+    return SpectralCoordinate(group(), name);
 
   // unknown type
-  return Coordinate(group(), string(buf));
+  return Coordinate(group(), name);
 }
 
 Attribute<string> Coordinate::coordinateType()

@@ -56,9 +56,11 @@ public:
   Attribute< std::vector<double> >      systemTemperature();
 
   Attribute<unsigned>     nofSubArrayPointings();
-  BF_SubArrayPointing     subArrayPointing( unsigned nr );
+  virtual BF_SubArrayPointing subArrayPointing( unsigned nr );
 
-  BF_SysLog             sysLog();
+  BF_SysLog               sysLog();
+protected:
+  std::string                     subArrayPointingName( unsigned nr );
 };
 
 class BF_SysLog: public HDF5GroupBase {
@@ -103,7 +105,10 @@ public:
   Attribute<std::string>  channelWidthUnit();
 
   Attribute<unsigned>     nofBeams();
-  BF_BeamGroup            beam( unsigned nr );
+  virtual BF_BeamGroup    beam( unsigned nr );
+
+protected:
+  std::string             beamName( unsigned nr );
 };
 
 class BF_BeamGroup: public HDF5GroupBase {
@@ -138,9 +143,13 @@ public:
   Attribute< std::vector<std::string> > stokesComponents();
   Attribute<bool>         complexVoltages();
   Attribute<std::string>  signalSum();
-  BF_StokesDataset        stokes( unsigned nr );
+  virtual BF_StokesDataset stokes( unsigned nr );
 
   CoordinatesGroup        coordinates();
+
+protected:
+  std::string              stokesName( unsigned nr );
+  std::string              coordinatesName();
 };
 
 class CoordinatesGroup: public HDF5GroupBase {
@@ -159,7 +168,11 @@ public:
   Attribute<unsigned>     nofAxes();
   Attribute< std::vector<std::string> > coordinateTypes();
 
-  Coordinate              coordinate( unsigned nr );
+  virtual Coordinate      coordinate( unsigned nr );
+
+protected:
+  std::string             coordinateType( unsigned nr );
+  std::string             coordinateName( unsigned nr );
 };
 
 class Coordinate: public HDF5GroupBase {
