@@ -29,6 +29,7 @@ set(lda_sources
 
   lofar/BF_File.cc
   lofar/CommonAttributesFile.cc
+  lofar/Coordinates.cc
   lofar/TBB_File.cc
 )
 
