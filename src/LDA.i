@@ -131,6 +131,7 @@ namespace LDA {
 }
 
 %include lofar/CommonAttributesFile.h
+%include lofar/Coordinates.h
 %include lofar/BF_File.h
 %include lofar/TBB_File.h
 

@@ -81,6 +81,16 @@ Coordinate CoordinatesGroup::coordinate( unsigned nr )
   if (type == "Spectral")
     return SpectralCoordinate(group(), name);
 
+  if (type == "Direction")
+    return DirectionCoordinate(group(), name);
+
+  if (type == "Polarization")
+    return PolarizationCoordinate(group(), name);
+
+  /* TODO:
+    type == "FaradayDepth" ??
+  */  
+
   // unknown type
   return Coordinate(group(), name);
 }
@@ -110,34 +120,115 @@ Attribute< vector<string> > Coordinate::axisUnits()
   return Attribute< vector<string> >(group(), "AXIS_UNITS");
 }
 
-Attribute< vector<double> > Coordinate::referenceValue()
+Attribute<double> NumericalCoordinate::referenceValue()
+{
+  return Attribute<double>(group(), "REFERENCE_VALUE");
+}
+
+Attribute<double> NumericalCoordinate::referencePixel()
+{
+  return Attribute<double>(group(), "REFERENCE_PIXEL");
+}
+
+Attribute<double> NumericalCoordinate::increment()
+{
+  return Attribute<double>(group(), "INCREMENT");
+}
+
+Attribute<unsigned> NumericalCoordinate::axisLength()
+{
+  return Attribute<unsigned>(group(), "AXIS_LENGTH");
+}
+
+Attribute< vector<unsigned> > NumericalCoordinate::axisValuesPixel()
+{
+  return Attribute< vector<unsigned> >(group(), "AXIS_VALUES_PIXEL");
+}
+
+Attribute< vector<double> > NumericalCoordinate::axisValuesWorld()
+{
+  return Attribute< vector<double> >(group(), "AXIS_VALUES_WORLD");
+}
+
+
+Attribute< vector<double> > DirectionCoordinate::referenceValue()
 {
   return Attribute< vector<double> >(group(), "REFERENCE_VALUE");
 }
 
-Attribute< vector<double> > Coordinate::referencePixel()
+Attribute< vector<double> > DirectionCoordinate::referencePixel()
 {
   return Attribute< vector<double> >(group(), "REFERENCE_PIXEL");
 }
 
-Attribute< vector<double> > Coordinate::increment()
+Attribute< vector<double> > DirectionCoordinate::increment()
 {
   return Attribute< vector<double> >(group(), "INCREMENT");
 }
 
-Attribute< vector<double> > Coordinate::pc()
+Attribute< vector<double> > DirectionCoordinate::pc()
 {
   return Attribute< vector<double> >(group(), "PC");
 }
 
-Attribute< vector<double> > Coordinate::axisValuesPixel()
+Attribute<string> DirectionCoordinate::equinox()
 {
-  return Attribute< vector<double> >(group(), "AXIS_VALUES_PIXEL");
+  return Attribute<string>(group(), "EQUINOX");
 }
 
-Attribute< vector<double> > Coordinate::axisValuesWorld()
+Attribute<string> DirectionCoordinate::radecSys()
 {
-  return Attribute< vector<double> >(group(), "AXIS_VALUES_WORLD");
+  return Attribute<string>(group(), "RADEC_SYS");
+}
+
+Attribute<string> DirectionCoordinate::projection()
+{
+  return Attribute<string>(group(), "PROJECTION");
+}
+
+Attribute< vector<double> > DirectionCoordinate::projectionParam()
+{
+  return Attribute< vector<double> >(group(), "PROJECTION_PARAM");
+}
+
+Attribute<double> DirectionCoordinate::lonPole()
+{
+  return Attribute<double>(group(), "LONPOLE");
+}
+
+Attribute<double> DirectionCoordinate::latPole()
+{
+  return Attribute<double>(group(), "LATPOLE");
+}
+
+Attribute<string> TimeCoordinate::referenceFrame()
+{
+  return Attribute<string>(group(), "REFERENCE_FRAME");
+}
+
+Attribute<string> SpectralCoordinate::referenceFrame()
+{
+  return Attribute<string>(group(), "REFERENCE_FRAME");
+}
+
+Attribute<double> SpectralCoordinate::restFrequency()
+{
+  return Attribute<double>(group(), "REST_FREQUENCY");
+}
+
+Attribute<string> SpectralCoordinate::restFrequencyUnit()
+{
+  return Attribute<string>(group(), "REST_FREQUENCY_UNIT");
+}
+
+Attribute<double> SpectralCoordinate::restWavelength()
+{
+  return Attribute<double>(group(), "REST_WAVELENGTH");
+}
+
+Attribute<string> SpectralCoordinate::restWavelengthUnit()
+{
+  return Attribute<string>(group(), "REST_WAVELENGTH_UNIT");
 }
 
 }

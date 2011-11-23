@@ -142,7 +142,7 @@ public:
   Attribute<std::string>  signalSum();
   virtual BF_StokesDataset stokes( unsigned nr );
 
-  CoordinatesGroup        coordinates();
+  virtual CoordinatesGroup coordinates();
 
 protected:
   std::string              stokesName( unsigned nr );
