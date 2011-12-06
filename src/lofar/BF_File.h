@@ -134,7 +134,7 @@ public:
   Attribute<double>       dedispersionMeasure();
   Attribute<std::string>  dedispersionMeasureUnit();
 
-  Attribute<bool>         barycenter();
+  Attribute<bool>         barycentered();
 
   Attribute<unsigned>     nofStokes();
   Attribute< std::vector<std::string> > stokesComponents();

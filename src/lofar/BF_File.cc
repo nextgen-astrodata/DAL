@@ -311,9 +311,9 @@ Attribute<string> BF_BeamGroup::dedispersionMeasureUnit()
   return Attribute<string>(group(), "DEDISPERSION_MEASURE_UNIT");
 }
 
-Attribute<bool> BF_BeamGroup::barycenter()
+Attribute<bool> BF_BeamGroup::barycentered()
 {
-  return Attribute<bool>(group(), "BARYCENTER");
+  return Attribute<bool>(group(), "BARYCENTERED");
 }
 
 Attribute<unsigned> BF_BeamGroup::nofStokes()
