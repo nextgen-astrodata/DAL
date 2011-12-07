@@ -13,6 +13,12 @@ To build:
         cd build
         cmake .. -DCMAKE_INSTALL_PREFIX=$PWD -DPYTHON_DEST=$PWD/python && make install
 
+Regarding the location of the HDF5 libs that will be used, FindHDF5 as included in CMake says the following:
+# To provide the module with a hint about where to find your HDF5 installation,
+# you can set the environment variable HDF5_ROOT.  The Find module will then
+# look in this path when searching for HDF5 executables, paths, and libraries.
+
+
 **** use LUS environment ***
         When 'use LUS' is active, add -DHDF5_C_INCLUDE_DIR=$LOFARSOFT/release/include/hdf5 to cmake
         to avoid confusion with the HDF5 installed in /usr.
