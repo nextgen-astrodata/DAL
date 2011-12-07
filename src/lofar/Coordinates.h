@@ -44,7 +44,7 @@ public:
   Attribute<unsigned>     nofAxes();
   Attribute< std::vector<std::string> > coordinateTypes();
 
-  virtual Coordinate      coordinate( unsigned nr );
+  virtual Coordinate *    coordinate( unsigned nr );
 
 protected:
   std::string             coordinateType( unsigned nr );

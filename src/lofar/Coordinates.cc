@@ -70,29 +70,29 @@ string CoordinatesGroup::coordinateType( unsigned nr )
   return types[nr];
 }
 
-Coordinate CoordinatesGroup::coordinate( unsigned nr )
+Coordinate *CoordinatesGroup::coordinate( unsigned nr )
 {
   const string type = coordinateType(nr);
   const string name = coordinateName(nr);
 
   if (type == "Time")
-    return TimeCoordinate(group(), name);
+    return new TimeCoordinate(group(), name);
 
   if (type == "Spectral")
-    return SpectralCoordinate(group(), name);
+    return new SpectralCoordinate(group(), name);
 
   if (type == "Direction")
-    return DirectionCoordinate(group(), name);
+    return new DirectionCoordinate(group(), name);
 
   if (type == "Polarization")
-    return PolarizationCoordinate(group(), name);
+    return new PolarizationCoordinate(group(), name);
 
   /* TODO:
     type == "FaradayDepth" ??
   */  
 
   // unknown type
-  return Coordinate(group(), name);
+  return new Coordinate(group(), name);
 }
 
 Attribute<string> Coordinate::coordinateType()
