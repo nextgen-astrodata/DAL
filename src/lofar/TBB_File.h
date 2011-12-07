@@ -28,11 +28,13 @@ public:
    */
   TBB_File( const std::string &filename, enum fileMode mode = READ );
 
-  TBB_SysLog             sysLog();
-  TBB_Station            station( unsigned nr );
+  virtual TBB_SysLog     sysLog();
+  virtual TBB_Station    station( unsigned nr );
 
   Attribute<std::string> triggerType();
-  TBB_Trigger            triggerData();
+  virtual TBB_Trigger    triggerData();
+protected:
+  std::string            stationName( unsigned nr );
 };
 
 class TBB_SysLog: public HDF5GroupBase {
@@ -61,7 +63,9 @@ public:
 
   Attribute<unsigned>                   nofDipoles();
 
-  TBB_DipoleDataset                     dipole( unsigned station, unsigned rsp, unsigned rcu );
+  virtual TBB_DipoleDataset             dipole( unsigned station, unsigned rsp, unsigned rcu );
+protected:
+  std::string                           dipoleName( unsigned station, unsigned rsp, unsigned rcu );
 };
 
 class TBB_DipoleDataset: public HDF5DatasetBase<short> {

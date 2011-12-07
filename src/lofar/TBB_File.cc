@@ -12,10 +12,15 @@ TBB_File::TBB_File( const std::string &filename, enum HDF5FileBase::fileMode mod
 
 TBB_Station TBB_File::station( unsigned nr )
 {
+  return TBB_Station(group(), stationName(nr));
+}
+
+string TBB_File::stationName( unsigned nr )
+{
   char buf[128];
   snprintf(buf, sizeof buf, "Station_%03u", nr);
 
-  return TBB_Station(group(), string(buf));
+  return string(buf);
 }
 
 Attribute<string> TBB_File::triggerType()
@@ -103,10 +108,15 @@ Attribute<unsigned> TBB_Station::nofDipoles()
 
 TBB_DipoleDataset TBB_Station::dipole( unsigned station, unsigned rsp, unsigned rcu )
 {
+  return TBB_DipoleDataset(group(), dipoleName(station, rsp, rcu));
+}
+
+string TBB_Station::dipoleName( unsigned station, unsigned rsp, unsigned rcu )
+{
   char buf[128];
   snprintf(buf, sizeof buf, "Dipole_%03u%03u%03u", station, rsp, rcu);
 
-  return TBB_DipoleDataset(group(), string(buf));
+  return string(buf);
 }
 
 Attribute<unsigned> TBB_DipoleDataset::stationID()
