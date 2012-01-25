@@ -201,6 +201,21 @@ Attribute<double> DirectionCoordinate::latPole()
   return Attribute<double>(group(), "LATPOLE");
 }
 
+Attribute<unsigned> StringCoordinate::axisLength()
+{
+  return Attribute<unsigned>(group(), "AXIS_LENGTH");
+}
+
+Attribute< vector<unsigned> > StringCoordinate::axisValuesPixel()
+{
+  return Attribute< vector<unsigned> >(group(), "AXIS_VALUES_PIXEL");
+}
+
+Attribute< vector<string> > StringCoordinate::axisValuesWorld()
+{
+  return Attribute< vector<string> >(group(), "AXIS_VALUES_WORLD");
+}
+
 Attribute<string> TimeCoordinate::referenceFrame()
 {
   return Attribute<string>(group(), "REFERENCE_FRAME");

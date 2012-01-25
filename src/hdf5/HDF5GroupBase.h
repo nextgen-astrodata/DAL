@@ -59,6 +59,11 @@ protected:
   hid_gc *_group;
 
   virtual hid_gc *open( hid_t parent, const std::string &name ) const;
+
+  /*!
+   * Add extra settings to the creation property list, before creating the group.
+   */
+  virtual void configure_ocpl( hid_t ocpl ) const;
 };
 
 }

@@ -26,8 +26,18 @@ HDF5GroupBase::~HDF5GroupBase() {
 }
 
 void HDF5GroupBase::create() {
+  hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list (gcpl)");
+
+  configure_ocpl(gcpl);
+
   delete _group; _group = 0;
-  _group = new hid_gc(H5Gcreate2(parent, _name.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT), H5Gclose, "Could not create group");
+  _group = new hid_gc(H5Gcreate2(parent, _name.c_str(), H5P_DEFAULT, gcpl, H5P_DEFAULT), H5Gclose, "Could not create group");
+}
+
+void HDF5GroupBase::configure_ocpl( hid_t ocpl ) const {
+  // make sure we use dense storage to be able to store attributes >64 kB in size
+  if (H5Pset_link_phase_change(ocpl, 0, 0) < 0)
+    throw HDF5Exception("Could not configure group for dense storage");
 }
 
 bool HDF5GroupBase::exists() const {

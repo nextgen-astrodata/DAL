@@ -18,11 +18,23 @@ HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::file
 
 hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMode mode ) const
 {
+
   switch (mode) {
     case CREATE:
-      return H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+      {
+        hid_gc_noref fapl(H5Pcreate(H5P_FILE_ACCESS), H5Pclose, "Could not create file access property list");
+
+        // we will use HDF5 1.8+ features, which must be enabled by raising the
+        // minimum HDF5 version required to read this file.
+        if (H5Pset_libver_bounds(fapl, H5F_LIBVER_18, H5F_LIBVER_LATEST) < 0)
+          return -1;
+
+        return H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
+      }  
+
     case READ:  
       return H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+
     case READWRITE:  
       return H5Fopen(filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
 
