@@ -1,0 +1,754 @@
+% Reqs_Design_Decisions.tex
+\title{DAL Requirements and Design Decisions}
+\author{
+	Alexander S. van Amesfoort \\
+	ASTRON (Netherlands Institute for Radio Astronomy) \\
+	Dwingeloo, The Netherlands \\
+	\textit{nextgen-astrodata@astron.nl}
+}
+\date{January 25, 2012}	% don't use \today as it generates a new date on every rebuild
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{booktabs}	% \toprule, etc
+\usepackage{units}	% unitfrac
+\usepackage{footnote}
+\usepackage{multirow}
+\usepackage{url}
+
+% Keep hyperref last. Buggy for >1 footnotes in table and not so useful for footnotes, so disable that.
+\usepackage[hyperfootnotes=false]{hyperref}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Introduction} \label{sec:intro}
+Radio astronomy data sets are growing at an enormous rate. 
+The LOFAR\footnote{LOw Frequency ARray, \url{http://www.lofar.org/}} telescope operated by ASTRON\footnote{Netherlands Institute for Radio Astronomy, \url{http://www.astron.nl/}} produces raw or partially processed data products of up to 10 TB with up to 20000 meta data attribute values per observation.
+To encapsulate and archive this data, provided data fields and relations have been specified, and HDF5\footnote{Hierarchical Data Format, version 5, \url{http://www.hdfgroup.org/}} has been selected as a storage format.
+
+After an observation completes, astronomers perform additional processing and all need to access the data fields in the same way.
+The DAL (Data Access Library) is a software library that provides data access to programs that process HDF5 files storing LOFAR data.
+It ships with the specifications describing the data formats and provides a reference implementation to access all data fields with long-term version compatibility in mind.
+At a later stage, some higher level functionality and support tools will be added, against existing astronomy software such as casacore, wcslib, CFITSIO/CCfits, etc.
+DAL v2 is written in C++, but is also usable by Python programs. DAL code has not been derived from the original DAL v1 code.
+
+This document describes the initial version of DAL v2, its requirements, properties of the development and user environment, and a list of design decisions.
+
+
+\section{Purpose} \label{sec:purpose}
+\begin{quote}
+The purpose of the DAL software library is to provide a convenient way for software developers to access data and meta data of LOFAR data products stored in the HDF5 format.
+\end{quote}
+
+
+\section{Users} \label{sec:users}
+The initial users of DAL are the current users of DAL v1 (est. 5--10), though DAL may not provide all functionality of DAL v1.
+In the coming years, the user base may grow with the radio astronomers that receive and work with LOFAR data products (est. 50 within ASTRON and LOFAR key science project universities) plus external astronomers (est. 10s per year).
+DAL's users are radio astronomers running Linux and Mac OS X.
+Many develop custom software tools or contribute to common radio astronomy software packages written in C/C++/Python/Fortran.
+
+Now that LOFAR selected a for radio astronomy non-standard storage format, some users may need data format conversions (e.g. to FITS, casaTables, etc), especially as long as bindings to common astronomy software are not yet implemented.
+
+
+\section{Definitions} \label{sec:definitions}
+\begin{itemize}
+\itemsep0em
+\item A ``DAL release'' is a tested DAL repository version tagged as a release (i.e. no daily builds) with a unique version number.
+\item A ``specification document'' is a document that specifies which (meta) data fields are stored where in a data product.
+The meaning and format of each field must be described or referred to as well.
+\item The data product type ``bf'' refers to beamforming data, ``tbb'' refers to transient buffer boards data.
+\end{itemize}
+
+% REQUIREMENTS ----------------------------------------------------------------
+
+\section{Requirements} \label{sec:reqs}
+The following list of requirements has been derived from users and developers of DAL v1.
+For the list of those who participated in dicussions, see the acknowledgements in Section~\ref{sec:acks}.
+Some requirements have been derived, as many users provided feedback in terms of specific solutions.
+We may of may not propose that solution for their and other requirements.
+Indicated importance (high, medium, low) are used to prioritize for the next release version.
+
+Each requirement can be referred to later using an \textit{R.\#} symbol, so we do not have to spell out the same reasons again and again. %\ref{req:descr}
+(Whether this makes matters clearer remains to be seen, also because these references cannot be back-tracked.)
+This also allows searching for implicitly (un)satisfied items and to see what influences which design items (somewhat ideally).
+
+Restricted by the environment discussed hereafter, the following requirements has been identified.
+Some items do not require software functionality or a document but a result of some (development) procedure that must be in place.
+
+\subsection{Library Requirements} \label{sec:lib_reqs}
+\begin{enumerate}[label=\it R.\arabic{*}]
+\itemsep0em
+
+\item \label{req:getset-fields} Primary functionality: to get and set every single field named in the specification documents.\\
+DAL is the reference implementation of the specification documents.\\
+Importance: high\\
+
+\item \label{req:data_struc_design} The data structure (class) design must strictly correspond to the naming and hierarchical group structure given in the specification documents.\\
+Importance: high\\
+
+\item \label{req:scope_1st_release} Scope first release: the supported specification documents are bf and tbb.\\
+Importance: high\\
+
+\item \label{req:storage_backend} DAL uses a single storage back-end, the Hierarchical Data Format, version 5 (HDF5).\\
+Importance: high\\
+We want to be able to use HDF5 features (and limitations), not a least common denominator of storage format features/limitations.
+This also allows a much simpler code base.
+
+\item \label{req:long-term_compat} After commissioning started for a data product type, offer compatibility for long-term (years) preserved data sets.\\
+Importance: high\\
+Backward-compatibility: It must be possible to access any data products ever written in a production run using the latest DAL release.\\
+Forward-compatibility: It must be possible to access all still fields in newer data products that still exist under their original name. (Don't force users to update DAL, only to access new fields and features, and bug fixes.)\\
+Versioned specification document modifications to support (likeliness of changes not always easy to predict):
+\begin{itemize}
+\itemsep0em
+\item Add attribute, data set, or group.\\
+Happens for sure.
+\item Remove attribute, data set, or empty group.\\
+This is less important, and is not expected to happen very often, because we can keep the old field around and indicate it is deprecated when its value has been superseded.
+\item Rename attribute, data set, or group (get, remove, add, set).\\
+This can happen, also from one field into multiple others (more detailed).
+\item Modify type of attribute or data set (including dimension(s)).\\
+This is unlikely for truncating changes, and might happen for detailed/precise information.
+\item Modify value format (e.g. number of decimals in timestamp, or ``MHz'' to ``Hz'').\\
+This may happen.
+\end{itemize}
+Drastical changes (moving entire sub-groups around, etc) will not happen in the sense that they are considered as conversions between incompatible formats.
+
+\item \label{req:lang_interfaces} All public interfaces must be available to C++ and Python software.\\
+Importance: high\\
+
+\item \label{req:data_store_compat} Keep track of data stores in a way that is compatible and easily convertible to all related packages (i.e. use raw arrays/pointers).\\
+Importance: high\\
+DAL users will need to be able to use various radio astronomy packages on their LOFAR data listed in the Table in~\ref{env:radio_astro_pkgs}.
+These packages use their own array containers.
+Do not force any of these to DAL users, nor insert conversions all over the place.
+
+\item \label{req:guarded_fopen} When opening data products, guard against opening ``wrong'' files.\\
+Importance: high\\
+The meaning of ``wrong'': different telescope, different data product type, unavailable or completely unrecognized version field format.\\
+
+\item \label{req:fopen_ro} Open files read-only if read-write has not been explicitly requested.\\
+Importance: high\\
+Opening read-write can fail more often and it updates timestamps that may trigger re-archiving.\\
+
+\item \label{req:impl_complexity} Implementation complexity: Simple, clea[rn] code.\\
+Importance: medium\\
+Compared to DAL v1, DAL can trade-in (initial) features for robustness and maintainability.\\
+
+\item \label{req:large_data} Suitable for working with (very) large data sets.\\
+Importance: medium\\
+See \ref{env:data_size} for size estimates.
+
+\end{enumerate}
+
+\subsection{Build System Requirements} \label{sec:build_system_reqs}
+\begin{enumerate}[resume, label=\it R.\arabic{*}]
+\itemsep0em
+
+\item \label{req:min_deps} Dependencies: Keep the number of dependencies to an absolute minimum, especially to use the functionality to get and set every single field.\\
+Importance: high\\
+
+\item \label{req:libs} Build and install native, static and shared libraries by default. By default, link with shared libraries.\\
+Importance: low\\
+Static linking can fail when a program links with multiple libraries each using DAL statically or its library dependencies, because of double deallocation of global identifiers and library version mismatches.
+And updated shared libraries are used without the need to rebuild programs that use it.
+
+\item \label{req:naming_versioning} Select a project name, versioning scheme, and library file names to link to.\\
+Importance: high\\
+The ``DAL'' name has been named a few times in papers, so it may be a good idea to keep the (rather generic) name.
+
+\item \label{req:build_complexity} Simple, fast build system.\\
+Importance: medium\\
+
+\item \label{req:sys_env} Deal with the following common system environment properties.\\
+Importance: endian: high; rest: low
+\begin{itemize}
+\itemsep0em
+
+\item Systems can be big or little endian.
+
+\item Systems are mostly 64 bit, but can also be 32 bit.\\
+64 bit systems may have also/only 32 bit libraries around. Either build natively what is possible or fail.
+
+\item Python 2 or 3 may be installed under ``python'', if installed at all.\\
+\end{itemize}
+
+\item \label{req:flex} Flexibility: Avoid assuming a specific data type domain (e.g. temporal, spatial, frequency, or none (tables)) or telescope (e.g. LOFAR) in functionality common to all data products.\\
+Importance: medium\\
+Future versions of DAL need to support not only bf and tbb data, and keep options open to support data products from other telescopes.
+
+\end{enumerate}
+
+
+\subsection{Tools and Supplementary Programs Requirements} \label{sec:tools_and_suppl_program_seqs}
+The following list of command-line tools and supplementary programs is useful.
+\begin{enumerate}[resume, label=\it R.\arabic{*}]
+\itemsep0em
+
+\item \label{req:data_prod_valid} A data product validation tool to check telescope, data product type, and version against actually stored fields.\\
+Importance: medium\\
+
+\item \label{req:add_fields} Tool to add/set(/remove) fields as a command argument and from a file to augment data products.\\
+Importance: low\\
+Incomplete data products may exist from telescope output or after format conversion.
+Users can fill in missing fields, or add not (yet) standardized fields.
+This could also be used to update the version of a data product.
+
+\item \label{req:conv} Conversion tools between DAL HDF5 and other commonly used radio astronomy formats.\\
+Importance: low\\
+Measurement Set Tables (AIPS++/casacore), FITS (image data), or specific raw formats.
+
+\item \label{req:tests} Test cases for all functionality.\\
+Importance: medium\\
+High level functionality explained in the user manual can be tested using referenced code examples.
+For all supported programming languages.
+
+\end{enumerate}
+
+\subsection{Documentation Requirements} \label{sec:doc_reqs}
+\begin{enumerate}[resume, label=\it R.\arabic{*}]
+\itemsep0em
+
+\item \label{req:doc_spec} A specification document for each supported data product type that decribes all available data and meta data fields of LOFAR data products. For each field, indicate since and until which version. This document is considered authoritative and thus above any implementation. Ship only fully implemented documents with every DAL release.\\
+Importance: high\\
+
+\item \label{req:doc_user_manual} A user manual explaining all features at a high abstraction level with references to the relevant API sections and examples, feature limitations, and the DAL version when first implemented.\\
+Importance: low\\
+
+\item \label{req:doc_api} An API document with the current state of all public interfaces including the bindings.\\
+Importance: high\\
+
+\item \label{req:doc_design_decisions} A design document that explains which design decisions have been taken and why (this one).\\
+Importance: medium\\
+
+\item \label{req:doc_misc} One or more text document(s) that contain(s) a short DAL description, references to other included docs and online resources, known issues and work-arounds, change logs, which DAL releases (have) implement(ed) which specifications, and how to report issues or contribute otherwise.
+
+\item \label{req:doc_license} A free/open source license for all code. Maybe also for all included documents.\\
+Importance: high\\
+ASTRON is paid with public funding and there are users outside ASTRON that may send patches occasionally.
+But ASTRON cannot provide legally binding support, and does not want to be held liable for any malfunctioning.
+
+\end{enumerate}
+
+\subsection{Development Process Requirements} \label{sec:dev_process_reqs}
+\begin{enumerate}[resume, label=\it R.\arabic{*}]
+\itemsep0em
+
+\item \label{req:repos} Repository publicly available. 
+The status of filed issues can be tracked by their reporters and viewed by anyone.\\
+Importance: high\\
+Many users prefer github, but leave the DAL v1 project unmaintained, because some features will not be immediately available.\\
+
+\item \label{req:maintainer} Someone at ASTRON to handle pull requests, and control code quality and feature creep.\\
+Importance: high\\
+
+\item \label{req:release} Release plan: We have a DAL release when the LOFAR 1.0 software is released at the latest. A potentially less-stable version must be available to users to plan their tooling efforts and comment two months earlier (LOFAR 1.0 code freeze) at the latest.\\
+Importance: high\\
+This is tied to the planned timeline of the stabilization period and release of the LOFAR 1.0 software release.
+
+\end{enumerate}
+
+
+% ENVIRONMENT -----------------------------------------------------------------
+
+\section{Environment} \label{sec:env}
+
+Here we describe the availability of existing resources and some of their properties.
+They may influence decisions by allowing/easing or contraining certain solutions.
+
+\begin{enumerate}[label=\it E.\arabic{*}]
+\itemsep0em
+
+\item \label{env:dev_time} Developer time: \unitfrac{1}{2} fte for the initial version + (external) TBB writer. Not included: BF specific work. This will eventually lower to \unitfrac{1}{2} day per week of maintenance work.
+
+\item \label{env:sched} Schedule/planning: LOFAR 1.0 code freeze is planned for the end of Feb 2012. Then 2--3 months stablization until the first commissioning production runs.
+
+\item \label{env:data_size} Expected approx. data product size:\\
+Data sets: many GB -- several (say up to 10) TB. (E.g. in TS mode a TBB VHECR data set (full raw data) is 1.9 TB for 48 stations.)\\
+Metadata: 1000s -- 10000s attributes (also counting array values; just dipole dataset attributes: 425 attribs/dipole data set * 48 stations = 20400 attribute values.)
+
+\item \label{env:HDF5} HDF5: HDF5\footnote{Hierarchical Data Format, version 5, \url{http://www.hdfgroup.org/}} is a hierarchical data storage format for large (scientific) sets of data with meta data.
+I couldn't find a clear list of features and limitations, but some that I know of in the current version (1.8.x) follow.
+
+Supports large files (v4 had 2 GB limit), parallel I/O (I presume using the various libhdf5 MPI variants), concurrent reads, and a caching mechanism with some tuning functions.
+Limitations are limited variable size arrays, no true multi-dimensional arrays (probably because C/C++ don't), max 64 kB per meta data attribute (potentially bigger attributes must be split or stored as data), no read-write/write-write concurrency (users must do locking), 
+
+The hdf group is investigating if/how to add support for an XML based data specification format (unknown schedule).
+This can be useful, because frequently, the structure of HDF5 files comes back in different places in a tool or library (e.g. various documents, get/set code, compliance check table, etc), so then those could be generated from one XML representation (if I understand this correctly).
+
+\item \label{env:ICDs} ICD documents: The ICDs are documents written by LOFAR scientists that specify the desired (meta) data fields and hierarchy in HDF5 data products.
+
+\item \label{env:DAL} DAL v1: DAL\footnote{\url{https://github.com/nextgen-astrodata/DAL}, 2006--2011} is the currently used library for LOFAR data access.
+
+\item \label{env:LDA} LDA: LDA\footnote{\url{https://github.com/jjdmol/LDA}, Jan David Mol (ASTRON), 2011} is a new library developed to access bf (and tbb) data.
+It is written in C++ on top of a single backend (HDF5), provides a thin HDF5 abstraction layer and a layer that (mostly) implements the bf and tbb ICDs, offers Python bindings using swig, and builds using cmake.
+
+\item \label{env:code_std} Code standard: ASTRON/NFRA has a C++ code standard\footnote{\url{http://www.astron.nl/~gvd/cppStdDoc.html}, Ger van Diepen (ASTRON), 1997}, but it is outdated.
+
+\item \label{env:OSes_used} OS flavors in use (LUS forum): Ubuntu 10.10 (CEP nodes) till latest, Fedora, OpenSuSE, RHEL6/CentOS6, Scientific Linux, Mac OS X 10.5/10.6/10.7 (MacBooks).
+
+\item \label{env:deps_in_use} Dependencies in use: Boost is already used a lot in the LOFAR User Software (LUS); casacore uses Boost::Python to provide pyrap.
+
+\item \label{env:radio_astro_pkgs} A list of radio astronomy packages that our users use to process their data and that we may have to interface with eventually.
+\begin{table}[htb!]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Package					& Developed by			& Written in		& Supports code in	& License \\
+\midrule
+\multirow{2}{*}{casacore\footnotemark}	& M. Marquarding, Ger		& \multirow{2}{*}{C++}	& C++,			& \multirow{2}{*}{GPLv2} \\
+					& v. Diepen, T. Cornwell	&			& Python (pyrap)	& \\
+wcslib\footnotemark			& M. Calabretta et al.(?)	& C			& C, Fortran		& GPLv3	\\
+cfitsio\footnotemark			& William D. Pence (NASA) et al.& C			& $<Many>$		& US gov open\\
+
+\bottomrule
+\end{tabular}
+\caption{Related radio astronomy packages}
+%\label{tab:related_astro_pkgs}	% don't use this one, use \ref{env:radio_astro_pkgs}
+\end{table}
+% Patch up the misery with multiple footnotes in a table.
+\addtocounter{footnote}{-3}	% -n for n footnotes
+\stepcounter{footnote}\footnotetext{\url{http://code.google.com/p/casacore/}}
+\stepcounter{footnote}\footnotetext{\url{http://www.atnf.csiro.au/people/mcalabre/WCS/wcslib/index.html}}
+\stepcounter{footnote}\footnotetext{\url{http://heasarc.gsfc.nasa.gov/fitsio/}}
+
+\end{enumerate}
+
+
+% DESIGN DECISIONS ------------------------------------------------------------
+
+\section{Design Decisions} \label{sec:design_decisions}
+The initial version of DAL v2 will be fairly minimal in functionality, especially compared to DAL v1.
+In that respect, we cannot satisfy all requirements from day 1(.0).
+We will focus on implementing the specification document and some system that enables long-term compatibility, then turn to broader testing, tools, environment support, documentation, examples, and more functionality.
+
+
+\subsection{Library Design Decisions} \label{sec:lib_design_decisions}
+
+\begin{enumerate}[label=\it D.\arabic{*}]
+\itemsep0em
+
+\item \label{dsg:LDA} Use the LDA as a starting point for DAL v2.\\
+Satisfies: \ref{req:getset-fields}, \ref{req:data_struc_design}, \ref{req:scope_1st_release}, \ref{req:storage_backend}, \ref{req:lang_interfaces}, \ref{req:impl_complexity}, \ref{req:fopen_ro}, \ref{req:data_store_compat}\\
+
+LDA satisfies important feature and other qualitative requirements.
+It provides get and set methods for each field, conforms with its object hierarchy to the ICD structure, uses only one storage backend (HDF5), converts libhdf5 error codes to C++ exceptions, supplies a C++ and Python interface, and is simple with a consistent code style.
+LDA provides the functionality of Layer 1a and 1b (Figure~\ref{fig:layers}), and remains stateless with respect to (meta) data fields.
+So using LDA saves time.
+(This also means that we do not implement in Python with C++ bindings.)
+
+The most important core requirement not satisfied is long-term compatibility~\ref{req:long-term_compat}.
+This must be added (more below at~\ref{dsg:long-term_compat}).
+
+Specification and code (two places) need to be kept synchronized.
+We do not plan to also automatically generate the specifications and code.
+This is too much work and we hope to have the synchronized update done fine in another way (a single maintainer at ASTRON will already help).
+I also believe that developing such a code generator can only be done work-efficiently once input and output formats are known (with examples).
+HDF5 may offer something that helps with this in the future.
+In short, I believe now is not the opportune moment to write a generator.
+
+LDA uses HDF5's reference counting for objects in the hierarchy and uses raw (void) pointers (+ size) for data stores.
+This is exactly as requested by users and cooperates easily with all the possible custom data stores of external packages.
+Since data products always store data store lengths (and sizes don't change under user's feet), users can always allocate exactly enough.
+Perhaps a bigger downside is the responsibility of deallocation, but this only concerns the large data stores, not many, temporary or shared bookkeepings.
+If users want to avoid any problems for sure, they can choose to turn to reference counting themselves with little effort, e.g. using Boost shared pointer or array.
+
+Not sure if the choice for Python bindings through SWIG can clash with casacore's Python wrappers that are through Boost::Python. %CHECK
+%provide Python bindings with SWIG; lighter weight than Boost::Python, already in LDA, nice exc translation, does need explicit template instantiation(?), but casacore/pyrap uses Boost::Python.
+
+
+\item \label{dsg:layers} We use a layered software architecture, as shown in Figure~\ref{fig:layers}.\\
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=0.70\textwidth]{Reqs_DD_layers.pdf}
+\caption{DAL layers}
+\label{fig:layers}	% having the label here gets the figure nr right, but the hyperref ref is then too low...
+\end{figure}
+
+On top of the ``libhdf5'' layer (Layer 0), DAL has a ``HDF5/C Abstraction'' layer (Layer 1a) that turns C error codes in C++ exceptions, defines classes according to the planned specification documents (\ref{dsg:spec_docs}), and does some object reference counting.
+
+The ``Data Product Spec. Impl.'' layer (Layer 1b) provides for each data product type get and set functions to access each field.
+This is the lowest layer that is supposed to be accessed by user applications.
+Layer 1b may only interpret fields that are specified as constant (e.g. telescope, data product type, version).
+No conversions or interpretations are ever performed here.
+Layer 1b is intended to be the lowest layer used by user applications.
+
+The ``Tuple get/set, Slicing'' layer (Layer 2) would offer functionality across multiple fields.
+Some meta data fields really belong to each other or to some specified but not stored constant (i.e. unit of measurement) (tuple).
+Others usually do not need a set, but an append function (e.g. log or diag fields).
+Users that need a view across several data stores can do so using slicing.
+The requirements for the specific data products bf and tbb are to iterate across antennas and maybe stations over the data arrays with a antenna specific displacement applied. (move this to reqs.)
+We intend to provide some simple iterator functionality and leave more complex ``queries'' to future integration with TaQL, possibly through casacore.
+Layer 2 may or may not make it into the initial version of DAL.
+
+Layers 1 and 2 are stateless, i.e. they do not cache fields. We aim to directly forward the request to Layer 0 without checks on version in every field access code path.
+The only check needed is on the status code returned by Layer 0.
+
+We may want to have a Layer 3 later (not shown) where data and coordinate conversions can be performed, which requires linking to or such functionality can be provided by including DAL in other packages.
+We have some thoughts on this, but it's too early to sink more time into.
+
+
+Some other details:
+We may want to offer global methods to get (and set) the version field in the root group from anywhere in the object tree.
+Even so, we may also need a parent group node in each object, otherwise you cannot navigate up- or sideward.
+If we need it, we want it in 1.0.
+But even then, the type of this node will be the type of the parent, which means you cannot easily have the same group type in different places in the tree, or move groups (maybe we don't care about this).
+Perhaps users can comment on this one. %CHECK
+
+Disallow auto-create on set, as we believe it is problematic for various compatibility reasons.
+Do return \texttt{this} from \texttt{create()} functions, so you can create and set in a single statement.
+
+\item \label{dsg:long-term_compat} After commissioning started for a data product type, offer compatibility for long-term (years) preserved data sets.\\
+Satisfies: \ref{req:long-term_compat}, \ref{req:guarded_fopen}\\
+(Cosider moving some of the stated requirements here.)
+%throw if ``wrong'' fopen
+
+Foreseen limitations of DAL version vs. data product version (assuming version mismatches in the minor version number):
+\begin{itemize}
+\itemsep0em
+\item Equal: All fields in the data product are accessible.
+\item Older data product (bwd-compat):
+Should work as normal for this data product.
+Application functionality that depends on new fields will not work.
+You can set fields beyond the data version, but consider doing that separately with or without a tool~\ref{dsg:add_fields}.
+\item Newer data product (fwd-compat):
+Users can open newer data products and access all fields that your DAL knows about.
+Users can detect this and then know that there is a new DAL version available which solves problems accessing some fields.
+\end{itemize}
+
+There may be issues with some modifications, also because of how HDF5 does auto-conversions.
+For example, if the specification changed an int to a double, then writing a double into an older data product may silently truncate the written value.
+We don't want DAL to automatically up-convert this field.
+Supporting the old data type interface (here int) as well will be tricky.
+(The return type of a C++ (get()) function cannot be overloaded).
+
+We can make the scheme very flexible, but it will always be unwise to reuse an identifier to store data with another interpretation.
+
+\item \label{dsg:flex} Keep DAL generic enough for all kind of data product types and telescopes.
+Satisfies: \ref{req:flex}\\
+Data type domain is mostly applicable to slicing.
+TBB needs some simple slicing across temporal data.
+Implementing that does not really hurt anyone, although they have indicated they can also do it themselves.
+There may be performance aspects.
+But we can keep an eye out to keep it coordinate type generic.
+
+Requirements for non-temporal domains are not clear to me, but complicated queries can be performed using TaQL once we hook DAL into casacore.
+
+By always checking for the telescope and data product type fields early on, we are pretty safe from major extension disasters from the start.
+I don't really know what else we can do wrong now to obstruct others later...
+
+\item \label{dsg:logging} No logging infrastructure.\\
+Satisfies: -\\
+For higher layer functionality, debugging logging may be useful.
+User application can easily detect version mismatches (the open operation succeeds, so it cannot be encoded in an exception).
+(The HDF5 library does not print errors/warnings, but provides extensive error handling (H5E) functions for handling and cooperated reporting.)
+Preferably, DAL should not log.
+If at all, use log4cxx, and at compile-time turn logging off by default.
+
+\item \label{dsg:perf_opt} Performance optimization.\\
+Satisfies: -\\
+
+Various runtime performance optimizations can be performed and would be useful for processing large data sets~\ref{req:large_data}).
+We have decided not to look into this for now, but by keeping as many layers as possible stateless, we avoid some synchronization problems when we do start looking into this.
+
+To properly optimize, it would be useful to see how DAL is used, so wait a bit see what applications are developed on top of DAL.
+Some performance aspects and access patterns have come up with DAL v1:
+BF data for Pulsars (Anastasia Alexov): \url{http://lus.lofar.org/forum/index.php?topic=180.0}\\
+Image cube data, hdf5 chunking (Ger van Diepen): \url{http://lus.lofar.org/forum/index.php?topic=37.0}\\
+
+Another opportunity is in tuning libhdf5.
+
+
+%\item \label{dsg:span_objs} Functionality spanning objects (such as setting or retrieving attributes from all datasets in a station) should be handled by a simple separate slicing (iteration) mechanism with stateless objects.
+%	Slicing by means of simple iteration with stateless objects. Simplifies the basic object structure and minimizes the number of methods each object contains. Again removes propagation problems.
+%(e.g. get samples x1 to x2 from all antennas for stations s0 to s15; also set all qqq attribs of all stations to 'val0'. (what about val<stationId>?))
+%Need to iterate over "objects" (samples, stations, antennas, ...?). Also allow list of object ids, but not a range with gaps.
+%Impl: iterate over all objects in the slice and call its methods (efficient?) (instead of handling it inside each object (station, ...))
+%May be faster sometimes to directly instruct hdf5 to operate on a range. Another reason to make ICD layer stateless. But do not impl yet.
+%Don't specify in detail, look at DAL v1 after initial DAL v2 version is done. And wait until more ICDs will be implemented, so we properly design for all data domains.
+%Better introduce state only when needed and as high as possible. May only pay-off on top of slicing (lookups) and conversions.
+
+%\item \label{dsg:higher_lvl_classes} Higher level class requirements
+%Difficult to see atm. Better use/derive from often used code in use on top of initial version(s), than "imaging" beforehand.
+%Some examples:
+%	- Over 1 class, e.g. for interpretation and to combine attribute triplets. Maybe using inheritance. Clearly an is-a relationship.
+%		What to do with 
+%	- Functionality oriented over multiple classes. Has-a relationship. E.g. calibrate data using telescope and observation parameters.
+%	What on top of what? (Avoid inher on top of contains?)
+%-> From comments: Classes contain, rather then derive from, each other.
+%	E.g. a file contains multiple stations and a station contains multiple datasets.
+%	Inheritance should be kept to a minimum in general to keep the structure flat.
+
+
+\end{enumerate}
+
+
+\subsection{Build System Design Decisions} \label{sec:build_sys_design_decisions}
+
+\begin{enumerate}[resume, label=\it D.\arabic{*}]
+\itemsep0em
+
+\item \label{dsg:min_deps} Build dependencies.\\
+Satisfies: \ref{req:min_deps}, \ref{req:build_complexity}, \ref{req:sys_env}\\
+
+We will stick with cmake to build.
+Build what is possible on the system, and report at the end what was built and what was not and why.
+The LDA build system already deals with various system environments; maybe the customization can be simplified somewhat.
+
+For the layers 1--2 (Figure~\ref{fig:layers}), we expect to restrict the build dependencies to:
+\begin{itemize}
+\itemsep0em
+\item GNU g++ or llvm/clang (or another C++ compiler)
+\item cmake 2.8+
+\item libhdf5 and libhdf5-dev 1.8 (maybe 1.10)
+\item python and python-dev, version 2 (if using the Python interface)
+\item numpy (idem)
+\item libtool and libtool-dev (shared libs)
+\end{itemize}
+By offering archives with pre-built maintainer targets, users will have documentation, bindings, etc. without having build dependencies for those.
+This increases release archive size, but DAL will not be very large anyway.
+
+We try to keep Boost out of the lower layers, but we don't want to reimplement anything and it is not critical to avoid Boost~\ref{env:deps_in_use}.
+
+Full maintainer builds need additionally:
+\begin{itemize}
+\itemsep0em
+\item swig
+\item python and python-dev
+\item doxygen
+\item pdflatex
+\item valgrind (if we use that for test runs)
+\end{itemize}
+
+Higher layers may eventually need common radio astronomy tools~\ref{env:radio_astro_pkgs}, or DAL may become an optional dependency for them.
+
+
+\item \label{dsg:libs} Build what can be build and use shared libraries by default.\\
+Satisfies: \ref{req:libs}
+
+For all users (including at ASTRON), a shared library avoids the need to rebuild the application.
+If requested, we could provide a single set of binaries for Linux and a universal binary for Mac OS X.
+
+
+\item \label{dsg:naming_versioning} Project and library naming and versioning.\\
+Satisfies: \ref{req:naming_versioning}\\
+
+\begin{itemize}
+\itemsep0em
+\item Project / library name: ``DAL'', which stands for ``Data Access Library'' (all unchanged).
+\item Versioning scheme is \textit{major}.\textit{minor}.\textit{patch} starting at 2.0.0.
+Incompatible interface (API) changes increment \textit{major} (preferably not), compatible interface changes (i.e. new (data product) features) increment \textit{minor}, and bug fixes increment \textit{patch}. (After 9 comes 10, after 99 comes 100, etc.)
+
+We provide the following pre-processor version macros: DAL\_VERSION\_MAJOR, DAL\_VERSION\_MINOR, DAL\_VERSION\_PATCH.
+\item Library names:
+
+\begin{table}[htb!]
+\label{tab:lib_names}
+\centering
+\begin{tabular}{ll}
+libdal.so.major					& Link to this dyn library name...\\
+libdal.so.major.minor.patch			& ...to use the latest version of this one...\\
+libdal.so.major -\textgreater libdal.so.major.minor.patch	& ...through this sym link.\\
+libdal.la					& Lib. text descr. by libtool for linking.\\
+libdal.a					& Static lib to link against, alternatively.\\
+\end{tabular}
+\caption{DAL library filenames}
+\end{table}
+
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsection{Tools and Supplementary Programs Design Decisions} \label{sec:tools_and_suppl_progs_design_decisions}
+
+\begin{enumerate}[resume, label=\it D.\arabic{*}]
+\itemsep0em
+
+\item \label{dsg:data_prod_valid} Provide library functionality and a command-line tool to validate compliance of available meta data fields against the advertized or application requested version.\\
+Satisfies: \ref{req:data_prod_valid}
+
+If the file is a supported data product of the requested type at all is checked through three fields: telescope, data product type, and version.
+
+Version compliance will be implemented at Layer 1b (Figure~\ref{fig:layers}).
+Since data products are generated automatically, the overly large majority of them will be compliant.
+Therefore, a simple check (i.e. when opening a file) will be just on the three most basic attributes (telescope, data product type, and version).
+A more extensive compliance check could checks if all fields with respect to the three most basic attributes exist.
+Even then we do not interpret values, but we do check the values of constant fields (e.g. "MHz").
+
+Overload the version object comparison operators to allow any version comparison check.
+We need to be able to enumerate over all stored fields; currently LDA does not do this.
+(Assuming that HDF5 offers this, because there exists a generic HDF5 viewer).
+We also need to compare against and thus include some versioned field table to compare.
+Still to decide how to implement such a (diff-like?) change format; the checker needs to be able to check against any version ever released, not just the latest. %CHECK
+This means that, apart from the get/set functions and the specification, this is the third representation of the data product fields that need to be kept synchronized.
+
+If a compliance check fails, the user must be able to see on which field names it failed on, so (s)he can fix up the fields if needed once available.
+Compliance checking is only offered as functionality; DAL does not enforce it anywhere, because missing fields may not be critical and we want some forward-compatibilty.
+However, when working with non-compliant data products, users may receive (unexpected) exceptions, unexpected data values, or truncated values that were just set (with certain field type changes).
+
+%Saving version compliance info is not as much a potential problem as caching fields, but if saved, we need to invalidate it when any field is removed.
+%As long as the check is cheap, we can also recheck every time; tools should not need to perform many checks.
+
+
+\item \label{dsg:add_fields} Provide tool to add/set(/remove) (many) fields as a command argument from a file to augment/annotate data products.\\
+Satisfies: \ref{req:add_fields}\\
+We can take a look at this upon request when we have a user with a case where manually adding all missing fields to all (broken) data products is too much work.
+
+\item \label{dsg:conv} Provide conversion tools.\\
+Satisfies: \ref{req:conv}\\
+Updating LOFAR HDF5 support in casacore using DAL likely gets us toward there faster and better.
+Remaining conversions can be developed on demand in DAL or into existing tools using DAL (e.g. Pulsar Tools).
+
+\item \label{dsg:tests} Test cases for all functionality.\\
+Satisfies: \ref{req:tests}, \ref{req:sys_env}\\
+LDA provides a few tests, and I believe Sven Duscha (ASTRON) was going to write more.
+To properly test compatibilty, we need to have (small) data products from most (every?) type and version (not shipped).
+The long-term archive may help us here.
+Then there are various operating systems~\ref{env:OSes_used} and system enviroments~\ref{req:sys_env}, which can be covered with the Jenkins test build system here at ASTRON.
+We also need to test with large files~\ref{req:large_data} and perhaps check for memory leaks when running tests.
+All together, we can only offer a reasonable effort here to improve upon DAL v1.
+
+As for files beyond 4 GB on 32 bit systems, we do not try to make this work.
+(Users did not indicate the need to process multi-GB LOFAR data products on their smartphones.)
+
+\end{enumerate}
+
+
+\subsection{Documentation Decisions} \label{sec:doc_decisions}
+Documentation requirements can be integrally satisfied, but we may not be able to supply all documents fully in the initial version(s).
+
+\begin{enumerate}[resume, label=\it D.\arabic{*}]
+\itemsep0em
+
+\item \label{dsg:spec_docs} DAL ships for each supported data product type a data product specification document. (Note: the details under this item are still under discussion)\\
+Satisfies: \ref{req:doc_spec}
+
+Note: Each document lists all fields, field types, field since/until versions, and a short description of what is actually present in a type of data product in LOFAR production runs.
+
+Thus we only specify fields that appear(ed) in actual data products.
+Making them optional instead only complicates user applications and does not solve anything.
+The DAL versioning system is supposed to deal with this better (i.e. with ``named'' (version) groups of fields).
+
+We do not allow default values for fields that are used in data processing.
+Default values here require an additional check in applications after every field retrieval and if forgotten may (silently) corrupt data processing.
+Also, we prefer to leave it up to the application to apply an appropriate default (which may be different across applications and we do not want to convert default values).
+Default values for (string) fields that are descriptive only (e.g. TBB trigger type) are fine.
+This also means that if a field cannot be be set upon creation, the resulting data product is not compliant with its advertized version, which is intentional.
+(DAL supplies functionality to check for and ``repair'' this.)
+
+Each data product specification document is separately versioned in the same versioning scheme as DAL (major.minor.patch).
+The DAL library implements these specifications, but it is \emph{not} authoritative.
+
+Some constant fields (e.g. units) are specified as fields for self-descriptive purposes only (instead of generated on-the-fly).
+This is useful, because some data product users like to have a raw view on the data (which can only be done using an HDF5 viewer).
+
+To be clear: these documents are \emph{not} the same as the ICDs.
+The ICDs can remain as externally maintained data product guides.
+But we do need to agree on a way to keep common info (sub-tables) synchronized with the ICDs.
+
+Preferably, whenever a data writer has been updated and goes into production, we provide a new version of the (meta) data tables (e.g. in .tex files) that ICD maintainers can include.
+Then they only need to strip the table rows that have just been implemented.
+We may write those .tex files manually, or generate them from another format (e.g. .xml).
+
+
+\item \label{dsg:api_docs} The API specification will be generated using doxygen.\\
+Satisfies: \ref{req:doc_api}
+
+This way, it is easier to keep it up to data with the code and LDA already does this using doxygen.
+
+\item \label{dsg:other_docs} Other documents will be provided or made complete when there are no higher priority tasks.\\
+Satisfies: \ref{req:doc_misc}, \ref{req:doc_user_manual}, \ref{req:doc_license}, \ref{req:doc_design_decisions}
+
+These include:
+\begin{itemize}
+\itemsep0em
+\item User\_Manual.pdf
+\item Data\_Product\_versions.pdf
+\item README.txt, INSTALL.txt, CHANGELOG.txt, KNOWN\_ISSUES.txt, CONTRIBUTING.txt
+\item LICENSE.txt
+\item Reqs\_Design\_Decisions.pdf
+\end{itemize}
+Only on the license there is something to write more than already at the requirements.
+We do not want to be (legally) bothered with support demands (we may or may not fix perceived issues) or have our sources stripped from author and license headers.
+Note that casacore is GPLv2, while wcslib and some LOFAR sources carry GPLv3 headers~\ref{env:radio_astro_pkgs}.
+Let's select GPLv3.
+For the documents, I still have to check out FDL and CC.
+
+\end{enumerate}
+
+
+\subsection{Development Process Decisions} \label{sec:dev_process_decisions}
+Development process decisions also follow in a straightforward way from the requirements.
+
+
+\begin{enumerate}[resume, label=\it D.\arabic{*}]
+\itemsep0em
+
+\item \label{dsg:repos} The DAL repository will be hosted as ``DAL'' on github under the nextgen-astrodata ``organization''.\\
+Satisfies: \ref{req:repos}\\
+Given the discussions we had, this may be the most important decision for the (input-providing) users.
+
+The alternative is to have it in the LOFAR svn repository.
+(This paragraph is just to document the arguments.)
+The downside to have it along with LOFAR at ASTRON is that it introduces a barrier to contribute.
+This downside is somewhat lowered by the arguments that you should not expect anyone to contribute, except for current users but they already have an account; that new users would receive accounts anyway along with their project proposal acceptance, and that anyone can download a release archive, which we must provide either way to significantly reduce build dependencies~(\ref{req:min_deps}).
+Then there is the git vs. svn argument.
+The LOFAR svn would open up, but this will take months at least; we cannot wait that long.
+
+Anyway, DAL exists to make data access easier for users, so to do that best and possibly get more contributions, github is a better choice.
+The writer applications are part of LOFAR with cross-sub-package issue tracking etc, so they need to be in the LOFAR repository.
+This means that we have to make sure in other ways~(e.g. \ref{dsg:tests}) that DAL can access all created files (though we can still cross-test using the writers).
+Since writers also use DAL, DAL becomes another external dependency for the LOFAR repository.
+
+We will rename project ``DAL'' (v1) to ``DAL1'' and indicate it is deprecated, we will rename/copy ``LDA'' to ``DAL''.
+
+\item \label{dsg:maintainer} The ASTRON members of nextgen-astrodata will maintain DAL.\\
+Satisfies: \ref{req:maintainer}
+
+The file CONTRIBUTING.txt~\ref{dsg:other_docs} will outline some criteria for accepting contributions.
+Apart from code quality, this revolves around features that are related to \emph{data access} (not just processing) and are useful to have in a \emph{common}, shared library (thus serving more than one user at the time of inclusion).
+
+Contributions to DAL v1 from earlier contributors are always accepted.
+
+\item \label{dsg:release} Make the first DAL release when the LOFAR 1.0 software is released, and try to finalize the Layer 1b interface (Figure~\ref{fig:layers}) around the LOFAR 1.0 code freeze.\\
+Satisfies: \ref{req:release}
+
+I think we can make this schedule, but we will start by completing the writer applications and their direct DAL dependencies, because that is the most urgent.
+We need to provide (mainly tbb) users with a list of fields that will be easy to support, such that they can shoot remaining critical field support into the next Sprint (End of Jan 2012).
+
+We have no intentions to make versioned DAL releases earlier, but repository versions are always available through github.
+
+With respect to the LOFAR 1.0 planning~\ref{env:sched}, note that if LOFAR 1.0 is delayed, we may as well.
+This would introduce unnecessary versioning before any data product is available, and with a limited test suite, a release does not mean a lot anyway.
+
+For future versions, implementing specifications for new data product types has a higher development priority than extending support for existing data product types and other higher layer features, all other matters being equal.
+
+\end{enumerate}
+
+
+\section{Acknowledgements} \label{sec:acks}
+This document originates from input from and dicussions with the following people. Thanks a lot!
+\begin{itemize}
+\itemsep0em
+\item Pim Schellart (RuG)
+\item John Swinbank (UvA)
+\item Sven Duscha (ASTRON)
+\item Anastasia Alexov (UvA)
+\item Ger van Diepen (ASTRON)
+\item Lars B\"ahren (??? (formerly ASTRON), DAL v1 dev)
+\item Andreas Horneffer (MPIfR-Bonn (formerly ASTRON), DAL v1 dev)
+\item Joseph Masters (NRAO (formerly UvA), DAL v1 dev)
+\item Jan David Mol (ASTRON, LDA dev)
+\item Michael Wise (ASTRON/UvA).
+\end{itemize}
+
+
+\end{document}
+
