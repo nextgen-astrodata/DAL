@@ -1,0 +1,48 @@
+The Data Access Library (DAL) - CONTRIBUTING
+============================================
+
+External contributions in any form (comments, requests, issue reports, patches, ...) are welcome.
+To keep a maintainable code base and not drift away from the goals of DAL, we may or may not decide to include the changes as provided.
+
+_NOTE_: By contributing to this project you certify that you have the right to submit the contribution under the open source license covering this project, and that you understand that a record of this contribution with any personal information provided along may be redistributed with this project.
+
+
+Contributing
+------------
+
+- Send patches by mail or enclosed in the issue report (plain text and inline, not attached), or with a pull request. For more information on sending pull requests, see http://help.github.com/send-pull-requests/
+- Please notify us well before you are done (read: begin) developing a significant feature, so we can cooperate towards smooth inclusion and avoid needless (double or unmergeable) work.
+- Split large changes into multiple small patches where each patch makes one _logical_ change.
+
+
+Contribution Policy
+-------------------
+
+When receiving feature requests or other contributions to include, we consider the following:
+- The contribution must be in line with the purpose of DAL, that is data access for LOFAR (for now) data products.
+- The contribution must be useful for enough users to warrant inclusion in a common library.
+- The contribution must not slow down frequently executed functionality.
+- The request must be realistic given the man power resources we have for DAL, both to implement and to maintain.
+
+
+Contact
+-------
+
+DAL issues can be reported through the github issue tracker.
+Before reporting, make sure the issue is against the latest DAL and not already listed.
+
+	https://github.com/nextgen-astrodata/DAL/issues
+
+
+For questions or comments about DAL, you can contact us and/or discuss with other users through the mailing list.
+Subscribe to our nextgen-astrodata list by sending the following single line in the message body (not Subject) to: majordomo AT astron DOT nl
+subscribe nextgen-astrodata
+After confirming the automatic reply, you can post by mailing to:
+
+	nextgen-astrodata AT astron DOT nl
+
+
+NOTE: For questions about ASTRON, LOFAR, or your LOFAR data product, please instead contact ASTRON Science Support through:
+
+	sciencesupport AT astron DOT nl
+

@@ -1,0 +1,67 @@
+The Data Access Library (DAL) - Installation Instructions
+=========================================================
+
+The DAL repository contains some pregenerated files to reduce build dependencies for most users.
+
+
+Retrieving DAL
+--------------
+
+To grab a copy of the DAL repository into a (new) directory 'DAL', run:
+
+	git clone https://github.com/nextgen-astrodata/DAL.git DAL
+
+
+Build Instructions
+------------------
+
+	mkdir build
+	cd build
+	cmake .. -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=$PWD -DPYTHON_DEST=$PWD/python && make install
+
+Regarding the location of the HDF5 libs that will be used, FindHDF5 as included in CMake says the following:
+# To provide the module with a hint about where to find your HDF5 installation,
+# you can set the environment variable HDF5_ROOT.  The Find module will then
+# look in this path when searching for HDF5 executables, paths, and libraries.
+
+**** use LUS environment ***
+	When 'use LUS' is active, add -DHDF5_C_INCLUDE_DIR=$LOFARSOFT/release/include/hdf5 to cmake
+	to avoid confusion with the HDF5 installed in /usr.
+
+
+To test:
+	export PYTHONPATH=$PYTHONPATH:$PWD/python
+	cd ../examples
+	python example-bf-read.py
+	python example-custom-write.py
+
+To regenerate the docstrings and doxygen documentation, you need to install doxygen, and run
+	make clean
+	make docstrings.i
+
+
+Dependencies
+------------
+
+To use a pre-compiled DAL:
+	- libhdf5-1.8 or later
+	- python	(version 2 or 3; if running Python applications)
+	- python-numpy	(idem)
+
+	- casacore	(optional, for higher level functionality)
+
+To build, additionally:
+	- cmake 2.8+
+	- make
+	- g++ or llvm with clang
+	- libhdf5-dev-1.8+
+	- python-dev
+
+Maintainer and developer builds, additionally:
+	- git
+	- casacore
+	- swig		(regenerate Python bindings)
+	- doxygen	(regenerate documentation and python docstring support)
+	- pdflatex	(regenerate user manual, data product specification, and design documentation)
+	- valgrind	(run test suite tracking memory related bugs)
+
