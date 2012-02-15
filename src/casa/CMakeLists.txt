@@ -9,6 +9,7 @@ if(CASACORE_INTERFACE)
     CasaDatasetExtend.h
     CasaTBBFileExtend.h
 
-    DESTINATION include/lda/casa
+    DESTINATION include/dal/casa
   )
 endif(CASACORE_INTERFACE)  
+

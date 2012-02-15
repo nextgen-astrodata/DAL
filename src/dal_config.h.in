@@ -1,0 +1,2 @@
+#cmakedefine DAL_VERSION "@DAL_VERSION@"
+

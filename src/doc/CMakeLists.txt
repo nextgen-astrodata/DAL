@@ -25,7 +25,7 @@ if(GENERATE_DOCS)
   install(DIRECTORY
     ${CMAKE_CURRENT_BINARY_DIR}/html
 
-    DESTINATION share/doc/lda
+    DESTINATION share/doc/dal
   )  
 
   # generate SWIG docstrings from Doxygen output

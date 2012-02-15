@@ -1,9 +1,9 @@
-import LDA
+import DAL
 import numpy
 from itertools import count
 
 # open the file for reading
-f = LDA.BF_File("test.h5")
+f = DAL.BF_File("test.h5")
 
 # functions like f.observationID() return attribute objects, which support the following
 # methods:

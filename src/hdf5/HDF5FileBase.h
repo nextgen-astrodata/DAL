@@ -7,7 +7,7 @@
 #include "hdf5/HDF5Node.h"
 #include "hdf5/HDF5Attribute.h"
 
-namespace LDA {
+namespace DAL {
 
 class HDF5FileBase: public HDF5NodeSet {
 public:

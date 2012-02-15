@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace LDA {
+namespace DAL {
 
 TBB_File::TBB_File( const std::string &filename, enum HDF5FileBase::fileMode mode )
 :

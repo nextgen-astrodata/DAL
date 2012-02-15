@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace LDA {
+namespace DAL {
 
 HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::fileMode mode )
 :
@@ -49,3 +49,4 @@ void HDF5FileBase::flush()
 }
 
 }
+

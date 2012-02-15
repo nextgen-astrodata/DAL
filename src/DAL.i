@@ -1,4 +1,4 @@
-%module LDA
+%module DAL
 
 // -------------------------------
 // Documentation
@@ -23,7 +23,7 @@
 %exception {
   try {
     $action
-  } catch (const LDA::HDF5Exception &e) {
+  } catch (const DAL::HDF5Exception &e) {
     SWIG_exception(SWIG_RuntimeError, e.what());
   } catch (const std::exception& e) {
     SWIG_exception(SWIG_RuntimeError, e.what());
@@ -89,14 +89,14 @@ DATASETTYPE(float, NPY_FLOAT, size_t);
 DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 
 // -------------------------------
-// LDA classes and templates
+// DAL classes and templates
 // -------------------------------
 
 %{
   #include "lofar/BF_File.h"
   #include "lofar/TBB_File.h"
 
-  using namespace LDA;
+  using namespace DAL;
 %}
 
 // rename otherwise unreachable functions
@@ -114,7 +114,7 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 %include hdf5/HDF5GroupBase.h
 %include hdf5/HDF5DatasetBase.h
 
-namespace LDA {
+namespace DAL {
   using namespace std;
 
   %template(AttributeBool)      Attribute<bool>;

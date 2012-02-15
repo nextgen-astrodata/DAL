@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace LDA {
+namespace DAL {
 
 CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum HDF5FileBase::fileMode mode )
 :
@@ -191,3 +191,4 @@ Attribute<string> CommonAttributesFile::notes()
 }
 
 }
+

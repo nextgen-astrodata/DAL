@@ -7,7 +7,7 @@
 #include "CasaDatasetExtend.h"
 #include "HDF5Attribute.h"
 
-namespace LDA {
+namespace DAL {
 
 /*!
  * Adds casacore functionality to an HDF5DatasetBase<T> class or any of its derivatives.

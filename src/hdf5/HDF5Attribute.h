@@ -11,7 +11,7 @@
  * threads in parallel!
  */
 
-namespace LDA {
+namespace DAL {
 
 /*!
  * Represents core functionality for an attribute inside a group.

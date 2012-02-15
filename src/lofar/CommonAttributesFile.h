@@ -7,7 +7,7 @@
 #include "hdf5/HDF5Attribute.h"
 #include "hdf5/HDF5FileBase.h"
 
-namespace LDA {
+namespace DAL {
 
 /*!
  * Wraps an HDF5 file implementing the Common LOFAR Attributes.

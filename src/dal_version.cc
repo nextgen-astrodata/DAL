@@ -1,17 +1,17 @@
-#include "lda_config.h"
-#include "lda_version.h"
+#include "dal_config.h"
+#include "dal_version.h"
 #include <cstdio>
 #include <hdf5.h>
 
-namespace LDA {
+namespace DAL {
 
 using namespace std;
 
 string get_lib_version() {
-  return LDA_VERSION;
+  return DAL_VERSION;
 }
 
-string get_lda_hdf5_version() {
+string get_dal_hdf5_version() {
   return H5_PACKAGE_VERSION;
 }
 
@@ -27,3 +27,4 @@ string get_current_hdf5_lib_version() {
 }
 
 }
+

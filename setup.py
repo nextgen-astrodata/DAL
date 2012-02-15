@@ -30,24 +30,24 @@ else:
   hdf5_include = "/opt/cep/hdf5/include"
   hdf5_lib     = "/opt/cep/hdf5/lib"
 
-LDA_module = Extension('_LDA',
-                           sources=['LDA.i', 'CommonAttributesFile.cc', 'BF_File.cc', 'TBB_File.cc', 'HDF5FileBase.cc', 'HDF5GroupBase.cc'],
-                           include_dirs=[hdf5_include, numpy_include],
-                           library_dirs=[hdf5_lib],
-                           extra_compile_args=['-include','%s/hdf5.h' % hdf5_include], # force right hdf5.h instead of from /usr/include
-                           libraries=['hdf5'],
-                           swig_opts=['-c++','-Wall'],
-                           language='c++',
-                           )
+DAL_module = Extension('_DAL',
+			sources=['DAL.i', 'CommonAttributesFile.cc', 'BF_File.cc', 'TBB_File.cc', 'HDF5FileBase.cc', 'HDF5GroupBase.cc'],
+			include_dirs=[hdf5_include, numpy_include],
+			library_dirs=[hdf5_lib],
+			extra_compile_args=['-include','%s/hdf5.h' % hdf5_include], # force right hdf5.h instead of from /usr/include
+			libraries=['hdf5'],
+			swig_opts=['-c++','-Wall'],
+			language='c++',
+			)
 
-dist = setup (name = 'LDA',
-       version = '1.0',
-       author       = "dr. Jan David Mol, ASTRON, the Netherlands",
-       author_email = "mol@astron.nl",
-       description = """Bindings of LDA""",
-       ext_modules = [LDA_module],
-       py_modules = ["LDA"],
-       )
+dist = setup (name	= 'DAL',
+	version		= '2.0.0',
+	author		= "dr. Jan David Mol, ASTRON, the Netherlands",
+	author_email	= "nextgen-astrodata@astron.nl",
+	description	= """Bindings of DAL""",
+	ext_modules	= [DAL_module],
+	py_modules	= ["DAL"],
+	)
 
 # Because while SWIG support is 'native' to python, it refuses to
 # run its build process in the correct order, causing .py files

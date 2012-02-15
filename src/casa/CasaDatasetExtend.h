@@ -5,7 +5,7 @@
 #include "hdf5core/h5exception.h"
 #include "HDF5DatasetBase.h"
 
-namespace LDA {
+namespace DAL {
 
 /*!
  * Adds casacore functionality to an HDF5DatasetBase<T> class or any of its derivatives.

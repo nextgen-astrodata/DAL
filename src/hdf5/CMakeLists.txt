@@ -7,7 +7,8 @@ install (FILES
   HDF5GroupBase.h
   HDF5Node.h
 
-  DESTINATION include/lda/hdf5
+  DESTINATION include/dal/hdf5
 )
 
 add_subdirectory(types)
+

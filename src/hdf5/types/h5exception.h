@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace LDA {
+namespace DAL {
 
 class HDF5Exception: public std::runtime_error
 {

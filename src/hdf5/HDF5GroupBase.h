@@ -7,7 +7,7 @@
 #include "hdf5/HDF5Attribute.h"
 #include "hdf5/HDF5Node.h"
 
-namespace LDA {
+namespace DAL {
 
 /*!
  * Wraps an HDF5 group, providing core functionality.

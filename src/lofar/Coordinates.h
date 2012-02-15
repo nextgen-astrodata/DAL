@@ -21,7 +21,7 @@
  *      - Tabular<P,W> (P = pixel type (unsigned/int/double), W = world type (double/string))
  */
 
-namespace LDA {
+namespace DAL {
 
 class Coordinate;
 
@@ -143,3 +143,4 @@ public:
 }
 
 #endif
+

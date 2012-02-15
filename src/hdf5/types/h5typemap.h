@@ -5,7 +5,7 @@
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/types/h5complex.h"
 
-namespace LDA {
+namespace DAL {
 
 template<typename T> struct h5typemap {
   /*!
@@ -69,3 +69,4 @@ template<typename T> struct h5typemap< std::complex<T> > {
 }
 
 #endif
+

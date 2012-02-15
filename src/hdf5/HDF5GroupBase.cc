@@ -3,7 +3,7 @@
 
 using namespace std;
 
-namespace LDA {
+namespace DAL {
 
 HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 :

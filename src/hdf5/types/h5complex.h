@@ -7,7 +7,7 @@
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/types/h5exception.h"
 
-namespace LDA {
+namespace DAL {
 
 inline hid_gc h5complexType( hid_t halftype )
 {
@@ -28,3 +28,4 @@ inline hid_gc h5complexType( hid_t halftype )
 }
 
 #endif
+

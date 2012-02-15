@@ -4,7 +4,7 @@
 #include <hdf5.h>
 #include "hdf5/types/h5exception.h"
 
-namespace LDA {
+namespace DAL {
 
 // Autocloses hid_t types using closefunc() on destruction, and keeps a reference count.
 class hid_gc

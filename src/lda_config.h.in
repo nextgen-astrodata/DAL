@@ -1,2 +1,0 @@
-#cmakedefine LDA_VERSION "@LDA_VERSION@"
-

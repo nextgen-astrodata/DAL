@@ -4,6 +4,6 @@ install (FILES
   h5typemap.h
   hid_gc.h
 
-  DESTINATION include/lda/hdf5/types
+  DESTINATION include/dal/hdf5/types
 )
 

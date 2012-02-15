@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace LDA {
+namespace DAL {
 
 Attribute< vector<double> > CoordinatesGroup::refLocationValue()
 {

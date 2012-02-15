@@ -10,19 +10,19 @@ include_directories (
   )
 
 configure_file (
-  "${CMAKE_CURRENT_SOURCE_DIR}/lda_config.h.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/lda_config.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/dal_config.h.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/dal_config.h"
 )
 
 install (FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/lda_config.h
-  lda_version.h
+  ${CMAKE_CURRENT_BINARY_DIR}/dal_config.h
+  dal_version.h
 
-  DESTINATION include/lda
+  DESTINATION include/dal
 )
 
-set(lda_sources
-  lda_version.cc
+set(dal_sources
+  dal_version.cc
 
   hdf5/HDF5FileBase.cc
   hdf5/HDF5GroupBase.cc
@@ -33,14 +33,14 @@ set(lda_sources
   lofar/TBB_File.cc
 )
 
-add_library (lda 
-  ${lda_sources}
+add_library (dal
+  ${dal_sources}
 )
 
-target_link_libraries(lda ${HDF5_LIBRARIES})
+target_link_libraries(dal ${HDF5_LIBRARIES})
 
 install (TARGETS
-  lda
+  dal
 
   DESTINATION lib
 )
@@ -65,18 +65,18 @@ if(PYTHON_BINDINGS)
   set(PYTHON_DEST ${PYTHON_SITE_PACKAGES} CACHE PATH "Target directory for python bindings")
 
   list(APPEND CMAKE_SWIG_FLAGS -Wall)
-  set_source_files_properties(LDA.i PROPERTIES CPLUSPLUS ON)
-  swig_add_module(LDA python LDA.i ${lda_sources})
-  add_dependencies(${SWIG_MODULE_LDA_REAL_NAME} generate_docstrings)
-  swig_link_libraries(LDA ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
+  set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
+  swig_add_module(DAL python DAL.i ${dal_sources})
+  add_dependencies(${SWIG_MODULE_DAL_REAL_NAME} generate_docstrings)
+  swig_link_libraries(DAL ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
 
   install(TARGETS
-    ${SWIG_MODULE_LDA_REAL_NAME}
+    ${SWIG_MODULE_DAL_REAL_NAME}
     DESTINATION ${PYTHON_DEST}
   )
 
   install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/LDA.py
+    ${CMAKE_CURRENT_BINARY_DIR}/DAL.py
     DESTINATION ${PYTHON_DEST}
   )  
 endif(PYTHON_BINDINGS)

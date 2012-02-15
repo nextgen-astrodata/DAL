@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <hdf5.h>
 
-namespace LDA {
+namespace DAL {
 
 inline bool AttributeBase::exists() const
 {
@@ -231,3 +231,4 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
 #endif
 
 }
+

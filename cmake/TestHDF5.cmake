@@ -18,3 +18,4 @@ if(NOT CMAKE_CROSSCOMPILING)
       "Version mismatch between HDF5 headers and HDF5 library:\n${TEST_HDF5_RUN_OUTPUT}\n\n${TEST_HDF5_COMPILE_OUTPUT}")
   endif(TEST_HDF5_RESULT GREATER 0)
 endif(NOT CMAKE_CROSSCOMPILING)  
+

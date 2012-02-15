@@ -4,5 +4,6 @@ install (FILES
   CommonAttributesFile.h
   TBB_File.h
 
-  DESTINATION include/lda/lofar
+  DESTINATION include/dal/lofar
 )
+

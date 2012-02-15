@@ -9,7 +9,7 @@
 #include "lofar/CommonAttributesFile.h"
 #include "lofar/Coordinates.h"
 
-namespace LDA {
+namespace DAL {
 
 class BF_File;
 class BF_SysLog;

@@ -8,7 +8,7 @@
 #include "hdf5/HDF5DatasetBase.h"
 #include "lofar/CommonAttributesFile.h"
 
-namespace LDA {
+namespace DAL {
 
 class TBB_File;
 class TBB_SysLog;

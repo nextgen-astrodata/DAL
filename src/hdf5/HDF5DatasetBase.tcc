@@ -1,7 +1,7 @@
 #include "hdf5/types/h5typemap.h"
 #include "hdf5/HDF5DatasetBase.h"
 
-namespace LDA {
+namespace DAL {
 
 template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
 
@@ -316,3 +316,4 @@ template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t
 }
 
 }
+

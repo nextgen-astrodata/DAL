@@ -4,7 +4,7 @@
 #include <string>
 #include "hdf5/types/hid_gc.h"
 
-namespace LDA {
+namespace DAL {
 
 /*!
  * Represents a node in the HDF5 hierarchy (an attribute, group, or dataset).

@@ -8,7 +8,7 @@
 #include "hdf5/types/h5exception.h"
 #include "hdf5/HDF5GroupBase.h"
 
-namespace LDA {
+namespace DAL {
 
 /*!
  * \class HDF5DatasetBase
