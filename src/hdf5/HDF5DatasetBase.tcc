@@ -30,8 +30,6 @@ template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t>
       throw HDF5Exception("Could not add external file to dataset");
   }
 
-  configure_ocpl(dcpl);
-
   // create the dataset
   delete _group; _group = 0;
   _group = new hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)), filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset");
