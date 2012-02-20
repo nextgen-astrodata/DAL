@@ -13,8 +13,9 @@ if(GENERATE_DOCS)
   )
 
   # run "make doc" to generate doxygen documentation
-  add_custom_target(doc ALL
+  add_custom_target(documentation ALL
     COMMAND ${DOXYGEN_EXECUTABLE} doxygen.conf
+    COMMENT "Generating doxygen documentation"
   )
 
   set_property (DIRECTORY
@@ -28,22 +29,18 @@ if(GENERATE_DOCS)
     DESTINATION share/doc/dal
   )  
 
-  # generate SWIG docstrings from Doxygen output
-  add_custom_command(
-    OUTPUT docstrings.i
+  add_custom_target(docstrings_i
     COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/external/doxy2swig.py xml/index.xml docstrings.i
-    DEPENDS doc
+    COMMENT "Generating SWIG docstrings"
   )
+  
+  add_dependencies(docstrings_i documentation)
+
 else(GENERATE_DOCS)
   # generate an empty docstrings.i
-  add_custom_command(
-    OUTPUT docstrings.i
-    COMMAND touch docstrings.i
+  add_custom_target(docstrings_i
+    COMMAND ${CMAKE_COMMAND} -E touch docstrings.i
+    COMMENT "Creating empty SWIG docstrings file"
   )
 endif(GENERATE_DOCS)
-
-add_custom_target(
-  generate_docstrings
-  DEPENDS docstrings.i
-)
 

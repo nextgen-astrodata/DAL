@@ -67,7 +67,7 @@ if(PYTHON_BINDINGS)
   list(APPEND CMAKE_SWIG_FLAGS -Wall)
   set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
   swig_add_module(DAL python DAL.i ${dal_sources})
-  add_dependencies(${SWIG_MODULE_DAL_REAL_NAME} generate_docstrings)
+  add_dependencies(${SWIG_MODULE_DAL_REAL_NAME} docstrings_i)
   swig_link_libraries(DAL ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
 
   install(TARGETS
