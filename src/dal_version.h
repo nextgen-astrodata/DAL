@@ -20,7 +20,7 @@ std::string get_dal_hdf5_version();
 /*
  * Return the version of HDF5 headers currently in use.
  */
-std::string get_current_hdf5_header_version() {
+static std::string get_current_hdf5_header_version() {
   // this code needs to be in a header file, to let
   // the client compiler fill in H5_PACKAGE_VERSION below.
 
@@ -36,7 +36,7 @@ std::string get_current_hdf5_lib_version();
  * Returns true if the hdf5 versions used to compile
  * the DAL and to compile the client code are the same.
  */
-bool check_hdf5_versions() {
+static bool check_hdf5_versions() {
   // this code needs to be in a header file, to let
   // the client compiler fill in H5_PACKAGE_VERSION.
 
