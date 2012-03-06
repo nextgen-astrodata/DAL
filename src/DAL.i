@@ -50,7 +50,10 @@ typedef unsigned long size_t;
 namespace std {
   %template(VectorSizeT)        vector<size_t>;
   %template(VectorSSizeT)       vector<ssize_t>;
+
+  %template(VectorBool)         vector<bool>;
   %template(VectorUnsigned)     vector<unsigned>;
+  %template(VectorDouble)       vector<double>;
   %template(VectorString)       vector<string>;
 };
 
@@ -122,7 +125,9 @@ namespace DAL {
   %template(AttributeDouble)    Attribute<double>;
   %template(AttributeString)    Attribute<string>;
 
+  %template(AttributeVBool)     Attribute< vector<bool> >;
   %template(AttributeVUnsigned) Attribute< vector<unsigned> >;
+  %template(AttributeVDouble)   Attribute< vector<double> >;
   %template(AttributeVString)   Attribute< vector<string> >;
 
   %template(HDF5DatasetBaseShort)        HDF5DatasetBase<short>;
