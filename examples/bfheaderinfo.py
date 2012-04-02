@@ -15,27 +15,13 @@ from optparse import OptionParser         # command line argument parsing
 import DAL
 import bfmeta
 
-"""
-# Display usage information
-#
-def usage(progname):
-  print "usage: ", progname, " <filename.h5> <options>"
-  print "Displays HDF5 meta information of a BF h5 file."
-  print "Currently this only extends to the same attributes"
-  print "that readfile displays for FITS files."
-  print "Options:"
-  print "-s <sapNr>   info for this sap nr only"
-  print "-b <beamNr>    info for this beam nr only"
-  print "-s             show SAP names and beam numbers"
-  print "-t             use tabs for display"
-  print "-c             use color for display"
-  print "-h             show this help info"
-"""
 
 def main():
   basename=os.path.basename(sys.argv[0])
 
-  parser = OptionParser()
+  #usage= = "usage: %prog <options> <filename>"
+  #parser = OptionParser(usage=usage)
+  parser = OptionParser("filename")
   parser.add_option("-t", "--tabs", dest="tabs",
                     action="store_true", help="use tabs for display")
   parser.add_option("-c", "--color", dest="color", default=False,
@@ -48,10 +34,11 @@ def main():
                     action="store", type="string", help="display these stokes")
   parser.add_option("-v", "--verbose", dest="verbose", default=False,
                     action="store_true", help="display verbose info")
+#  parser.add_option()
   (options, args) = parser.parse_args()
   
   if len(sys.argv)==1:
-    usage(basename)
+    parser.print_help()
     sys.exit()
   else:
     filename=sys.argv[1]

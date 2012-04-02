@@ -9,6 +9,7 @@
 # Last change:  2012-03-05
 
 
+import sys
 import DAL
 
 class bfmeta:
@@ -52,14 +53,14 @@ class bfmeta:
       print "Project ID             = ", self.fh.projectID().get()
     if self.fh.observationStartUTC().exists():
       print "UTC start time         = ", self.fh.observationStartUTC().get()
-    if self.fh.observationStartMJD().exists():
-      print "MJD start time         = ", self.fh.observationStartMJD().get()  
-    if self.fh.observationStartTAI().exists():
-      print "TAI start time         = ", self.fh.observationStartTAI().get()
     if self.fh.observationEndUTC().exists():
       print "UTC end time           = ", self.fh.observationEndUTC().get()
+    if self.fh.observationStartMJD().exists():
+      print "MJD start time         = ", self.fh.observationStartMJD().get()  
     if self.fh.observationEndMJD().exists():
       print "MJD end time           = ", self.fh.observationEndMJD().get() 
+    if self.fh.observationStartTAI().exists():
+      print "TAI start time         = ", self.fh.observationStartTAI().get()
     if self.fh.observationEndTAI().exists():
       print "TAI end time           = ", self.fh.observationEndTAI().get()
     if self.fh.totalIntegrationTime().exists():
@@ -74,25 +75,24 @@ class bfmeta:
       print "Beam diameter          = ", self.fh.beamDiameter().get()
     if self.fh.nofSubArrayPointings().exists():
       print "No. of SAP             = ", self.fh.nofSubArrayPointings().get()
-
-    # reset printing options
-    self.prefix=bcolors.ENDC
-    print self.prefix
+    self.prefix=bcolors.ENDC      # reset printing options
   
   # Display Sub Array Pointing information for SAPs
   #
-  def displaySAP(self, nr="all"):
-    if nr=="all":
-      for n in range(0, self.fh.nofSubArrayPointings().get()):   
-        self.displaySAPInfo(n)
+  def displaySAP(self):
+    if self.sap=="all":
+      for nr in range(0, self.fh.nofSubArrayPointings().get()):   
+        self.displaySAPInfo(nr)
     else:
-      self.displaySAPInfo(nr)
+      if isinstance(self.sap, list):
+        for nr in self.sap:
+          self.displaySAPInfo(nr)
+      else:   # single SAP nr (int)
+        self.displaySAPInfo(int(self.sap))
   
   # SAP attributes of individual SAP Nr.
   #
   def displaySAPInfo(self, nr):
-    if str(nr) not in self.sap and self.sap!="all":
-      return
     if self.useTabs:
       self.prefix=""    # SAP is high-level doesn't have a tab
     if self.useColor:
@@ -104,39 +104,41 @@ class bfmeta:
         print self.prefix + "------------------------------------"
         print self.prefix + "SubArrayPointing Nr    = ", nr
       else:
+        print "SubArrayPointing Nr", nr, "doesn't exist."        
         return
     else:
-      print "SubArrayPointing Nr", sapNr, "doesn't exist."
+      print "SubArrayPointing Nr", nr, "doesn't exist."
       return    
 
     if sap.nofStations().exists():   
-      print self.prefix + "No, of stations        = ", sap.nofStations().get()
+      print self.prefix + "No. of stations        = ", sap.nofStations().get()
     if sap.stationsList().exists():
       print self.prefix + "Stationlist            = ", sap.stationsList().get()
     if sap.pointRA().exists():
       print self.prefix + "pointing RA            = ", sap.pointRA().get()
     if sap.pointDEC().exists():
       print self.prefix + "pointing DEC           = ", sap.pointDEC().get()
-    if sap.clockRate().exists():
+    if sap.clockRate().exists() and sap.clockRateUnit().exists()==False:
+      #sys.stdout.write(self.prefix + "Clock rate             = "+str(sap.clockRate().get()))
       print self.prefix + "Clock rate             = ", sap.clockRate().get()
-    if sap.clockRateUnit().exists():
-      print self.prefix + "Clock rate unit        = ", sap.clockRateUnit().get()
+    if sap.clockRate().exists() and sap.clockRateUnit().exists():
+      print self.prefix + "Clock rate             = ", sap.clockRate().get(), sap.clockRateUnit().get()
     if sap.nofSamples().exists():
       print self.prefix + "No. of samples         = ", sap.nofSamples().get()
-    if sap.samplingRate().exists():
+    if sap.samplingRate().exists() and sap.samplingRateUnit().exists()==False:
       print self.prefix + "Sampling rate          = ", sap.samplingRate().get()      
-    if sap.samplingRateUnit().exists():
-      print self.prefix + "Sampling rate unit     = ", sap.samplingRateUnit().get()      
-    if sap.channelsPerSubband().exists():
+    if sap.samplingRate().exists() and sap.samplingRateUnit().exists():
+      print self.prefix + "Sampling rate          = ", sap.samplingRate().get(), sap.samplingRateUnit().get()      
+    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
       print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().get()
-    if sap.subbandWidth().exists():
-      print self.prefix + "Subband width          = ", sap.subbandWidth().get()
-    if sap.subbandWidthUnit().exists():
+    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
+      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().get(), sap.subbandWidth().get()
+    if sap.channelsPerSubband().exists() and sap.subbandWidthUnit().exists():
       print self.prefix + "Subband width unit     = ", sap.subbandWidthUnit().get()      
-    if sap.channelWidth().exists():
+    if sap.channelWidth().exists()  and sap.channelWidthUnit().exists()==False:
       print self.prefix + "Channel width          = ", sap.channelWidth().get()
-    if sap.channelWidthUnit().exists():
-      print self.prefix + "Channel width unit     = ", sap.channelWidthUnit().get()
+    if sap.channelWidth().exists() and sap.channelWidthUnit().exists():
+      print self.prefix + "Channel width          = ", sap.channelWidth().get(), sap.channelWidthUnit().get()
     if sap.nofBeams().exists():
       print self.prefix + "No. of beams           = ", sap.nofBeams().get()      
 
@@ -163,8 +165,11 @@ class bfmeta:
       self.prefix=self.prefix + bcolors.BEAM
 
     # only display beam if it is in the list to be shown
-    if str(nr) not in self.beam and self.beam!="all":
-      return
+    #if str(nr) not in self.beam and self.beam!="all":
+    #  return
+
+    print "displayBeamInfo() nr = ", nr # DEBUG
+    #print nr, " in ", self.beam, "? = ", str(nr in self.beam)
 
     print self.prefix + "------------------------------------"
     print self.prefix + "Beam Nr                = ", nr
@@ -172,8 +177,9 @@ class bfmeta:
     if sap.beam(nr).exists():
       beam=sap.beam(nr)
     else:
-      self.printTabs(3)
-      print self.prefix + "Beam Nr ", str(nr), "doesn't exist." 
+      print "foo"
+      #self.printTabs(3)
+      print self.prefix + "Beam No. ", str(nr), " doesn't exist in file." 
       return
 
     # Only beams with selected Stokes components
@@ -196,22 +202,23 @@ class bfmeta:
       print self.prefix + "beam diameter RA       = ", beam.beamDiameterRA().get()
     if beam.beamDiameterDEC().exists():
       print self.prefix + "beam diameter DEC      = ", beam.beamDiameterDEC().get()      
-    if beam.beamFrequencyCenter().exists():
+    if beam.beamFrequencyCenter().exists() and beam.beamFrequencyCenterUnit().exists()==False:
       print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().get()
-    if beam.beamFrequencyCenterUnit().exists():
-      print self.prefix + "beam freq. barycenter unit = ", beam.beamFrequencyCenterUnit().get()
+    if beam.beamFrequencyCenter().exists() and beam.beamFrequencyCenterUnit().exists():
+      print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().get(), beam.beamFrequencyCenterUnit().get()
+#      sys.stdout.write(beam.beamFrequencyCenterUnit().get())
     if beam.foldedData().exists():
       print self.prefix + "folded data            = ", beam.foldedData().get()
-    if beam.foldPeriod().exists():
-      print self.prefix + "folded period          = ", beam.foldPeriod().get()
+    if beam.foldPeriod().exists() and beam.foldPeriodUnit().exists()==False:
+      sys.stdout.write(self.prefix + "folded period          = " + str(beam.foldPeriod().get()))
     if beam.foldPeriodUnit().exists():
-      print self.prefix + "folded period unit     = ", beam.foldPeriodUnit().get()
+      print " ", beam.foldPeriodUnit().get()
     if beam.dedispersion().exists():
       print self.prefix + "dedispersion           = ", beam.dedispersion().get()
     if beam.dedispersionMeasure().exists():
-      print self.prefix + "dedispersion Measure   = ", beam.dedispersionMeasure().get()
+      sys.stdout.write(self.prefix + "dedispersion Measure   = " + str(beam.dedispersionMeasure().get()))
     if beam.dedispersionMeasureUnit().exists():
-      print self.prefix + "dedispersion Measure unit   = ", beam.dedispersionMeasureUnit().get()
+      print " " + beam.dedispersionMeasureUnit().get()
     if beam.barycentered().exists():
       print self.prefix + "barycentered           = ", beam.barycentered().get()
     if beam.nofStokes().exists():
