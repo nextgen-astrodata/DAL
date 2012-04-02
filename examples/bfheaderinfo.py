@@ -19,21 +19,19 @@ import bfmeta
 def main():
   basename=os.path.basename(sys.argv[0])
 
-  #usage= = "usage: %prog <options> <filename>"
-  #parser = OptionParser(usage=usage)
   parser = OptionParser("filename")
   parser.add_option("-t", "--tabs", dest="tabs",
                     action="store_true", help="use tabs for display")
   parser.add_option("-c", "--color", dest="color", default=False,
                     action="store_true", help="use color for display")
   parser.add_option("-p", "--sap", dest="sap", default="all",
-                    action="store", type="string", help="display this sap")
+                    action="store", type="string", help="display this sap, one out of [0->NSAP] or 'all'")
   parser.add_option("-b", "--beam", dest="beam", default="all",
-                    action="store", type="string", help="display this beam")
+                    action="store", type="string", help="display this beam, one out of  [0->NBeam] or 'all'")
   parser.add_option("-s", "--stokes", dest="stokes", default="all",
-                    action="store", type="string", help="display these stokes")
+                    action="store", type="string", help="display these stokes one out of [IQUV], [XXYY], or 'all'")
   parser.add_option("-v", "--verbose", dest="verbose", default=False,
-                    action="store_true", help="display verbose info")
+                    action="store_true", help="display verbose output")
 #  parser.add_option()
   (options, args) = parser.parse_args()
   
@@ -45,9 +43,6 @@ def main():
     fh=DAL.BF_File(filename)      # open file
 
     bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, verbose=options.verbose)
-
-#    displayInfo(sys.argv[1], tabs=False)
-
 
 # Entry point on call
 #  

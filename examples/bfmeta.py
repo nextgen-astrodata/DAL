@@ -6,7 +6,7 @@
 # File:         bfmeta.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-02
-# Last change:  2012-03-05
+# Last change:  2012-04-02
 
 
 import sys
@@ -149,38 +149,44 @@ class bfmeta:
 
   # Display Sub Array Pointing information for Beams
   #  
-  def displayBeam(self, sap, nr="all"):
-    if str(nr) in self.beam or nr=="all":
+  def displayBeam(self, sap):
+    #print "displayBeam()"               # DEBUG
+  
+    if self.beam=="all":
       for n in range(0, sap.nofBeams().get()):   
-          self.displayBeamInfo(sap, n)
-    else:
-      self.displayBeamInfo(sap, nr)
+          self.displayBeamInfo(sap, int(n))
+    elif isinstance(self.beam, list):
+      for b in self.beam:
+        self.displayBeamInfo(sap, int(b))
+    else:   # single beam integer
+      self.displayBeamInfo(sap, int(self.beam))
 
   # Display Beam information
   #  
   def displayBeamInfo(self, sap, nr):
+    #print "displayBeamInfo()"
+
     if self.useTabs:
       self.prefix="\t"
     if self.useColor:
       self.prefix=self.prefix + bcolors.BEAM
 
-    # only display beam if it is in the list to be shown
-    #if str(nr) not in self.beam and self.beam!="all":
-    #  return
+    # Check if this beam exists in this SAP
+    if sap.beam(nr).exists():
+      beam=sap.beam(nr)
+    else:
+      print self.prefix + "Beam No. ", str(nr), " doesn't exist in file." 
+      return
 
-    print "displayBeamInfo() nr = ", nr # DEBUG
-    #print nr, " in ", self.beam, "? = ", str(nr in self.beam)
+    # only display beam if it is in the list to be shown
+    print "str(nr) = ", str(nr), " self.beam = ",self.beam    # DEBUG
+
+    if str(nr) not in self.beam and self.beam!="all":    
+      return
 
     print self.prefix + "------------------------------------"
     print self.prefix + "Beam Nr                = ", nr
         
-    if sap.beam(nr).exists():
-      beam=sap.beam(nr)
-    else:
-      print "foo"
-      #self.printTabs(3)
-      print self.prefix + "Beam No. ", str(nr), " doesn't exist in file." 
-      return
 
     # Only beams with selected Stokes components
     if self.stokes not in beam.stokesComponents().get() and self.stokes!="all":
@@ -380,6 +386,7 @@ class bfmeta:
 
         
 class bcolors:
+    BACKGROUND="dark"       # background scheme of terminal (dark or bright)
     HEADER = '\033[95m'
     SAP = '\033[94m'        # blue
     BEAM = '\033[92m'       # green
@@ -387,6 +394,26 @@ class bcolors:
     COORD = '\033[0m'       # fat white
     FAIL = '\033[91m'
     ENDC = '\033[0m'
+
+    def switch(self):
+      if self.BACKGROUND=="dark": # switch to bright background scheme
+        BACKGROUND="bright"     # background scheme of terminal (dark or bright)
+        HEADER = '\033[95m'
+        SAP = '\033[94m'        # blue
+        BEAM = '\033[92m'       # green
+        DATASET = '\033[93m'    # yellow
+        COORD = '\033[0m'       # fat white
+        FAIL = '\033[91m'
+        ENDC = '\033[0m'
+      else:                     # switch to dark background scheme
+        BACKGROUND="dark"
+        HEADER = '\033[95m'
+        SAP = '\033[94m'        # blue
+        BEAM = '\033[92m'       # green
+        DATASET = '\033[93m'    # yellow
+        COORD = '\033[0m'       # fat white
+        FAIL = '\033[91m'
+        ENDC = '\033[0m'
 
     def disable(self):
         self.HEADER = ''
