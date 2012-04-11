@@ -1,8 +1,8 @@
 # Mandatory: HDF5 support for core library
-find_package(HDF5 REQUIRED)
+find_package(HDF5_DAL)
 include_directories(${HDF5_INCLUDE_DIR})
 
-include(TestHDF5)
+#include(TestHDF5)
 
 include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR} # to find regular headers
@@ -85,4 +85,4 @@ add_subdirectory(casa)
 add_subdirectory(doc)
 add_subdirectory(hdf5)
 add_subdirectory(lofar)
-
+add_subdirectory(utils)
