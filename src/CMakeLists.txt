@@ -2,7 +2,7 @@
 find_package(HDF5_DAL)
 include_directories(${HDF5_INCLUDE_DIR})
 
-#include(TestHDF5)
+include(TestHDF5)
 
 include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR} # to find regular headers
