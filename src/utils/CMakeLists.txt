@@ -1,10 +1,9 @@
-install (FILES
-  bfheaderinfo.py
-
-  DESTINATION $LOFARSOFT/release/bin
-)
-
 if(PYTHON_BINDINGS)
+  install (PROGRAMS
+    bfheaderinfo.py
+    DESTINATION bin
+  ) 
+
   install(FILES
     bfmeta.py
     DESTINATION ${PYTHON_DEST}
