@@ -53,7 +53,7 @@ hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMo
 
 void HDF5FileBase::flush()
 {
-  H5Fflush(group(), H5F_SCOPE_GLOBAL);
+  H5Fflush(group(), H5F_SCOPE_LOCAL);
 }
 
 }
