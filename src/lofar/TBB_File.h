@@ -19,7 +19,7 @@ class TBB_UnknownTrigger;
 class TBB_VHECRTrigger;
 
 /*!
- * Interface for TBB Time-Series Data as described in ICD001.
+ * Interface for TBB Time-Series Data.
  */
 class TBB_File: public CommonAttributesFile {
 public:

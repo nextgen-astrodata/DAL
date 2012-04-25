@@ -19,7 +19,7 @@ class BF_BeamGroup;
 class BF_StokesDataset;
 
 /*!
- * Interface for Beam-formed Data as described in ICD003.
+ * Interface for Beam-formed Data.
  */
 class BF_File: public CommonAttributesFile {
 public:
