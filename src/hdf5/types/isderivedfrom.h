@@ -4,47 +4,27 @@
 // Excerpted from the book More Exceptional C++ by Herb Sutter.
 // see http://www.gotw.ca/publications/mxc++-item-4.htm
 
-// IsDerivedFrom<D,B>::Is == 1 at compile time if D is or derived from B, 0 otherwise (use #1).
-//
-// This allows one to select implementations based on D's class hierarchy, and thus
-// create template specializations for whole class hierarchies at once. Example:
-#if 0
-
-template<typename T, int>
-class XImpl
-{
-  // general case: T is not derived from Cloneable
-}; 
-
-template<typename T>
-class XImpl<T, 1>
-{
-  // T is derived from Cloneable
-}; 
-
-template<typename T>
-class X
-{
-  XImpl<T, IsDerivedFrom<T, Cloneable>::Is> impl_;
-  // ... delegates to impl_ ...
-};
-
-#endif
-// 
-// alternatively (use #2), a class can be forced to inherit from B during its construction. Example:
-//
-#if 0
-
-template<typename D>
-class X : IsDerivedFrom<D,B>
-{
-  // ...
-};
-
-#endif
-//
-// The above code will only compile if D is or derives from B.
-
+/*!
+ * The IsDerivedFrom<D,B> class provides class hierarchy information at compile time, allowing
+ * the programmer to implement different behaviours for different class hierarchies.
+ *
+ * The class provides two constructs.
+ *   1: IsDerivedFrom<D,B>::Is == 1 at compile time if D is or derived from B, 0 otherwise.
+ *   2: Inheriting from IsDerivedFrom<D,B> will only compile if D is or derived from B.
+ *
+ * Example uses:
+ *   1: template<typename T, int> class Impl  { ... generic implementation ... };
+ *      template<typename T,   1> class Impl  { ... specialization for B and subclasses ... };
+ *      template<typename T>      class Class { Impl<T, IsDerivedFrom<T, B>::Is> impl;
+ *                                              ... delegating to impl ... };
+ *
+ *      The above example will provide the generic impl if T is not derived from B (IsDerivedFrom::Is == 0),
+ *      and the specialization if T is derived from B (IsDerivedFrom::Is == 1).
+ *
+ *   2: template<typename D> class Class: IsDerivedFrom<D,B> { ... };
+ *
+ *      The above example will throw a compile error if D is not (derived from) B.
+ */
 template<typename D, typename B>
 class IsDerivedFrom
 {

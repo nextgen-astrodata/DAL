@@ -9,7 +9,7 @@
 
 namespace DAL {
 
-/*
+/*!
  * struct h5typemap<T>
  *
  * Implements compile-time type-marshalling functions from C++ to HDF5.
