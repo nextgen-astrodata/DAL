@@ -3,7 +3,6 @@
 
 #include <complex>
 #include <hdf5.h>
-#include "hdf5/types/h5typemap.h"
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/types/h5exception.h"
 
