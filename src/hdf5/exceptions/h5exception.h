@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <string>
-#include "hdf5/exceptions/h5errorhandling.h"
+#include "hdf5/exceptions/h5errorstack.h"
 
 namespace DAL {
 

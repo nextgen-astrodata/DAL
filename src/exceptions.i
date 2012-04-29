@@ -6,7 +6,7 @@
 
 %{
 #include "hdf5/exceptions/h5exception.h"
-#include "hdf5/exceptions/h5errorhandling.h"
+#include "hdf5/exceptions/h5errorstack.h"
 #include <new>
 #include <exception>
 #include <stdexcept>
@@ -32,7 +32,7 @@ class IndexError: public std::exception {};
   SWIG_CATCH_STDEXCEPT
 }
 
-%include "hdf5/exceptions/h5errorhandling.h"
+%include "hdf5/exceptions/h5errorstack.h"
 
 namespace std {
   %template(VectorStackLine)        vector<DAL::HDF5StackLine>;

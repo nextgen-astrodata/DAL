@@ -1,5 +1,5 @@
-#ifndef __H5ERRORHANDLING__
-#define __H5ERRORHANDLING__
+#ifndef __H5ERRORSTACK__
+#define __H5ERRORSTACK__
 
 #include "hdf5.h"
 #include <string>
