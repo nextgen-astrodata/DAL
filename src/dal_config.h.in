@@ -1,2 +1,10 @@
 #cmakedefine DAL_VERSION "@DAL_VERSION@"
 
+/*
+ * Define if HDF5 should be silenced by default when an
+ * error occurs. When HDF5 is silenced, DAL will still
+ * throw exceptions, but HDF5 will not print the stack
+ * trace as well.
+ */
+#cmakedefine QUIET_HDF5_ERRORS "@QUIET_HDF5_ERRORS@"
+

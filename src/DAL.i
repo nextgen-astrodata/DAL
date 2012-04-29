@@ -1,38 +1,18 @@
-%module DAL
-
 // -------------------------------
 // Documentation
 // -------------------------------
+
+%define DOCSTRING
+"DAL implements a Data Access Layer for LOFAR data."
+%enddef
+
+%module(docstring=DOCSTRING) DAL
 
 // first generate signatures using SWIG's knowledge
 %feature("autodoc",1);
 
 // then append documentation using doxygen's knowledge
 %include "doc/docstrings.i"
-
-// -------------------------------
-// Exception handling
-// -------------------------------
-
-%include "exception.i"
-
-%{
-#include "hdf5/types/h5exception.h"
-
-class IndexError: public std::exception {};
-%}
-
-%exception {
-  try {
-    $action
-  } catch (const DAL::HDF5Exception &e) {
-    SWIG_exception(SWIG_RuntimeError, e.what());
-  } catch (const IndexError&) {
-    SWIG_exception(SWIG_IndexError, "list index out of range");
-  } catch (const std::exception& e) {
-    SWIG_exception(SWIG_RuntimeError, e.what());
-  }
-}
 
 // -------------------------------
 // Type marshalling - scalars
@@ -57,6 +37,12 @@ namespace std {
   %template(VectorDouble)       vector<double>;
   %template(VectorString)       vector<string>;
 };
+
+// -------------------------------
+// Exception handling
+// -------------------------------
+
+%include "exceptions.i"
 
 // -------------------------------
 // DAL classes and templates

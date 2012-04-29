@@ -4,7 +4,7 @@
 #include <complex>
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
-#include "hdf5/types/h5exception.h"
+#include "hdf5/exceptions/h5exception.h"
 
 namespace DAL {
 

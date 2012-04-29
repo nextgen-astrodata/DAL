@@ -3,7 +3,7 @@
 
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
-#include "hdf5/types/h5exception.h"
+#include "hdf5/exceptions/h5exception.h"
 
 namespace DAL {
 
@@ -31,13 +31,27 @@ public:
  * T: The data type of the tuple (the tuple is homogeneous).
  * N: The number of data elements in the tuple.
  *
- * It is assumed that sizeof(TupleBase<T,N>) == N * sizeof(T): the
- * tuple is stored as a packed set of its members.
+ * The subclasses of TupleBase are responsible for providing the storage
+ * for the elements as named data members. It is assumed that
+ *    sizeof(TupleBase<T,N>) == N * sizeof(T),
+ * the tuple is stored as a packed set of its members.
+ *
+ * Note that TupleBase cannot be directly instantiated, as it has
+ * no storage for its data members.
+ *
  */
 template<typename T, size_t N> class TupleBase: public TupleUntemplated {
+protected:
+  TupleBase() {} // prevent direct instantiation
 public:
+  /*!
+   * The type of elements in tuples of this type.
+   */
   typedef T type;
 
+  /*!
+   * The number of elements in tuples of this type.
+   */
   static size_t size() { return N; }
 
   /*
@@ -57,7 +71,8 @@ public:
         iterator end()       { return begin() + size(); }
 };
 
-/*!
+/*! \class Tuple
+ *
  * Tuple<T,N> provides a generic tuple for N=1..4 providing
  * fields with names `first`, `second`, `third`, and up to `fourth`.
  */
@@ -65,22 +80,28 @@ template<typename T, size_t N> class Tuple;
 
 template<typename T> class Tuple<T,1>: public TupleBase<T,1> {
 public:
-  T first;
+  T first;  //!< First tuple element
 };
 
 template<typename T> class Tuple<T,2>: public TupleBase<T,2> {
 public:
-  T first, second;
+  T first;  //!< First tuple element
+  T second; //!< Second tuple element
 };
 
 template<typename T> class Tuple<T,3>: public TupleBase<T,3> {
 public:
-  T first, second, third;
+  T first;  //!< First tuple element
+  T second; //!< Second tuple element
+  T third;  //!< Third tuple element
 };
 
 template<typename T> class Tuple<T,4>: public TupleBase<T,4> {
 public:
-  T first, second, third, fourth;
+  T first;  //!< First tuple element
+  T second; //!< Second tuple element
+  T third;  //!< Third tuple element
+  T fourth; //!< Fourth tuple element
 };
 
 /*!

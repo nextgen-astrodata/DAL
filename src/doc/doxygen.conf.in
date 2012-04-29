@@ -1,5 +1,5 @@
 # The files and directories to parse
-INPUT = @CMAKE_SOURCE_DIR@/src @CMAKE_SOURCE_DIR@/src/hdf5 @CMAKE_SOURCE_DIR@/src/lofar 
+INPUT = @CMAKE_SOURCE_DIR@/src @CMAKE_SOURCE_DIR@/src/hdf5 @CMAKE_SOURCE_DIR@/src/hdf5/types @CMAKE_SOURCE_DIR@/src/hdf5/exceptions @CMAKE_SOURCE_DIR@/src/lofar 
 INCLUDE_PATH = @CMAKE_INCLUDE_PATH@
 
 # Where to put the results

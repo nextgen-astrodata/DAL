@@ -1,6 +1,5 @@
 install (FILES
   h5complex.h
-  h5exception.h
   h5tuple.h
   h5typemap.h
   hid_gc.h
