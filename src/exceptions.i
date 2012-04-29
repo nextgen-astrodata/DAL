@@ -38,6 +38,16 @@ namespace std {
   %template(VectorStackLine)        vector<DAL::HDF5StackLine>;
 }
 
+%extend DAL::HDF5StackLine  {
+  std::string __repr__() {
+    return $self->longDesc();
+  }
+
+  std::string __str__() {
+    return $self->shortDesc();
+  }
+}
+
 // -------------------------------
 // Class extensions for bindings
 // -------------------------------

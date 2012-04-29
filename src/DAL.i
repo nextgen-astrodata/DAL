@@ -25,6 +25,10 @@ typedef unsigned long size_t;
 // STL/C++ templates
 // -------------------------------
 
+%{
+#define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS 
+%}
+
 %include "std_complex.i"
 %include "std_string.i"
 %include "std_vector.i"
@@ -98,5 +102,14 @@ namespace DAL {
 // -------------------------------
 
 %pythoncode %{
+
+# Add __repr__ functions to all vectors
+
+def vector_repr(self):
+  return "(" + ", ".join([x.__repr__() for x in self]) + ")"
+
+for vector in [x for x in locals().keys() if x.startswith("Vector") and type(locals()[x]) == type]:
+  locals()[vector].__repr__ = vector_repr
+
 %}
 

@@ -81,14 +81,14 @@ namespace DAL {
 
 // std::vector variants
 namespace std {
-  %template(VectorTupleUnsigned2)     vector< Tuple<unsigned,2> >;
-  %template(VectorTupleUnsigned3)     vector< Tuple<unsigned,3> >;
-  %template(VectorTupleUnsigned4)     vector< Tuple<unsigned,4> >;
-  %template(VectorTupleDouble2)       vector< Tuple<double,2> >;
-  %template(VectorTupleDouble3)       vector< Tuple<double,3> >;
-  %template(VectorTupleDouble4)       vector< Tuple<double,4> >;
+  %template(VectorTupleUnsigned2)     vector< DAL::Tuple<unsigned,2> >;
+  %template(VectorTupleUnsigned3)     vector< DAL::Tuple<unsigned,3> >;
+  %template(VectorTupleUnsigned4)     vector< DAL::Tuple<unsigned,4> >;
+  %template(VectorTupleDouble2)       vector< DAL::Tuple<double,2> >;
+  %template(VectorTupleDouble3)       vector< DAL::Tuple<double,3> >;
+  %template(VectorTupleDouble4)       vector< DAL::Tuple<double,4> >;
 
-  %template(VectorCoordinate3DDouble) vector< Coordinate3D<double> >;
-  %template(VectorCoordinate3DFloat)  vector< Coordinate3D<float> >;
+  %template(VectorCoordinate3DDouble) vector< DAL::Coordinate3D<double> >;
+  %template(VectorCoordinate3DFloat)  vector< DAL::Coordinate3D<float> >;
 }
 
