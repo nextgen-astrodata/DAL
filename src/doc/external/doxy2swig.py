@@ -274,7 +274,7 @@ class Doxy2SWIG:
 
     def do_sectiondef(self, node):
         kind = node.attributes['kind'].value
-        if kind in ('public-func', 'func'):
+        if kind in ('public-func', 'func', 'public-attrib'):
             self.generic_parse(node)
 
     def do_simplesect(self, node):
