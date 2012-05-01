@@ -2,6 +2,7 @@
 #define __H5TUPLE__
 
 #include <hdf5.h>
+#include <algorithm>
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/exceptions/h5exception.h"
 
@@ -69,6 +70,28 @@ public:
 
   const_iterator end() const { return begin() + size(); }
         iterator end()       { return begin() + size(); }
+
+  /*!
+   * Return this tuple as a vector.
+   */
+  std::vector<T> get() const {
+    std::vector<T> result(size());
+
+    std::copy(begin(), end(), result.begin());
+
+    return result;
+  }
+
+  /*!
+   * Copy a vector into this tuple.
+   */
+  void set( const std::vector<T> &other ) {
+    if (other.size() != size()) {
+      throw HDF5Exception("Tuples can only be initialised with vectors of the same size");
+    }
+
+    std::copy(other.begin(), other.end(), begin());
+  }
 };
 
 /*! \class Tuple

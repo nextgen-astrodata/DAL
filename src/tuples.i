@@ -11,8 +11,6 @@
 %ignore DAL::TupleBase::end;
 %ignore DAL::TupleUntemplated;
 
-%include hdf5/types/h5tuple.h
-
 // make DAL::TupleBase more pythonic
 %extend DAL::TupleBase {
   T __getitem__(ssize_t index) {
@@ -57,16 +55,19 @@
   }
 }
 
+%include hdf5/types/h5tuple.h
+
 namespace DAL {
-  %template()     TupleBase<unsigned,2>;
-  %template()     TupleBase<unsigned,3>;
-  %template()     TupleBase<unsigned,4>;
-  %template()     TupleBase<float,2>;
-  %template()     TupleBase<float,3>;
-  %template()     TupleBase<float,4>;
-  %template()     TupleBase<double,2>;
-  %template()     TupleBase<double,3>;
-  %template()     TupleBase<double,4>;
+  // TupleBases need to be instantiated to force that they will be %extended
+  %template(_TupleBaseUnsigned2)     TupleBase<unsigned,2>;
+  %template(_TupleBaseUnsigned3)     TupleBase<unsigned,3>;
+  %template(_TupleBaseUnsigned4)     TupleBase<unsigned,4>;
+  %template(_TupleBaseFloat2)        TupleBase<float,2>;
+  %template(_TupleBaseFloat3)        TupleBase<float,3>;
+  %template(_TupleBaseFloat4)        TupleBase<float,4>;
+  %template(_TupleBaseDouble2)       TupleBase<double,2>;
+  %template(_TupleBaseDouble3)       TupleBase<double,3>;
+  %template(_TupleBaseDouble4)       TupleBase<double,4>;
 
   %template(TupleUnsigned2)     Tuple<unsigned,2>;
   %template(TupleUnsigned3)     Tuple<unsigned,3>;
