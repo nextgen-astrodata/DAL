@@ -1,6 +1,8 @@
 #ifndef __ISDERIVEDFROM__
 #define __ISDERIVEDFROM__
 
+namespace DAL {
+
 // Excerpted from the book More Exceptional C++ by Herb Sutter.
 // see http://www.gotw.ca/publications/mxc++-item-4.htm
 
@@ -68,5 +70,7 @@ public:
 
   IsDerivedFrom() { char* p = (int*)0; /* error */ }
 };
+
+}
 
 #endif
