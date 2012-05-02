@@ -21,25 +21,18 @@
 
 #include <sys/types.h> // import size_t and ssize_t
 
-// Don't use hdf5/types/issame.h, as compilation could also
-// fail if that header cannot be found.
-
-// Tester<T,U> compiles if T == U
+// Tester<T,U> can be constructed if T == U
 
 template<typename T, typename U> class Tester {
-/* trigger a compile error if func() is used */
 private:
-  static void func();
+  Tester();
 };
 
 template<typename T> class Tester<T,T> {
-/* func() is valid to call */
-public:
-  static void func() {}
 };
 
 int main() {
-  Tester<TYPE_A, TYPE_B>::func();
+  (void)Tester<TYPE_A, TYPE_B>();
 
   return 0;
 }
