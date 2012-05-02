@@ -11,7 +11,7 @@ foreach(SRC_TYPE size_t ssize_t)
             ${CMAKE_BINARY_DIR}
             ${PROJECT_SOURCE_DIR}/cmake/TestIsSame.cc
             CMAKE_FLAGS
-              "-DCOMPILE_DEFINITIONS:STRING=-DSRC_TYPE='${SRC_TYPE}' -DDEST_TYPE='${SRC_TYPE}'"
+              "-DCOMPILE_DEFINITIONS:STRING=-DTYPE_A='${SRC_TYPE}' -DTYPE_B='${SRC_TYPE}'"
             OUTPUT_VARIABLE TEST_COMPILE_OUTPUT
             )
 
@@ -19,7 +19,7 @@ foreach(SRC_TYPE size_t ssize_t)
       message(FATAL_ERROR "Failed to compile cmake/TestIsSame.cc: ${TEST_COMPILE_OUTPUT}")
     endif(NOT TEST_COMPILE)
 
-    # Try to match any of these types. Note that adding types here required additional code
+    # Try to match with any of these types. Note that adding types here required additional code
     # in src/DAL.i and src/size_types.i as well to marshall the types to SWIG and Python.
     foreach(DEST_TYPE
       "unsigned int" "unsigned long"
@@ -33,7 +33,7 @@ foreach(SRC_TYPE size_t ssize_t)
               ${CMAKE_BINARY_DIR}
               ${PROJECT_SOURCE_DIR}/cmake/TestIsSame.cc
               CMAKE_FLAGS
-                "-DCOMPILE_DEFINITIONS:STRING=-DSRC_TYPE='${SRC_TYPE}' -DDEST_TYPE='${DEST_TYPE}'"
+                "-DCOMPILE_DEFINITIONS:STRING=-DTYPE_A='${SRC_TYPE}' -DTYPE_B='${DEST_TYPE}'"
               OUTPUT_VARIABLE TEST_COMPILE_OUTPUT
               )
 
