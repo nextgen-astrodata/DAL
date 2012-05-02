@@ -18,8 +18,7 @@
 // Type marshalling - scalars
 // -------------------------------
 
-typedef long ssize_t;
-typedef unsigned long size_t;
+%include "size_types.i"
 
 // -------------------------------
 // STL/C++ templates
@@ -34,13 +33,26 @@ typedef unsigned long size_t;
 %include "std_vector.i"
 
 namespace std {
-  %template(VectorSizeT)        vector<size_t>;
-  %template(VectorSSizeT)       vector<ssize_t>;
-
   %template(VectorUnsigned)     vector<unsigned>;
+  %template(VectorUnsignedLong) vector<unsigned long>;
+  %template(VectorInt)          vector<int>;
+  %template(VectorLong)         vector<long>;
   %template(VectorDouble)       vector<double>;
   %template(VectorString)       vector<string>;
 };
+
+// Define Vector aliases for python for size_t and ssize_t
+%pythoncode %{
+  if typeof_size_t == "unsigned int":
+    VectorSizeT = VectorUnsigned
+  elif typeof_size_t == "unsigned long":
+    VectorSizeT = VectorUnsignedLong
+
+  if typeof_ssize_t == "int":
+    VectorSSizeT = VectorInt
+  elif typeof_size_t == "long":
+    VectorSSizeT = VectorLong
+%}
 
 // -------------------------------
 // Exception handling

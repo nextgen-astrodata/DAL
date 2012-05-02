@@ -3,6 +3,7 @@ find_package(HDF5_DAL)
 include_directories(${HDF5_INCLUDES})
 
 include(TestHDF5)
+include(TestSizeT)
 
 include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR} # to find regular headers
@@ -12,6 +13,11 @@ include_directories (
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/dal_config.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/dal_config.h"
+)
+
+configure_file (
+  "${CMAKE_CURRENT_SOURCE_DIR}/size_types.i.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/size_types.i"
 )
 
 install (FILES
