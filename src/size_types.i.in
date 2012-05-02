@@ -1,4 +1,9 @@
 // Tell SWIG the types of size_t and ssize_t
+//
+// If SWIG does not know (s)size_t, it will treat it as
+// a custom type instead of a numerical type. Unfortunately,
+// sys/types.h is typically too complex to be parsed by SWIG
+// directly, so we let CMake help out here.
 
 typedef @TYPEOF_size_t@ size_t;
 typedef @TYPEOF_ssize_t@ ssize_t;
