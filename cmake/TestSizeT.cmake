@@ -40,7 +40,7 @@ foreach(SRC_TYPE size_t ssize_t)
       if(TEST_COMPILE)
         message(STATUS "${SRC_TYPE} == ${DEST_TYPE}")
  
-        set(TYPEOF_${SRC_TYPE} ${DEST_TYPE} CACHE INTERNAL "Basic type of size_t")
+        set(TYPEOF_${SRC_TYPE} ${DEST_TYPE} CACHE INTERNAL "Basic type (int, long, etc) of ${SRC_TYPE}")
 
         break()  
       endif(TEST_COMPILE)
