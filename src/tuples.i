@@ -93,3 +93,17 @@ namespace std {
   %template(VectorCoordinate3DFloat)  vector< DAL::Coordinate3D<float> >;
 }
 
+%pythoncode %{
+
+# SWIG generates __repr__ members for all classes, so we need to explicitly override them all
+
+# Add __repr__ functions to all tuples
+
+def tuple_repr(self):
+  return "(" + ", ".join([x.__repr__() for x in self]) + ")"
+
+for tuple_ in [x for x in locals().keys() if x.startswith("Tuple") and type(locals()[x]) == type]:
+  locals()[tuple_].__repr__ = tuple_repr
+  locals()[tuple_].__str__  = tuple_repr
+
+%}  

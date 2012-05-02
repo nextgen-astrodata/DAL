@@ -115,13 +115,78 @@ namespace DAL {
 
 %pythoncode %{
 
-# Add __repr__ functions to all vectors
+# Add special functions to all vectors
 
-def vector_repr(self):
-  return "(" + ", ".join([x.__repr__() for x in self]) + ")"
+class PythonicVector:
+  def __repr__(self):
+    return "(" + ", ".join([x.__repr__() for x in self]) + ")"
+
+  def __add__(self, other):
+    result = self[:]
+    result.append(other)
+    return result
+
+  def __radd__(self, other):
+    result = self[:]
+    result.insert(result.__iter__(), other)
+    return result
+
+  def __iadd__(self, other):
+    self.append(other)
+    return self
+
+  def __mul__(self, value):
+    result = self.__class__()
+    result.reserve(len(self) * value)
+
+    for x in xrange(len(self)):
+      result.extend(self)
+
+    return result
+
+  def __imul__(self, value):
+    if value == 0:
+      self.clear()
+
+    if value <= 1:
+      return self
+
+    origlist = self[:]
+    self.reserve(len(self) * value)
+
+    for x in xrange(value - 1):
+      self.extend(origlist)
+
+    return self
+
+  def count(self, value):
+    n = 0
+
+    for x in self:
+      if x == value:
+        n += 1
+
+    return n
+
+  def extend(self, l):
+    for x in l:
+      self.append(x)
+
+  def index(self, value, *args):
+    # slow because list(self) copies, but list.index has some extensive behaviour
+    return list(self).index(value, *args)
+
+  def sort(self, *args, **kwargs):
+    # a future implementation could use std::sort in C++ for the default case
+    raise NotImplementedError
 
 for vector in [x for x in locals().keys() if x.startswith("Vector") and type(locals()[x]) == type]:
-  locals()[vector].__repr__ = vector_repr
+  # SWIG generates __repr__ members for all classes, so we need to explicitly override them all
+  locals()[vector].__repr__ = PythonicVector.__repr__
+
+  # provide all other members at once through inheritance
+  if PythonicVector not in locals()[vector].__bases__: # some Vector classes are aliases to others
+    locals()[vector].__bases__ += (PythonicVector,)
 
 %}
 
