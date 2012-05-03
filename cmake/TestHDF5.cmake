@@ -3,7 +3,6 @@ try_run(TEST_HDF5_RESULT TEST_HDF5_COMPILE
         ${PROJECT_SOURCE_DIR}/cmake/TestHDF5.c
         CMAKE_FLAGS
           "-DLINK_LIBRARIES:STRING=${HDF5_LIBRARIES}"
-#          "-DINCLUDE_DIRECTORIES:STRING=${HDF5_INCLUDE_DIR}"
 	  "-DINCLUDE_DIRECTORIES:STRING=${HDF5_INCLUDES}"
         COMPILE_OUTPUT_VARIABLE TEST_HDF5_COMPILE_OUTPUT
         RUN_OUTPUT_VARIABLE TEST_HDF5_RUN_OUTPUT)
@@ -16,7 +15,11 @@ endif(NOT TEST_HDF5_COMPILE)
 if(NOT CMAKE_CROSSCOMPILING)
   if(TEST_HDF5_RESULT GREATER 0)
     message(FATAL_ERROR
-      "Version mismatch between HDF5 headers and HDF5 library:\n${TEST_HDF5_RUN_OUTPUT}")
+      "Version mismatch between HDF5 headers and HDF5 library: ${TEST_HDF5_RUN_OUTPUT}")
+  else(TEST_HDF5 RESULT GREATER 0)
+    message(STATUS "HDF5 version ${TEST_HDF5_RUN_OUTPUT}")
   endif(TEST_HDF5_RESULT GREATER 0)
+else(NOT CMAKE_CROSSCOMPILING)
+  message(STATUS "Cross compiling -> assuming HDF5 headers and library versions match")
 endif(NOT CMAKE_CROSSCOMPILING)  
 
