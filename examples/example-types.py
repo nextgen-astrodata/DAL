@@ -5,7 +5,7 @@ print("---- Vectors")
 # initialise a vector of unsigned numbers
 v = DAL.VectorUnsigned([1,2,3])
 
-# Access v's values in many different ways
+# A Vector behaves like a list
 print("type(v) = %s" % (type(v),))
 print("len(v) = %u" % (len(v),))
 print("v = %s" % (v,))
@@ -16,7 +16,7 @@ print("v = %s" % (list(v),))
 for x in v:
   print("v contains %s"% (x,))
 
-# vectors can also be sliced, copied, and extended
+# Vectors can also be sliced, copied, and extended
 v2 = v[:]
 for x in [4,5,6]:
   v2 += x
@@ -31,7 +31,8 @@ print("---- Tuples")
 t = DAL.TupleUnsigned3()
 t.set([1,2,3])
 
-# Access t's values in many different ways
+# A Tuple behaves like a tuple, but
+# also allow name-based access (t.first, etc).
 print("type(t) = %s" % (type(t),))
 print("len(t) = %u" % (len(t),))
 print("t = %s" % (t,))
@@ -57,7 +58,7 @@ print("---- Vectors of tuples")
 # Put two tuples in a vector
 v = DAL.VectorTupleUnsigned3([t, t2])
 
-# Access v's values in many different ways
+# Vectors again act like lists
 print("type(v) = %s" % (type(v),))
 print("len(v) = %u" % (len(v),))
 print("v = %s" % (v,))

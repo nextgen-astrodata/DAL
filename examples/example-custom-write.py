@@ -5,14 +5,17 @@ f = DAL.HDF5FileBase("foo.h5", DAL.HDF5FileBase.CREATE)
 
 # create an attribute
 a = DAL.AttributeString(f.group(), "MY_ATTRIBUTE")
-a.create()
-a.set("hello world!")
+a.value = "hello world!"
 
 # create and destroy a second attribute
 b = DAL.AttributeString(f.group(), "FAULTY_ATTRIBUTE")
-b.create()
-b.set("hello world!")
-b.remove()
+assert b.value is None
+
+b.value = "foo"
+assert b.value == "foo"
+
+del b.value
+assert b.value is None
 
 # create a dataset
 d = DAL.HDF5DatasetBaseComplexFloat(f.group(), "MY_DATASET")
