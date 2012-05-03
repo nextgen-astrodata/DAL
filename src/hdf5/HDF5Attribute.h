@@ -29,13 +29,13 @@ public:
    */
   void remove() const;
 
-protected:
-  AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
-
   /*!
    * Returns the number of data points in this element (1 for a scalar, >= 0 for a vector)
    */
   size_t size() const;
+
+protected:
+  AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
 
   const hid_gc container;
 };
@@ -48,6 +48,11 @@ public:
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
 
   /*!
+   * Creates this attribute.
+   */
+  void create() const;
+
+  /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
    * is thrown if the attribute does not already exist.
    */
@@ -58,9 +63,6 @@ public:
    * if it does not already exist.
    */
   void set( const T &value ) const;
-
-protected:
-  void create() const;
 };
 
 /*!
@@ -69,6 +71,11 @@ protected:
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {
 public:
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
+
+  /*!
+   * Creates this attribute, reserving a certain length.
+   */
+  void create( size_t length = 0) const;
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
@@ -81,9 +88,6 @@ public:
    * if it does not already exist.
    */
   void set( const std::vector<T> &value ) const;
-
-protected:
-  void create( size_t length ) const;
 };
 
 }
