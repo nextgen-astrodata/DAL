@@ -8,10 +8,28 @@
 
 namespace DAL {
 
-class HDF5Exception: public std::runtime_error
+class DALException: public std::runtime_error
 {
 public:
-  HDF5Exception(const std::string &msg, const HDF5ErrorStack &stack = HDF5ErrorStack()): std::runtime_error(msg), stack(stack) {}
+  DALException(const std::string &msg): std::runtime_error(msg) {}
+};
+
+class DALValueError: public DALException
+{
+public:
+  DALValueError(const std::string &msg): DALException(msg) {}
+};
+
+class DALIndexError: public DALValueError
+{
+public:
+  DALIndexError(const std::string &msg): DALValueError(msg) {}
+};
+
+class HDF5Exception: public DALException
+{
+public:
+  HDF5Exception(const std::string &msg, const HDF5ErrorStack &stack = HDF5ErrorStack()): DALException(msg), stack(stack) {}
 
   HDF5ErrorStack stack;
 

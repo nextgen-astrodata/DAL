@@ -86,9 +86,8 @@ public:
    * Copy a vector into this tuple.
    */
   void set( const std::vector<T> &other ) {
-    if (other.size() != size()) {
-      throw HDF5Exception("Tuples can only be initialised with vectors of the same size");
-    }
+    if (other.size() != size())
+      throw DALValueError("Tuples can only be initialised with vectors of the same size");
 
     std::copy(other.begin(), other.end(), begin());
   }

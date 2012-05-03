@@ -8,7 +8,7 @@ template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t>
   const size_t rank = dims.size();
 
   if (maxdims.size() != rank)
-    throw HDF5Exception("Current and maximum dimensions vectors must have equal length");
+    throw DALValueError("Current and maximum dimensions vectors must have equal length");
 
   // convert from ssize_t -> hsize_t
   std::vector<hsize_t> hdims(rank), hmaxdims(rank);
@@ -93,7 +93,7 @@ template<typename T> void HDF5DatasetBase<T>::resize( const std::vector<ssize_t>
   std::vector<hsize_t> newdims_hsize_t(rank);
 
   if (newdims.size() != rank)
-    throw HDF5Exception("resize() cannot change the number of dimensions");
+    throw DALValueError("resize() cannot change the number of dimensions");
 
   for (size_t i = 0; i < rank; i++ ) {
     newdims_hsize_t[i] = newdims[i];
@@ -147,17 +147,17 @@ template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &
   std::vector<size_t> size(ndims(),1);
 
   if (size.size() < 2)
-    throw HDF5Exception("get2D requires a dataset of at least 2 dimensions");
+    throw DALValueError("get2D requires a dataset of at least 2 dimensions");
 
   if (dim1index >= size.size())
-    throw HDF5Exception("First dimension index exceeds the dataset rank");
+    throw DALIndexError("First dimension index exceeds the dataset rank");
 
   if (dim2index >= size.size())
-    throw HDF5Exception("Second dimension index exceeds the dataset rank");
+    throw DALIndexError("Second dimension index exceeds the dataset rank");
 
   // we don't do transposes
   if (dim1index >= dim2index)
-    throw HDF5Exception("Dimensions must be addressed in-order");
+    throw DALValueError("Dimensions must be addressed in-order");
 
   size[dim1index] = dim1;
   size[dim2index] = dim2;
@@ -170,17 +170,17 @@ template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &
   std::vector<size_t> size(ndims(),1);
 
   if (size.size() < 2)
-    throw HDF5Exception("set2D requires a dataset of at least 2 dimensions");
+    throw DALValueError("set2D requires a dataset of at least 2 dimensions");
 
   if (dim1index >= size.size())
-    throw HDF5Exception("First dimension index exceeds the dataset rank");
+    throw DALIndexError("First dimension index exceeds the dataset rank");
 
   if (dim2index >= size.size())
-    throw HDF5Exception("Second dimension index exceeds the dataset rank");
+    throw DALIndexError("Second dimension index exceeds the dataset rank");
 
   // we don't do transposes
   if (dim1index >= dim2index)
-    throw HDF5Exception("Dimensions must be addressed in-order");
+    throw DALValueError("Dimensions must be addressed in-order");
 
   size[dim1index] = dim1;
   size[dim2index] = dim2;
@@ -193,7 +193,7 @@ template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &
   std::vector<size_t> size(ndims(),1);
 
   if (dim1index >= size.size())
-    throw HDF5Exception("Dimension index exceeds the dataset rank");
+    throw DALIndexError("Dimension index exceeds the dataset rank");
 
   size[dim1index] = dim1;
 
@@ -205,7 +205,7 @@ template<typename T> void HDF5DatasetBase<T>::set1D( const std::vector<size_t> &
   std::vector<size_t> size(ndims(),1);
 
   if (dim1index >= size.size())
-    throw HDF5Exception("Dimension index exceeds the dataset rank");
+    throw DALIndexError("Dimension index exceeds the dataset rank");
 
   size[dim1index] = dim1;
 
@@ -258,10 +258,10 @@ template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t
   std::vector<hsize_t> offset(rank), count(rank), stride(rank);
 
   if (pos.size() != rank)
-    throw HDF5Exception("Specified position does not match dimensionality of dataset");
+    throw DALValueError("Specified position does not match dimensionality of dataset");
 
   if (size.size() != rank)
-    throw HDF5Exception("Specified block size does not match dimensionality of dataset");
+    throw DALValueError("Specified block size does not match dimensionality of dataset");
 
   for (size_t i = 0; i < rank; i++) {
     offset[i] = pos[i];

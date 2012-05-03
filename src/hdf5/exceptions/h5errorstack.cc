@@ -13,7 +13,9 @@ private:
 
   const DisableErrorPrinting *dep;
 
-} gdep;
+};
+
+static GlobalDisableErrorPrinting gdep;
 
 bool GlobalDisableErrorPrinting::quietErrors() const {
 #ifndef QUIET_HDF5_ERRORS

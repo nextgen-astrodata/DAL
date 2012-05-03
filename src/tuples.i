@@ -18,7 +18,7 @@
       index += $self->size();
 
     if (index >= $self->size())
-      throw IndexError();
+      throw DAL::DALIndexError("list index out of range");
 
     return $self->operator[](index);
   }
@@ -28,7 +28,7 @@
       index += $self->size();
 
     if (index >= $self->size())
-      throw IndexError();
+      throw DAL::DALIndexError("list index out of range");
 
     $self->operator[](index) = value;
   }
