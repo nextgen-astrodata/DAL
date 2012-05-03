@@ -93,6 +93,9 @@ template<typename T> inline T Attribute<T>::get() const
 
 template<typename T> inline void Attribute< std::vector<T> >::create( size_t length ) const
 {
+  if (length == 0)
+    throw DALValueError("Cannot store empty arrays");
+
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace");
 
   hid_gc_noref attr(H5Acreate2(container, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
@@ -100,6 +103,9 @@ template<typename T> inline void Attribute< std::vector<T> >::create( size_t len
 
 template<typename T> inline void Attribute< std::vector<T> >::set( const std::vector<T> &value ) const
 {
+  if (value.empty())
+    throw DALValueError("Cannot store empty arrays");
+
   if (size() != value.size()) {
     // recreate the attribute to change the vector length on disk
     remove();
@@ -168,6 +174,9 @@ template<> inline std::string Attribute<std::string>::get() const
 
 template<> inline void Attribute< std::vector<std::string> >::create( size_t length ) const
 {
+  if (length == 0)
+    throw DALValueError("Cannot store empty arrays");
+
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
@@ -176,6 +185,9 @@ template<> inline void Attribute< std::vector<std::string> >::create( size_t len
 
 template<> inline void Attribute< std::vector<std::string> >::set( const std::vector<std::string> &value ) const
 {
+  if (value.empty())
+    throw DALValueError("Cannot store empty arrays");
+
   if (size() != value.size()) {
     // recreate the attribute to change the vector length on disk
     remove();
