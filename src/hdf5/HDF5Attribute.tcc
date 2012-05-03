@@ -44,17 +44,17 @@ inline size_t AttributeBase::size() const
   return nelems;
 }
 
-inline hid_t h5scalar()
+static inline hid_t h5scalar()
 {
   return H5Screate(H5S_SCALAR);
 }
 
-inline hid_t h5array( hsize_t count )
+static inline hid_t h5array( hsize_t count )
 {
   return H5Screate_simple(1, &count, NULL);
 }
 
-inline hid_t h5stringType()
+static inline hid_t h5stringType()
 {
   const hid_t datatype = H5Tcopy(H5T_C_S1);
 
@@ -73,9 +73,6 @@ template<typename T> inline void Attribute<T>::create() const
 
 template<typename T> inline void Attribute<T>::set( const T &value ) const
 {
-  if (!exists())
-    throw HDF5Exception("Attribute does not exist");
-
   hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   if (H5Awrite(attr, h5typemap<T>::memoryType(), &value) < 0)
@@ -103,9 +100,6 @@ template<typename T> inline void Attribute< std::vector<T> >::create( size_t len
 
 template<typename T> inline void Attribute< std::vector<T> >::set( const std::vector<T> &value ) const
 {
-  if (!exists())
-    throw HDF5Exception("Attribute does not exist");
-
   if (size() != value.size()) {
     // recreate the attribute to change the vector length on disk
     remove();
@@ -144,12 +138,8 @@ template<> inline void Attribute<std::string>::create() const
 
 template<> inline void Attribute<std::string>::set( const std::string &value ) const
 {
-  if (!exists())
-    throw HDF5Exception("Attribute does not exist");
-
-  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
-
   hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
   const char *cstr = value.c_str();
   if (H5Awrite(attr, datatype, &cstr) < 0)
@@ -186,9 +176,6 @@ template<> inline void Attribute< std::vector<std::string> >::create( size_t len
 
 template<> inline void Attribute< std::vector<std::string> >::set( const std::vector<std::string> &value ) const
 {
-  if (!exists())
-    throw HDF5Exception("Attribute does not exist");
-
   if (size() != value.size()) {
     // recreate the attribute to change the vector length on disk
     remove();
@@ -201,9 +188,8 @@ template<> inline void Attribute< std::vector<std::string> >::set( const std::ve
     c_strs[i] = value[i].c_str();
   }
 
-  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
-
   hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
   if (H5Awrite(attr, datatype, &c_strs[0]) < 0)
     throw HDF5Exception("Could not write attribute");

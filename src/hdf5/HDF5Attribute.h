@@ -45,6 +45,9 @@ protected:
  */
 template<typename T> class Attribute: public AttributeBase {
 public:
+  /*!
+   * Represent an attribute called `name' within group `container'.
+   */
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
 
   /*!
@@ -54,13 +57,13 @@ public:
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
-   * is thrown if the attribute does not already exist.
+   * is thrown if the attribute does not exist.
    */
   T get() const;
 
   /*!
-   * Stores the value of this attribute in the HDF5 file. The attribute is created
-   * if it does not already exist.
+   * Stores the value of this attribute in the HDF5 file. An exception is thrown
+   * if the attribute does not exist.
    */
   void set( const T &value ) const;
 };
@@ -70,6 +73,9 @@ public:
  */
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {
 public:
+  /*!
+   * Represent an attribute called `name' within group `container'.
+   */
   Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name) {}
 
   /*!
@@ -84,8 +90,8 @@ public:
   std::vector<T> get() const;
 
   /*!
-   * Stores the value of this attribute in the HDF5 file. The attribute is created
-   * if it does not already exist.
+   * Stores the value of this attribute in the HDF5 file. An exception is thrown
+   * if the attribute does not exist.
    */
   void set( const std::vector<T> &value ) const;
 };
