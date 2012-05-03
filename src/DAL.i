@@ -188,5 +188,33 @@ for vector in [x for x in locals().keys() if x.startswith("Vector") and type(loc
   if PythonicVector not in locals()[vector].__bases__: # some Vector classes are aliases to others
     locals()[vector].__bases__ += (PythonicVector,)
 
+class PythonicAttribute:
+  @property
+  def value(self):
+    if not self.exists():
+      return None
+
+    return self.get()
+
+  @value.setter
+  def value(self, val):
+    if not self.exists():
+      self.create()
+
+    try:
+      self.set(val)
+    except TypeError:
+      raise TypeError("'%s' cannot be assigned values of type '%s'" % (self.__class__.__name__, type(val).__name__,))
+
+  @value.deleter
+  def value(self):
+    if self.exists():
+      self.remove()
+
+for attr in [x for x in locals().keys() if x.startswith("Attribute") and type(locals()[x]) == type]:
+  # provide all other members at once through inheritance
+  if PythonicAttribute not in locals()[attr].__bases__: # some Attribute classes are aliases to others
+    locals()[attr].__bases__ += (PythonicAttribute,)
+
 %}
 
