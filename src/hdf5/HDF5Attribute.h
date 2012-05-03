@@ -81,7 +81,7 @@ public:
   /*!
    * Creates this attribute, reserving a certain length.
    */
-  void create( size_t length = 0) const;
+  void create( size_t length = 1 ) const;
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
