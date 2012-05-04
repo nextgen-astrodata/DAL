@@ -62,44 +62,24 @@ template<typename T> class Attribute;
 template<typename T> class AttributeValueType {
 public:
   /*!
-   * Setter.
+   * Setter: allows x.value = (T)y.
    */
-  AttributeValueType<T>& operator=( const T& value ) {
-    if (!attr.exists())
-      attr.create();
-
-    attr.set(value);
-
-    return *this;
-  }
+  AttributeValueType<T>& operator=( const T& value );
 
   /*!
    * Allow x.value = y.value
    */
-  AttributeValueType<T>& operator=( const AttributeValueType<T>& value ) {
-    if (this == &value)
-      return *this;
-
-    return *this = static_cast<T>(value);
-  }
+  AttributeValueType<T>& operator=( const AttributeValueType<T>& value );
 
   /*!
-   * Getter.
+   * Getter: allows T y = x.value.
    */
-  operator T() const {
-    // We can't gracefully return if the attribute does not exist,
-    // because there is no safe default value for T. Note that in
-    // Python, we return None in that case.
-    return attr.get();
-  }
+  operator T() const;
 
   /*!
    * Crudely mimic Python's "del attr.value" (the property's deleter)
    */
-  void del() const {
-    if (attr.exists())
-      attr.remove();
-  }
+  void del() const;
 
 private:
   // Do'not allow copying, as attr of the copy might get out of scope
@@ -113,10 +93,8 @@ private:
   friend class Attribute<T>;
 };
 
-template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValueType<T> &val)
-{
-  return out << static_cast<T>(val);
-}
+template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValueType<T> &val);
+
 #endif
 
 

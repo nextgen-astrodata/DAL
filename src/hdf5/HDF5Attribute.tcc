@@ -44,6 +44,43 @@ inline size_t AttributeBase::size() const
   return nelems;
 }
 
+template<typename T> AttributeValueType<T>& AttributeValueType<T>::operator=( const T& value )
+{
+  if (!attr.exists())
+    attr.create();
+
+  attr.set(value);
+
+  return *this;
+}
+
+template<typename T> AttributeValueType<T>& AttributeValueType<T>::operator=( const AttributeValueType<T>& value )
+{
+  if (this == &value)
+    return *this;
+
+  return *this = static_cast<T>(value);
+}
+
+template<typename T> AttributeValueType<T>::operator T() const
+{
+  // We can't gracefully return if the attribute does not exist,
+  // because there is no safe default value for T. Note that in
+  // Python, we return None in that case.
+  return attr.get();
+}
+
+template<typename T> void AttributeValueType<T>::del() const
+{
+  if (attr.exists())
+    attr.remove();
+}
+
+template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValueType<T> &val)
+{
+  return out << static_cast<T>(val);
+}
+
 static inline hid_t h5scalar()
 {
   return H5Screate(H5S_SCALAR);
