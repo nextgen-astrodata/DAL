@@ -113,7 +113,7 @@ public:
   /*!
    * Creates this attribute.
    */
-  void create() const;
+  Attribute<T>& create();
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
@@ -125,7 +125,7 @@ public:
    * Stores the value of this attribute in the HDF5 file. An exception is thrown
    * if the attribute does not exist.
    */
-  void set( const T &value ) const;
+  void set( const T &value );
 
 #ifndef SWIG
   AttributeValueType<T> value;
@@ -148,7 +148,7 @@ public:
    * Creates this attribute, reserving a certain length. Note that HDF5 does not support
    * arrays of size 0, so length >= 1.
    */
-  void create( size_t length = 1 ) const;
+  Attribute< std::vector<T> > &create( size_t length = 1 );
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
@@ -160,7 +160,7 @@ public:
    * Stores the value of this attribute in the HDF5 file. An exception is thrown
    * if the attribute does not exist.
    */
-  void set( const std::vector<T> &value ) const;
+  void set( const std::vector<T> &value );
 
 #ifndef SWIG
   AttributeValueType< std::vector<T> > value;

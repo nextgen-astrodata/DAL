@@ -65,6 +65,7 @@ namespace std {
 // -------------------------------
 
 %{
+  #include "lofar/CommonTuples.h"
   #include "lofar/BF_File.h"
   #include "lofar/TBB_File.h"
 
@@ -74,6 +75,12 @@ namespace std {
 // rename otherwise unreachable functions
 %rename(get_hid_t)  operator hid_t;
 %rename(get_hid_gc) operator hid_gc;
+
+// member functions that return *this are problematic,
+// because SWIG generates a new wrapper object and cannot
+// know how to do the memory management right between
+// both wrapper objects. So we write our own further below.
+%rename(_create) DAL::Attribute::create;
 
 %include hdf5/HDF5Node.h
 %include hdf5/HDF5Attribute.h
@@ -97,11 +104,23 @@ namespace DAL {
 
   %template(AttributeUnsigned3)     Attribute< Tuple<unsigned,3> >;
   %template(AttributeDouble3)       Attribute< Tuple<double,3> >;
-  %template(AttributeCoordinate3D)  Attribute< Coordinate3D<double> >;
 
   %template(AttributeVUnsigned3)    Attribute< vector< Tuple<unsigned,3> > >;
   %template(AttributeVDouble3)      Attribute< vector< Tuple<double,3> > >;
-  %template(AttributeVCoordinate3D) Attribute< vector< Coordinate3D<double> > >;
+}
+
+%include lofar/CommonTuples.h
+
+namespace std {
+  %template(VectorCoordinate3DDouble)     vector< DAL::Coordinate3D<double> >;
+}
+
+namespace DAL {
+  using namespace std;
+
+  %template(Coordinate3DDouble)           Coordinate3D<double>;
+  %template(AttributeCoordinate3DDouble)  Attribute< Coordinate3D<double> >;
+  %template(AttributeVCoordinate3DDouble) Attribute< vector< Coordinate3D<double> > >;
 }
 
 %include lofar/CommonAttributesFile.h
@@ -189,6 +208,10 @@ for vector in [x for x in locals().keys() if x.startswith("Vector") and type(loc
     locals()[vector].__bases__ += (PythonicVector,)
 
 class PythonicAttribute:
+  def create(self):
+    self._create()
+    return self
+
   @property
   def value(self):
     if not self.exists():

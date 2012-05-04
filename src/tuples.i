@@ -75,9 +75,6 @@ namespace DAL {
   %template(TupleDouble2)       Tuple<double,2>;
   %template(TupleDouble3)       Tuple<double,3>;
   %template(TupleDouble4)       Tuple<double,4>;
-
-  %template(Coordinate3DDouble) Coordinate3D<double>;
-  %template(Coordinate3DFloat)  Coordinate3D<float>;
 }
 
 // std::vector variants
@@ -88,9 +85,6 @@ namespace std {
   %template(VectorTupleDouble2)       vector< DAL::Tuple<double,2> >;
   %template(VectorTupleDouble3)       vector< DAL::Tuple<double,3> >;
   %template(VectorTupleDouble4)       vector< DAL::Tuple<double,4> >;
-
-  %template(VectorCoordinate3DDouble) vector< DAL::Coordinate3D<double> >;
-  %template(VectorCoordinate3DFloat)  vector< DAL::Coordinate3D<float> >;
 }
 
 %pythoncode %{

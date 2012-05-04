@@ -139,11 +139,6 @@ public:
   T elems[N];
 };
 
-template<typename T> class Coordinate3D: public TupleBase<T,3> {
-public:
-  T x, y, z;
-};
-
 inline hid_gc h5tupleType( hid_t element, size_t num )
 {
   hsize_t dims[1];

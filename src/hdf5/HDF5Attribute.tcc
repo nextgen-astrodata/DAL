@@ -101,14 +101,16 @@ static inline hid_t h5stringType()
 }
 
 // generic versions
-template<typename T> inline void Attribute<T>::create() const
+template<typename T> inline Attribute<T>& Attribute<T>::create()
 {
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
 
   hid_gc_noref attr(H5Acreate2(container, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute" );
+
+  return *this;
 }
 
-template<typename T> inline void Attribute<T>::set( const T &value ) const
+template<typename T> inline void Attribute<T>::set( const T &value )
 {
   hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
@@ -128,7 +130,7 @@ template<typename T> inline T Attribute<T>::get() const
   return value;
 }
 
-template<typename T> inline void Attribute< std::vector<T> >::create( size_t length ) const
+template<typename T> inline Attribute< std::vector<T> >& Attribute< std::vector<T> >::create( size_t length )
 {
   if (length == 0)
     throw DALValueError("Cannot store empty arrays");
@@ -136,9 +138,11 @@ template<typename T> inline void Attribute< std::vector<T> >::create( size_t len
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace");
 
   hid_gc_noref attr(H5Acreate2(container, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
+
+  return *this;
 }
 
-template<typename T> inline void Attribute< std::vector<T> >::set( const std::vector<T> &value ) const
+template<typename T> inline void Attribute< std::vector<T> >::set( const std::vector<T> &value )
 {
   if (value.empty())
     throw DALValueError("Cannot store empty arrays");
@@ -171,15 +175,17 @@ template<typename T> inline std::vector<T> Attribute< std::vector<T> >::get() co
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-template<> inline void Attribute<std::string>::create() const
+template<> inline Attribute<std::string>& Attribute<std::string>::create()
 {
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
   hid_gc_noref attr(H5Acreate2(container, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
+
+  return *this;
 }
 
-template<> inline void Attribute<std::string>::set( const std::string &value ) const
+template<> inline void Attribute<std::string>::set( const std::string &value )
 {
   hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
@@ -209,7 +215,7 @@ template<> inline std::string Attribute<std::string>::get() const
 
 // specialisations for std::vector<std::string>
 
-template<> inline void Attribute< std::vector<std::string> >::create( size_t length ) const
+template<> inline Attribute< std::vector<std::string> >& Attribute< std::vector<std::string> >::create( size_t length )
 {
   if (length == 0)
     throw DALValueError("Cannot store empty arrays");
@@ -218,9 +224,11 @@ template<> inline void Attribute< std::vector<std::string> >::create( size_t len
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
   hid_gc_noref attr(H5Acreate2(container, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute");
+
+  return *this;
 }
 
-template<> inline void Attribute< std::vector<std::string> >::set( const std::vector<std::string> &value ) const
+template<> inline void Attribute< std::vector<std::string> >::set( const std::vector<std::string> &value )
 {
   if (value.empty())
     throw DALValueError("Cannot store empty arrays");
