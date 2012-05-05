@@ -96,8 +96,11 @@ namespace std {
 def tuple_repr(self):
   return "(" + ", ".join([x.__repr__() for x in self]) + ")"
 
-for tuple_ in [x for x in locals().keys() if x.startswith("Tuple") and type(locals()[x]) == type]:
-  locals()[tuple_].__repr__ = tuple_repr
-  locals()[tuple_].__str__  = tuple_repr
+g = globals().copy()
+
+for name, obj in g.iteritems():
+  if name.startswith("Tuple") and type(obj) == type:
+    obj.__repr__ = tuple_repr
+    obj.__str__  = tuple_repr
 
 %}  

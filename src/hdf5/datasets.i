@@ -1,7 +1,7 @@
 // SWIG customisations for HDF5Datasets
 
 // -------------------------------
-// Type marshalling - arrays
+// Type marshalling
 // -------------------------------
 
 %{
@@ -34,7 +34,7 @@ DATASETTYPE(float, NPY_FLOAT, size_t);
 DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 
 // -------------------------------
-// DAL classes and templates
+// Templates
 // -------------------------------
 
 // ignore functions that contain raw pointers that
