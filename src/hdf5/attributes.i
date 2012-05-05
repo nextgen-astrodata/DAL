@@ -1,3 +1,6 @@
+%include hdf5/HDF5Node.h
+%include hdf5/HDF5Attribute.h
+
 // rename otherwise unreachable functions
 %rename(get_hid_t)  operator hid_t;
 %rename(get_hid_gc) operator hid_gc;
@@ -40,9 +43,6 @@
         self.remove()
   }
 }
-
-%include hdf5/HDF5Node.h
-%include hdf5/HDF5Attribute.h
 
 namespace DAL {
   using namespace std;

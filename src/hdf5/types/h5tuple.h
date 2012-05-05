@@ -103,7 +103,12 @@ public:
  * >>> t.get()
  * [1,2,3]
  */
-template<typename T, size_t N> class Tuple;
+template<typename T, size_t N> class Tuple: public TupleBase<T,N> {
+private:
+  // prevent construction of generic form, as it provides no storage
+  Tuple();
+  ~Tuple();
+};
 
 template<typename T> class Tuple<T,1>: public TupleBase<T,1> {
 public:

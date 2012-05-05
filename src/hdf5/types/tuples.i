@@ -10,6 +10,8 @@
 %ignore DAL::TupleBase::end;
 %ignore DAL::TupleUntemplated;
 
+%include hdf5/types/h5tuple.h
+
 // make DAL::TupleBase more pythonic
 %extend DAL::TupleBase {
   T __getitem__(ssize_t index) {
@@ -65,8 +67,6 @@
     __repr__ = __str__
   }
 }
-
-%include hdf5/types/h5tuple.h
 
 namespace DAL {
   // TupleBases need to be instantiated to force that they will be %extended

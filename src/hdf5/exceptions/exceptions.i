@@ -6,9 +6,24 @@
 
 %{
 #include "hdf5/exceptions/h5exception.h"
-#include "hdf5/exceptions/h5errorstack.h"
-#include <string>
 %}
+
+%include "hdf5/exceptions/h5exception.h"
+
+%extend DAL::HDF5Exception {
+  %pythoncode {
+    __old_init = __init__
+
+    def __init__(self, *args, **kwargs):
+      self.__old_init(*args, **kwargs)
+
+      # Keep a reference to the HF5ErrorStack until we copied the stack,
+      # or SWIG will become confused.
+
+      stackobj = HDF5ErrorStack()
+      self.stack = list(stackobj.stack)
+  }
+}
 
 /*
  * Create a custom HDF5Exception in Python.
@@ -25,24 +40,10 @@
   PyModule_AddObject(m, "HDF5Exception", pHDF5Exception); // 'm' is the name of the module object in SWIG
 %}
 
-%pythoncode %{
-  # marshall the exception from the shadow module
+%pythoncode {
+  # marshall from shadow module
   HDF5Exception = _DAL.HDF5Exception
-
-  # also record the HDF5 error stack when an exception is thrown
-  HDF5Exception.__old_init = HDF5Exception.__init__
-
-  def new_init(self, *args, **kwargs):
-      self.__old_init(*args, **kwargs)
-
-      # Keep a reference to the HF5ErrorStack until we copied the stack,
-      # or SWIG will become confused.
-
-      stackobj = HDF5ErrorStack()
-      self.stack = list(stackobj.stack)
-
-  HDF5Exception.__init__ = new_init    
-%}
+}
 
 #endif  
 
@@ -87,12 +88,9 @@ namespace std {
 }
 
 %extend DAL::HDF5StackLine {
-  std::string __repr__() {
-    return std::string("\"") + $self->longDesc() + "\"";
-  }
-
-  std::string __str__() {
-    return $self->shortDesc();
+  %pythoncode {
+    __repr__ = longDesc
+    __str__  = shortDesc  
   }
 }
 
