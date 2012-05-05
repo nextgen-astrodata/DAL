@@ -44,7 +44,7 @@ inline size_t AttributeBase::size() const
   return nelems;
 }
 
-template<typename T> AttributeValueType<T>& AttributeValueType<T>::operator=( const T& value )
+template<typename T> AttributeValue<T>& AttributeValue<T>::operator=( const T& value )
 {
   if (!attr.exists())
     attr.create();
@@ -54,7 +54,7 @@ template<typename T> AttributeValueType<T>& AttributeValueType<T>::operator=( co
   return *this;
 }
 
-template<typename T> AttributeValueType<T>& AttributeValueType<T>::operator=( const AttributeValueType<T>& value )
+template<typename T> AttributeValue<T>& AttributeValue<T>::operator=( const AttributeValue<T>& value )
 {
   if (this == &value)
     return *this;
@@ -62,7 +62,7 @@ template<typename T> AttributeValueType<T>& AttributeValueType<T>::operator=( co
   return *this = static_cast<T>(value);
 }
 
-template<typename T> AttributeValueType<T>::operator T() const
+template<typename T> AttributeValue<T>::operator T() const
 {
   // We can't gracefully return if the attribute does not exist,
   // because there is no safe default value for T. Note that in
@@ -70,13 +70,13 @@ template<typename T> AttributeValueType<T>::operator T() const
   return attr.get();
 }
 
-template<typename T> void AttributeValueType<T>::del() const
+template<typename T> void AttributeValue<T>::del() const
 {
   if (attr.exists())
     attr.remove();
 }
 
-template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValueType<T> &val)
+template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValue<T> &val)
 {
   return out << static_cast<T>(val);
 }

@@ -53,23 +53,23 @@ template<typename T> class Attribute;
  * int i = attr.value; // get the value
  * attr.del();         // remove the attribute
  *
- * where attr.value is of type AttributeValueType<int>.
+ * where attr.value is of type AttributeValue<int>.
  *
  * The setter will create the attribute if it does not exist.
  * The getter will throw an exception if the attribute does not exist.
  * The deleter will not throw an exception if the attribute dos not exist.
  */
-template<typename T> class AttributeValueType {
+template<typename T> class AttributeValue {
 public:
   /*!
    * Setter: allows x.value = (T)y.
    */
-  AttributeValueType<T>& operator=( const T& value );
+  AttributeValue<T>& operator=( const T& value );
 
   /*!
    * Allow x.value = y.value
    */
-  AttributeValueType<T>& operator=( const AttributeValueType<T>& value );
+  AttributeValue<T>& operator=( const AttributeValue<T>& value );
 
   /*!
    * Getter: allows T y = x.value.
@@ -83,9 +83,9 @@ public:
 
 private:
   // Do'not allow copying, as attr of the copy might get out of scope
-  AttributeValueType( const AttributeValueType& );
+  AttributeValue( const AttributeValue& );
 
-  AttributeValueType( const Attribute<T> &attr ): attr(attr) {}
+  AttributeValue( const Attribute<T> &attr ): attr(attr) {}
 
   const Attribute<T> &attr;
 
@@ -93,7 +93,7 @@ private:
   friend class Attribute<T>;
 };
 
-template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValueType<T> &val);
+template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValue<T> &val);
 
 #endif
 
@@ -128,7 +128,7 @@ public:
   void set( const T &value );
 
 #ifndef SWIG
-  AttributeValueType<T> value;
+  AttributeValue<T> value;
 #endif
 };
 
@@ -163,7 +163,7 @@ public:
   void set( const std::vector<T> &value );
 
 #ifndef SWIG
-  AttributeValueType< std::vector<T> > value;
+  AttributeValue< std::vector<T> > value;
 #endif
 };
 
