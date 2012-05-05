@@ -2,7 +2,6 @@
 
 %{
   #include <sstream>
-  #include <vector>
 %}
 
 // make DAL::TupleBase more pythonic
@@ -53,6 +52,18 @@
 
     return oss.str();
   }
+
+  %pythoncode {
+    __repr__ = __str__
+  }
+}
+
+// SWIG sets __repr__ for all classes, so we need to replace them for
+// all classes too.
+%extend DAL::Tuple {
+  %pythoncode {
+    __repr__ = __str__
+  }
 }
 
 %include hdf5/types/h5tuple.h
@@ -87,20 +98,3 @@ namespace std {
   %template(VectorTupleDouble4)       vector< DAL::Tuple<double,4> >;
 }
 
-%pythoncode %{
-
-# SWIG generates __repr__ members for all classes, so we need to explicitly override them all
-
-# Add __repr__ functions to all tuples
-
-def tuple_repr(self):
-  return "(" + ", ".join([x.__repr__() for x in self]) + ")"
-
-g = globals().copy()
-
-for name, obj in g.iteritems():
-  if name.startswith("Tuple") and type(obj) == type:
-    obj.__repr__ = tuple_repr
-    obj.__str__  = tuple_repr
-
-%}  

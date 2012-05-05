@@ -41,7 +41,6 @@ protected:
   const hid_gc container;
 };
 
-#ifndef SWIG
 template<typename T> class Attribute;
 
 /*!
@@ -95,9 +94,6 @@ private:
 
 template<typename T> std::ostream& operator<<(std::ostream &out, const AttributeValue<T> &val);
 
-#endif
-
-
 /*!
  * Represents an attribute containing a scalar or a string.
  */
@@ -127,9 +123,7 @@ public:
    */
   void set( const T &value );
 
-#ifndef SWIG
   AttributeValue<T> value;
-#endif
 };
 
 /*!

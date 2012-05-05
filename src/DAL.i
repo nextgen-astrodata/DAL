@@ -77,9 +77,6 @@ namespace DAL {
 // Class extensions for bindings
 // -------------------------------
 
-EXTEND_VECTORS
-EXTEND_ATTRIBUTES
-
 %pythoncode %{
 %}
 
