@@ -70,25 +70,31 @@
   }
 }
 
-namespace std {
-  %template(VectorUnsigned)     vector<unsigned>;
-  %template(VectorUnsignedLong) vector<unsigned long>;
-  %template(VectorInt)          vector<int>;
-  %template(VectorLong)         vector<long>;
-  %template(VectorDouble)       vector<double>;
-  %template(VectorString)       vector<string>;
-};
+%define AddVector( PythonName, CPPName )
+  // create the Python class VectorXXX
+  %template(Vector ## PythonName) std::vector<CPPName>;
+
+  // register it in our Vectors dict
+  %pythoncode {
+    Vectors[#CPPName] = Vector ## PythonName;
+  }
+%enddef
+
+%pythoncode {
+  # std::vector templates can be registered here
+  Vectors = {}
+}
+
+AddVector(Unsigned,     unsigned)
+AddVector(UnsignedLong, unsigned long)
+AddVector(Int,          int)
+AddVector(Long,         long)
+AddVector(Double,       double)
+AddVector(String,       std::string)
 
 // Define Vector aliases for python for size_t and ssize_t
 %pythoncode %{
-  if typeof_size_t == "unsigned int":
-    VectorSizeT = VectorUnsigned
-  elif typeof_size_t == "unsigned long":
-    VectorSizeT = VectorUnsignedLong
-
-  if typeof_ssize_t == "int":
-    VectorSSizeT = VectorInt
-  elif typeof_size_t == "long":
-    VectorSSizeT = VectorLong
+  VectorSizeT  = Vectors[typeof_size_t];
+  VectorSSizeT = Vectors[typeof_ssize_t];
 %}
 

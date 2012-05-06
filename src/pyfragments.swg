@@ -1,6 +1,11 @@
 /*
   Redefine the error message signatures to be more user friendly
   (i.e. don't bother the Python user with C++ function signatures).
+
+  The code below overrides the macros set in typemaps/swigtype.swg.
+
+  By putting this code in pyfragments.swg, it gets loaded before the
+  macros are actually used.
 */
 
 #undef %argfail_fmt

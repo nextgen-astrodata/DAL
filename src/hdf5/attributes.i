@@ -3,12 +3,11 @@
 %rename(get_hid_gc) operator hid_gc;
 
 // member functions that return *this are problematic,
-// because SWIG generates a new wrapper object and cannot
+// because SWIG generates a new wrapper object and does not
 // know how to do the memory management right between
 // both wrapper objects. So we write our own further below.
 %rename(_create) DAL::Attribute::create;
 
-%ignore DAL::AttributeValue;
 %ignore DAL::Attribute::value;
 
 %include hdf5/HDF5Node.h

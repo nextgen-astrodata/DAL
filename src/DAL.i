@@ -56,9 +56,7 @@
 
 %include lofar/CommonTuples.h
 
-namespace std {
-  %template(VectorCoordinate3DDouble)     vector< DAL::Coordinate3D<double> >;
-}
+%template(VectorCoordinate3DDouble)     std::vector< DAL::Coordinate3D<double> >;
 
 namespace DAL {
   using namespace std;
@@ -72,11 +70,4 @@ namespace DAL {
 %include lofar/Coordinates.h
 %include lofar/BF_File.h
 %include lofar/TBB_File.h
-
-// -------------------------------
-// Class extensions for bindings
-// -------------------------------
-
-%pythoncode %{
-%}
 
