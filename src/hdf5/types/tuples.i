@@ -89,12 +89,10 @@ namespace DAL {
 }
 
 // std::vector variants
-namespace std {
-  %template(VectorTupleUnsigned2)     vector< DAL::Tuple<unsigned,2> >;
-  %template(VectorTupleUnsigned3)     vector< DAL::Tuple<unsigned,3> >;
-  %template(VectorTupleUnsigned4)     vector< DAL::Tuple<unsigned,4> >;
-  %template(VectorTupleDouble2)       vector< DAL::Tuple<double,2> >;
-  %template(VectorTupleDouble3)       vector< DAL::Tuple<double,3> >;
-  %template(VectorTupleDouble4)       vector< DAL::Tuple<double,4> >;
-}
+%template(VectorTupleUnsigned2)     std::vector< DAL::Tuple<unsigned,2> >;
+%template(VectorTupleUnsigned3)     std::vector< DAL::Tuple<unsigned,3> >;
+%template(VectorTupleUnsigned4)     std::vector< DAL::Tuple<unsigned,4> >;
+%template(VectorTupleDouble2)       std::vector< DAL::Tuple<double,2> >;
+%template(VectorTupleDouble3)       std::vector< DAL::Tuple<double,3> >;
+%template(VectorTupleDouble4)       std::vector< DAL::Tuple<double,4> >;
 
