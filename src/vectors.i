@@ -94,7 +94,8 @@ AddVector(String,       std::string)
 
 // Define Vector aliases for python for size_t and ssize_t
 %pythoncode %{
-  VectorSizeT  = Vectors[typeof_size_t];
-  VectorSSizeT = Vectors[typeof_ssize_t];
+  VectorSizeT    = Vectors[typeof_size_t];
+  VectorSSizeT   = Vectors[typeof_ssize_t];
+  VectorPtrDiffT = Vectors[typeof_ptrdiff_t];
 %}
 

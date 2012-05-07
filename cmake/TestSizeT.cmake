@@ -2,6 +2,7 @@
 # Variables defined by this module:
 #  TYPEOF_size_t      - the integer type corresponing to size_t (unsigned int, unsigned long, etc)
 #  TYPEOF_ssize_t     - the integer type corresponing to ssize_t (int, long, etc)
+#  TYPEOF_ptrdiff_t   - the integer type corresponing to ptrdiff_t (int, long, etc)
 
 # Resolve all the types we need
 foreach(SRC_TYPE size_t ssize_t ptrdiff_t)
@@ -22,8 +23,8 @@ foreach(SRC_TYPE size_t ssize_t ptrdiff_t)
     # Try to match with any of these types. Note that adding types here required additional code
     # in src/DAL.i and src/size_types.i as well to marshall the types to SWIG and Python.
     foreach(DEST_TYPE
-      "unsigned int" "unsigned long"
-      "int" "long"
+      "unsigned int" "unsigned long" "unsigned long long"
+      "int" "long" "long long"
     )
 
       # Try to compile TestIsSame.cc given the SRC_TYPE and DEST_TYPE. The compilation will

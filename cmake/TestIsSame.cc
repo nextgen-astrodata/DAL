@@ -19,7 +19,8 @@
 #error Define TYPE_A and TYPE_B. 
 #endif
 
-#include <cstddef> // import size_t, ssize_t, ptrdiff_t, etc
+#include <sys/types.h> // import ssize_t
+#include <cstddef>     // import size_t and ptrdiff_t
 
 // Tester<T,U> can be constructed if T == U
 

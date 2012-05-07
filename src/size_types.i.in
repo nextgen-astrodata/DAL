@@ -7,9 +7,11 @@
 
 typedef @TYPEOF_size_t@ size_t;
 typedef @TYPEOF_ssize_t@ ssize_t;
+typedef @TYPEOF_ptrdiff_t@ ptrdiff_t;
 
 // Tell Python the types of size_t and ssize_t
 %pythoncode %{
   typeof_size_t = "@TYPEOF_size_t@"
   typeof_ssize_t = "@TYPEOF_ssize_t@"
+  typeof_ptrdiff_t = "@TYPEOF_ptrdiff_t@"
 %}
