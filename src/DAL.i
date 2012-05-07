@@ -78,7 +78,7 @@ namespace DAL {
 %pythoncode %{
 def _test():
   import doctest
-  doctest.testmod(optionflags=doctest.ELLIPSIS|doctest.IGNORE_EXCEPTION_DETAIL)
+  doctest.testmod(optionflags=doctest.ELLIPSIS | doctest.IGNORE_EXCEPTION_DETAIL | doctest.NORMALIZE_WHITESPACE)
 
 if __name__ == "__main__":
   _test()

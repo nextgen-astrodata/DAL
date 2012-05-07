@@ -14,6 +14,52 @@ namespace DAL {
  * \class HDF5DatasetBase
  *
  * Provides generic functionality for HDF5 Datasets.
+ *
+ * Python example:
+ * \code
+ *    # Create a new HDF5 file called "example.h5"
+ *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+ *
+ *    # Create a 2 x 3 dataset of floats within the given file
+ *    >>> d = HDF5DatasetBaseFloat(f.group(), "EXAMPLE_DATASET")
+ *    >>> d.exists()
+ *    False
+ *    >>> d.create([2,3], [2,3]) # (current dims, max dims)
+ *
+ *    # Retrieve some information about the dataset
+ *    >>> d.exists()
+ *    True
+ *    >>> d.dims()
+ *    (2, 3)
+ *    >>> d.ndims()
+ *    2
+ *
+ *    # Query the format in which the data is stored
+ *    >>> d.dtype
+ *    <type 'numpy.float32'>
+ *
+ *    # Allocate a 2 x 3 numpy array of the right type to read data into
+ *    >>> import numpy
+ *    >>> x = numpy.zeros((2,3), dtype=d.dtype)
+ *
+ *    # Read data starting from [0,0], and display it
+ *    >>> d.get2D([0,0], x)
+ *    >>> x
+ *    array([[ 0.,  0.,  0.], [ 0.,  0.,  0.]], dtype=float32)
+ *
+ *    # Now, write some data: we write a block of size (1,2) to position (1,1)
+ *    >>> y = numpy.ones((1,2), dtype=d.dtype)
+ *    >>> d.set2D([1,1], y)
+ *
+ *    # Read data starting from [0,0], and display it
+ *    >>> d.get2D([0,0], x)
+ *    >>> x
+ *    array([[ 0.,  0.,  0.], [ 0.,  1.,  1.]], dtype=float32)
+ *
+ *    # Clean up
+ *    >>> import os
+ *    >>> os.remove("example.h5")
+ * \endcode
  */
 template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:

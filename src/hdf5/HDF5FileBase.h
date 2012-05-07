@@ -15,6 +15,21 @@ public:
 
   /*!
    * Open or create an HDF5 file called `filename`.
+   *
+   * Python example:
+   * \code
+   *    # Create and close a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> del f
+   *
+   *    # Open (and close) the same file for reading
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.READ)
+   *    >>> del f
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
   HDF5FileBase( const std::string &filename, enum fileMode mode );
 
