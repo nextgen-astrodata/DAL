@@ -98,10 +98,13 @@ public:
  * Tuple<T,N> provides a generic tuple for N=1..4 providing
  * fields with names `first`, `second`, `third`, and up to `fourth`.
  *
- * >>> t = TupleUnsigned3()
- * >>> t.set([1,2,3])
- * >>> t.get()
- * [1,2,3]
+ * Python example:
+ * \code
+ *    >>> t = TupleUnsigned3()
+ *    >>> t.set([1,2,3])
+ *    >>> t.get()
+ *    (1, 2, 3)
+ * \endcode
  */
 template<typename T, size_t N> class Tuple: public TupleBase<T,N> {
 private:

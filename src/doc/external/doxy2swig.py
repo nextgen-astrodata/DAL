@@ -69,7 +69,7 @@ class Doxy2SWIG:
         self.multi = 0
         self.ignores = ('inheritancegraph', 'param', 'listofallmembers',
                         'innerclass', 'name', 'declname', 'incdepgraph',
-                        'invincdepgraph', 'programlisting', 'type',
+                        'invincdepgraph', 'includes', 'type',
                         'references', 'referencedby', 'location',
                         'collaborationgraph', 'reimplements',
                         'reimplementedby', 'derivedcompoundref',
@@ -177,6 +177,7 @@ class Doxy2SWIG:
     do_bold = space_parse
     do_computeroutput = space_parse
     do_formula = space_parse
+    do_sp = space_parse
 
     def do_compoundname(self, node):
         self.add_text('\n\n')
@@ -215,6 +216,14 @@ class Doxy2SWIG:
     def do_para(self, node):
         self.add_text('\n')
         self.generic_parse(node, pad=1)
+
+    def do_programlisting(self, node):
+        self.add_text('\n')
+        self.generic_parse(node, pad=0)
+
+    def do_codeline(self, node):
+        self.add_text('\n')
+        self.generic_parse(node, pad=0)
 
     def do_parametername(self, node):
         self.add_text('\n')
@@ -349,6 +358,8 @@ class Doxy2SWIG:
             if i == 'Parameters:':
                 ret.extend(['Parameters:\n-----------', '\n\n'])
             elif i.find('// File:') > -1: # leave comments alone.
+                ret.extend([i, '\n'])
+            elif i.startswith(' ' * 4): # leave code alone.
                 ret.extend([i, '\n'])
             else:
                 _tmp = textwrap.fill(i.strip())
