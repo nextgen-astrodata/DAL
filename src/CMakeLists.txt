@@ -11,11 +11,6 @@ include_directories (
   )
 
 configure_file (
-  "${CMAKE_CURRENT_SOURCE_DIR}/dal_config.h.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/dal_config.h"
-)
-
-configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/size_types.i.in"
   "${CMAKE_CURRENT_BINARY_DIR}/size_types.i"
 )
@@ -94,3 +89,10 @@ add_subdirectory(doc)
 add_subdirectory(hdf5)
 add_subdirectory(lofar)
 add_subdirectory(utils)
+
+# Generate the configuration file at the end, once all options are known
+configure_file (
+  "${CMAKE_CURRENT_SOURCE_DIR}/dal_config.h.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/dal_config.h"
+)
+

@@ -16,10 +16,6 @@ cmake_minimum_required (VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(BUILD_SHARED_LIBS ON)
 
-# General options to be set by the user
-
-option(QUIET_HDF5_ERRORS "Prevent HDF5 from printing error information directly on stderr" ON)
-
 # Start processing the source tree
 
 add_subdirectory(src)
