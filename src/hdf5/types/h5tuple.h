@@ -100,10 +100,21 @@ public:
  *
  * Python example:
  * \code
+ *    # TupleUnsigned3() is a Tuple<unsigned int, 3>
  *    >>> t = TupleUnsigned3()
- *    >>> t.set([1,2,3])
+ *
+ *    # Values can be modified in various ways:
+ *    >>> t.set([0,0,3])
+ *    >>> t.first = 1
+ *    >>> t[1] = 2
+ *
+ *    # Values can be retrieved in various ways:
  *    >>> t.get()
  *    (1, 2, 3)
+ *    >>> t[0]
+ *    1
+ *    >>> t.third
+ *    3
  * \endcode
  */
 template<typename T, size_t N> class Tuple: public TupleBase<T,N> {

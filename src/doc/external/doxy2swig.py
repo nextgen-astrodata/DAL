@@ -360,7 +360,7 @@ class Doxy2SWIG:
             elif i.find('// File:') > -1: # leave comments alone.
                 ret.extend([i, '\n'])
             elif i.startswith(' ' * 4): # leave code alone.
-                ret.extend([i, '\n'])
+                ret.extend([i, '\n\n'])
             else:
                 _tmp = textwrap.fill(i.strip())
                 _tmp = self.lead_spc.sub(r'\1"\2', _tmp)
