@@ -12,7 +12,7 @@ string get_lib_version() {
 }
 
 string get_dal_hdf5_version() {
-  return H5_PACKAGE_VERSION;
+  return get_current_hdf5_header_version();
 }
 
 string get_current_hdf5_lib_version() {

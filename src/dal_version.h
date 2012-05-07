@@ -22,9 +22,20 @@ std::string get_dal_hdf5_version();
  */
 static std::string get_current_hdf5_header_version() {
   // this code needs to be in a header file, to let
-  // the client compiler fill in H5_PACKAGE_VERSION below.
+  // the client compiler fill in H5_VERS_* below.
+  //
+  // Note: we do not use H5_PACKAGE_VERSION as that might
+  // include sub-release information that messes up our
+  // version check systems (i.e. "1.8.4-patch1").
 
-  return std::string(H5_PACKAGE_VERSION);
+#define _QUOTE(x) #x
+#define QUOTE(x) _QUOTE(x)
+
+  return std::string(QUOTE(H5_VERS_MAJOR) "." QUOTE(H5_VERS_MINOR) "." QUOTE(H5_VERS_RELEASE));
+
+#undef QUOTE
+#undef _QUOTE
+
 }
 
 /*
