@@ -100,6 +100,56 @@ template<typename T> std::ostream& operator<<(std::ostream &out, const Attribute
 
 /*!
  * Represents an attribute containing a scalar or a string.
+ *
+ * Python example:
+ * \code
+ *     # Create a new HDF5 file with some string attribute
+ *     >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+ *     >>> a = AttributeString(f.group(), "EXAMPLE_STRING")
+ *
+ *     # Because we are creating the file, the attribute does initially not exist
+ *     >>> a.value is None
+ *     True
+ *
+ *     # Once we set the value, the attribute exists and can be read
+ *     >>> a.value = "hello world!"
+ *     >>> a.value
+ *     'hello world!'
+ *
+ *     # The attribute can also be removed
+ *     >>> del a.value
+ *     >>> a.value is None
+ *     True
+ *
+ *     # Low-level functions allow finer control ...
+ *     >>> a.exists()
+ *     False
+ *     >>> a.create() # returns a
+ *     <...>
+ *     >>> a.exists()
+ *     True
+ *     >>> a.set("hello world!")
+ *     >>> a.get()
+ *     'hello world!'
+ *     >>> a.remove()
+ *
+ *     # ... but raise errors if used incorrectly
+ *     >>> a.exists()
+ *     False
+ *     >>> a.set("hello world!")
+ *     Traceback (most recent call last):
+ *     HDF5Exception: Could not open attribute
+ *     >>> a.get()
+ *     Traceback (most recent call last):
+ *     HDF5Exception: Could not open attribute
+ *     >>> a.remove()
+ *     Traceback (most recent call last):
+ *     HDF5Exception: Could not delete element
+ *
+ *     # Clean up:
+ *     >>> import os
+ *     >>> os.remove("example.h5")
+ * \endcode
  */
 template<typename T> class Attribute: public AttributeBase {
 public:

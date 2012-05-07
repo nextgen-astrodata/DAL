@@ -71,3 +71,16 @@ namespace DAL {
 %include lofar/BF_File.h
 %include lofar/TBB_File.h
 
+// -------------------------------
+// Run doctest if module is executed
+// -------------------------------
+
+%pythoncode %{
+def _test():
+  import doctest
+  doctest.testmod(optionflags=doctest.ELLIPSIS|doctest.IGNORE_EXCEPTION_DETAIL)
+
+if __name__ == "__main__":
+  _test()
+%}
+
