@@ -4,7 +4,7 @@
 #  TYPEOF_ssize_t     - the integer type corresponing to ssize_t (int, long, etc)
 
 # Resolve all the types we need
-foreach(SRC_TYPE size_t ssize_t)
+foreach(SRC_TYPE size_t ssize_t ptrdiff_t)
   if(NOT TYPEOF_${SRC_TYPE})
     # First do a trial run to see if TestIsSame is sane
     try_compile(TEST_COMPILE
