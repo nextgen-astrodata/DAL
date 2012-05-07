@@ -39,6 +39,11 @@ add_library (dal
   ${dal_sources}
 )
 
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wno-unused-function -ansi -pedantic")
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 target_link_libraries(dal ${HDF5_LIBRARIES})
 
 install (TARGETS
@@ -64,13 +69,13 @@ if(PYTHON_BINDINGS)
 
   find_package(PythonInterp)
 
-  if(PYTHONINTERP_FOUND)
+  if(PYTHON_EXECUTABLE)
     # Obtain location of 'site-packages' directory (doesn't work when cross-compiling)
     execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
-  else(PYTHONINTERP_FOUND)
+  else(PYTHON_EXECUTABLE)
     # A default value -- X.X should be replaced with the target python version
     set(PYTHON_SITE_PACKAGES ${CMAKE_INSTALL_PREFIX}/lib/pythonX.X/dist-packages)
-  endif(PYTHONINTERP_FOUND)
+  endif(PYTHON_EXECUTABLE)
 
   set(PYTHON_DEST ${PYTHON_SITE_PACKAGES} CACHE PATH "Target directory for python bindings")
 
