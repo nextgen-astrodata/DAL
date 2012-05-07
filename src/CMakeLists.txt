@@ -81,7 +81,7 @@ if(PYTHON_BINDINGS)
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/DAL.py
     DESTINATION ${PYTHON_DEST}
-  )  
+  )
 endif(PYTHON_BINDINGS)
 
 add_subdirectory(casa)

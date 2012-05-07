@@ -11,7 +11,8 @@ set (DAL_VERSION "${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}.${DAL_VERSION_PATCH}
 ## Minimum required version of CMake to configure the project
 cmake_minimum_required (VERSION 2.8)
 
-#include(CTest)
+include(CTest)
+enable_testing()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(BUILD_SHARED_LIBS ON)
