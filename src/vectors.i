@@ -85,7 +85,7 @@
   Vectors = {}
 }
 
-AddVector(Unsigned,     unsigned)
+AddVector(Unsigned,     unsigned int)
 AddVector(UnsignedLong, unsigned long)
 AddVector(Int,          int)
 AddVector(Long,         long)
