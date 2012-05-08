@@ -13,7 +13,7 @@ void HDF5NodeSet::addNode( HDF5Node *attr )
     throw DALValueError("attr cannot be NULL");
 
   if (nodeMap.find(attr->name()) != nodeMap.end())
-    throw DALValueError(std::string("Node already exists: ") + name); 
+    throw DALValueError(std::string("Node already exists: ") + attr->name()); 
 
   nodeMap[attr->name()] = attr;
 }
@@ -29,7 +29,7 @@ throw DALException("Cannot access nodes in a non-existing group");
   }
  
   if (nodeMap.find(name) == nodeMap.end())
-    throw DALValueError(std::string("Node not found: ") + name); 
+    throw DALValueError(std::string("Node not found: ") + name);
 
   return *nodeMap[name];
 }

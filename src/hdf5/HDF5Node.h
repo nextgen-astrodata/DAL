@@ -86,7 +86,5 @@ protected:
 
 }
 
-#include "HDF5Node.tcc"
-
 #endif
 
