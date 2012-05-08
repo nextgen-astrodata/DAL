@@ -42,10 +42,18 @@ public:
 
   virtual bool exists() const { return true; }
 
+  /*!
+   * The name of the file.
+   */
+  const std::string filename;
+
+  /*!
+   * The mode in which the file is opened.
+   */
+  const fileMode mode;
+
 protected:
   const hid_gc _group;
-  const std::string filename;
-  const fileMode fileMode;
 
 private:
   hid_t open( const std::string &filename, enum fileMode mode ) const;
