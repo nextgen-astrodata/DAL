@@ -10,44 +10,44 @@ CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum HD
 {
 }
 
-void CommonAttribtusFile::initNodes()
+void CommonAttributesFile::initNodes()
 {
-  addNode( Attribute<string>(group(), "GROUPTYPE") );
-  addNode( Attribute<string>(group(), "FILENAME") );
-  addNode( Attribute<string>(group(), "FILEDATE") );
-  addNode( Attribute<string>(group(), "FILETYPE") );
-  addNode( Attribute<string>(group(), "TELESCOPE") );
-  addNode( Attribute<string>(group(), "OBSERVER") );
-  addNode( Attribute<string>(group(), "PROJECT_ID") );
-  addNode( Attribute<string>(group(), "PROJECT_TITLE") );
-  addNode( Attribute<string>(group(), "PROJECT_PI") );
-  addNode( Attribute<string>(group(), "PROJECT_CO_I") );
-  addNode( Attribute<string>(group(), "PROJECT_CONTACT") );
-  addNode( Attribute<string>(group(), "OBSERVATION_ID") );
-  addNode( Attribute<string>(group(), "OBSERVATION_START_UTC") );
-  addNode( Attribute<double>(group(), "OBSERVATION_START_MJD") );
-  addNode( Attribute<string>(group(), "OBSERVATION_START_TAI") );
-  addNode( Attribute<string>(group(), "OBSERVATION_END_UTC") );
-  addNode( Attribute<double>(group(), "OBSERVATION_END_MJD") );
-  addNode( Attribute<string>(group(), "OBSERVATION_END_TAI") );
-  addNode( Attribute<unsigned>(group(), "OBSERVATION_NOF_STATIONS") );
-  addNode( Attribute< vector<string> >(group(), "OBSERVATION_STATIONS_LIST") );
-  addNode( Attribute<double>(group(), "OBSERVATION_FREQUENCY_MAX") );
-  addNode( Attribute<double>(group(), "OBSERVATION_FREQUENCY_MIN") );
-  addNode( Attribute<double>(group(), "OBSERVATION_FREQUENCY_CENTER") );
-  addNode( Attribute<string>(group(), "OBSERVATION_FREQUENCY_UNIT") );
-  addNode( Attribute<unsigned>(group(), "OBSERVATION_NOF_BITS_PER_SAMPLE") );
-  addNode( Attribute<double>(group(), "CLOCK_FREQUENCY") );
-  addNode( Attribute<string>(group(), "CLOCK_FREQUENCY_UNIT") );
-  addNode( Attribute<string>(group(), "ANTENNA_SET") );
-  addNode( Attribute<string>(group(), "FILTER_SELECTION") );
-  addNode( Attribute<string>(group(), "TARGET") );
-  addNode( Attribute<string>(group(), "SYSTEM_VERSION") );
-  addNode( Attribute<string>(group(), "PIPELINE_NAME") );
-  addNode( Attribute<string>(group(), "PIPELINE_VERSION") );
-  addNode( Attribute<string>(group(), "ICD_NUMBER") );
-  addNode( Attribute<string>(group(), "ICD_VERSION") );
-  addNode( Attribute<string>(group(), "NOTES") );
+  addNode( new Attribute<string>(group(), "GROUPTYPE") );
+  addNode( new Attribute<string>(group(), "FILENAME") );
+  addNode( new Attribute<string>(group(), "FILEDATE") );
+  addNode( new Attribute<string>(group(), "FILETYPE") );
+  addNode( new Attribute<string>(group(), "TELESCOPE") );
+  addNode( new Attribute<string>(group(), "OBSERVER") );
+  addNode( new Attribute<string>(group(), "PROJECT_ID") );
+  addNode( new Attribute<string>(group(), "PROJECT_TITLE") );
+  addNode( new Attribute<string>(group(), "PROJECT_PI") );
+  addNode( new Attribute<string>(group(), "PROJECT_CO_I") );
+  addNode( new Attribute<string>(group(), "PROJECT_CONTACT") );
+  addNode( new Attribute<string>(group(), "OBSERVATION_ID") );
+  addNode( new Attribute<string>(group(), "OBSERVATION_START_UTC") );
+  addNode( new Attribute<double>(group(), "OBSERVATION_START_MJD") );
+  addNode( new Attribute<string>(group(), "OBSERVATION_START_TAI") );
+  addNode( new Attribute<string>(group(), "OBSERVATION_END_UTC") );
+  addNode( new Attribute<double>(group(), "OBSERVATION_END_MJD") );
+  addNode( new Attribute<string>(group(), "OBSERVATION_END_TAI") );
+  addNode( new Attribute<unsigned>(group(), "OBSERVATION_NOF_STATIONS") );
+  addNode( new Attribute< vector<string> >(group(), "OBSERVATION_STATIONS_LIST") );
+  addNode( new Attribute<double>(group(), "OBSERVATION_FREQUENCY_MAX") );
+  addNode( new Attribute<double>(group(), "OBSERVATION_FREQUENCY_MIN") );
+  addNode( new Attribute<double>(group(), "OBSERVATION_FREQUENCY_CENTER") );
+  addNode( new Attribute<string>(group(), "OBSERVATION_FREQUENCY_UNIT") );
+  addNode( new Attribute<unsigned>(group(), "OBSERVATION_NOF_BITS_PER_SAMPLE") );
+  addNode( new Attribute<double>(group(), "CLOCK_FREQUENCY") );
+  addNode( new Attribute<string>(group(), "CLOCK_FREQUENCY_UNIT") );
+  addNode( new Attribute<string>(group(), "ANTENNA_SET") );
+  addNode( new Attribute<string>(group(), "FILTER_SELECTION") );
+  addNode( new Attribute<string>(group(), "TARGET") );
+  addNode( new Attribute<string>(group(), "SYSTEM_VERSION") );
+  addNode( new Attribute<string>(group(), "PIPELINE_NAME") );
+  addNode( new Attribute<string>(group(), "PIPELINE_VERSION") );
+  addNode( new Attribute<string>(group(), "ICD_NUMBER") );
+  addNode( new Attribute<string>(group(), "ICD_VERSION") );
+  addNode( new Attribute<string>(group(), "NOTES") );
 }
 
 Attribute<string> CommonAttributesFile::groupType()
