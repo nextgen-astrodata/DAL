@@ -17,7 +17,7 @@ inline void AttributeBase::remove() const {
 
 inline size_t AttributeBase::size() const
 {
-  hid_gc_noref attr(H5Aopen_name(container, _name.c_str()), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not retrieve dataspace of atttribute");
 
