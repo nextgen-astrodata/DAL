@@ -28,30 +28,50 @@ public:
     return oss.str();
   }
 
-  bool operator <(const VersionType &other) const {
+  int cmp(const VersionType &other) const {
     if( major < other.major )
-      return true;
+      return -1;
 
     if( major > other.major )
-      return false;
+      return +1;
 
     if( minor < other.minor )
-      return true;
+      return -1;
 
     if( minor > other.minor )
-      return false;
+      return +1;
 
     if( release < other.release )
-      return true;
+      return -1;
 
     if( release > other.release )
-      return false;
+      return +1;
 
-    return false;  
+    return 0;  
+  }
+
+  bool operator <(const VersionType &other) const {
+    return cmp(other) < 0;
+  }
+
+  bool operator <=(const VersionType &other) const {
+    return cmp(other) <= 0;
+  }
+
+  bool operator >(const VersionType &other) const {
+    return cmp(other) > 0;
+  }
+
+  bool operator >=(const VersionType &other) const {
+    return cmp(other) >= 0;
   }
 
   bool operator ==(const VersionType &other) const {
-    return major == other.major && minor == other.minor && release == other.release;
+    return cmp(other) == 0;
+  }
+
+  bool operator !=(const VersionType &other) const {
+    return cmp(other) != 0;
   }
 };
 
