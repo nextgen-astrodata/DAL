@@ -10,94 +10,115 @@ BF_File::BF_File( const std::string &filename, enum HDF5FileBase::fileMode mode 
 {
 }
 
+void BF_File::initNodes() {
+  addNode( new Attribute<string>(group(), "CREATE_OFFLINE_ONLINE") );
+  addNode( new Attribute<string>(group(), "BF_FORMAT") );
+  addNode( new Attribute<string>(group(), "BF_VERSION") );
+  addNode( new Attribute<string>(group(), "EXPTIME_START_UTC") );
+  addNode( new Attribute<double>(group(), "EXPTIME_START_MJD") );
+  addNode( new Attribute<string>(group(), "EXPTIME_START_TAI") );
+  addNode( new Attribute<string>(group(), "EXPTIME_END_UTC") );
+  addNode( new Attribute<double>(group(), "EXPTIME_END_MJD") );
+  addNode( new Attribute<string>(group(), "EXPTIME_END_TAI") );
+  addNode( new Attribute<double>(group(), "TOTAL_INTEGRATION_TIME") );
+  addNode( new Attribute<string>(group(), "OBSERVATION_DATATYPE") );
+  addNode( new Attribute<double>(group(), "SUB_ARRAY_POINTING_DIAMETER") );
+  addNode( new Attribute<double>(group(), "BANDWIDTH") );
+  addNode( new Attribute<double>(group(), "BEAM_DIAMETER") );
+  addNode( new Attribute< vector<double> >(group(), "WEATHER_TEMPERATURE") );
+  addNode( new Attribute< vector<double> >(group(), "WEATHER_HUMIDITY") );
+  addNode( new Attribute< vector<double> >(group(), "SYSTEM_TEMPERATURE") );
+  addNode( new Attribute<unsigned>(group(), "NOF_SUB_ARRAY_POINTINGS") );
+}
+
 Attribute<string> BF_File::createOfflineOnline()
 {
-  return Attribute<string>(group(), "CREATE_OFFLINE_ONLINE");
+  return getNode("CREATE_OFFLINE_ONLINE");
 }
 
 Attribute<string> BF_File::BFFormat()
 {
-  return Attribute<string>(group(), "BF_FORMAT");
+  return getNode("BF_FORMAT");
 }
 
 Attribute<string> BF_File::BFVersion()
 {
-  return Attribute<string>(group(), "BF_VERSION");
+  return getNode("BF_VERSION");
 }
 
 Attribute<string> BF_File::expTimeStartUTC()
 {
-  return Attribute<string>(group(), "EXPTIME_START_UTC");
+  return getNode("EXPTIME_START_UTC");
 }
 
 Attribute<double> BF_File::expTimeStartMJD()
 {
-  return Attribute<double>(group(), "EXPTIME_START_MJD");
+  return getNode("EXPTIME_START_MJD");
 }
 
 Attribute<string> BF_File::expTimeStartTAI()
 {
-  return Attribute<string>(group(), "EXPTIME_START_TAI");
+  return getNode("EXPTIME_START_TAI");
 }
 
 Attribute<string> BF_File::expTimeEndUTC()
 {
-  return Attribute<string>(group(), "EXPTIME_END_UTC");
+  return getNode("EXPTIME_END_UTC");
 }
 
 Attribute<double> BF_File::expTimeEndMJD()
 {
-  return Attribute<double>(group(), "EXPTIME_END_MJD");
+  return getNode("EXPTIME_END_MJD");
 }
 
 Attribute<string> BF_File::expTimeEndTAI()
 {
-  return Attribute<string>(group(), "EXPTIME_END_TAI");
+  return getNode("EXPTIME_END_TAI");
 }
 
 Attribute<double> BF_File::totalIntegrationTime()
 {
-  return Attribute<double>(group(), "TOTAL_INTEGRATION_TIME");
+  return getNode("TOTAL_INTEGRATION_TIME");
 }
 
 Attribute<string> BF_File::observationDatatype()
 {
-  return Attribute<string>(group(), "OBSERVATION_DATATYPE");
+  return getNode("OBSERVATION_DATATYPE");
 }
 
 Attribute<double> BF_File::subArrayPointingDiameter()
 {
-  return Attribute<double>(group(), "SUB_ARRAY_POINTING_DIAMETER");
+  return getNode("SUB_ARRAY_POINTING_DIAMETER");
 }
 
 Attribute<double> BF_File::bandwidth()
 {
-  return Attribute<double>(group(), "BANDWIDTH");
+  return getNode("BANDWIDTH");
 }
 
 Attribute<double> BF_File::beamDiameter()
 {
-  return Attribute<double>(group(), "BEAM_DIAMETER");
+  return getNode("BEAM_DIAMETER");
 }
 
 Attribute< vector<double> > BF_File::weatherTemperature()
 {
-  return Attribute< vector<double> >(group(), "WEATHER_TEMPERATURE");
+  return getNode("WEATHER_TEMPERATURE");
 }
 
 Attribute< vector<double> > BF_File::weatherHumidity()
 {
-  return Attribute< vector<double> >(group(), "WEATHER_HUMIDITY");
+  return getNode("WEATHER_HUMIDITY");
 }
 
 Attribute< vector<double> > BF_File::systemTemperature()
 {
-  return Attribute< vector<double> >(group(), "SYSTEM_TEMPERATURE");
+  return getNode("SYSTEM_TEMPERATURE");
 }
 
 Attribute<unsigned> BF_File::nofSubArrayPointings()
 {
-  return Attribute<unsigned>(group(), "NOF_SUB_ARRAY_POINTINGS");
+  return getNode("NOF_SUB_ARRAY_POINTINGS");
 }
 
 string BF_File::subArrayPointingName( unsigned nr )
@@ -118,104 +139,130 @@ BF_SysLog BF_File::sysLog()
   return BF_SysLog(group(), "SYS_LOG");
 }
 
+void BF_ProcessingHistory::initNodes() {
+  addNode( new Attribute<bool>(group(), "PARSET_OBS") );
+  addNode( new Attribute<bool>(group(), "LOG_PRESTO") );
+  addNode( new Attribute<bool>(group(), "PARFILE") );
+}
+
 Attribute<bool> BF_ProcessingHistory::parsetObs()
 {
-  return Attribute<bool>(group(), "PARSET_OBS");
+  return getNode("PARSET_OBS");
 }
 
 Attribute<bool> BF_ProcessingHistory::logPresto()
 {
-  return Attribute<bool>(group(), "LOG_PRESTO");
+  return getNode("LOG_PRESTO");
 }
 
 Attribute<bool> BF_ProcessingHistory::parFile()
 {
-  return Attribute<bool>(group(), "PARFILE");
+  return getNode("PARFILE");
+}
+
+void BF_SubArrayPointing::initNodes() {
+  addNode( new Attribute<unsigned>(group(), "NOF_STATIONS") );
+  addNode( new Attribute< vector<string> >(group(), "STATIONS_LIST") );
+  addNode( new Attribute<double>(group(), "POINT_RA") );
+  addNode( new Attribute<double>(group(), "POINT_DEC") );
+  addNode( new Attribute<double>(group(), "CLOCK_RATE") );
+  addNode( new Attribute<string>(group(), "CLOCK_RATE_UNIT") );
+  addNode( new Attribute<unsigned>(group(), "NOF_SAMPLES") );
+  addNode( new Attribute<double>(group(), "SAMPLING_RATE") );
+  addNode( new Attribute<string>(group(), "SAMPLING_RATE_UNIT") );
+  addNode( new Attribute<double>(group(), "SAMPLING_TIME") );
+  addNode( new Attribute<string>(group(), "SAMPLING_TIME_UNIT") );
+  addNode( new Attribute<unsigned>(group(), "CHANNELS_PER_SUBBAND") );
+  addNode( new Attribute<double>(group(), "SUBBAND_WIDTH") );
+  addNode( new Attribute<string>(group(), "SUBBAND_WIDTH_UNIT") );
+  addNode( new Attribute<double>(group(), "CHANNEL_WIDTH") );
+  addNode( new Attribute<string>(group(), "CHANNEL_WIDTH_UNIT") );
+  addNode( new Attribute<unsigned>(group(), "NOF_BEAMS") );
 }
 
 Attribute<unsigned> BF_SubArrayPointing::nofStations()
 {
-  return Attribute<unsigned>(group(), "NOF_STATIONS");
+  return getNode("NOF_STATIONS");
 }
 
 Attribute< vector<string> > BF_SubArrayPointing::stationsList()
 {
-  return Attribute< vector<string> >(group(), "STATIONS_LIST");
+  return getNode("STATIONS_LIST");
 }
 
 Attribute<double> BF_SubArrayPointing::pointRA()
 {
-  return Attribute<double>(group(), "POINT_RA");
+  return getNode("POINT_RA");
 }
 
 Attribute<double> BF_SubArrayPointing::pointDEC()
 {
-  return Attribute<double>(group(), "POINT_DEC");
+  return getNode("POINT_DEC");
 }
 
 Attribute<double> BF_SubArrayPointing::clockRate()
 {
-  return Attribute<double>(group(), "CLOCK_RATE");
+  return getNode("CLOCK_RATE");
 }
 
 Attribute<string> BF_SubArrayPointing::clockRateUnit()
 {
-  return Attribute<string>(group(), "CLOCK_RATE_UNIT");
+  return getNode("CLOCK_RATE_UNIT");
 }
 
 Attribute<unsigned> BF_SubArrayPointing::nofSamples()
 {
-  return Attribute<unsigned>(group(), "NOF_SAMPLES");
+  return getNode("NOF_SAMPLES");
 }
 
 Attribute<double> BF_SubArrayPointing::samplingRate()
 {
-  return Attribute<double>(group(), "SAMPLING_RATE");
+  return getNode("SAMPLING_RATE");
 }
 
 Attribute<string> BF_SubArrayPointing::samplingRateUnit()
 {
-  return Attribute<string>(group(), "SAMPLING_RATE_UNIT");
+  return getNode("SAMPLING_RATE_UNIT");
 }
 
 Attribute<double> BF_SubArrayPointing::samplingTime()
 {
-  return Attribute<double>(group(), "SAMPLING_TIME");
+  return getNode("SAMPLING_TIME");
 }
 
 Attribute<string> BF_SubArrayPointing::samplingTimeUnit()
 {
-  return Attribute<string>(group(), "SAMPLING_TIME_UNIT");
+  return getNode("SAMPLING_TIME_UNIT");
 }
 
 Attribute<unsigned> BF_SubArrayPointing::channelsPerSubband()
 {
-  return Attribute<unsigned>(group(), "CHANNELS_PER_SUBBAND");
+  return getNode("CHANNELS_PER_SUBBAND");
 }
 
 Attribute<double> BF_SubArrayPointing::subbandWidth()
 {
-  return Attribute<double>(group(), "SUBBAND_WIDTH");
+  return getNode("SUBBAND_WIDTH");
 }
 
 Attribute<string> BF_SubArrayPointing::subbandWidthUnit()
 {
-  return Attribute<string>(group(), "SUBBAND_WIDTH_UNIT");
+  return getNode("SUBBAND_WIDTH_UNIT");
 }
 
 Attribute<double> BF_SubArrayPointing::channelWidth()
 {
-  return Attribute<double>(group(), "CHANNEL_WIDTH");
+  return getNode("CHANNEL_WIDTH");
 }
 
 Attribute<string> BF_SubArrayPointing::channelWidthUnit()
 {
-  return Attribute<string>(group(), "CHANNEL_WIDTH_UNIT");
+  return getNode("CHANNEL_WIDTH_UNIT");
 }
 
 Attribute<unsigned> BF_SubArrayPointing::nofBeams()
 {
-  return Attribute<unsigned>(group(), "NOF_BEAMS");
+  return getNode("NOF_BEAMS");
 }
 
 string BF_SubArrayPointing::beamName( unsigned nr )
@@ -231,109 +278,133 @@ BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
   return BF_BeamGroup(group(), beamName(nr));
 }
 
+void BF_BeamGroup::initNodes() {
+  addNode( new Attribute<unsigned>(group(), "NOF_STATIONS") );
+  addNode( new Attribute< vector<string> >(group(), "STATIONS_LIST") );
+  addNode( new Attribute<double>(group(), "POINT_RA") );
+  addNode( new Attribute<double>(group(), "POINT_DEC") );
+  addNode( new Attribute<double>(group(), "POINT_OFFSET_RA") );
+  addNode( new Attribute<double>(group(), "POINT_OFFSET_DEC") );
+  addNode( new Attribute<double>(group(), "BEAM_DIAMETER_RA") );
+  addNode( new Attribute<double>(group(), "BEAM_DIAMETER_DEC") );
+  addNode( new Attribute<double>(group(), "BEAM_FREQUENCY_CENTER") );
+  addNode( new Attribute<string>(group(), "BEAM_FREQUENCY_CENTER_UNIT") );
+  addNode( new Attribute<bool>(group(), "FOLDED_DATA") );
+  addNode( new Attribute<double>(group(), "FOLD_PERIOD") );
+  addNode( new Attribute<string>(group(), "FOLD_PERIOD_UNIT") );
+  addNode( new Attribute<string>(group(), "DEDISPERSION") );
+  addNode( new Attribute<double>(group(), "DEDISPERSION_MEASURE") );
+  addNode( new Attribute<string>(group(), "DEDISPERSION_MEASURE_UNIT") );
+  addNode( new Attribute<bool>(group(), "BARYCENTERED") );
+  addNode( new Attribute<unsigned>(group(), "NOF_STOKES") );
+  addNode( new Attribute< vector<string> >(group(), "STOKES_COMPONENTS") );
+  addNode( new Attribute<bool>(group(), "COMPLEX_VOLTAGES") );
+  addNode( new Attribute<string>(group(), "SIGNAL_SUM") );
+}
+
 Attribute<unsigned> BF_BeamGroup::nofStations()
 {
-  return Attribute<unsigned>(group(), "NOF_STATIONS");
+  return getNode("NOF_STATIONS");
 }
 
 Attribute< vector<string> > BF_BeamGroup::stationsList()
 {
-  return Attribute< vector<string> >(group(), "STATIONS_LIST");
+  return getNode("STATIONS_LIST");
 }
 
 Attribute<double> BF_BeamGroup::pointRA()
 {
-  return Attribute<double>(group(), "POINT_RA");
+  return getNode("POINT_RA");
 }
 
 Attribute<double> BF_BeamGroup::pointDEC()
 {
-  return Attribute<double>(group(), "POINT_DEC");
+  return getNode("POINT_DEC");
 }
 
 Attribute<double> BF_BeamGroup::pointOffsetRA()
 {
-  return Attribute<double>(group(), "POINT_OFFSET_RA");
+  return getNode("POINT_OFFSET_RA");
 }
 
 Attribute<double> BF_BeamGroup::pointOffsetDEC()
 {
-  return Attribute<double>(group(), "POINT_OFFSET_DEC");
+  return getNode("POINT_OFFSET_DEC");
 }
 
 Attribute<double> BF_BeamGroup::beamDiameterRA()
 {
-  return Attribute<double>(group(), "BEAM_DIAMETER_RA");
+  return getNode("BEAM_DIAMETER_RA");
 }
 
 Attribute<double> BF_BeamGroup::beamDiameterDEC()
 {
-  return Attribute<double>(group(), "BEAM_DIAMETER_DEC");
+  return getNode("BEAM_DIAMETER_DEC");
 }
 
 Attribute<double> BF_BeamGroup::beamFrequencyCenter()
 {
-  return Attribute<double>(group(), "BEAM_FREQUENCY_CENTER");
+  return getNode("BEAM_FREQUENCY_CENTER");
 }
 
 Attribute<string> BF_BeamGroup::beamFrequencyCenterUnit()
 {
-  return Attribute<string>(group(), "BEAM_FREQUENCY_CENTER_UNIT");
+  return getNode("BEAM_FREQUENCY_CENTER_UNIT");
 }
 
 Attribute<bool> BF_BeamGroup::foldedData()
 {
-  return Attribute<bool>(group(), "FOLDED_DATA");
+  return getNode("FOLDED_DATA");
 }
 
 Attribute<double> BF_BeamGroup::foldPeriod()
 {
-  return Attribute<double>(group(), "FOLD_PERIOD");
+  return getNode("FOLD_PERIOD");
 }
 
 Attribute<string> BF_BeamGroup::foldPeriodUnit()
 {
-  return Attribute<string>(group(), "FOLD_PERIOD_UNIT");
+  return getNode("FOLD_PERIOD_UNIT");
 }
 
 Attribute<string> BF_BeamGroup::dedispersion()
 {
-  return Attribute<string>(group(), "DEDISPERSION");
+  return getNode("DEDISPERSION");
 }
 
 Attribute<double> BF_BeamGroup::dedispersionMeasure()
 {
-  return Attribute<double>(group(), "DEDISPERSION_MEASURE");
+  return getNode("DEDISPERSION_MEASURE");
 }
 
 Attribute<string> BF_BeamGroup::dedispersionMeasureUnit()
 {
-  return Attribute<string>(group(), "DEDISPERSION_MEASURE_UNIT");
+  return getNode("DEDISPERSION_MEASURE_UNIT");
 }
 
 Attribute<bool> BF_BeamGroup::barycentered()
 {
-  return Attribute<bool>(group(), "BARYCENTERED");
+  return getNode("BARYCENTERED");
 }
 
 Attribute<unsigned> BF_BeamGroup::nofStokes()
 {
-  return Attribute<unsigned>(group(), "NOF_STOKES");
+  return getNode("NOF_STOKES");
 }
 
 Attribute< vector<string> > BF_BeamGroup::stokesComponents()
 {
-  return Attribute< vector<string> >(group(), "STOKES_COMPONENTS");
+  return getNode("STOKES_COMPONENTS");
 }
 
 Attribute<bool> BF_BeamGroup::complexVoltages()
 {
-  return Attribute<bool>(group(), "COMPLEX_VOLTAGES");
+  return getNode("COMPLEX_VOLTAGES");
 }
 
 Attribute<string> BF_BeamGroup::signalSum()
 {
-  return Attribute<string>(group(), "SIGNAL_SUM");
+  return getNode("SIGNAL_SUM");
 }
 
 string BF_BeamGroup::stokesName( unsigned nr )
@@ -359,24 +430,32 @@ CoordinatesGroup BF_BeamGroup::coordinates()
   return CoordinatesGroup(group(), coordinatesName());
 }
 
+void BF_StokesDataset::initNodes()
+{
+  addNode( new Attribute<string>(group(), "STOKES_COMPONENT") );
+  addNode( new Attribute< vector<unsigned> >(group(), "NOF_CHANNELS") );
+  addNode( new Attribute<unsigned>(group(), "NOF_SUBBANDS") );
+  addNode( new Attribute<unsigned>(group(), "NOF_SAMPLES") );
+}
+
 Attribute<string> BF_StokesDataset::stokesComponent()
 {
-  return Attribute<string>(group(), "STOKES_COMPONENT");
+  return getNode("STOKES_COMPONENT");
 }
 
 Attribute< vector<unsigned> > BF_StokesDataset::nofChannels()
 {
-  return Attribute< vector<unsigned> >(group(), "NOF_CHANNELS");
+  return getNode("NOF_CHANNELS");
 }
 
 Attribute<unsigned> BF_StokesDataset::nofSubbands()
 {
-  return Attribute<unsigned>(group(), "NOF_SUBBANDS");
+  return getNode("NOF_SUBBANDS");
 }
 
 Attribute<unsigned> BF_StokesDataset::nofSamples()
 {
-  return Attribute<unsigned>(group(), "NOF_SAMPLES");
+  return getNode("NOF_SAMPLES");
 }
 
 }

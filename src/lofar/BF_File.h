@@ -57,6 +57,8 @@ public:
 
   BF_SysLog               sysLog();
 protected:
+  virtual void                    initNodes();
+
   std::string                     subArrayPointingName( unsigned nr );
 };
 
@@ -72,6 +74,9 @@ public:
   Attribute<bool>         parsetObs();
   Attribute<bool>         logPresto();
   Attribute<bool>         parFile();
+
+protected:
+  virtual void            initNodes();
 };
 
 class BF_SubArrayPointing: public HDF5GroupBase {
@@ -105,6 +110,8 @@ public:
   virtual BF_BeamGroup    beam( unsigned nr );
 
 protected:
+  virtual void            initNodes();
+
   std::string             beamName( unsigned nr );
 };
 
@@ -145,8 +152,10 @@ public:
   virtual CoordinatesGroup coordinates();
 
 protected:
-  std::string              stokesName( unsigned nr );
-  std::string              coordinatesName();
+  virtual void            initNodes();
+
+  std::string             stokesName( unsigned nr );
+  std::string             coordinatesName();
 };
 
 class BF_StokesDataset: public HDF5DatasetBase<float> {
@@ -157,6 +166,9 @@ public:
   Attribute< std::vector<unsigned> >    nofChannels();
   Attribute<unsigned>     nofSubbands();
   Attribute<unsigned>     nofSamples();
+
+protected:
+  virtual void            initNodes();
 };
 
 }
