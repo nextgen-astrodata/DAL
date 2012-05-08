@@ -20,6 +20,11 @@ namespace DAL {
 class AttributeBase: public HDF5Node {
 public:
   /*!
+   * Create a generic Attribute object, providing meta functionality.
+   */
+  AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
+
+  /*!
    * Returns whether this attribute exists in the HDF5 file.
    */
   virtual bool exists() const;
@@ -36,8 +41,6 @@ public:
   size_t size() const;
 
 protected:
-  AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
-
   const hid_gc container;
 };
 

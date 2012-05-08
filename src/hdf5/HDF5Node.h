@@ -50,20 +50,20 @@ public:
   virtual const hid_gc &group() = 0;
 
   /*!
-   * Retrieve a (copy of a) node from the map. initNodes() is called
-   * if needed, and an exception is thrown if the group
-   * has not been opened or created yet.
-   */
-#if defined SWIG || defined SWIGINTERN // disable dynamic casting when generating the interface and the bindings
-  HDF5Node getNode( const std::string &name );
-#else
-  ImplicitDowncast<HDF5Node> getNode( const std::string &name );
-#endif
-
-  /*!
    * Returns a list of the HDF5 names of all nodes.
    */
   std::vector<std::string> nodeNames();
+
+#ifndef SWIG
+
+  /*!
+   * Returns a reference to a node from the map. initNodes() is called
+   * if needed, and an exception is thrown if the group
+   * has not been opened or created yet.
+   */
+  ImplicitDowncast<HDF5Node> getNode( const std::string &name );
+
+#endif
 
 protected:
   /*!
