@@ -6,6 +6,16 @@
 
 namespace DAL {
 
+// stupid GNU
+#ifdef major
+#undef major
+#endif
+
+// stupid GNU
+#ifdef minor
+#undef minor
+#endif
+
 class VersionType {
 public:
   unsigned major;
@@ -15,9 +25,22 @@ public:
   VersionType(unsigned major = 0, unsigned minor = 0, unsigned release = 0): major(major), minor(minor), release(release) {}
 
   VersionType(const std::string &str): major(0), minor(0), release(0) {
-    std::istringstream iss(std::istringstream::in);
+    std::istringstream iss(str, std::istringstream::in);
+    char dot = '\0';
 
-    oss >> major >> "." >> minor >> "." >> release;
+    iss >> major;
+    iss >> dot;
+
+    if (dot != '.' || !iss.good())
+      return;
+
+    iss >> minor;
+    iss >> dot;
+
+    if (dot != '.' || !iss.good())
+      return;
+
+    iss >> release;
   }
 
   std::string toString() const {
@@ -28,6 +51,12 @@ public:
     return oss.str();
   }
 
+  /*!
+   * Compares *this with other. Returns:
+   *   -1 if *this <  other
+   *    0 if *this == other
+   *   +1 if *this >  other
+   */
   int cmp(const VersionType &other) const {
     if( major < other.major )
       return -1;
@@ -74,5 +103,7 @@ public:
     return cmp(other) != 0;
   }
 };
+
+}
 
 #endif
