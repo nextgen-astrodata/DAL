@@ -33,6 +33,10 @@ void HDF5GroupBase::create() {
 }
 
 bool HDF5GroupBase::exists() const {
+  // The root group always exists, but H5Lexists won't work on it
+  if (_name == "/")
+    return true;
+
   return H5Lexists(parent, _name.c_str(), H5P_DEFAULT) > 0; // does this check whether the link is a group?
 }
 
