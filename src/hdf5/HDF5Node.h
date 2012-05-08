@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 #include "hdf5/exceptions/h5exception.h"
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/types/implicitdowncast.h"
@@ -29,10 +30,7 @@ public:
   virtual bool exists() const { return false; }
 
 protected:
-  const std::string _name;
-
-private:
-  HDF5Node &operator=( const HDF5Node & );
+  std::string _name;
 };
 
 /*!
@@ -51,12 +49,21 @@ public:
    */
   virtual const hid_gc &group() = 0;
 
-private:
-  // The map containing all (registered) nodes in this set
-  std::map<std::string, HDF5Node*> nodeMap;
+  /*!
+   * Retrieve a (copy of a) node from the map. initNodes() is called
+   * if needed, and an exception is thrown if the group
+   * has not been opened or created yet.
+   */
+#if defined SWIG || defined SWIGINTERN // disable dynamic casting when generating the interface and the bindings
+  HDF5Node getNode( const std::string &name );
+#else
+  ImplicitDowncast<HDF5Node> getNode( const std::string &name );
+#endif
 
-  // Whether nodeMap is initialised through initNodes()
-  bool mapInitialised;
+  /*!
+   * Returns a list of the HDF5 names of all nodes.
+   */
+  std::vector<std::string> nodeNames();
 
 protected:
   /*!
@@ -71,17 +78,19 @@ protected:
   void addNode( HDF5Node *attr );
 
   /*!
-   * Retrieve a node from the map. initNodes() is called
-   * if needed, and an exception is thrown if the group
-   * has not been opened or created yet.
-   */
-
-  ImplicitDowncast<HDF5Node> getNode( const std::string &name );
-
-  /*!
    * Remove all registered nodes from the map and delete them.
    */
   void freeNodeMap();
+
+private:
+  // The map containing all (registered) nodes in this set
+  std::map<std::string, HDF5Node*> nodeMap;
+
+  // Whether nodeMap is initialised through initNodes()
+  bool mapInitialised;
+
+  // Makes sure that nodeMap can be accessed
+  void ensureNodesExist();
 };
 
 }
