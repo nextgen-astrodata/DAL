@@ -40,6 +40,8 @@ public:
 
   virtual const hid_gc &group() { return _group; }
 
+  virtual bool exists() const { return true; }
+
 protected:
   const hid_gc _group;
   const std::string filename;

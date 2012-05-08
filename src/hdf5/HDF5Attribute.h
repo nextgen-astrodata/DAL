@@ -22,7 +22,7 @@ public:
   /*!
    * Returns whether this attribute exists in the HDF5 file.
    */
-  bool exists() const;
+  virtual bool exists() const;
 
   /*!
    * Removes this element from the HDF5 file. Useful for porting, 

@@ -30,7 +30,7 @@ public:
   /*!
    * Returns whether this group exists in the HDF5 file.
    */
-  bool exists() const;
+  virtual bool exists() const;
 
   /*!
    * Removes this group from the HDF5 file.
