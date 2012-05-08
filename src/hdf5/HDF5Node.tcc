@@ -7,7 +7,7 @@ HDF5NodeSet::~HDF5NodeSet()
   freeNodeMap();
 }
 
-void HD5NodeSet::addNode( HDF5Node *attr )
+void HDF5NodeSet::addNode( HDF5Node *attr )
 {
   if (!attr)
     throw DALValueError("attr cannot be NULL");
