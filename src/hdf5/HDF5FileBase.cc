@@ -15,7 +15,7 @@ HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::file
   versionAttrName(versionAttrName)
 {
   // Fill the data that will be propagated to other HDF5Nodes
-  data.fileVersion = getVersion();
+  data.fileVersion = getStoredFileVersion();
 
   switch (mode) {
     case CREATE:
@@ -72,7 +72,7 @@ void HDF5FileBase::flush()
   H5Fflush(group(), H5F_SCOPE_LOCAL);
 }
 
-VersionType HDF5FileBase::getVersion()
+VersionType HDF5FileBase::getStoredFileVersion()
 {
   Attribute<string> versionAttr(*this, versionAttrName);
   if (!versionAttr.exists())
@@ -81,7 +81,7 @@ VersionType HDF5FileBase::getVersion()
   return VersionType(versionAttr.get());  
 }
 
-void HDF5FileBase::setVersion( const VersionType &version )
+void HDF5FileBase::setFileVersion( const VersionType &version )
 {
   Attribute<string> versionAttr(*this, versionAttrName);
   if (versionAttr.exists())

@@ -34,6 +34,27 @@ public:
 
   /*!
    * Removes this group from the HDF5 file.
+   *
+   * Python example:
+   * \code
+   *    # Create and close a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *
+   *    # Create a group
+   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> g.create()
+   *    >>> g.exists()
+   *    True
+   *
+   *    # Delete the group
+   *    >>> g.remove()
+   *    >>> g.exists()
+   *    False
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
   void remove() const;
 

@@ -77,7 +77,7 @@ public:
    *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
    *
    *    # Set the file's version number to 2.0.0
-   *    >>> f.setVersion(VersionType("2.0.0"))
+   *    >>> f.setFileVersion(VersionType("2.0.0"))
    *
    *    # Create some attribute to play with
    *    >>> a = AttributeString(f, "EXAMPLE_ATTR")

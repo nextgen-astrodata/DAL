@@ -56,15 +56,52 @@ public:
   const std::string versionAttrName;
 
   /*!
+   * Stores the given version in the HDF5 file.
+   *
+   * Python example:
+   * \code
+   *    # Create and close a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *
+   *    # Set and get the file version
+   *    >>> f.setFileVersion(VersionType(1,2,3))
+   *
+   *    # fileVersion() reports the version
+   *    >>> str(f.fileVersion())
+   *    '1.2.3'
+   *
+   *    # Groups and attributes inherit the Version
+   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> str(g.fileVersion())
+   *    '1.2.3'
+   *
+   *    # Note: changing the version does not affect
+   *    # already existing group objects.
+   *    >>> f.setFileVersion(VersionType(4,5,6))
+   *    >>> str(f.fileVersion())
+   *    '4.5.6'
+   *    >>> str(g.fileVersion())
+   *    '1.2.3'
+   *
+   *    # Reload other objects to refresh the file info,
+   *    # including the newly set version.
+   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> str(g.fileVersion())
+   *    '4.5.6'
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
+   */
+  void setFileVersion( const VersionType &version );
+
+protected:
+  /*!
    * Return the version as stored in the HDF5 file.
    * A default value is returned if the attribute does not exist.
    */
-  VersionType getVersion();
-
-  /*!
-   * Stores the given version in the HDF5 file.
-   */
-  void setVersion( const VersionType &version );
+  VersionType getStoredFileVersion();
 
 private:
   hid_gc open( const std::string &filename, enum fileMode mode ) const;
