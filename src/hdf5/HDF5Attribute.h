@@ -22,7 +22,7 @@ public:
   /*!
    * Create a generic Attribute object, providing meta functionality.
    */
-  AttributeBase( HDF5NodeSet &parent, const std::string &name ): HDF5Node(parent.group(), name) {}
+  AttributeBase( HDF5NodeSet &parent, const std::string &name ): HDF5Node(parent, name) {}
 
   /*!
    * Returns whether this attribute exists in the HDF5 file.
@@ -86,9 +86,9 @@ private:
   // Do'not allow copying, as attr of the copy might get out of scope
   AttributeValue( const AttributeValue& );
 
-  AttributeValue( const Attribute<T> &attr ): attr(attr) {}
+  AttributeValue( Attribute<T> &attr ): attr(attr) {}
 
-  const Attribute<T> &attr;
+  Attribute<T> &attr;
 
   // Only Attribute<T> can create instances
   friend class Attribute<T>;
