@@ -6,47 +6,47 @@ namespace DAL {
 
 Attribute< vector<double> > CoordinatesGroup::refLocationValue()
 {
-  return Attribute< vector<double> >(group(), "REF_LOCATION_VALUE");
+  return Attribute< vector<double> >(*this, "REF_LOCATION_VALUE");
 }
 
 Attribute< vector<string> > CoordinatesGroup::refLocationUnit()
 {
-  return Attribute< vector<string> >(group(), "REF_LOCATION_UNIT");
+  return Attribute< vector<string> >(*this, "REF_LOCATION_UNIT");
 }
 
 Attribute<string> CoordinatesGroup::refLocationFrame()
 {
-  return Attribute<string>(group(), "REF_LOCATION_FRAME");
+  return Attribute<string>(*this, "REF_LOCATION_FRAME");
 }
 
 Attribute<double> CoordinatesGroup::refTimeValue()
 {
-  return Attribute<double>(group(), "REF_TIME_VALUE");
+  return Attribute<double>(*this, "REF_TIME_VALUE");
 }
 
 Attribute<string> CoordinatesGroup::refTimeUnit()
 {
-  return Attribute<string>(group(), "REF_TIME_UNIT");
+  return Attribute<string>(*this, "REF_TIME_UNIT");
 }
 
 Attribute<string> CoordinatesGroup::refTimeFrame()
 {
-  return Attribute<string>(group(), "REF_TIME_FRAME");
+  return Attribute<string>(*this, "REF_TIME_FRAME");
 }
 
 Attribute<unsigned> CoordinatesGroup::nofCoordinates()
 {
-  return Attribute<unsigned>(group(), "NOF_COORDINATES");
+  return Attribute<unsigned>(*this, "NOF_COORDINATES");
 }
 
 Attribute<unsigned> CoordinatesGroup::nofAxes()
 {
-  return Attribute<unsigned>(group(), "NOF_AXES");
+  return Attribute<unsigned>(*this, "NOF_AXES");
 }
 
 Attribute< vector<string> > CoordinatesGroup::coordinateTypes()
 {
-  return Attribute< vector<string> >(group(), "COORDINATE_TYPES");
+  return Attribute< vector<string> >(*this, "COORDINATE_TYPES");
 }
 
 string CoordinatesGroup::coordinateName( unsigned nr )
@@ -76,174 +76,174 @@ Coordinate *CoordinatesGroup::coordinate( unsigned nr )
   const string name = coordinateName(nr);
 
   if (type == "Time")
-    return new TimeCoordinate(group(), name);
+    return new TimeCoordinate(*this, name);
 
   if (type == "Spectral")
-    return new SpectralCoordinate(group(), name);
+    return new SpectralCoordinate(*this, name);
 
   if (type == "Direction")
-    return new DirectionCoordinate(group(), name);
+    return new DirectionCoordinate(*this, name);
 
   if (type == "Polarization")
-    return new PolarizationCoordinate(group(), name);
+    return new PolarizationCoordinate(*this, name);
 
   /* TODO:
     type == "FaradayDepth" ??
   */  
 
   // unknown type
-  return new Coordinate(group(), name);
+  return new Coordinate(*this, name);
 }
 
 Attribute<string> Coordinate::coordinateType()
 {
-  return Attribute<string>(group(), "COORDINATE_TYPE");
+  return Attribute<string>(*this, "COORDINATE_TYPE");
 }
 
 Attribute< vector<string> > Coordinate::storageType()
 {
-  return Attribute< vector<string> >(group(), "STORAGE_TYPE");
+  return Attribute< vector<string> >(*this, "STORAGE_TYPE");
 }
 
 Attribute<unsigned> Coordinate::nofAxes()
 {
-  return Attribute<unsigned>(group(), "NOF_AXES");
+  return Attribute<unsigned>(*this, "NOF_AXES");
 }
 
 Attribute< vector<string> > Coordinate::axisNames()
 {
-  return Attribute< vector<string> >(group(), "AXIS_NAMES");
+  return Attribute< vector<string> >(*this, "AXIS_NAMES");
 }
 
 Attribute< vector<string> > Coordinate::axisUnits()
 {
-  return Attribute< vector<string> >(group(), "AXIS_UNITS");
+  return Attribute< vector<string> >(*this, "AXIS_UNITS");
 }
 
 Attribute<double> NumericalCoordinate::referenceValue()
 {
-  return Attribute<double>(group(), "REFERENCE_VALUE");
+  return Attribute<double>(*this, "REFERENCE_VALUE");
 }
 
 Attribute<double> NumericalCoordinate::referencePixel()
 {
-  return Attribute<double>(group(), "REFERENCE_PIXEL");
+  return Attribute<double>(*this, "REFERENCE_PIXEL");
 }
 
 Attribute<double> NumericalCoordinate::increment()
 {
-  return Attribute<double>(group(), "INCREMENT");
+  return Attribute<double>(*this, "INCREMENT");
 }
 
 Attribute<unsigned> NumericalCoordinate::axisLength()
 {
-  return Attribute<unsigned>(group(), "AXIS_LENGTH");
+  return Attribute<unsigned>(*this, "AXIS_LENGTH");
 }
 
 Attribute< vector<unsigned> > NumericalCoordinate::axisValuesPixel()
 {
-  return Attribute< vector<unsigned> >(group(), "AXIS_VALUES_PIXEL");
+  return Attribute< vector<unsigned> >(*this, "AXIS_VALUES_PIXEL");
 }
 
 Attribute< vector<double> > NumericalCoordinate::axisValuesWorld()
 {
-  return Attribute< vector<double> >(group(), "AXIS_VALUES_WORLD");
+  return Attribute< vector<double> >(*this, "AXIS_VALUES_WORLD");
 }
 
 
 Attribute< vector<double> > DirectionCoordinate::referenceValue()
 {
-  return Attribute< vector<double> >(group(), "REFERENCE_VALUE");
+  return Attribute< vector<double> >(*this, "REFERENCE_VALUE");
 }
 
 Attribute< vector<double> > DirectionCoordinate::referencePixel()
 {
-  return Attribute< vector<double> >(group(), "REFERENCE_PIXEL");
+  return Attribute< vector<double> >(*this, "REFERENCE_PIXEL");
 }
 
 Attribute< vector<double> > DirectionCoordinate::increment()
 {
-  return Attribute< vector<double> >(group(), "INCREMENT");
+  return Attribute< vector<double> >(*this, "INCREMENT");
 }
 
 Attribute< vector<double> > DirectionCoordinate::pc()
 {
-  return Attribute< vector<double> >(group(), "PC");
+  return Attribute< vector<double> >(*this, "PC");
 }
 
 Attribute<string> DirectionCoordinate::equinox()
 {
-  return Attribute<string>(group(), "EQUINOX");
+  return Attribute<string>(*this, "EQUINOX");
 }
 
 Attribute<string> DirectionCoordinate::radecSys()
 {
-  return Attribute<string>(group(), "RADEC_SYS");
+  return Attribute<string>(*this, "RADEC_SYS");
 }
 
 Attribute<string> DirectionCoordinate::projection()
 {
-  return Attribute<string>(group(), "PROJECTION");
+  return Attribute<string>(*this, "PROJECTION");
 }
 
 Attribute< vector<double> > DirectionCoordinate::projectionParam()
 {
-  return Attribute< vector<double> >(group(), "PROJECTION_PARAM");
+  return Attribute< vector<double> >(*this, "PROJECTION_PARAM");
 }
 
 Attribute<double> DirectionCoordinate::lonPole()
 {
-  return Attribute<double>(group(), "LONPOLE");
+  return Attribute<double>(*this, "LONPOLE");
 }
 
 Attribute<double> DirectionCoordinate::latPole()
 {
-  return Attribute<double>(group(), "LATPOLE");
+  return Attribute<double>(*this, "LATPOLE");
 }
 
 Attribute<unsigned> StringCoordinate::axisLength()
 {
-  return Attribute<unsigned>(group(), "AXIS_LENGTH");
+  return Attribute<unsigned>(*this, "AXIS_LENGTH");
 }
 
 Attribute< vector<unsigned> > StringCoordinate::axisValuesPixel()
 {
-  return Attribute< vector<unsigned> >(group(), "AXIS_VALUES_PIXEL");
+  return Attribute< vector<unsigned> >(*this, "AXIS_VALUES_PIXEL");
 }
 
 Attribute< vector<string> > StringCoordinate::axisValuesWorld()
 {
-  return Attribute< vector<string> >(group(), "AXIS_VALUES_WORLD");
+  return Attribute< vector<string> >(*this, "AXIS_VALUES_WORLD");
 }
 
 Attribute<string> TimeCoordinate::referenceFrame()
 {
-  return Attribute<string>(group(), "REFERENCE_FRAME");
+  return Attribute<string>(*this, "REFERENCE_FRAME");
 }
 
 Attribute<string> SpectralCoordinate::referenceFrame()
 {
-  return Attribute<string>(group(), "REFERENCE_FRAME");
+  return Attribute<string>(*this, "REFERENCE_FRAME");
 }
 
 Attribute<double> SpectralCoordinate::restFrequency()
 {
-  return Attribute<double>(group(), "REST_FREQUENCY");
+  return Attribute<double>(*this, "REST_FREQUENCY");
 }
 
 Attribute<string> SpectralCoordinate::restFrequencyUnit()
 {
-  return Attribute<string>(group(), "REST_FREQUENCY_UNIT");
+  return Attribute<string>(*this, "REST_FREQUENCY_UNIT");
 }
 
 Attribute<double> SpectralCoordinate::restWavelength()
 {
-  return Attribute<double>(group(), "REST_WAVELENGTH");
+  return Attribute<double>(*this, "REST_WAVELENGTH");
 }
 
 Attribute<string> SpectralCoordinate::restWavelengthUnit()
 {
-  return Attribute<string>(group(), "REST_WAVELENGTH_UNIT");
+  return Attribute<string>(*this, "REST_WAVELENGTH_UNIT");
 }
 
 }

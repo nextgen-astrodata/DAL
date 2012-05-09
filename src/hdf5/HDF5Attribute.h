@@ -22,7 +22,7 @@ public:
   /*!
    * Create a generic Attribute object, providing meta functionality.
    */
-  AttributeBase( const hid_gc &parent, const std::string &name ): HDF5Node(parent, name) {}
+  AttributeBase( HDF5NodeSet &parent, const std::string &name ): HDF5Node(parent.group(), name) {}
 
   /*!
    * Returns whether this attribute exists in the HDF5 file.
@@ -105,7 +105,7 @@ template<typename T> std::ostream& operator<<(std::ostream &out, const Attribute
  * \code
  *     # Create a new HDF5 file with some string attribute
  *     >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
- *     >>> a = AttributeString(f.group(), "EXAMPLE_STRING")
+ *     >>> a = AttributeString(f, "EXAMPLE_STRING")
  *
  *     # Because we are creating the file, the attribute does initially not exist
  *     >>> a.value is None
@@ -156,7 +156,7 @@ public:
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+  Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
@@ -188,7 +188,7 @@ public:
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+  Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 

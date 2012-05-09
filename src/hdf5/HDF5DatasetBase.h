@@ -21,7 +21,7 @@ namespace DAL {
  *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
  *
  *    # Create a 2 x 3 dataset of floats within the given file
- *    >>> d = HDF5DatasetBaseFloat(f.group(), "EXAMPLE_DATASET")
+ *    >>> d = HDF5DatasetBaseFloat(f, "EXAMPLE_DATASET")
  *    >>> d.exists()
  *    False
  *    >>> d.create([2,3], [2,3]) # (current dims, max dims)
@@ -65,7 +65,7 @@ template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
 
-  HDF5DatasetBase( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  HDF5DatasetBase( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   /*!
    * Creates a new dataset with dimensions sized `dims` and can be scaled up to `maxdims`. The

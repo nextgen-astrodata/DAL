@@ -12,182 +12,182 @@ CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum HD
 
 Attribute<string> CommonAttributesFile::groupType()
 {
-  return Attribute<string>(group(), "GROUPTYPE");
+  return Attribute<string>(*this, "GROUPTYPE");
 }
 
 Attribute<string> CommonAttributesFile::fileName()
 {
-  return Attribute<string>(group(), "FILENAME");
+  return Attribute<string>(*this, "FILENAME");
 }
 
 Attribute<string> CommonAttributesFile::fileDate()
 {
-  return Attribute<string>(group(), "FILEDATE");
+  return Attribute<string>(*this, "FILEDATE");
 }
 
 Attribute<string> CommonAttributesFile::fileType()
 {
-  return Attribute<string>(group(), "FILETYPE");
+  return Attribute<string>(*this, "FILETYPE");
 }
 
 Attribute<string> CommonAttributesFile::telescope()
 {
-  return Attribute<string>(group(), "TELESCOPE");
+  return Attribute<string>(*this, "TELESCOPE");
 }
 
 Attribute<string> CommonAttributesFile::observer()
 {
-  return Attribute<string>(group(), "OBSERVER");
+  return Attribute<string>(*this, "OBSERVER");
 }
 
 Attribute<string> CommonAttributesFile::projectID()
 {
-  return Attribute<string>(group(), "PROJECT_ID");
+  return Attribute<string>(*this, "PROJECT_ID");
 }
 
 Attribute<string> CommonAttributesFile::projectTitle()
 {
-  return Attribute<string>(group(), "PROJECT_TITLE");
+  return Attribute<string>(*this, "PROJECT_TITLE");
 }
 
 Attribute<string> CommonAttributesFile::projectPI()
 {
-  return Attribute<string>(group(), "PROJECT_PI");
+  return Attribute<string>(*this, "PROJECT_PI");
 }
 
 Attribute<string> CommonAttributesFile::projectCOI()
 {
-  return Attribute<string>(group(), "PROJECT_CO_I");
+  return Attribute<string>(*this, "PROJECT_CO_I");
 }
 
 Attribute<string> CommonAttributesFile::projectContact()
 {
-  return Attribute<string>(group(), "PROJECT_CONTACT");
+  return Attribute<string>(*this, "PROJECT_CONTACT");
 }
 
 Attribute<string> CommonAttributesFile::observationID()
 {
-  return Attribute<string>(group(), "OBSERVATION_ID");
+  return Attribute<string>(*this, "OBSERVATION_ID");
 }
 
 Attribute<string> CommonAttributesFile::observationStartUTC()
 {
-  return Attribute<string>(group(), "OBSERVATION_START_UTC");
+  return Attribute<string>(*this, "OBSERVATION_START_UTC");
 }
 
 Attribute<double> CommonAttributesFile::observationStartMJD()
 {
-  return Attribute<double>(group(), "OBSERVATION_START_MJD");
+  return Attribute<double>(*this, "OBSERVATION_START_MJD");
 }
 
 Attribute<string> CommonAttributesFile::observationStartTAI()
 {
-  return Attribute<string>(group(), "OBSERVATION_START_TAI");
+  return Attribute<string>(*this, "OBSERVATION_START_TAI");
 }
 
 Attribute<string> CommonAttributesFile::observationEndUTC()
 {
-  return Attribute<string>(group(), "OBSERVATION_END_UTC");
+  return Attribute<string>(*this, "OBSERVATION_END_UTC");
 }
 
 Attribute<double> CommonAttributesFile::observationEndMJD()
 {
-  return Attribute<double>(group(), "OBSERVATION_END_MJD");
+  return Attribute<double>(*this, "OBSERVATION_END_MJD");
 }
 
 Attribute<string> CommonAttributesFile::observationEndTAI()
 {
-  return Attribute<string>(group(), "OBSERVATION_END_TAI");
+  return Attribute<string>(*this, "OBSERVATION_END_TAI");
 }
 
 Attribute<unsigned> CommonAttributesFile::observationNofStations()
 {
-  return Attribute<unsigned>(group(), "OBSERVATION_NOF_STATIONS");
+  return Attribute<unsigned>(*this, "OBSERVATION_NOF_STATIONS");
 }
 
 Attribute< vector<string> > CommonAttributesFile::observationStationsList()
 {
-  return Attribute< vector<string> >(group(), "OBSERVATION_STATIONS_LIST");
+  return Attribute< vector<string> >(*this, "OBSERVATION_STATIONS_LIST");
 }
 
 Attribute<double> CommonAttributesFile::observationFrequencyMax()
 {
-  return Attribute<double>(group(), "OBSERVATION_FREQUENCY_MAX");
+  return Attribute<double>(*this, "OBSERVATION_FREQUENCY_MAX");
 }
 
 Attribute<double> CommonAttributesFile::observationFrequencyMin()
 {
-  return Attribute<double>(group(), "OBSERVATION_FREQUENCY_MIN");
+  return Attribute<double>(*this, "OBSERVATION_FREQUENCY_MIN");
 }
 
 Attribute<double> CommonAttributesFile::observationFrequencyCenter()
 {
-  return Attribute<double>(group(), "OBSERVATION_FREQUENCY_CENTER");
+  return Attribute<double>(*this, "OBSERVATION_FREQUENCY_CENTER");
 }
 
 Attribute<string> CommonAttributesFile::observationFrequencyUnit()
 {
-  return Attribute<string>(group(), "OBSERVATION_FREQUENCY_UNIT");
+  return Attribute<string>(*this, "OBSERVATION_FREQUENCY_UNIT");
 }
 
 Attribute<unsigned> CommonAttributesFile::observationNofBitsPerSample()
 {
-  return Attribute<unsigned>(group(), "OBSERVATION_NOF_BITS_PER_SAMPLE");
+  return Attribute<unsigned>(*this, "OBSERVATION_NOF_BITS_PER_SAMPLE");
 }
 
 Attribute<double> CommonAttributesFile::clockFrequency()
 {
-  return Attribute<double>(group(), "CLOCK_FREQUENCY");
+  return Attribute<double>(*this, "CLOCK_FREQUENCY");
 }
 
 Attribute<string> CommonAttributesFile::clockFrequencyUnit()
 {
-  return Attribute<string>(group(), "CLOCK_FREQUENCY_UNIT");
+  return Attribute<string>(*this, "CLOCK_FREQUENCY_UNIT");
 }
 
 Attribute<string> CommonAttributesFile::antennaSet()
 {
-  return Attribute<string>(group(), "ANTENNA_SET");
+  return Attribute<string>(*this, "ANTENNA_SET");
 }
 
 Attribute<string> CommonAttributesFile::filterSelection()
 {
-  return Attribute<string>(group(), "FILTER_SELECTION");
+  return Attribute<string>(*this, "FILTER_SELECTION");
 }
 
 Attribute<string> CommonAttributesFile::target()
 {
-  return Attribute<string>(group(), "TARGET");
+  return Attribute<string>(*this, "TARGET");
 }
 
 Attribute<string> CommonAttributesFile::systemVersion()
 {
-  return Attribute<string>(group(), "SYSTEM_VERSION");
+  return Attribute<string>(*this, "SYSTEM_VERSION");
 }
 
 Attribute<string> CommonAttributesFile::pipelineName()
 {
-  return Attribute<string>(group(), "PIPELINE_NAME");
+  return Attribute<string>(*this, "PIPELINE_NAME");
 }
 
 Attribute<string> CommonAttributesFile::pipelineVersion()
 {
-  return Attribute<string>(group(), "PIPELINE_VERSION");
+  return Attribute<string>(*this, "PIPELINE_VERSION");
 }
 
 Attribute<string> CommonAttributesFile::ICDNumber()
 {
-  return Attribute<string>(group(), "ICD_NUMBER");
+  return Attribute<string>(*this, "ICD_NUMBER");
 }
 
 Attribute<string> CommonAttributesFile::ICDVersion()
 {
-  return Attribute<string>(group(), "ICD_VERSION");
+  return Attribute<string>(*this, "ICD_VERSION");
 }
 
 Attribute<string> CommonAttributesFile::notes()
 {
-  return Attribute<string>(group(), "NOTES");
+  return Attribute<string>(*this, "NOTES");
 }
 
 }

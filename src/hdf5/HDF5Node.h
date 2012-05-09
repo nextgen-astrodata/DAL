@@ -34,7 +34,7 @@ public:
    * \code
    *    # Create a new HDF5 file called "example.h5"
    *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
-   *    >>> a = AttributeString(f.group(), "EXAMPLE_ATTRIBUTE")
+   *    >>> a = AttributeString(f, "EXAMPLE_ATTRIBUTE")
    *
    *    # The minimal required version of any node is 0.0.0 by default
    *    >>> a.minVersion
@@ -68,7 +68,7 @@ public:
    *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
    *
    *    # Set the file's version number to 2.0.0
-   *    >>> a = AttributeString(f.group(), "VERSION")
+   *    >>> a = AttributeString(f, "VERSION")
    *    >>> a.value = "2.0.0"
    *
    *    # Request the file version (any node in the file will do)

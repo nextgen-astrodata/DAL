@@ -10,7 +10,7 @@ namespace DAL {
 VersionType HDF5Node::fileVersion( const std::string &attrName )
 {
   HDF5GroupBase rootGroup(parent, "/");
-  Attribute<string> versionAttr(rootGroup.group(), attrName);
+  Attribute<string> versionAttr(rootGroup, attrName);
 
   if (!versionAttr.exists())
     return VersionType();

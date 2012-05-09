@@ -12,6 +12,13 @@ HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 {
 }
 
+HDF5GroupBase::HDF5GroupBase( HDF5NodeSet &parent, const std::string &name )
+:
+  HDF5NodeSet(parent.group(), name),
+  _group(0)
+{
+}
+
 HDF5GroupBase::HDF5GroupBase( const hid_gc &parent, const std::string &name )
 :
   HDF5NodeSet(parent, name),
@@ -70,7 +77,7 @@ hid_gc *HDF5GroupBase::open( hid_t parent, const std::string &name ) const
 
 Attribute<string> HDF5GroupBase::groupType()
 {
-  return Attribute<string>(group(), "GROUPTYPE");
+  return Attribute<string>(*this, "GROUPTYPE");
 }
 
 }
