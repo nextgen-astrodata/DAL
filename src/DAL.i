@@ -49,8 +49,8 @@
 %include "hdf5/types/tuples.i"
 %include "hdf5/attributes.i"
 
-%include hdf5/HDF5FileBase.h
 %include hdf5/HDF5GroupBase.h
+%include hdf5/HDF5FileBase.h
 
 %include "hdf5/datasets.i"
 

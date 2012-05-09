@@ -4,12 +4,12 @@
 #include <string>
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
-#include "hdf5/HDF5Node.h"
+#include "hdf5/HDF5GroupBase.h"
 #include "hdf5/HDF5Attribute.h"
 
 namespace DAL {
 
-class HDF5FileBase: public HDF5NodeSet {
+class HDF5FileBase: public HDF5GroupBase {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
 
@@ -37,8 +37,6 @@ public:
    * Commit any changes to disk.
    */
   void flush();
-
-  virtual const hid_gc &group() { return parent; }
 
   virtual bool exists() const { return true; }
 
@@ -68,11 +66,8 @@ public:
    */
   void setVersion( const VersionType &version );
 
-protected:
-  const hid_gc _group;
-
 private:
-  hid_t open( const std::string &filename, enum fileMode mode ) const;
+  hid_gc open( const std::string &filename, enum fileMode mode ) const;
 };
 
 }

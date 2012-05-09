@@ -9,7 +9,7 @@ HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::file
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
   // completed: any open group identifiers (etc) will remain functioning)
-  HDF5NodeSet(hid_gc(open(filename, mode), H5Fclose, mode == CREATE ? "Could not create file" : "Could not open file"), ""),
+  HDF5GroupBase(open(filename, mode)),
   filename(filename),
   mode(mode),
   versionAttrName(versionAttrName)
@@ -32,7 +32,7 @@ HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::file
   data.parentNodePath = "";
 }
 
-hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMode mode ) const
+hid_gc HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMode mode ) const
 {
 
   switch (mode) {
@@ -53,14 +53,14 @@ hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMo
 #endif
           return -1;
 
-        return H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
+        return hid_gc(H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl), H5Fclose, "Could not create file");
       }  
 
     case READ:  
-      return H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+      return hid_gc(H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT), H5Fclose, "Could not open file");
 
     case READWRITE:  
-      return H5Fopen(filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+      return hid_gc(H5Fopen(filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT), H5Fclose, "Could not open file");
 
     default:
       return 0;

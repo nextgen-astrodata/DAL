@@ -48,17 +48,19 @@ public:
 
   virtual const hid_gc &group() {
     // deferred opening of group, as it may need to be created first
-    if (!_group)
+    if (!static_cast<hid_t>(_group))
       _group = open(parent, _name);
 
-    return *_group;
+    return _group;
   }
 
 protected:
-  hid_gc *_group;
+  hid_gc _group;
 
+  virtual hid_gc open( hid_t parent, const std::string &name ) const;
 
-  virtual hid_gc *open( hid_t parent, const std::string &name ) const;
+  // constructor for root group
+  HDF5GroupBase( const hid_gc &fileid );
 };
 
 }

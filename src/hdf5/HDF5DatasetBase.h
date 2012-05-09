@@ -208,8 +208,8 @@ public:
   void setScalar( const std::vector<size_t> &pos, const T &value );
 
 protected:
-  virtual hid_gc *open( hid_t parent, const std::string &name ) const {
-    return new hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset");
+  virtual hid_gc open( hid_t parent, const std::string &name ) const {
+    return hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset");
   }
 
   bool bigEndian( enum Endianness endianness ) const;
