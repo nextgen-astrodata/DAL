@@ -14,13 +14,6 @@ HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 
 HDF5GroupBase::HDF5GroupBase( HDF5NodeSet &parent, const std::string &name )
 :
-  HDF5NodeSet(parent.group(), name),
-  _group(0)
-{
-}
-
-HDF5GroupBase::HDF5GroupBase( const hid_gc &parent, const std::string &name )
-:
   HDF5NodeSet(parent, name),
   _group(0)
 {

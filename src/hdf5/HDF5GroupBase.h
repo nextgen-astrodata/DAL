@@ -59,12 +59,6 @@ protected:
 
 
   virtual hid_gc *open( hid_t parent, const std::string &name ) const;
-
-private:
-  // allow direct construction based on hid_gc by HDF5Node
-  HDF5GroupBase( const hid_gc &parent, const std::string &name );
-
-  friend class HDF5Node;
 };
 
 }

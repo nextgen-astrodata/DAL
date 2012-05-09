@@ -7,18 +7,34 @@ using namespace std;
 
 namespace DAL {
 
-VersionType HDF5Node::fileVersion( const std::string &attrName )
+HDF5Node::HDF5Node( HDF5NodeSet &parent, const std::string &name )
+:
+  parent(parent.group()),
+  _name(name),
+  data(parent.data)
 {
-  HDF5GroupBase rootGroup(parent, "/");
-  Attribute<string> versionAttr(rootGroup, attrName);
+}
 
-  if (!versionAttr.exists())
-    return VersionType();
+HDF5Node::HDF5Node( const hid_gc &parent, const std::string &name )
+:
+  parent(parent),
+  _name(name)
+{
+}
 
-  return VersionType(versionAttr.get());  
+VersionType HDF5Node::fileVersion()
+{
+  return data.fileVersion;
 }
 
 HDF5NodeSet::HDF5NodeSet( const hid_gc &parent, const std::string &name )
+:
+  HDF5Node(parent, name),
+  mapInitialised(false)
+{
+}
+
+HDF5NodeSet::HDF5NodeSet( HDF5NodeSet &parent, const std::string &name )
 :
   HDF5Node(parent, name),
   mapInitialised(false)

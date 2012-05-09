@@ -4,15 +4,29 @@ using namespace std;
 
 namespace DAL {
 
-HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::fileMode mode )
+HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::fileMode mode, const std::string versionAttrName )
 :
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
   // completed: any open group identifiers (etc) will remain functioning)
   HDF5NodeSet(hid_gc(open(filename, mode), H5Fclose, mode == CREATE ? "Could not create file" : "Could not open file"), ""),
   filename(filename),
-  mode(mode)
+  mode(mode),
+  versionAttrName(versionAttrName)
 {
+  // Fill the data that will be propagated to other HDF5Nodes
+  data.fileVersion = getVersion();
+
+  switch (mode) {
+    case CREATE:
+    case READWRITE:
+      data.canWrite = true;
+      break;
+
+    case READ:
+    default:
+      data.canWrite = false;
+  }
 }
 
 hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMode mode ) const
@@ -53,6 +67,25 @@ hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMo
 void HDF5FileBase::flush()
 {
   H5Fflush(group(), H5F_SCOPE_LOCAL);
+}
+
+VersionType HDF5FileBase::getVersion()
+{
+  Attribute<string> versionAttr(*this, versionAttrName);
+  if (!versionAttr.exists())
+    return VersionType();
+
+  return VersionType(versionAttr.get());  
+}
+
+void HDF5FileBase::setVersion( const VersionType &version )
+{
+  Attribute<string> versionAttr(*this, versionAttrName);
+  if (versionAttr.exists())
+    versionAttr.set(version.toString());
+
+  // update propagation data as well
+  data.fileVersion = version;
 }
 
 }

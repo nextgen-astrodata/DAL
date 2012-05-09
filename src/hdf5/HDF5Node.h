@@ -11,12 +11,16 @@
 
 namespace DAL {
 
+class HDF5NodeSet;
+
 /*!
  * Represents a node in the HDF5 hierarchy (an attribute, group, or dataset).
  */
 class HDF5Node {
 public:
-  HDF5Node( const hid_gc &parent, const std::string &name ): parent(parent), _name(name) {}
+  HDF5Node( HDF5NodeSet &parent, const std::string &name );
+
+  HDF5Node( const hid_gc &parent, const std::string &name );
 
   virtual ~HDF5Node() {} // a destructor makes this class polymorphic, allowing dynamic_cast
 
@@ -55,9 +59,9 @@ public:
   VersionType minVersion;
 
   /*!
-   * The version of the file, as given by /attrName (default: /VERSION).
+   * The version of the file.
    */
-  VersionType fileVersion( const std::string &attrName = "VERSION" );
+  VersionType fileVersion();
 
   /*!
    * Returns whether this node is supported by the current version.
@@ -95,8 +99,8 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  bool supported( const std::string &versionAttrName = "VERSION" ) {
-    return minVersion <= fileVersion(versionAttrName);
+  bool supported() {
+    return minVersion <= fileVersion();
   }
 
   /*!
@@ -107,6 +111,19 @@ public:
 protected:
   hid_gc parent;
   std::string _name;
+
+  /*!
+   * Data that will be propagated through the object tree,
+   * if subgroups and attributes are accessed.
+   */
+  struct PropagatedData {
+    VersionType fileVersion;
+    bool canWrite;
+
+    PropagatedData(): canWrite(false) {}
+  };
+
+  PropagatedData data;
 };
 
 /*!
@@ -116,6 +133,7 @@ protected:
 class HDF5NodeSet: public HDF5Node {
 public:
   HDF5NodeSet( const hid_gc &parent, const std::string &name );
+  HDF5NodeSet( HDF5NodeSet &parent, const std::string &name );
 
   virtual ~HDF5NodeSet();
 
