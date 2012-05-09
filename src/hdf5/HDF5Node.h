@@ -64,6 +64,35 @@ public:
   VersionType fileVersion();
 
   /*!
+   * Whether the file was opened for writing.
+   *
+   * Python example:
+   * \code
+   *    # Create a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f.canWrite()
+   *    True
+   *
+   *    # Can also query other nodes
+   *    >>> a = AttributeString(f, "EXAMPLE_ATTR")
+   *    >>> a.canWrite()
+   *    True
+   *
+   *    # Reopen the same file read-only
+   *    >>> del a
+   *    >>> del f
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.READ)
+   *    >>> f.canWrite()
+   *    False
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
+   */
+  bool canWrite() const;
+
+  /*!
    * Returns whether this node is supported by the current version.
    *
    * Python example:

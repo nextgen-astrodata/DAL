@@ -9,6 +9,7 @@ namespace DAL {
 
 HDF5Node::HDF5Node( HDF5NodeSet &parent, const std::string &name )
 :
+  minVersion(parent.minVersion),
   parent(parent.group()),
   _name(name),
   data(parent.data)
@@ -25,6 +26,11 @@ HDF5Node::HDF5Node( const hid_gc &parent, const std::string &name )
 VersionType HDF5Node::fileVersion()
 {
   return data.fileVersion;
+}
+
+bool HDF5Node::canWrite() const
+{
+  return data.canWrite;
 }
 
 HDF5NodeSet::HDF5NodeSet( const hid_gc &parent, const std::string &name )
