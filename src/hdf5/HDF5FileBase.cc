@@ -27,6 +27,9 @@ HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::file
     default:
       data.canWrite = false;
   }
+
+  data.fileName = filename;
+  data.parentNodePath = "";
 }
 
 hid_t HDF5FileBase::open( const std::string &filename, enum HDF5FileBase::fileMode mode ) const

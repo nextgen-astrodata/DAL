@@ -14,6 +14,20 @@ HDF5Node::HDF5Node( HDF5NodeSet &parent, const std::string &name )
   _name(name),
   data(parent.data)
 {
+  const std::string parentName = parent.name();
+
+  if (parentName.empty())
+    // parent is the root group
+    data.parentNodePath = "/";
+  else if (parentName[0] == '/')
+    // absolute path
+    data.parentNodePath = parentName;
+  else  
+    // relative path (note: HDF5 does not support /../ like UNIX does)
+    if (data.parentNodePath == "/")
+      data.parentNodePath = "/" + parent.name();
+    else  
+      data.parentNodePath = data.parentNodePath + "/" + parent.name();
 }
 
 HDF5Node::HDF5Node( const hid_gc &parent, const std::string &name )

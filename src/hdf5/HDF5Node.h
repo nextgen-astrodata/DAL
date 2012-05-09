@@ -30,6 +30,11 @@ public:
   std::string name() const { return _name; }
 
   /*!
+   * Returns whether this element exists in the HDF5 file.
+   */
+  virtual bool exists() const { return false; }
+
+  /*!
    * The minimal version required for this node to be supported. Version numbers
    * are user-defined, and matched against a fixed field in the HDF5 file
    * (see fileVersion()).
@@ -62,35 +67,6 @@ public:
    * The version of the file.
    */
   VersionType fileVersion();
-
-  /*!
-   * Whether the file was opened for writing.
-   *
-   * Python example:
-   * \code
-   *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
-   *    >>> f.canWrite()
-   *    True
-   *
-   *    # Can also query other nodes
-   *    >>> a = AttributeString(f, "EXAMPLE_ATTR")
-   *    >>> a.canWrite()
-   *    True
-   *
-   *    # Reopen the same file read-only
-   *    >>> del a
-   *    >>> del f
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.READ)
-   *    >>> f.canWrite()
-   *    False
-   *
-   *    # Clean up
-   *    >>> import os
-   *    >>> os.remove("example.h5")
-   * \endcode
-   */
-  bool canWrite() const;
 
   /*!
    * Returns whether this node is supported by the current version.
@@ -136,9 +112,67 @@ public:
   }
 
   /*!
-   * Returns whether this element exists in the HDF5 file.
+   * Whether the file was opened for writing.
+   *
+   * Python example:
+   * \code
+   *    # Create a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f.canWrite()
+   *    True
+   *
+   *    # Can also query other nodes
+   *    >>> a = AttributeString(f, "EXAMPLE_ATTR")
+   *    >>> a.canWrite()
+   *    True
+   *
+   *    # Reopen the same file read-only
+   *    >>> del a
+   *    >>> del f
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.READ)
+   *    >>> f.canWrite()
+   *    False
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
-  virtual bool exists() const { return false; }
+  bool canWrite() const;
+
+  /*!
+   * The name of the file as it was opened.
+   */
+  std::string fileName() const { return data.fileName; }
+
+  /*!
+   * The name of the HDF5 directory containing this node. The
+   * file object has parentNodePath() == "".
+   *
+   * Python example:
+   * \code
+   *    # Create a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> g.create()
+   *    >>> a = AttributeString(g, "ATTRIBUTE")
+   *    >>> a.create()
+   *    <...>
+   *
+   *    # Query HDF5 path info
+   *    >>> f.parentNodePath()
+   *    ''
+   *    >>> g.parentNodePath()
+   *    '/'
+   *    >>> a.parentNodePath()
+   *    '/GROUP'
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
+   */
+  std::string parentNodePath() const { return data.parentNodePath; }
 
 protected:
   hid_gc parent;
@@ -147,10 +181,20 @@ protected:
   /*!
    * Data that will be propagated through the object tree,
    * if subgroups and attributes are accessed.
+   *
+   * Propagation only occurs at object creation. Thus
+   * if any of these properties are changed, already existing
+   * objects representing subnodes are not updated.
    */
   struct PropagatedData {
     VersionType fileVersion;
     bool canWrite;
+
+    //! Name of the file containing this node.
+    std::string fileName;
+
+    //! Name of the HDF5 directory containing this node.
+    std::string parentNodePath;
 
     PropagatedData(): canWrite(false) {}
   };
