@@ -124,13 +124,13 @@ The HDF5 structure described above can be created and populated in C++ as follow
 
         HDF5FileBase f("foo.h5", HDF5FileBase.CREATE);
 
-        Attribute<string> name(f.group(), "NAME");
+        Attribute<string> name(f, "NAME");
         name.value = "John Doe";
 
-        Attribute<unsigned> age(f.group(), "AGE");
+        Attribute<unsigned> age(f, "AGE");
         age.value = 21;
 
-        HDF5DatasetBase<float > d(f.group(), "MY_DATASET");
+        HDF5DatasetBase<float > d(f, "MY_DATASET");
         vector<ssize_t> dims(2,2);
         d.create(dims, dims);
 
@@ -143,19 +143,19 @@ or alternatively, in Python:
 
         f = DAL.HDF5FileBase("foo.h5", DAL.HDF5FileBase.CREATE)
 
-        name = DAL.AttributeString(f.group(), "NAME")
+        name = DAL.AttributeString(f, "NAME")
         name.value = "John Doe"
 
-        age = DAL.AttributeString(f.group(), "AGE")
+        age = DAL.AttributeString(f, "AGE")
         age.value = 21;
 
-        d = DAL.HDF5DatasetBaseFloat(f.group(), "MY_DATASET")
+        d = DAL.HDF5DatasetBaseFloat(f, "MY_DATASET")
         d.create([2,2],[2,2])
 
-        desc = DAL.AttributeString(d.group(), "DESCRIPTION")
+        desc = DAL.AttributeString(d, "DESCRIPTION")
         desc.value = "This is an example dataset"
 
-Note that the f.group() and d.group() functions are used to access named elements within those groups. The group() functions provide an identifier for that group, with which child elements can be referenced.
+Note that the f and d.group() functions are used to access named elements within those groups. The group() functions provide an identifier for that group, with which child elements can be referenced.
 
 The DAL ships with classes that wrap the HDF5 structures as described in the ICD documents in a similar way. For example, the above structure could be wrapped in C++ classes as follows:
 
@@ -167,15 +167,15 @@ The DAL ships with classes that wrap the HDF5 structures as described in the ICD
         class MyFile: public HDF5FileBase {
           MyFile(const string &name, enum fileMode mode = READ): HDF5FileBase(name, mode) {}
 
-          Attribute<string>  name() { return Attribute<string>(group(), "NAME"); }
-          Attribute<unsigned> age() { return Attribute<unsigned>(group(), "AGE"); }
-          MyDataset myDataset()     { return MyDataset(group(), "MY_DATASET"); }
+          Attribute<string>  name() { return Attribute<string>(*this, "NAME"); }
+          Attribute<unsigned> age() { return Attribute<unsigned>(*this, "AGE"); }
+          MyDataset myDataset()     { return MyDataset(*this, "MY_DATASET"); }
         };
 
         class MyDataset: public HDF5DatasetBase<float> {
           MyDataset(const hid_gc &parent, const string &name): HDF5DatasetBase<float>(parent, name) {}
 
-          Attribute<string>  description() { return Attribute<string>(group(), "DESCRIPTION"); }
+          Attribute<string>  description() { return Attribute<string>(*this, "DESCRIPTION"); }
         };
 
 For the ICDs, the following wrappers are available:
