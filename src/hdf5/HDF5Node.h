@@ -26,20 +26,75 @@ public:
   std::string name() const { return _name; }
 
   /*!
-   * The minimal version required for this node to be supported.
+   * The minimal version required for this node to be supported. Version numbers
+   * are user-defined, and matched against a fixed field in the HDF5 file
+   * (see fileVersion()).
+   *
+   * Python example:
+   * \code
+   *    # Create a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> a = AttributeString(f.group(), "EXAMPLE_ATTRIBUTE")
+   *
+   *    # The minimal required version of any node is 0.0.0 by default
+   *    >>> a.minVersion
+   *    VersionType('0.0.0')
+   *
+   *    # Setting the minimal version.
+   *    >>> a.minVersion = VersionType('1.2.3')
+   *
+   *    # Requesting the minimal version.
+   *    >>> str(a.minVersion)
+   *    '1.2.3'
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
   VersionType minVersion;
 
   /*!
    * The version of the file, as given by /attrName (default: /VERSION).
    */
-
   VersionType fileVersion( const std::string &attrName = "VERSION" );
 
   /*!
-   * Returns whether this node is supported by the current version
+   * Returns whether this node is supported by the current version.
+   *
+   * Python example:
+   * \code
+   *    # Create a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *
+   *    # Set the file's version number to 2.0.0
+   *    >>> a = AttributeString(f.group(), "VERSION")
+   *    >>> a.value = "2.0.0"
+   *
+   *    # Request the file version (any node in the file will do)
+   *    >>> f.fileVersion()
+   *    VersionType('2.0.0')
+   *    >>> a.fileVersion()
+   *    VersionType('2.0.0')
+   *
+   *    # If an attribute is older than the file,
+   *    # it is supported and should be present.
+   *    >>> a.minVersion = VersionType('1.0.0')
+   *    >>> a.supported()
+   *    True
+   *
+   *    # If an attribute is newer than the file,
+   *    # it is possibly not present and therefor
+   *    # not supported.
+   *    >>> a.minVersion = VersionType('2.1.0')
+   *    >>> a.supported()
+   *    False
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
-
   bool supported( const std::string &versionAttrName = "VERSION" ) {
     return minVersion <= fileVersion(versionAttrName);
   }
