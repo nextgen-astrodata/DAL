@@ -7,16 +7,14 @@ namespace DAL {
 
 HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 :
-  HDF5NodeSet(other._name),
-  parent(other.parent),
+  HDF5NodeSet(other.parent, other._name),
   _group(other._group ? new hid_gc(*other._group) : 0)
 {
 }
 
 HDF5GroupBase::HDF5GroupBase( const hid_gc &parent, const std::string &name )
 :
-  HDF5NodeSet(name),
-  parent(parent),
+  HDF5NodeSet(parent, name),
   _group(0)
 {
 }

@@ -9,10 +9,9 @@ HDF5FileBase::HDF5FileBase( const std::string &filename, enum HDF5FileBase::file
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
   // completed: any open group identifiers (etc) will remain functioning)
-  HDF5NodeSet(""),
+  HDF5NodeSet(hid_gc(open(filename, mode), H5Fclose, mode == CREATE ? "Could not create file" : "Could not open file"), ""),
   filename(filename),
-  mode(mode),
-  _group(hid_gc(open(filename, mode), H5Fclose, mode == CREATE ? "Could not create file" : "Could not open file"))
+  mode(mode)
 {
 }
 

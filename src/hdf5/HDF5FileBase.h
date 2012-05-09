@@ -38,7 +38,7 @@ public:
    */
   void flush();
 
-  virtual const hid_gc &group() { return _group; }
+  virtual const hid_gc &group() { return parent; }
 
   virtual bool exists() const { return true; }
 

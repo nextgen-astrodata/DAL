@@ -7,9 +7,20 @@ using namespace std;
 
 namespace DAL {
 
-HDF5NodeSet::HDF5NodeSet( const std::string &name )
+VersionType HDF5Node::fileVersion( const std::string &attrName )
+{
+  HDF5GroupBase rootGroup(parent, "/");
+  Attribute<string> versionAttr(rootGroup.group(), attrName);
+
+  if (!versionAttr.exists())
+    return VersionType();
+
+  return VersionType(versionAttr.get());  
+}
+
+HDF5NodeSet::HDF5NodeSet( const hid_gc &parent, const std::string &name )
 :
-  HDF5Node(name),
+  HDF5Node(parent, name),
   mapInitialised(false)
 {
 }
@@ -17,17 +28,6 @@ HDF5NodeSet::HDF5NodeSet( const std::string &name )
 HDF5NodeSet::~HDF5NodeSet()
 {
   freeNodeMap();
-}
-
-VersionType HDF5NodeSet::fileVersion()
-{
-  HDF5GroupBase rootGroup(group(), "/");
-  Attribute<string> versionAttr(rootGroup.group(), "VERSION");
-
-  if (!versionAttr.exists())
-    return VersionType();
-
-  return VersionType(versionAttr.get());  
 }
 
 void HDF5NodeSet::addNode( HDF5Node *attr )

@@ -55,7 +55,6 @@ public:
   }
 
 protected:
-  const hid_gc parent;
   hid_gc *_group;
 
   virtual hid_gc *open( hid_t parent, const std::string &name ) const;

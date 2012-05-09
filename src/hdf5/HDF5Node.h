@@ -16,7 +16,7 @@ namespace DAL {
  */
 class HDF5Node {
 public:
-  HDF5Node( const std::string &name ): _name(name) {}
+  HDF5Node( const hid_gc &parent, const std::string &name ): parent(parent), _name(name) {}
 
   virtual ~HDF5Node() {} // a destructor makes this class polymorphic, allowing dynamic_cast
 
@@ -31,13 +31,27 @@ public:
   VersionType minVersion;
 
   /*!
+   * The version of the file, as given by /attrName (default: /VERSION).
+   */
+
+  VersionType fileVersion( const std::string &attrName = "VERSION" );
+
+  /*!
+   * Returns whether this node is supported by the current version
+   */
+
+  bool supported( const std::string &versionAttrName = "VERSION" ) {
+    return minVersion <= fileVersion(versionAttrName);
+  }
+
+  /*!
    * Returns whether this element exists in the HDF5 file.
    */
   virtual bool exists() const { return false; }
 
 protected:
+  hid_gc parent;
   std::string _name;
-  VersionType _minVersion;
 };
 
 /*!
@@ -46,7 +60,7 @@ protected:
  */
 class HDF5NodeSet: public HDF5Node {
 public:
-  HDF5NodeSet( const std::string &name );
+  HDF5NodeSet( const hid_gc &parent, const std::string &name );
 
   virtual ~HDF5NodeSet();
 
@@ -55,8 +69,6 @@ public:
    * when accessing substructures.
    */
   virtual const hid_gc &group() = 0;
-
-  VersionType fileVersion();
 
   /*!
    * Returns a list of the HDF5 names of all nodes.

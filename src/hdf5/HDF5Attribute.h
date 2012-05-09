@@ -22,7 +22,7 @@ public:
   /*!
    * Create a generic Attribute object, providing meta functionality.
    */
-  AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
+  AttributeBase( const hid_gc &parent, const std::string &name ): HDF5Node(parent, name) {}
 
   /*!
    * Returns whether this attribute exists in the HDF5 file.
@@ -39,9 +39,6 @@ public:
    * Returns the number of data points in this element (1 for a scalar, >= 0 for a vector)
    */
   size_t size() const;
-
-protected:
-  const hid_gc container;
 };
 
 #ifndef SWIG
@@ -157,9 +154,9 @@ template<typename T> std::ostream& operator<<(std::ostream &out, const Attribute
 template<typename T> class Attribute: public AttributeBase {
 public:
   /*!
-   * Represent an attribute called `name' within group `container'.
+   * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name), value(*this) {}
+  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
@@ -189,9 +186,9 @@ public:
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {
 public:
   /*!
-   * Represent an attribute called `name' within group `container'.
+   * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name), value(*this) {}
+  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
