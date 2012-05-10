@@ -7,7 +7,7 @@ template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t>
 
   const size_t rank = dims.size();
 
-  if (maxdims.size() != rank)
+  if (!maxdims.empty() && maxdims.size() != rank)
     throw DALValueError("Current and maximum dimensions vectors must have equal length");
 
   // convert from ssize_t -> hsize_t
@@ -31,8 +31,7 @@ template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t>
   }
 
   // create the dataset
-  delete _group; _group = 0;
-  _group = new hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)), filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset");
+  _group = hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)), filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset");
 }
 
 template<typename T> size_t HDF5DatasetBase<T>::ndims()

@@ -14,7 +14,7 @@ namespace DAL {
  */
 class HDF5GroupBase: public HDF5NodeSet {
 public:
-  HDF5GroupBase( const hid_gc &parent, const std::string &name );
+  HDF5GroupBase( HDF5NodeSet &parent, const std::string &name );
 
   HDF5GroupBase( const HDF5GroupBase &other );
 
@@ -34,6 +34,27 @@ public:
 
   /*!
    * Removes this group from the HDF5 file.
+   *
+   * Python example:
+   * \code
+   *    # Create and close a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *
+   *    # Create a group
+   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> g.create()
+   *    >>> g.exists()
+   *    True
+   *
+   *    # Delete the group
+   *    >>> g.remove()
+   *    >>> g.exists()
+   *    False
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
   void remove() const;
 
@@ -48,17 +69,19 @@ public:
 
   virtual const hid_gc &group() {
     // deferred opening of group, as it may need to be created first
-    if (!_group)
+    if (!static_cast<hid_t>(_group))
       _group = open(parent, _name);
 
-    return *_group;
+    return _group;
   }
 
 protected:
-  const hid_gc parent;
-  hid_gc *_group;
+  hid_gc _group;
 
-  virtual hid_gc *open( hid_t parent, const std::string &name ) const;
+  virtual hid_gc open( hid_t parent, const std::string &name ) const;
+
+  // constructor for root group
+  HDF5GroupBase( const hid_gc &fileid );
 };
 
 }

@@ -21,7 +21,7 @@ namespace DAL {
  *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
  *
  *    # Create a 2 x 3 dataset of floats within the given file
- *    >>> d = HDF5DatasetBaseFloat(f.group(), "EXAMPLE_DATASET")
+ *    >>> d = HDF5DatasetBaseFloat(f, "EXAMPLE_DATASET")
  *    >>> d.exists()
  *    False
  *    >>> d.create([2,3], [2,3]) # (current dims, max dims)
@@ -65,7 +65,7 @@ template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
 
-  HDF5DatasetBase( const hid_gc &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  HDF5DatasetBase( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   /*!
    * Creates a new dataset with dimensions sized `dims` and can be scaled up to `maxdims`. The
@@ -83,7 +83,7 @@ public:
    *  LITTLE: use little-endian: ARM, x86, x86_64
    *  BIG:    use big-endian:    MIPS, POWER, PowerPC, SPARC
    */
-  void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename = "", enum Endianness endianness = NATIVE );
+  void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims = std::vector<ssize_t>(0), const std::string &filename = "", enum Endianness endianness = NATIVE );
   virtual void create() { throw DALException("create() not supported on a dataset"); }
 
   /*!
@@ -208,8 +208,8 @@ public:
   void setScalar( const std::vector<size_t> &pos, const T &value );
 
 protected:
-  virtual hid_gc *open( hid_t parent, const std::string &name ) const {
-    return new hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset");
+  virtual hid_gc open( hid_t parent, const std::string &name ) const {
+    return hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset");
   }
 
   bool bigEndian( enum Endianness endianness ) const;

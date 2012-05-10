@@ -6,6 +6,7 @@ install (FILES
   implicitdowncast.h
   isderivedfrom.h
   issame.h
+  versiontype.h
 
   DESTINATION include/dal/hdf5/types
 )

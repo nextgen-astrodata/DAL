@@ -7,17 +7,17 @@ namespace DAL {
 
 inline bool AttributeBase::exists() const
 {
-  return H5Aexists(container, _name.c_str()) > 0;
+  return H5Aexists(parent, _name.c_str()) > 0;
 }
 
 inline void AttributeBase::remove() const {
-  if (H5Adelete(container, _name.c_str()) < 0)
+  if (H5Adelete(parent, _name.c_str()) < 0)
     throw HDF5Exception("Could not delete element");
 }
 
 inline size_t AttributeBase::size() const
 {
-  hid_gc_noref attr(H5Aopen_name(container, _name.c_str()), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not retrieve dataspace of atttribute");
 
@@ -105,14 +105,14 @@ template<typename T> inline Attribute<T>& Attribute<T>::create()
 {
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
 
-  hid_gc_noref attr(H5Acreate2(container, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute" );
+  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute" );
 
   return *this;
 }
 
 template<typename T> inline void Attribute<T>::set( const T &value )
 {
-  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   if (H5Awrite(attr, h5typemap<T>::memoryType(), &value) < 0)
     throw HDF5Exception("Could not write attribute");
@@ -122,7 +122,7 @@ template<typename T> inline T Attribute<T>::get() const
 {
   T value;
 
-  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   if (H5Aread(attr, h5typemap<T>::memoryType(), &value) < 0)
     throw HDF5Exception("Could not read attribute");
@@ -137,7 +137,7 @@ template<typename T> inline Attribute< std::vector<T> >& Attribute< std::vector<
 
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace");
 
-  hid_gc_noref attr(H5Acreate2(container, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
+  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
 
   return *this;
 }
@@ -153,7 +153,7 @@ template<typename T> inline void Attribute< std::vector<T> >::set( const std::ve
     create(value.size());
   }
     
-  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   if (H5Awrite(attr, h5typemap<T>::memoryType(), &value[0]) < 0)
     throw HDF5Exception("Could not write to attribute");
@@ -161,7 +161,7 @@ template<typename T> inline void Attribute< std::vector<T> >::set( const std::ve
 
 template<typename T> inline std::vector<T> Attribute< std::vector<T> >::get() const
 {
-  hid_gc_noref attr(H5Aopen_name(container, _name.c_str()), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen_name(parent, _name.c_str()), H5Aclose, "Could not open attribute");
 
   std::vector<T> value(size());
 
@@ -180,14 +180,14 @@ template<> inline Attribute<std::string>& Attribute<std::string>::create()
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
-  hid_gc_noref attr(H5Acreate2(container, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
+  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
 
   return *this;
 }
 
 template<> inline void Attribute<std::string>::set( const std::string &value )
 {
-  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
   const char *cstr = value.c_str();
@@ -202,7 +202,7 @@ template<> inline std::string Attribute<std::string>::get() const
   char *buf;
 
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
-  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   if (H5Aread(attr, datatype, &buf) < 0)
     throw HDF5Exception("Could not read attribute");
@@ -223,7 +223,7 @@ template<> inline Attribute< std::vector<std::string> >& Attribute< std::vector<
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
-  hid_gc_noref attr(H5Acreate2(container, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute");
+  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute");
 
   return *this;
 }
@@ -245,7 +245,7 @@ template<> inline void Attribute< std::vector<std::string> >::set( const std::ve
     c_strs[i] = value[i].c_str();
   }
 
-  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
   if (H5Awrite(attr, datatype, &c_strs[0]) < 0)
@@ -258,7 +258,7 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
   std::vector<char *> c_strs(size());
 
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
-  hid_gc_noref attr(H5Aopen(container, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
+  hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
   if (H5Aread(attr, datatype, &c_strs[0]) < 0)
     throw HDF5Exception("Could not read attribute");

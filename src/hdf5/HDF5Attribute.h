@@ -22,7 +22,7 @@ public:
   /*!
    * Create a generic Attribute object, providing meta functionality.
    */
-  AttributeBase( const hid_gc &container, const std::string &name ): HDF5Node(name), container(container) {}
+  AttributeBase( HDF5NodeSet &parent, const std::string &name ): HDF5Node(parent, name) {}
 
   /*!
    * Returns whether this attribute exists in the HDF5 file.
@@ -39,9 +39,6 @@ public:
    * Returns the number of data points in this element (1 for a scalar, >= 0 for a vector)
    */
   size_t size() const;
-
-protected:
-  const hid_gc container;
 };
 
 #ifndef SWIG
@@ -89,9 +86,9 @@ private:
   // Do'not allow copying, as attr of the copy might get out of scope
   AttributeValue( const AttributeValue& );
 
-  AttributeValue( const Attribute<T> &attr ): attr(attr) {}
+  AttributeValue( Attribute<T> &attr ): attr(attr) {}
 
-  const Attribute<T> &attr;
+  Attribute<T> &attr;
 
   // Only Attribute<T> can create instances
   friend class Attribute<T>;
@@ -108,7 +105,7 @@ template<typename T> std::ostream& operator<<(std::ostream &out, const Attribute
  * \code
  *     # Create a new HDF5 file with some string attribute
  *     >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
- *     >>> a = AttributeString(f.group(), "EXAMPLE_STRING")
+ *     >>> a = AttributeString(f, "EXAMPLE_STRING")
  *
  *     # Because we are creating the file, the attribute does initially not exist
  *     >>> a.value is None
@@ -157,9 +154,9 @@ template<typename T> std::ostream& operator<<(std::ostream &out, const Attribute
 template<typename T> class Attribute: public AttributeBase {
 public:
   /*!
-   * Represent an attribute called `name' within group `container'.
+   * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name), value(*this) {}
+  Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
@@ -189,9 +186,9 @@ public:
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {
 public:
   /*!
-   * Represent an attribute called `name' within group `container'.
+   * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( const hid_gc &container, const std::string &name ): AttributeBase(container, name), value(*this) {}
+  Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 

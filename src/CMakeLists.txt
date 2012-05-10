@@ -29,6 +29,7 @@ set(dal_sources
   hdf5/HDF5GroupBase.cc
   hdf5/HDF5Node.cc
   hdf5/exceptions/h5errorstack.cc
+  hdf5/types/versiontype.cc
 
   lofar/BF_File.cc
   lofar/CommonAttributesFile.cc
