@@ -22,19 +22,15 @@ namespace DAL {
  *
  *    # Create a 2 x 3 dataset of floats within the given file
  *    >>> d = HDF5DatasetBaseFloat(f, "EXAMPLE_DATASET")
- *    >>> d.exists()
- *    False
- *    >>> d.create([2,3], [2,3]) # (current dims, max dims)
+ *    >>> d.create([2,3])
  *
  *    # Retrieve some information about the dataset
- *    >>> d.exists()
- *    True
  *    >>> d.dims()
  *    (2, 3)
  *    >>> d.ndims()
  *    2
  *
- *    # Query the format in which the data is stored
+ *    # Query the numpy format in which the data is stored
  *    >>> d.dtype
  *    <type 'numpy.float32'>
  *
@@ -68,10 +64,10 @@ public:
   HDF5DatasetBase( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   /*!
-   * Creates a new dataset with dimensions sized `dims` and can be scaled up to `maxdims`. The
-   * rank of the dataset is dims.size() == maxdims.size(). A maximum of -1 represents an unbounded dimension.
+   * Creates a new dataset with dimensions sized `dims'. If `maxdims' is set, the dataset can be scaled up to `maxdims'.
+   * The rank of the dataset is dims.size() == maxdims.size(). A maximum of -1 represents an unbounded dimension.
    *
-   * If a `filename` is given, that file will be used to store the data. The file can be provided by
+   * If a `filename' is given, that file will be used to store the data. The file can be provided by
    * the user, or will be created upon the first write. Note that the filename cannot be changed
    * after the dataset has been created (HDF5 1.8.7), so providing absolute paths will make the
    * dataset difficult to copy or move across systems.
