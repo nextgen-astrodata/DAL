@@ -33,7 +33,7 @@ public:
   ImplicitDowncast( B &base ): base(base) {}
 
   // the cast-operator can be templated based on return-type: just what we need!
-  template<typename D> operator D() {
+  template<typename D> operator D&() {
     return dynamic_cast<D&>(base);
   }
 
