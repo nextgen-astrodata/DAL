@@ -45,6 +45,9 @@ public:
    * using the type defined by this object.
    */
   virtual bool valid() const;
+
+protected:
+  AttributeBase( const hid_gc &parent, const std::string &name ): HDF5Node(parent, name) {}
 };
 
 #ifndef SWIG
@@ -166,6 +169,8 @@ public:
    */
   Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
+  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
   /*!
@@ -238,6 +243,8 @@ public:
    */
   Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
+  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
   /*!
@@ -264,9 +271,7 @@ public:
    */
   virtual bool valid() const;
 
-#ifndef SWIG
   AttributeValue< std::vector<T> > value;
-#endif
 };
 
 }

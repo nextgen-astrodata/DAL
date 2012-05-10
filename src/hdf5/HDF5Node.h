@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <typeinfo>
 #include "hdf5/exceptions/h5exception.h"
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/types/implicitdowncast.h"
@@ -210,7 +211,9 @@ public:
    * \endcode
    */
   std::string parentNodePath() const { return data.parentNodePath; }
-
+/*
+  std::string className() const { return typeid(*this).name(); }
+*/
 protected:
   hid_gc parent;
   std::string _name;

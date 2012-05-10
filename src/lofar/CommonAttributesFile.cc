@@ -6,7 +6,7 @@ namespace DAL {
 
 CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum HDF5FileBase::fileMode mode )
 :
-  HDF5FileBase(filename, mode)
+  HDF5FileBase(filename, mode, "ICD_VERSION")
 {
 }
 
