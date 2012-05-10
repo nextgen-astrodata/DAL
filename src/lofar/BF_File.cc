@@ -11,6 +11,8 @@ BF_File::BF_File( const std::string &filename, enum HDF5FileBase::fileMode mode 
 }
 
 void BF_File::initNodes() {
+  CommonAttributesFile::initNodes();
+
   addNode( new Attribute<string>(*this, "CREATE_OFFLINE_ONLINE") );
   addNode( new Attribute<string>(*this, "BF_FORMAT") );
   addNode( new Attribute<string>(*this, "BF_VERSION") );

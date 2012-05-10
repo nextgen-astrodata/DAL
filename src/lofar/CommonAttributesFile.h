@@ -61,6 +61,9 @@ public:
   Attribute<std::string>  ICDNumber();
   Attribute<std::string>  ICDVersion();
   Attribute<std::string>  notes();
+
+protected:
+  virtual void            initNodes();
 };
 
 }
