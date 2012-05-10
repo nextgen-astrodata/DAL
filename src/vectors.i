@@ -72,7 +72,7 @@
 
 %define AddVector( PythonName, CPPName )
   // create the Python class VectorXXX
-  %template(Vector ## PythonName) std::vector<CPPName>;
+  %template(Vector ## PythonName) std::vector< CPPName >;
 
   // register it in our Vectors dict
   %pythoncode {
