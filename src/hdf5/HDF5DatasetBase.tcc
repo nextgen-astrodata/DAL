@@ -7,7 +7,7 @@ template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t>
 
   const size_t rank = dims.size();
 
-  if (maxdims.size() != rank)
+  if (!maxdims.empty() && maxdims.size() != rank)
     throw DALValueError("Current and maximum dimensions vectors must have equal length");
 
   // convert from ssize_t -> hsize_t

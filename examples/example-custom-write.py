@@ -19,7 +19,7 @@ assert b.value is None
 
 # create a dataset
 d = DAL.HDF5DatasetBaseComplexFloat(f, "MY_DATASET")
-d.create([4,4],[4,4])
+d.create([4,4])
 
 # insert some data points
 d.setScalar([0,0],1+2j)

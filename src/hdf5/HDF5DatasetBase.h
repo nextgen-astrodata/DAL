@@ -83,7 +83,7 @@ public:
    *  LITTLE: use little-endian: ARM, x86, x86_64
    *  BIG:    use big-endian:    MIPS, POWER, PowerPC, SPARC
    */
-  void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename = "", enum Endianness endianness = NATIVE );
+  void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims = std::vector<ssize_t>(0), const std::string &filename = "", enum Endianness endianness = NATIVE );
   virtual void create() { throw DALException("create() not supported on a dataset"); }
 
   /*!
