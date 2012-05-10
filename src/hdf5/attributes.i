@@ -83,6 +83,31 @@ namespace DAL {
         If the attribute type is present in DAL.Attributes.values(),
         the returned object will have the correct type. Otherwise,
         a generic HDF5Node object is returned.
+
+        Python example:
+
+             # Create a new HDF5 file with some string attribute
+             >>> f = BF_File("example.h5", HDF5FileBase.CREATE)
+
+             # Set one of the attributes
+             >>> f.observationID().value = '12345'
+
+             # Check the HDF5 name of the observationID attribute
+             >>> f.observationID().name()
+             'OBSERVATION_ID'
+
+             # The observationID attribute is registered by BF_File
+             >>> 'OBSERVATION_ID' in f.nodeNames()
+             True
+
+             # Retrieve the attribute through introspection
+             >>> a = f.getNode('OBSERVATION_ID')
+             >>> a.value
+             '12345'
+        
+             # Clean up:
+             >>> import os
+             >>> os.remove("example.h5")
       """
       typename = self._getNodeTypeName(name)
 
