@@ -132,7 +132,7 @@ The HDF5 structure described above can be created and populated in C++ as follow
 
         HDF5DatasetBase<float > d(f, "MY_DATASET");
         vector<ssize_t> dims(2,2);
-        d.create(dims, dims);
+        d.create(dims);
 
         Attribute<string> desc(d.group(), "DESCRIPTION");
         desc.value = "This is an example dataset";
@@ -150,7 +150,7 @@ or alternatively, in Python:
         age.value = 21;
 
         d = DAL.HDF5DatasetBaseFloat(f, "MY_DATASET")
-        d.create([2,2],[2,2])
+        d.create([2,2])
 
         desc = DAL.AttributeString(d, "DESCRIPTION")
         desc.value = "This is an example dataset"
