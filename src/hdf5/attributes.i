@@ -86,7 +86,7 @@ namespace DAL {
 
         Python example:
 
-             # Create a new HDF5 file with some string attribute
+             # Create a new HDF5 file with a predefined format
              >>> f = BF_File("example.h5", HDF5FileBase.CREATE)
 
              # Set one of the attributes
