@@ -20,9 +20,7 @@ class HDF5Node {
 public:
   HDF5Node( HDF5NodeSet &parent, const std::string &name );
 
-  HDF5Node( const hid_gc &parent, const std::string &name );
-
-  virtual ~HDF5Node() {} // a destructor makes this class polymorphic, allowing dynamic_cast
+  virtual ~HDF5Node() {}
 
   /*!
    * Returns the HDF5 name of this node.
@@ -31,6 +29,33 @@ public:
 
   /*!
    * Returns whether this element exists in the HDF5 file.
+   *
+   * Python example:
+   * \code
+   *    # Create a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *
+   *    # An open file always exists
+   *    >>> f.exists()
+   *    True
+   *
+   *    # Reference an attribute in the file
+   *    >>> a = AttributeString(f, "EXAMPLE_ATTRIBUTE")
+   *
+   *    # Initially, the attribute does not exist
+   *    >>> a.exists()
+   *    False
+   *
+   *    # If we create it, it does exist
+   *    >>> a.create()
+   *    <...>
+   *    >>> a.exists()
+   *    True
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
   virtual bool exists() const { return false; }
 
@@ -107,9 +132,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  bool supported() {
-    return minVersion <= fileVersion();
-  }
+  bool supported() { return minVersion <= fileVersion(); }
 
   /*!
    * Whether the file was opened for writing.
@@ -142,6 +165,20 @@ public:
 
   /*!
    * The name of the file as it was opened.
+   *
+   * Python example:
+   * \code
+   *    # Create a new HDF5 file called "example.h5"
+   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *
+   *    # Query the file name
+   *    >>> f.fileName()
+   *    'example.h5'
+   *
+   *    # Clean up
+   *    >>> import os
+   *    >>> os.remove("example.h5")
+   * \endcode
    */
   std::string fileName() const { return data.fileName; }
 
@@ -178,6 +215,8 @@ protected:
   hid_gc parent;
   std::string _name;
 
+  HDF5Node( const hid_gc &parent, const std::string &name );
+
   /*!
    * Data that will be propagated through the object tree,
    * if subgroups and attributes are accessed.
@@ -187,7 +226,10 @@ protected:
    * objects representing subnodes are not updated.
    */
   struct PropagatedData {
+    //! The file version as it was set when this object was created
     VersionType fileVersion;
+
+    //! True if this file was opened for writing (CREATE or READWRITE)
     bool canWrite;
 
     //! Name of the file containing this node.
@@ -205,10 +247,12 @@ protected:
 /*!
  * Represents a set in the HDF5 hierarchy (a file, group or dataset;
  * anything that can have attributes and hold other nodes).
+ *
+ * An HDF5NodeSet maintains a set of registered HDF5Nodes that it
+ * expects to be present.
  */
 class HDF5NodeSet: public HDF5Node {
 public:
-  HDF5NodeSet( const hid_gc &parent, const std::string &name );
   HDF5NodeSet( HDF5NodeSet &parent, const std::string &name );
 
   virtual ~HDF5NodeSet();
@@ -220,7 +264,8 @@ public:
   virtual const hid_gc &group() = 0;
 
   /*!
-   * Returns a list of the HDF5 names of all nodes.
+   * Returns a list of the HDF5 names of all nodes registered
+   * in this class.
    */
   std::vector<std::string> nodeNames();
 
@@ -245,6 +290,8 @@ public:
 #endif
 
 protected:
+  HDF5NodeSet( const hid_gc &parent, const std::string &name );
+
   /*!
    * Add all known nodes to the map. This function will be called
    * when a node is requested.
@@ -262,13 +309,13 @@ protected:
   void freeNodeMap();
 
 private:
-  // The map containing all (registered) nodes in this set
+  //! The map containing all (registered) nodes in this set
   std::map<std::string, HDF5Node*> nodeMap;
 
-  // Whether nodeMap is initialised through initNodes()
+  //! Whether nodeMap is initialised through initNodes()
   bool mapInitialised;
 
-  // Makes sure that nodeMap can be accessed
+  //! Makes sure that nodeMap can be accessed
   void ensureNodesExist();
 };
 
