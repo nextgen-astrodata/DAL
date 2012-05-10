@@ -39,7 +39,13 @@ namespace DAL {
    *
    * Much nicer behaviour is obtained by letting Python return
    * objects of the same class as the requested node really is. Such
-   * behaviour is obtained by adding the following functionality:
+   * behaviour is obtained using the following approach. First, all Attribute
+   * wrapper classes (AttributeXXXX) register themselves under their
+   * internal C++ ABI type name. Second, any call to getNode first obtains
+   * the type of object (the internal C++ ABI type name) that needs to
+   * be returned. Finally, the class of the correct wrapper object
+   * is requested to return our node, forcably downcast to the correct
+   * C++ type of Attribute.
    *
    * 1) AttributeXXXX._typeName()
    *      returns the internal C++ ABI type name of the wrapped Attribute<T> class.
@@ -89,6 +95,8 @@ namespace DAL {
   }
 }
 
+// ignore the original getNode routine, which cannot be exported
+// because it returns a fancy ImplicitDowncast<HDF5Node>.
 %ignore DAL::HDF5NodeSet::getNode;
 
 %extend DAL::Attribute {
