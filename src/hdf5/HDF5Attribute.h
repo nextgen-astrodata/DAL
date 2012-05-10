@@ -39,6 +39,12 @@ public:
    * Returns the number of data points in this element (1 for a scalar, >= 0 for a vector)
    */
   size_t size() const;
+
+  /*!
+   * Validates the attribute by checking whether it exists, and whether it can be read
+   * using the type defined by this object.
+   */
+  virtual bool valid() const;
 };
 
 #ifndef SWIG
@@ -153,6 +159,8 @@ template<typename T> std::ostream& operator<<(std::ostream &out, const Attribute
  */
 template<typename T> class Attribute: public AttributeBase {
 public:
+  typedef T value_type;
+
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
@@ -177,6 +185,44 @@ public:
    */
   void set( const T &value );
 
+  /*!
+   * Validates the attribute by checking whether it exists, and whether it can be read
+   * using the type defined by this object.
+   *
+   * Python example:
+   * \code
+   *     # Create a new HDF5 file with some string attribute
+   *     >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *
+   *     # Refer to a string attribute
+   *     >>> a = AttributeString(f, "EXAMPLE_STRING")
+   *
+   *     # The attribute has not been written yet, so it's not valid
+   *     >>> a.exists()
+   *     False
+   *     >>> a.valid()
+   *     False
+   *
+   *     # Create and set the attribute
+   *     >>> a.value = "hello world"
+   *
+   *     # This attribute is valid because it exists and the type we specified
+   *     # matches the type stored on disk.
+   *     >>> a.valid()
+   *     True
+   *
+   *     # Read the same value as an integer
+   *     >>> b = AttributeUnsigned(f, "EXAMPLE_STRING")
+   *     >>> b.valid()
+   *     False
+   *
+   *     # Clean up:
+   *     >>> import os
+   *     >>> os.remove("example.h5")
+   * \endcode
+   */
+  virtual bool valid() const;
+
   AttributeValue<T> value;
 };
 
@@ -185,6 +231,8 @@ public:
  */
 template<typename T> class Attribute< std::vector<T> >: public AttributeBase {
 public:
+  typedef std::vector<T> value_type;
+
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
@@ -209,6 +257,12 @@ public:
    * if the attribute does not exist.
    */
   void set( const std::vector<T> &value );
+
+  /*!
+   * Validates the attribute by checking whether it exists, and whether it can be read
+   * using the type defined by this object.
+   */
+  virtual bool valid() const;
 
 #ifndef SWIG
   AttributeValue< std::vector<T> > value;

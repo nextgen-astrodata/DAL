@@ -10,6 +10,11 @@ inline bool AttributeBase::exists() const
   return H5Aexists(parent, _name.c_str()) > 0;
 }
 
+inline bool AttributeBase::valid() const
+{
+  return exists();
+}
+
 inline void AttributeBase::remove() const {
   if (H5Adelete(parent, _name.c_str()) < 0)
     throw HDF5Exception("Could not delete element");
@@ -130,6 +135,20 @@ template<typename T> inline T Attribute<T>::get() const
   return value;
 }
 
+template<typename T> inline bool Attribute<T>::valid() const
+{
+  if (!exists())
+    return false;
+
+  try {
+    (void)get();
+  } catch (HDF5Exception &e) {
+    return false;
+  }
+
+  return true;
+}
+
 template<typename T> inline Attribute< std::vector<T> >& Attribute< std::vector<T> >::create( size_t length )
 {
   if (length == 0)
@@ -169,6 +188,20 @@ template<typename T> inline std::vector<T> Attribute< std::vector<T> >::get() co
     throw HDF5Exception("Could not read attribute");
 
   return value;
+}
+
+template<typename T> inline bool Attribute< std::vector<T> >::valid() const
+{
+  if (!exists())
+    return false;
+
+  try {
+    (void)get();
+  } catch (HDF5Exception &e) {
+    return false;
+  }
+
+  return true;
 }
 
 // specialisations for std::string

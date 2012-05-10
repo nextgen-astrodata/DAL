@@ -2,6 +2,21 @@
 %rename(get_hid_t)  operator hid_t;
 %rename(get_hid_gc) operator hid_gc;
 
+// prevent SWIG from requiring a default constructor for AttributeBase
+namespace DAL {
+  %valuewrapper AttributeBase;
+  class AttributeBase;
+};
+
+// first extend, then ignore the original
+%extend DAL::HDF5NodeSet {
+  AttributeBase getNode( const std::string &name ) {
+    return $self->getNode(name);
+  }
+}
+
+%ignore DAL::HDF5NodeSet::getNode;
+
 // member functions that return *this are problematic,
 // because SWIG generates a new wrapper object and does not
 // know how to do the memory management right between
