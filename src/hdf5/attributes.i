@@ -25,27 +25,30 @@ namespace DAL {
 // loading the actual class.
 %extend DAL::HDF5NodeSet {
   /*
-   * When registering objects in an HDF5NodeSet, they are collected
-   * in a generic map<string, HDF5Node*>. In C++, we can use dynamic_cast
-   * to downcast each registered node to its original type. This is how
-   * HDF5NodeSet.getNode(name) is implemented: the user gets a reference
-   * to the requested node, which can be downcast to the desired type.
+   * Each HDF5NodeSet allows nodes to be registered in a generic
+   * map<string, HDF5Node*> using the addNode method. The getNode method
+   * is used for node lookup in that map. Nodes in the map are typically
+   * subclasses of HDF5Node. In C++, we can use dynamic_cast to cast
+   * the received object to its proper type.
    *
-   * However, SWIG behaves a lot better when it can handle objects
-   * instead of references or pointers to objects. A straight-forward
-   * implementation of HDF5NodeSet.getNode(name) would return a
-   * regular HDF5NodeSet object, slicing the requested node. We can't
-   * downcast a sliced object afterwards, since it's only a (wrapped) copy.
+   * In SWIG however, we prefer to pass around regular objects instead
+   * of references and pointers, to prevent crashes due to incorrect
+   * memory management between C++ and Python. Exposing the C++ getNode
+   * function to Python directly would thus result in returning HDF5Node
+   * objects, which are sliced copies of the object retained in the map.
    *
    * Much nicer behaviour is obtained by letting Python return
-   * objects of the same class as the requested node really is. Such
-   * behaviour is obtained using the following approach. First, all Attribute
-   * wrapper classes (AttributeXXXX) register themselves under their
-   * internal C++ ABI type name. Second, any call to getNode first obtains
-   * the type of object (the internal C++ ABI type name) that needs to
-   * be returned. Finally, the class of the correct wrapper object
-   * is requested to return our node, forcably downcast to the correct
-   * C++ type of Attribute.
+   * objects of the same class as the requested node really is. To do so,
+   * we need to know which Python class should wrap a requested node.
+   *
+   * The C++ <-> Python class link is maintained by a lookup table called
+   * `Attributes' in Python, which has the internal C++ class name (typeid)
+   * linked to its corresponding Python class. When a node is requested in
+   * our Python getNode funtion, we first ask in C++ what the class of that
+   * node is. Then, we ask the corresponding Python wrapper class to
+   * request the node and force a downcast.
+   *
+   * The following functionality is used in the process:
    *
    * 1) AttributeXXXX._typeName()
    *      returns the internal C++ ABI type name of the wrapped Attribute<T> class.
