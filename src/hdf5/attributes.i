@@ -56,7 +56,7 @@ namespace DAL {
    *      is a dict resolving C++ ABI type names to AttributeXXXX classes.
    * 3) HDF5NodeSet._getNodeTypeName(name)
    *      returns the internal C++ ABI type name of a node
-   * 4) AttributeXXXX._downCast(nodeSet, name)
+   * 4) AttributeXXXX._castNode(nodeSet, name)
    *      returns nodeSet.getNode(name) forcably upcast to AttributeXXXX.
    * 5) HDF5Node.getNode(name) (Python implementation to allow weakly typed return values)
    *      returns a node, forcably downcast to the AttributeXXXX class
@@ -116,7 +116,7 @@ namespace DAL {
 
       if typename in Attributes:
         # attribute type is registered, so cast to it
-        return Attributes[typename]._downCast(self, name)
+        return Attributes[typename]._castNode(self, name)
       else:
         # cast to the lowest common denominator
         return self._getNode(name)
@@ -137,7 +137,8 @@ namespace DAL {
   }
 
   // Force node `name' in nodeset `nodeSet' to be of our type
-  static Attribute< T > _downCast( HDF5NodeSet &nodeSet, const std::string &name ) {
+  // (will throw std::bad_cast on failure)
+  static Attribute< T > _castNode( HDF5NodeSet &nodeSet, const std::string &name ) {
     return nodeSet.getNode(name);
   }
 }  
