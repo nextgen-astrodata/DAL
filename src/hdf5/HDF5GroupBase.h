@@ -69,7 +69,7 @@ public:
 
   virtual const hid_gc &group() {
     // deferred opening of group, as it may need to be created first
-    if (!static_cast<hid_t>(_group))
+    if (!_group.isset())
       _group = open(parent, _name);
 
     return _group;
