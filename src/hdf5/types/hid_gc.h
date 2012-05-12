@@ -22,13 +22,13 @@ public:
   }
 
   hid_gc( const hid_gc &other ): hid(other.hid), closefunc(other.closefunc) {
-    if (hid > 0) {
+    if (isset()) {
       H5Iinc_ref(hid);
     }  
   }
 
   ~hid_gc() {
-    if (hid > 0 && H5Idec_ref(hid) == 1 && closefunc) {
+    if (isset() && H5Idec_ref(hid) == 1 && closefunc) {
       closefunc(hid);
     }
   }
@@ -41,8 +41,13 @@ public:
   }
 
   operator hid_t() const { return hid; }
-private:
 
+  /*!
+   * Returns true if this object wraps a hid.
+   */
+  bool isset() const { return hid > 0; }
+
+private:
   hid_t hid;
   hid_t (*closefunc)(hid_t);
 };
@@ -60,12 +65,18 @@ public:
   }
 
   ~hid_gc_noref() {
-    if (hid > 0 && closefunc) {
+    if (isset() && closefunc) {
       closefunc(hid);
     }  
   }
 
   operator hid_t() const { return hid; }
+
+  /*!
+   * Returns true if this object wraps a hid.
+   */
+  bool isset() const { return hid > 0; }
+
 private:
   hid_gc_noref( const hid_gc &other );
   hid_gc_noref &operator=( const hid_gc & );
