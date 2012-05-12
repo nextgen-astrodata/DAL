@@ -12,6 +12,8 @@ CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum HD
 
 void CommonAttributesFile::initNodes()
 {
+  HDF5FileBase::initNodes();
+
   addNode( new Attribute<string>(*this, "GROUPTYPE") );
   addNode( new Attribute<string>(*this, "FILENAME") );
   addNode( new Attribute<string>(*this, "FILEDATE") );

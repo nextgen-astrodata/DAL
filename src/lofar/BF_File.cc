@@ -142,6 +142,8 @@ BF_SysLog BF_File::sysLog()
 }
 
 void BF_ProcessingHistory::initNodes() {
+  HDF5GroupBase::initNodes();
+
   addNode( new Attribute<bool>(*this, "PARSET_OBS") );
   addNode( new Attribute<bool>(*this, "LOG_PRESTO") );
   addNode( new Attribute<bool>(*this, "PARFILE") );
@@ -163,6 +165,8 @@ Attribute<bool> BF_ProcessingHistory::parFile()
 }
 
 void BF_SubArrayPointing::initNodes() {
+  HDF5GroupBase::initNodes();
+
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
@@ -281,6 +285,8 @@ BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
 }
 
 void BF_BeamGroup::initNodes() {
+  HDF5GroupBase::initNodes();
+
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
@@ -434,6 +440,8 @@ CoordinatesGroup BF_BeamGroup::coordinates()
 
 void BF_StokesDataset::initNodes()
 {
+  HDF5GroupBase::initNodes();
+
   addNode( new Attribute<string>(*this, "STOKES_COMPONENT") );
   addNode( new Attribute< vector<unsigned> >(*this, "NOF_CHANNELS") );
   addNode( new Attribute<unsigned>(*this, "NOF_SUBBANDS") );

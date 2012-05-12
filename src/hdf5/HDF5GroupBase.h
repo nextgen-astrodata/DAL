@@ -67,16 +67,16 @@ public:
 
   Attribute<std::string> groupType();
 
-  virtual const hid_gc &group() {
-    // deferred opening of group, as it may need to be created first
-    if (!_group.isset())
-      _group = open(parent, _name);
-
-    return _group;
-  }
+  /*!
+   * Exposes the HDF5 object ID of this group. Opens the group
+   * if needed.
+   */
+  virtual const hid_gc &group();
 
 protected:
   hid_gc _group;
+
+  virtual void initNodes();
 
   virtual hid_gc open( hid_t parent, const std::string &name ) const;
 

@@ -72,9 +72,22 @@ hid_gc HDF5GroupBase::open( hid_t parent, const std::string &name ) const
   return hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group");
 }
 
+void HDF5GroupBase::initNodes()
+{
+  addNode(new Attribute<string>(*this, "GROUPTYPE"));
+}
+
 Attribute<string> HDF5GroupBase::groupType()
 {
-  return Attribute<string>(*this, "GROUPTYPE");
+  return getNode("GROUPTYPE");
+}
+
+const hid_gc &HDF5GroupBase::group() {
+  // deferred opening of group, as it may need to be created first
+  if (!_group.isset())
+    _group = open(parent, _name);
+
+  return _group;
 }
 
 }
