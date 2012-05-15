@@ -29,6 +29,7 @@ class HDF5Exception: public DALException
 {
 public:
   HDF5Exception(const std::string &msg, const HDF5ErrorStack &stack = HDF5ErrorStack());
+  virtual ~HDF5Exception() throw();
 
   HDF5ErrorStack stack;
 
