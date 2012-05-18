@@ -14,7 +14,6 @@ void CommonAttributesFile::initNodes()
 {
   HDF5FileBase::initNodes();
 
-  addNode( new Attribute<string>(*this, "GROUPTYPE") );
   addNode( new Attribute<string>(*this, "FILENAME") );
   addNode( new Attribute<string>(*this, "FILEDATE") );
   addNode( new Attribute<string>(*this, "FILETYPE") );
@@ -50,11 +49,6 @@ void CommonAttributesFile::initNodes()
   addNode( new Attribute<string>(*this, "ICD_NUMBER") );
   addNode( new Attribute<string>(*this, "ICD_VERSION") );
   addNode( new Attribute<string>(*this, "NOTES") );
-}
-
-Attribute<string> CommonAttributesFile::groupType()
-{
-  return getNode("GROUPTYPE");
 }
 
 Attribute<string> CommonAttributesFile::fileName()

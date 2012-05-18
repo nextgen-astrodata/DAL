@@ -16,7 +16,6 @@ class CommonAttributesFile: public HDF5FileBase {
 public:
   CommonAttributesFile( const std::string &filename, enum fileMode mode = READ );
 
-  Attribute<std::string> groupType();
   Attribute<std::string> fileName();
   Attribute<std::string> fileDate();
   Attribute<std::string> fileType();
