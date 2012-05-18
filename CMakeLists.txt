@@ -24,3 +24,6 @@ if(BUILD_TESTING)
   add_subdirectory(test)
 endif(BUILD_TESTING)
 
+if(GENERATE_DOCS)
+  add_subdirectory(doc)
+endif(GENERATE_DOCS)
