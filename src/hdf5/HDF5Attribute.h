@@ -1,5 +1,5 @@
-#ifndef __H5ATTRIBUTE__
-#define __H5ATTRIBUTE__
+#ifndef __HDF5_ATTRIBUTE__
+#define __HDF5_ATTRIBUTE__
 
 #include <string>
 #include <vector>

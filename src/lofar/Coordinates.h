@@ -26,7 +26,7 @@ namespace DAL {
 class Coordinate;
 
 /*!
- * Coordinate groups as defined in ICD002.
+ * Interface for coordinate groups.
  */
 class CoordinatesGroup: public HDF5GroupBase {
 public:

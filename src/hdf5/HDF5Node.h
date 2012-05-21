@@ -1,5 +1,5 @@
-#ifndef __HDF5NODE__
-#define __HDF5NODE__
+#ifndef __HDF5_NODE__
+#define __HDF5_NODE__
 
 #include <string>
 #include <map>

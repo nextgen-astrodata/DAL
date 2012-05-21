@@ -90,5 +90,26 @@ const hid_gc &HDF5GroupBase::group() {
   return _group;
 }
 
+vector<string> HDF5GroupBase::memberNames() {
+  vector<string> names;
+  H5G_info_t groupInfo;
+
+  if (H5Gget_info(group(), &groupInfo) < 0)
+    throw HDF5Exception("could not get group info");
+
+  // Loop around H5Lget_name_by_idx(). Can also use H5Literate(), but it is more fuss for what we need here.
+  char linkName[128];
+  hid_gc_noref lapl(H5Pcreate(H5P_LINK_ACCESS), H5Pclose, "Could not create link access property list");
+  for (size_t i = 0; i < groupInfo.nlinks; i++) {
+    ssize_t size = H5Lget_name_by_idx(group(), ".", H5_INDEX_CRT_ORDER, H5_ITER_NATIVE, i, linkName, sizeof linkName, lapl);
+    if (size < 0)
+      throw HDF5Exception("could not get link name by index");
+
+    names.push_back(linkName);
+  }
+
+  return names;
+}
+
 }
 

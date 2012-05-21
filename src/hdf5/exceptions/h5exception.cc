@@ -12,6 +12,9 @@ HDF5Exception::HDF5Exception(const std::string &msg, const HDF5ErrorStack &stack
 {
 }
 
+HDF5Exception::~HDF5Exception() throw() {
+}
+
 std::string HDF5Exception::stackSummary() const {
   if (stack.stack.empty())
     return "";

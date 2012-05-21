@@ -1,7 +1,8 @@
-#ifndef __HDF5GROUP__
-#define __HDF5GROUP__
+#ifndef __HDF5_GROUP_BASE__
+#define __HDF5_GROUP_BASE__
 
 #include <string>
+#include <vector>
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/HDF5Attribute.h"
@@ -79,6 +80,8 @@ protected:
   virtual void initNodes();
 
   virtual hid_gc open( hid_t parent, const std::string &name ) const;
+
+  std::vector<std::string> memberNames();
 
   // constructor for root group
   HDF5GroupBase( const hid_gc &fileid );

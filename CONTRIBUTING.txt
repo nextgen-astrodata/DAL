@@ -2,9 +2,9 @@ The Data Access Library (DAL) - CONTRIBUTING
 ============================================
 
 External contributions in any form (comments, requests, issue reports, patches, ...) are welcome.
-To keep a maintainable code base and not drift away from the goals of DAL, we may or may not decide to include the changes as provided.
+To keep a maintainable code base and not drift away from the goals of DAL, we may or may not include the changes as provided.
 
-_NOTE_: By contributing to this project you certify that you have the right to submit the contribution under the open source license covering this project, and that you understand that a record of this contribution with any personal information provided along may be redistributed with this project.
+_NOTE_: By contributing to this project you certify that you have the right to submit the contribution under the open source license covering this project, and that you understand that a record of this contribution with any personal information provided along may be publicly available for many years and be redistributed with this project.
 
 
 Contributing
@@ -42,7 +42,7 @@ After confirming the automatic reply, you can post by mailing to:
 	nextgen-astrodata AT astron DOT nl
 
 
-NOTE: For questions about ASTRON, LOFAR, or your LOFAR data product, please instead contact ASTRON Science Support through:
+NOTE: For questions about ASTRON, LOFAR, or your LOFAR data product, please contact ASTRON Science Support instead through:
 
 	sciencesupport AT astron DOT nl
 
