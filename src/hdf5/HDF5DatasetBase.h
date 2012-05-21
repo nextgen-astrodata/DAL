@@ -1,5 +1,5 @@
-#ifndef __HDF5DATASET__
-#define __HDF5DATASET__
+#ifndef __HDF5_DATASET_BASE__
+#define __HDF5_DATASET_BASE__
 
 #include <string>
 #include <vector>

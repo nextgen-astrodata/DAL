@@ -1,5 +1,5 @@
-#ifndef __HDF5GROUP__
-#define __HDF5GROUP__
+#ifndef __HDF5_GROUP_BASE__
+#define __HDF5_GROUP_BASE__
 
 #include <string>
 #include <hdf5.h>
