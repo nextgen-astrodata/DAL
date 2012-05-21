@@ -13,7 +13,7 @@ if(GENERATE_DOCS)
   )
 
   # run "make doc" to generate doxygen documentation
-  add_custom_target(doc# ALL
+  add_custom_target(doc ALL
     COMMAND ${DOXYGEN_EXECUTABLE} doxygen.conf
     COMMENT "Generating doxygen documentation"
   )
