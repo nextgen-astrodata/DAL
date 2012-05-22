@@ -24,7 +24,7 @@ inline size_t AttributeBase::size() const
 {
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute");
 
-  hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not retrieve dataspace of atttribute");
+  hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not retrieve dataspace of attribute");
 
   if (!H5Sis_simple(dataspace)) {
     // attribute is a scalar
@@ -110,7 +110,7 @@ template<typename T> inline Attribute<T>& Attribute<T>::create()
 {
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
 
-  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute" );
+  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute" );
 
   return *this;
 }
@@ -156,7 +156,7 @@ template<typename T> inline Attribute< std::vector<T> >& Attribute< std::vector<
 
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace");
 
-  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
+  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute");
 
   return *this;
 }
@@ -213,7 +213,7 @@ template<> inline Attribute<std::string>& Attribute<std::string>::create()
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
 
-  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
+  hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute");
 
   return *this;
 }
