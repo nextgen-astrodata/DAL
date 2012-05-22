@@ -207,6 +207,9 @@ namespace DAL {
 
 AddAttribute( Bool,       bool );
 
+AddAttribute( Int,        int );
+AddAttribute( VInt,       std::vector<int> );
+
 AddAttribute( Unsigned,   unsigned );
 AddAttribute( VUnsigned,  std::vector<unsigned> );
 
