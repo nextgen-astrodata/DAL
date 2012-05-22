@@ -31,12 +31,10 @@ public:
 
   virtual TBB_SysLog     sysLog();
   virtual std::vector<TBB_Station> stations();
-  virtual TBB_Station    station( const std::string &name );
+  virtual TBB_Station    station( const std::string &stationName );
 
   Attribute<std::string> triggerType();
   virtual TBB_Trigger    triggerData();
-protected:
-  std::string            stationName( unsigned nr );
 };
 
 class TBB_SysLog: public HDF5GroupBase {
@@ -64,10 +62,7 @@ public:
   Attribute<double>                     triggerOffset();
 
   virtual std::vector<TBB_DipoleDataset> dipoles();
-  virtual TBB_DipoleDataset             dipole( const std::string &name );
-
-protected:
-
+  virtual TBB_DipoleDataset             dipole( const std::string &dipoleName );
 };
 
 class TBB_DipoleDataset: public HDF5DatasetBase<short> {
