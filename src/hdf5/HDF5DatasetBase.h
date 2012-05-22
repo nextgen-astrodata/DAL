@@ -205,7 +205,7 @@ public:
 
 protected:
   virtual hid_gc open( hid_t parent, const std::string &name ) const {
-    return hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset");
+    return hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset " + _name);
   }
 
   bool bigEndian( enum Endianness endianness ) const;
