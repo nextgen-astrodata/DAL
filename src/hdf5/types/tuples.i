@@ -68,6 +68,13 @@
   }
 }
 
+%define AddTuple( PythonName, CPPName )
+  // instantiate the template, and a vector variant
+  %template(PythonName) CPPName;
+
+  AddVector(PythonName, CPPName);
+%enddef
+
 namespace DAL {
   // TupleBases need to be instantiated to force that they will be %extended
   %template(_TupleBaseUnsigned2)     TupleBase<unsigned,2>;
@@ -79,20 +86,15 @@ namespace DAL {
   %template(_TupleBaseDouble2)       TupleBase<double,2>;
   %template(_TupleBaseDouble3)       TupleBase<double,3>;
   %template(_TupleBaseDouble4)       TupleBase<double,4>;
-
-  %template(TupleUnsigned2)     Tuple<unsigned,2>;
-  %template(TupleUnsigned3)     Tuple<unsigned,3>;
-  %template(TupleUnsigned4)     Tuple<unsigned,4>;
-  %template(TupleDouble2)       Tuple<double,2>;
-  %template(TupleDouble3)       Tuple<double,3>;
-  %template(TupleDouble4)       Tuple<double,4>;
 }
 
-// std::vector variants
-%template(VectorTupleUnsigned2)     std::vector< DAL::Tuple<unsigned,2> >;
-%template(VectorTupleUnsigned3)     std::vector< DAL::Tuple<unsigned,3> >;
-%template(VectorTupleUnsigned4)     std::vector< DAL::Tuple<unsigned,4> >;
-%template(VectorTupleDouble2)       std::vector< DAL::Tuple<double,2> >;
-%template(VectorTupleDouble3)       std::vector< DAL::Tuple<double,3> >;
-%template(VectorTupleDouble4)       std::vector< DAL::Tuple<double,4> >;
+AddTuple( TupleUnsigned2, %arg(DAL::Tuple<unsigned,2>) )
+AddTuple( TupleUnsigned3, %arg(DAL::Tuple<unsigned,3>) )
+AddTuple( TupleUnsigned4, %arg(DAL::Tuple<unsigned,4>) )
+AddTuple( TupleFloat2, %arg(DAL::Tuple<float,2>) )
+AddTuple( TupleFloat3, %arg(DAL::Tuple<float,3>) )
+AddTuple( TupleFloat4, %arg(DAL::Tuple<float,4>) )
+AddTuple( TupleDouble2, %arg(DAL::Tuple<double,2>) )
+AddTuple( TupleDouble3, %arg(DAL::Tuple<double,3>) )
+AddTuple( TupleDouble4, %arg(DAL::Tuple<double,4>) )
 
