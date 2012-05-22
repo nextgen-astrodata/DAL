@@ -2,6 +2,7 @@
 #define __TBB_FILE__
 
 #include <string>
+#include <vector>
 #include <hdf5.h>
 #include "hdf5/HDF5Attribute.h"
 #include "hdf5/HDF5GroupBase.h"
@@ -19,7 +20,7 @@ class TBB_UnknownTrigger;
 class TBB_VHECRTrigger;
 
 /*!
- * Interface for TBB Time-Series Data as described in ICD001.
+ * Interface for TBB Time-Series Data.
  */
 class TBB_File: public CommonAttributesFile {
 public:
@@ -29,7 +30,8 @@ public:
   TBB_File( const std::string &filename, enum fileMode mode = READ );
 
   virtual TBB_SysLog     sysLog();
-  virtual TBB_Station    station( unsigned nr );
+  virtual std::vector<TBB_Station> stations();
+  virtual TBB_Station    station( const std::string &name );
 
   Attribute<std::string> triggerType();
   virtual TBB_Trigger    triggerData();
@@ -61,11 +63,11 @@ public:
 
   Attribute<double>                     triggerOffset();
 
-  Attribute<unsigned>                   nofDipoles();
+  virtual std::vector<TBB_DipoleDataset> dipoles();
+  virtual TBB_DipoleDataset             dipole( const std::string &name );
 
-  virtual TBB_DipoleDataset             dipole( unsigned station, unsigned rsp, unsigned rcu );
 protected:
-  std::string                           dipoleName( unsigned station, unsigned rsp, unsigned rcu );
+
 };
 
 class TBB_DipoleDataset: public HDF5DatasetBase<short> {

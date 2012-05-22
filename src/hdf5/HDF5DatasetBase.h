@@ -1,5 +1,5 @@
-#ifndef __HDF5DATASET__
-#define __HDF5DATASET__
+#ifndef __HDF5_DATASET_BASE__
+#define __HDF5_DATASET_BASE__
 
 #include <string>
 #include <vector>
@@ -76,11 +76,11 @@ public:
    *
    * `endianness` toggles whether the data is in big-endian format. Typically:
    *  NATIVE: use the endianness of the current machine
-   *  LITTLE: use little-endian: ARM, x86, x86_64
-   *  BIG:    use big-endian:    MIPS, POWER, PowerPC, SPARC
+   *  LITTLE: use little-endian: x86, x86_64, ARM
+   *  BIG:    use big-endian:    MIPS, POWER/PowerPC, SPARC, IA-64
    */
-  void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims = std::vector<ssize_t>(0), const std::string &filename = "", enum Endianness endianness = NATIVE );
-  virtual void create() { throw DALException("create() not supported on a dataset"); }
+  void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims = std::vector<ssize_t>(0),
+               const std::string &filename = "", enum Endianness endianness = NATIVE );
 
   /*!
    * Returns the rank of the dataset.
@@ -212,6 +212,10 @@ protected:
 
   // if the strides vector is empty, a continuous array is assumed
   void matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read );
+
+  virtual void create() {
+    throw HDF5Exception("create() without parameters not supported on a dataset");
+  }
 };
 
 }

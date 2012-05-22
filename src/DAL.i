@@ -11,9 +11,6 @@
 // first generate signatures using SWIG's knowledge
 %feature("autodoc",1);
 
-// then append documentation using doxygen's knowledge
-%include "doc/docstrings.i"
-
 // -------------------------------
 // Type marshalling - scalars
 // -------------------------------
