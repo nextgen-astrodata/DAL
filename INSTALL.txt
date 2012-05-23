@@ -19,7 +19,7 @@ Build Instructions
 	cd build
 	cmake ..
 	make
-	make install
+	sudo make install
 
 If cmake does not find (the right) HDF5 libs, provide a hint to the Find module by setting the HDF5_ROOT environment variable.
 
