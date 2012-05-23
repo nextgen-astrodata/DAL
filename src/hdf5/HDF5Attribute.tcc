@@ -121,7 +121,7 @@ static inline bool h5stringIsVariable( hid_t datatype )
   htri_t isVariable = H5Tis_variable_str(datatype);
 
   if (isVariable < 0)
-    throw HDF5Exception("Could not determine whether datatype is a variable string");
+    throw HDF5Exception("Could not determine whether datatype is a variable or fixed length string");
 
   return isVariable > 0;  
 }
@@ -248,24 +248,24 @@ template<> inline void Attribute<std::string>::set( const std::string &value )
 
   if (h5stringIsVariable(diskdatatype)) {
     // string type on disk is variable -- just set it
-    hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype");
+    hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype for attribute " + _name);
 
     // write the attribute
     if (H5Awrite(attr, datatype, &cstr) < 0)
-      throw HDF5Exception("Could not write attribute");
+      throw HDF5Exception("Could not write attribute " + _name);
   } else {
     // string type on disk is fixed -- recreate if not enough space
     size_t diskdatasize = H5Tget_size(diskdatatype);
     size_t requiredsize = value.size() + 1;
 
-    hid_gc_noref datatype(h5fixedStringType(requiredsize), H5Tclose, "Could not create fixed string datatype");
+    hid_gc_noref datatype(h5fixedStringType(requiredsize), H5Tclose, "Could not create fixed string datatype for attribute " + _name);
 
     if (diskdatasize < requiredsize) {
       // recreate as fixed string of the right size
       remove();
 
-      hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace");
-      hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create atttribute");
+      hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace for attribute " + _name);
+      hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute " + _name);
 
       // write the new attribute
       if (H5Awrite(attr, datatype, cstr) < 0)
@@ -290,7 +290,7 @@ template<> inline std::string Attribute<std::string>::get() const
 
   if (h5stringIsVariable(diskdatatype)) {
     // string type on disk is variable -- just read it (HDF5 will allocate)
-    hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create variable string datatype");
+    hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create variable string datatype for attribute " + _name);
 
     if (H5Aread(attr, datatype, &buf) < 0)
       throw HDF5Exception("Could not read attribute " + _name);
@@ -300,9 +300,9 @@ template<> inline std::string Attribute<std::string>::get() const
     buf = static_cast<char*>(malloc(diskdatasize));
 
     if (!buf)
-      throw DALException("Not enough memory");
+      throw DALException("Could not allocate memory to retrieve attribute " + _name);
 
-    hid_gc_noref datatype(h5fixedStringType(diskdatasize), H5Tclose, "Could not create fixed string datatype");
+    hid_gc_noref datatype(h5fixedStringType(diskdatasize), H5Tclose, "Could not create fixed string datatype for attribute " + _name);
 
     if (H5Aread(attr, datatype, buf) < 0)
       throw HDF5Exception("Could not read attribute " + _name);
