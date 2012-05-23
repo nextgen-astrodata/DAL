@@ -72,7 +72,7 @@
   // instantiate the template, and a vector variant
   %template(PythonName) CPPName;
 
-  AddVector(PythonName, CPPName);
+  AddVector(PythonName, %arg(CPPName));
 %enddef
 
 namespace DAL {
