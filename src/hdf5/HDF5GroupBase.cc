@@ -7,25 +7,29 @@ namespace DAL {
 
 HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
 :
-  HDF5NodeSet(other.parent, other._name),
-  _group(other._group)
+  HDF5Node(other.parent, other._name),
+  _group(other._group),
+  mapInitialised(false)
 {
 }
 
-HDF5GroupBase::HDF5GroupBase( HDF5NodeSet &parent, const std::string &name )
+HDF5GroupBase::HDF5GroupBase( HDF5GroupBase &parent, const std::string &name )
 :
-  HDF5NodeSet(parent, name)
+  HDF5Node(parent, name),
+  mapInitialised(false)
 {
 }
 
 HDF5GroupBase::HDF5GroupBase( const hid_gc &fileid )
 :
-  HDF5NodeSet(fileid, ""),
-  _group(fileid)
+  HDF5Node(fileid, ""),
+  _group(fileid),
+  mapInitialised(false)
 {
 }
 
 HDF5GroupBase::~HDF5GroupBase() {
+  freeNodeMap();
 }
 
 void HDF5GroupBase::create() {
@@ -88,6 +92,60 @@ const hid_gc &HDF5GroupBase::group() {
     _group = open(parent, _name);
 
   return _group;
+}
+
+void HDF5GroupBase::addNode( HDF5Node *attr )
+{
+  if (!attr)
+    throw DALValueError("attr cannot be NULL");
+
+  if (nodeMap.find(attr->name()) != nodeMap.end())
+    throw DALValueError("Node already exists: " + attr->name()); 
+
+  nodeMap[attr->name()] = attr;
+}
+
+void HDF5GroupBase::ensureNodesExist()
+{
+  if (!exists())
+    throw DALException("Cannot access nodes in a non-existing group " + _name);
+
+  if (!mapInitialised) {
+    initNodes();
+    mapInitialised = true;
+  }
+}
+
+ImplicitDowncast<HDF5Node> HDF5GroupBase::getNode( const std::string &name )
+{
+  ensureNodesExist();
+ 
+  if (nodeMap.find(name) == nodeMap.end())
+    throw DALValueError(string("Node not found: ") + name);
+
+  return *nodeMap[name];
+}
+
+vector<string> HDF5GroupBase::nodeNames() {
+  ensureNodesExist();
+
+  vector<string> names;
+  names.reserve(nodeMap.size());
+
+  for( map<string, HDF5Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
+    names.push_back(i->first);
+  }
+
+  return names;
+}
+
+void HDF5GroupBase::freeNodeMap()
+{
+  for( map<string, HDF5Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
+    delete i->second;
+  }
+
+  nodeMap.clear();
 }
 
 vector<string> HDF5GroupBase::memberNames() {

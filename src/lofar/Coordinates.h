@@ -30,7 +30,7 @@ class Coordinate;
  */
 class CoordinatesGroup: public HDF5GroupBase {
 public:
-  CoordinatesGroup( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  CoordinatesGroup( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   Attribute< std::vector<double> >      refLocationValue();
   Attribute< std::vector<std::string> > refLocationUnit();
@@ -53,7 +53,7 @@ protected:
 
 class Coordinate: public HDF5GroupBase {
 public:
-  Coordinate( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  Coordinate( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   Attribute<std::string>  coordinateType();
   Attribute< std::vector<std::string> > storageType();
@@ -69,7 +69,7 @@ public:
  */
 class NumericalCoordinate: public Coordinate {
 public:
-  NumericalCoordinate( HDF5NodeSet &parent, const std::string &name ): Coordinate(parent, name) {}
+  NumericalCoordinate( HDF5GroupBase &parent, const std::string &name ): Coordinate(parent, name) {}
 
   // linear coordinates use these attributes
   Attribute<double>                     referenceValue();
@@ -88,7 +88,7 @@ public:
  */
 class DirectionCoordinate: public Coordinate {
 public:
-  DirectionCoordinate( HDF5NodeSet &parent, const std::string &name ): Coordinate(parent, name) {}
+  DirectionCoordinate( HDF5GroupBase &parent, const std::string &name ): Coordinate(parent, name) {}
 
   Attribute< std::vector<double> >      referenceValue();
   Attribute< std::vector<double> >      referencePixel();
@@ -108,7 +108,7 @@ public:
  */
 class StringCoordinate: public Coordinate {
 public:
-  StringCoordinate( HDF5NodeSet &parent, const std::string &name ): Coordinate(parent, name) {}
+  StringCoordinate( HDF5GroupBase &parent, const std::string &name ): Coordinate(parent, name) {}
 
   Attribute<unsigned>                   axisLength();
   Attribute< std::vector<unsigned> >    axisValuesPixel();
@@ -117,14 +117,14 @@ public:
 
 class TimeCoordinate: public NumericalCoordinate {
 public:
-  TimeCoordinate( HDF5NodeSet &parent, const std::string &name ): NumericalCoordinate(parent, name) {}
+  TimeCoordinate( HDF5GroupBase &parent, const std::string &name ): NumericalCoordinate(parent, name) {}
 
   Attribute<std::string>                referenceFrame();
 };
 
 class SpectralCoordinate: public NumericalCoordinate {
 public:
-  SpectralCoordinate( HDF5NodeSet &parent, const std::string &name ): NumericalCoordinate(parent, name) {}
+  SpectralCoordinate( HDF5GroupBase &parent, const std::string &name ): NumericalCoordinate(parent, name) {}
 
   Attribute<std::string>                referenceFrame();
 
@@ -137,7 +137,7 @@ public:
 
 class PolarizationCoordinate: public StringCoordinate {
 public:
-  PolarizationCoordinate( HDF5NodeSet &parent, const std::string &name ): StringCoordinate(parent, name) {}
+  PolarizationCoordinate( HDF5GroupBase &parent, const std::string &name ): StringCoordinate(parent, name) {}
 };
 
 }

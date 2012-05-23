@@ -61,7 +61,7 @@ template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
 
-  HDF5DatasetBase( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  HDF5DatasetBase( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   /*!
    * Creates a new dataset with dimensions sized `dims'. If `maxdims' is set, the dataset can be scaled up to `maxdims'.

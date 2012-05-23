@@ -85,10 +85,9 @@ The DAL allows any HDF5 file structure consisting of groups, data sets, and attr
 An HDF5 file in the DAL is thus represented in its abstract form -- the developer does not need to call any HDF5 functions to define, examine, or use a document structure. To do so, DAL defines the following C++ class structure:
 
         HDF5Node                  - Represents any HDF5 node (attribute/group/dataset/file).
-          HDF5NodeSet             - Represents objects which can have HDF5 attributes and subgroups.
+          HDF5GroupBase           - Any HDF5 group that is not a root group.
             HDF5FileBase          - Wraps an HDF5 file itself (the root group).
-            HDF5GroupBase         - Any HDF5 group that is not a root group.
-              HDF5DatasetBase<T>  - An HDF5 data set with data of type T.
+            HDF5DatasetBase<T>    - An HDF5 data set with data of type T.
           AttributeBase           - Common functionality for all attributes.
             Attribute<T>          - An HDF5 attribute (a key/value pair; key = string, value = data type T)
 

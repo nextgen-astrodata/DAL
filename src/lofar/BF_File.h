@@ -64,12 +64,12 @@ protected:
 
 class BF_SysLog: public HDF5GroupBase {
 public:
-  BF_SysLog( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_SysLog( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 };
 
 class BF_ProcessingHistory: public HDF5GroupBase {
 public:
-  BF_ProcessingHistory( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_ProcessingHistory( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   Attribute<bool>         parsetObs();
   Attribute<bool>         logPresto();
@@ -81,7 +81,7 @@ protected:
 
 class BF_SubArrayPointing: public HDF5GroupBase {
 public:
-  BF_SubArrayPointing( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_SubArrayPointing( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
@@ -117,7 +117,7 @@ protected:
 
 class BF_BeamGroup: public HDF5GroupBase {
 public:
-  BF_BeamGroup( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_BeamGroup( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
@@ -160,7 +160,7 @@ protected:
 
 class BF_StokesDataset: public HDF5DatasetBase<float> {
 public:
-  BF_StokesDataset( HDF5NodeSet &parent, const std::string &name ): HDF5DatasetBase<float>(parent, name) {}
+  BF_StokesDataset( HDF5GroupBase &parent, const std::string &name ): HDF5DatasetBase<float>(parent, name) {}
 
   Attribute<std::string>  stokesComponent();
   Attribute< std::vector<unsigned> >    nofChannels();

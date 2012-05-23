@@ -6,6 +6,7 @@
 #include <ostream>
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/HDF5Node.h"
+#include "hdf5/HDF5GroupBase.h"
 
 /*
  * NOTE: Setting attributes is not thread-safe if the same attribute is modified by multiple
@@ -22,7 +23,7 @@ public:
   /*!
    * Create a generic Attribute object, providing meta functionality.
    */
-  AttributeBase( HDF5NodeSet &parent, const std::string &name ): HDF5Node(parent, name) {}
+  AttributeBase( HDF5GroupBase &parent, const std::string &name ): HDF5Node(parent, name) {}
 
   /*!
    * Returns whether this attribute exists in the HDF5 file.
@@ -167,7 +168,7 @@ public:
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+  Attribute( HDF5GroupBase &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
@@ -241,7 +242,7 @@ public:
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( HDF5NodeSet &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+  Attribute( HDF5GroupBase &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 

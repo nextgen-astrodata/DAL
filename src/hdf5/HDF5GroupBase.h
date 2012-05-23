@@ -5,17 +5,21 @@
 #include <vector>
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
-#include "hdf5/HDF5Attribute.h"
 #include "hdf5/HDF5Node.h"
 
 namespace DAL {
 
+template<typename T> class Attribute;
+
 /*!
  * Wraps an HDF5 group, providing core functionality.
+ *
+ * An HDF5GroupBase maintains a set of registered HDF5Nodes that it
+ * expects to be present.
  */
-class HDF5GroupBase: public HDF5NodeSet {
+class HDF5GroupBase: public HDF5Node {
 public:
-  HDF5GroupBase( HDF5NodeSet &parent, const std::string &name );
+  HDF5GroupBase( HDF5GroupBase &parent, const std::string &name );
 
   HDF5GroupBase( const HDF5GroupBase &other );
 
@@ -74,6 +78,42 @@ public:
    */
   virtual const hid_gc &group();
 
+  /*!
+   * Returns a list of the HDF5 names of all nodes registered
+   * in this class.
+   */
+  std::vector<std::string> nodeNames();
+
+#ifndef SWIG
+
+  /*!
+   * Returns a reference to a node from the map. initNodes() is called
+   * if needed, and an exception is thrown if the group
+   * has not been opened or created yet.
+   *
+   * ImplicitDowncast<HDF5Node> allows getNode to be automatically
+   * cast to the required type (a subclass of HDF5Node), for example:
+   *
+   * Attribute<int> &attr = getNode("MY_INTEGER");
+   *
+   * It is the responsibility of the caller to request a type
+   * that is compatible with the type of object that is retrieved.
+   * If not, an std::bad_cast exception is thrown.
+   */
+  ImplicitDowncast<HDF5Node> getNode( const std::string &name );
+
+#endif
+
+  /*!
+   * Add a node to the map. Ownerschip is taken.
+   */
+  void addNode( HDF5Node *attr );
+
+  /*!
+   * Remove all registered nodes from the map and delete them.
+   */
+  void freeNodeMap();
+
 protected:
   hid_gc _group;
 
@@ -85,9 +125,22 @@ protected:
 
   // constructor for root group
   HDF5GroupBase( const hid_gc &fileid );
+
+private:
+  //! The map containing all (registered) nodes in this set
+  std::map<std::string, HDF5Node*> nodeMap;
+
+  //! Whether nodeMap is initialised through initNodes()
+  bool mapInitialised;
+
+  //! Makes sure that nodeMap can be accessed
+  void ensureNodesExist();
 };
 
 }
+
+// make sure that Attribute is actually defined
+#include "hdf5/HDF5Attribute.h"
 
 #endif
 

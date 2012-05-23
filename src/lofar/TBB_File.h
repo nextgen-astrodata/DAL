@@ -39,12 +39,12 @@ public:
 
 class TBB_SysLog: public HDF5GroupBase {
 public:
-  TBB_SysLog( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  TBB_SysLog( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 };
 
 class TBB_Station: public HDF5GroupBase {
 public:
-  TBB_Station( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  TBB_Station( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 
   Attribute<std::string>                stationName();
 
@@ -67,7 +67,7 @@ public:
 
 class TBB_DipoleDataset: public HDF5DatasetBase<short> {
 public:
-  TBB_DipoleDataset( HDF5NodeSet &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
+  TBB_DipoleDataset( HDF5GroupBase &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();
@@ -110,19 +110,19 @@ public:
 
 class TBB_Trigger: public HDF5GroupBase {
 public:
-  TBB_Trigger( HDF5NodeSet &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  TBB_Trigger( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
 };
 
 class TBB_UnknownTrigger: public TBB_Trigger {
 public:
-  TBB_UnknownTrigger( HDF5NodeSet &parent, const std::string &name ): TBB_Trigger(parent, name) {}
+  TBB_UnknownTrigger( HDF5GroupBase &parent, const std::string &name ): TBB_Trigger(parent, name) {}
 
   Attribute<std::string> metadata();
 };
 
 class TBB_VHECRTrigger: public TBB_Trigger {
 public:
-  TBB_VHECRTrigger( HDF5NodeSet &parent, const std::string &name ): TBB_Trigger(parent, name) {}
+  TBB_VHECRTrigger( HDF5GroupBase &parent, const std::string &name ): TBB_Trigger(parent, name) {}
 
   Attribute<std::string> triggerSource();
 
