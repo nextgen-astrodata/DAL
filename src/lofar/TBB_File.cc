@@ -12,25 +12,23 @@ TBB_File::TBB_File( const std::string &filename, enum HDF5FileBase::fileMode mod
 
 vector<TBB_Station> TBB_File::stations()
 {
+  const string stPrefix("STATION_");
   vector<TBB_Station> stationGroups;
   vector<string> membNames(memberNames());
 
   for (vector<string>::const_iterator it(membNames.begin()); it != membNames.end(); ++it) {
-
     // Filter the names that appear to be stations and fill the vector with objects of the right type.
-    if (it->find("STATION_") == 0) {
-//      HDF5GroupBase h5Group(group(), *it);
-//      if (h5Group.exists() && h5Group.groupType().exists() && h5Group.groupType().get() == "StationGroup")
-      stationGroups.push_back(station(*it));
+    if (it->find(stPrefix) == 0) {
+      stationGroups.push_back(station(it->substr(stPrefix.size())));
     }
   }
 
   return stationGroups;
 }
 
-TBB_Station TBB_File::station( const string &name )
+TBB_Station TBB_File::station( const string &stationName )
 {
-  return TBB_Station(*this, name);
+  return TBB_Station(*this, "STATION_" + stationName);
 }
 
 Attribute<string> TBB_File::triggerType()
@@ -113,25 +111,23 @@ Attribute<double> TBB_Station::triggerOffset()
 
 vector<TBB_DipoleDataset> TBB_Station::dipoles()
 {
+  const string dpPrefix("DIPOLE_");
   vector<TBB_DipoleDataset> dipoleDatasets;
 
   vector<string> membNames(memberNames());
   for (vector<string>::const_iterator it(membNames.begin()); it != membNames.end(); ++it) {
-
     // Filter the names that appear to be dipoles and fill the vector with objects of the right type.
-    if (it->find("DIPOLE_") == 0) {
-//      HDF5DatasetBase<short> h5Dataset(group(), *it);
-//    if (h5Dataset.exists() && h5Dataset.groupType().exists() && h5Dataset.groupType().get() == "DipoleDataset")
-      dipoleDatasets.push_back(dipole(*it));
+    if (it->find(dpPrefix) == 0) {
+      dipoleDatasets.push_back(dipole(it->substr(dpPrefix.size())));
     }
   }
 
   return dipoleDatasets;
 }
 
-TBB_DipoleDataset TBB_Station::dipole( const string &name )
+TBB_DipoleDataset TBB_Station::dipole( const string &dipoleName )
 {
-  return TBB_DipoleDataset(*this, name);
+  return TBB_DipoleDataset(*this, "DIPOLE_" + dipoleName);
 }
 
 Attribute<unsigned> TBB_DipoleDataset::stationID()
