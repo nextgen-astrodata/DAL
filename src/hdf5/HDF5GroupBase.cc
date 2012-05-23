@@ -29,9 +29,9 @@ HDF5GroupBase::~HDF5GroupBase() {
 }
 
 void HDF5GroupBase::create() {
-  hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list (gcpl)");
+  hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list for group " + _name);
 
-  _group = hid_gc(H5Gcreate2(parent, _name.c_str(), H5P_DEFAULT, gcpl, H5P_DEFAULT), H5Gclose, "Could not create group");
+  _group = hid_gc(H5Gcreate2(parent, _name.c_str(), H5P_DEFAULT, gcpl, H5P_DEFAULT), H5Gclose, "Could not create group " + _name);
 }
 
 bool HDF5GroupBase::exists() const {
@@ -44,7 +44,7 @@ bool HDF5GroupBase::exists() const {
 
 void HDF5GroupBase::remove() const {
   if (H5Ldelete(parent, _name.c_str(), H5P_DEFAULT) < 0)
-    throw HDF5Exception("Could not delete group"); 
+    throw HDF5Exception("Could not delete group " + _name); 
 }
 
 void HDF5GroupBase::set( const HDF5GroupBase &other, bool deepcopy ) {
@@ -53,23 +53,23 @@ void HDF5GroupBase::set( const HDF5GroupBase &other, bool deepcopy ) {
     remove();
   }
 
-  hid_gc ocpl(H5Pcreate(H5P_OBJECT_COPY), H5Pclose, "Could not create property list");
+  hid_gc ocpl(H5Pcreate(H5P_OBJECT_COPY), H5Pclose, "Could not create object creation property list for group " + _name);
 
   if (!deepcopy) {
     // do a shallow copy
     if (H5Pset_copy_object(ocpl, H5O_COPY_SHALLOW_HIERARCHY_FLAG) < 0) {
-      throw HDF5Exception("Could not enable shallow copy mode");
+      throw HDF5Exception("Could not enable shallow copy mode for group " + _name);
     }
   }
 
   // H5Ocopy allows us to copy all properties, subgroups, etc, even across files
   if (H5Ocopy(other.parent, other._name.c_str(), parent, _name.c_str(), ocpl, H5P_DEFAULT) < 0)
-    throw HDF5Exception("Could not copy element");
+    throw HDF5Exception("Could not copy object for group " + _name);
 }
 
 hid_gc HDF5GroupBase::open( hid_t parent, const std::string &name ) const
 {
-  return hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group");
+  return hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group " + _name);
 }
 
 void HDF5GroupBase::initNodes()
@@ -95,15 +95,15 @@ vector<string> HDF5GroupBase::memberNames() {
   H5G_info_t groupInfo;
 
   if (H5Gget_info(group(), &groupInfo) < 0)
-    throw HDF5Exception("could not get group info");
+    throw HDF5Exception("could not get info for group " + _name);
 
   // Loop around H5Lget_name_by_idx(). Can also use H5Literate(), but it is more fuss for what we need here.
   char linkName[128];
-  hid_gc_noref lapl(H5Pcreate(H5P_LINK_ACCESS), H5Pclose, "Could not create link access property list");
+  hid_gc_noref lapl(H5Pcreate(H5P_LINK_ACCESS), H5Pclose, "Could not create link access property list for group " + _name);
   for (size_t i = 0; i < groupInfo.nlinks; i++) {
     ssize_t size = H5Lget_name_by_idx(group(), ".", H5_INDEX_CRT_ORDER, H5_ITER_NATIVE, i, linkName, sizeof linkName, lapl);
     if (size < 0)
-      throw HDF5Exception("could not get link name by index");
+      throw HDF5Exception("could not get link name by index for group " + _name);
 
     names.push_back(linkName);
   }

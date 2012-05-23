@@ -190,7 +190,7 @@ namespace DAL {
 }
 
 %define AddAttribute( PythonName, CPPName )
-  // create the Python class VectorXXX
+  // create the Python class AttributeXXX
   %template(Attribute ## PythonName) DAL::Attribute< CPPName >;
 
   // register it in our Attributes dict

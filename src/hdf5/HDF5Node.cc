@@ -72,7 +72,7 @@ void HDF5NodeSet::addNode( HDF5Node *attr )
     throw DALValueError("attr cannot be NULL");
 
   if (nodeMap.find(attr->name()) != nodeMap.end())
-    throw DALValueError(string("Node already exists: ") + attr->name()); 
+    throw DALValueError("Node already exists: " + attr->name()); 
 
   nodeMap[attr->name()] = attr;
 }
@@ -80,7 +80,7 @@ void HDF5NodeSet::addNode( HDF5Node *attr )
 void HDF5NodeSet::ensureNodesExist()
 {
   if (!exists())
-    throw DALException("Cannot access nodes in a non-existing group");
+    throw DALException("Cannot access nodes in a non-existing group " + _name);
 
   if (!mapInitialised) {
     initNodes();
