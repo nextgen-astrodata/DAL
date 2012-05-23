@@ -4,7 +4,7 @@ using namespace std;
 
 namespace DAL {
 
-TBB_File::TBB_File( const std::string &filename, enum HDF5FileBase::fileMode mode )
+TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode )
 :
   CommonAttributesFile(filename, mode)
 {

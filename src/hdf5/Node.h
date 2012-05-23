@@ -12,16 +12,16 @@
 
 namespace DAL {
 
-class HDF5GroupBase;
+class Group;
 
 /*!
  * Represents a node in the HDF5 hierarchy (an attribute, group, or dataset).
  */
-class HDF5Node {
+class Node {
 public:
-  HDF5Node( HDF5GroupBase &parent, const std::string &name );
+  Node( Group &parent, const std::string &name );
 
-  virtual ~HDF5Node() {}
+  virtual ~Node() {}
 
   /*!
    * Returns the HDF5 name of this node.
@@ -34,7 +34,7 @@ public:
    * Python example:
    * \code
    *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *
    *    # An open file always exists
    *    >>> f.exists()
@@ -68,7 +68,7 @@ public:
    * Python example:
    * \code
    *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *    >>> a = AttributeString(f, "EXAMPLE_ATTRIBUTE")
    *
    *    # The minimal required version of any node is 0.0.0 by default
@@ -100,7 +100,7 @@ public:
    * Python example:
    * \code
    *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *
    *    # Set the file's version number to 2.0.0
    *    >>> f.setFileVersion(VersionType("2.0.0"))
@@ -141,7 +141,7 @@ public:
    * Python example:
    * \code
    *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *    >>> f.canWrite()
    *    True
    *
@@ -153,7 +153,7 @@ public:
    *    # Reopen the same file read-only
    *    >>> del a
    *    >>> del f
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.READ)
+   *    >>> f = File("example.h5", File.READ)
    *    >>> f.canWrite()
    *    False
    *
@@ -170,7 +170,7 @@ public:
    * Python example:
    * \code
    *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *
    *    # Query the file name
    *    >>> f.fileName()
@@ -190,8 +190,8 @@ public:
    * Python example:
    * \code
    *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
-   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> f = File("example.h5", File.CREATE)
+   *    >>> g = Group(f, "GROUP")
    *    >>> g.create()
    *    >>> a = AttributeString(g, "ATTRIBUTE")
    *    >>> a.create()
@@ -218,7 +218,7 @@ protected:
   hid_gc parent;
   std::string _name;
 
-  HDF5Node( const hid_gc &parent, const std::string &name );
+  Node( const hid_gc &parent, const std::string &name );
 
   /*!
    * Data that will be propagated through the object tree,
@@ -249,8 +249,8 @@ protected:
 
 }
 
-// make sure that HDF5GroupBase is defined
-#include "hdf5/HDF5GroupBase.h"
+// make sure that Group is defined
+#include "hdf5/Group.h"
 
 #endif
 

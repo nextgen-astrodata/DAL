@@ -1,4 +1,4 @@
-#include "hdf5/HDF5Attribute.h"
+#include "hdf5/Attribute.h"
 #include "hdf5/types/h5typemap.h"
 #include <cstdlib>
 #include <hdf5.h>

@@ -1,9 +1,9 @@
 #include "hdf5/types/h5typemap.h"
-#include "hdf5/HDF5DatasetBase.h"
+#include "hdf5/Dataset.h"
 
 namespace DAL {
 
-template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
+template<typename T> void Dataset<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
 
   const size_t rank = dims.size();
 
@@ -34,7 +34,7 @@ template<typename T> void HDF5DatasetBase<T>::create( const std::vector<ssize_t>
   _group = hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)), filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset " + _name);
 }
 
-template<typename T> size_t HDF5DatasetBase<T>::ndims()
+template<typename T> size_t Dataset<T>::ndims()
 {
   // TODO: this routine is often used for bounds checks. However, caching
   // ndims() might lead to concurrency issues. Maybe only cache if data
@@ -50,7 +50,7 @@ template<typename T> size_t HDF5DatasetBase<T>::ndims()
   return rank;
 }
 
-template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::dims()
+template<typename T> std::vector<ssize_t> Dataset<T>::dims()
 {
   const size_t rank = ndims();
   std::vector<hsize_t> dims(rank);
@@ -68,7 +68,7 @@ template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::dims()
   return result;
 }
 
-template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::maxdims()
+template<typename T> std::vector<ssize_t> Dataset<T>::maxdims()
 {
   const size_t rank = ndims();
   std::vector<hsize_t> maxdims(rank);
@@ -86,7 +86,7 @@ template<typename T> std::vector<ssize_t> HDF5DatasetBase<T>::maxdims()
   return result;
 }
 
-template<typename T> void HDF5DatasetBase<T>::resize( const std::vector<ssize_t> &newdims )
+template<typename T> void Dataset<T>::resize( const std::vector<ssize_t> &newdims )
 {
   const size_t rank = ndims();
   std::vector<hsize_t> newdims_hsize_t(rank);
@@ -102,7 +102,7 @@ template<typename T> void HDF5DatasetBase<T>::resize( const std::vector<ssize_t>
     throw HDF5Exception("Could not resize dataset " + _name);
 }
 
-template<typename T> std::vector<std::string> HDF5DatasetBase<T>::externalFiles()
+template<typename T> std::vector<std::string> Dataset<T>::externalFiles()
 {
   hid_gc_noref dcpl(H5Dget_create_plist(group()), H5Pclose, "Could not open dataset creation property list for dataset " + _name);
 
@@ -127,21 +127,21 @@ template<typename T> std::vector<std::string> HDF5DatasetBase<T>::externalFiles(
   return files;
 }
 
-template<typename T> void HDF5DatasetBase<T>::getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer )
+template<typename T> void Dataset<T>::getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer )
 {
   const std::vector<size_t> strides(0);
 
   matrixIO(pos, size, strides, buffer, true);
 }
 
-template<typename T> void HDF5DatasetBase<T>::setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer )
+template<typename T> void Dataset<T>::setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer )
 {
   const std::vector<size_t> strides(0);
 
   matrixIO(pos, size, strides, const_cast<T *>(buffer), false);
 }
 
-template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
+template<typename T> void Dataset<T>::get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
 {
   std::vector<size_t> size(ndims(),1);
 
@@ -164,7 +164,7 @@ template<typename T> void HDF5DatasetBase<T>::get2D( const std::vector<size_t> &
   getMatrix(pos, size, outbuffer2);
 }
 
-template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
+template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
 {
   std::vector<size_t> size(ndims(),1);
 
@@ -187,7 +187,7 @@ template<typename T> void HDF5DatasetBase<T>::set2D( const std::vector<size_t> &
   setMatrix(pos, size, inbuffer2);
 }
 
-template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &pos, size_t dim1, T *outbuffer1, unsigned dim1index )
+template<typename T> void Dataset<T>::get1D( const std::vector<size_t> &pos, size_t dim1, T *outbuffer1, unsigned dim1index )
 {
   std::vector<size_t> size(ndims(),1);
 
@@ -199,7 +199,7 @@ template<typename T> void HDF5DatasetBase<T>::get1D( const std::vector<size_t> &
   getMatrix(pos, size, outbuffer1);
 }
 
-template<typename T> void HDF5DatasetBase<T>::set1D( const std::vector<size_t> &pos, size_t dim1, const T *inbuffer1, unsigned dim1index )
+template<typename T> void Dataset<T>::set1D( const std::vector<size_t> &pos, size_t dim1, const T *inbuffer1, unsigned dim1index )
 {
   std::vector<size_t> size(ndims(),1);
 
@@ -211,7 +211,7 @@ template<typename T> void HDF5DatasetBase<T>::set1D( const std::vector<size_t> &
   setMatrix(pos, size, inbuffer1);
 }
 
-template<typename T> T HDF5DatasetBase<T>::getScalar( const std::vector<size_t> &pos )
+template<typename T> T Dataset<T>::getScalar( const std::vector<size_t> &pos )
 {
   T value;
   std::vector<size_t> size(ndims(),1);
@@ -221,14 +221,14 @@ template<typename T> T HDF5DatasetBase<T>::getScalar( const std::vector<size_t> 
   return value;
 }
 
-template<typename T> void HDF5DatasetBase<T>::setScalar( const std::vector<size_t> &pos, const T &value )
+template<typename T> void Dataset<T>::setScalar( const std::vector<size_t> &pos, const T &value )
 {
   std::vector<size_t> size(ndims(),1);
 
   setMatrix(pos, size, &value);
 }
 
-template<typename T>  bool HDF5DatasetBase<T>::bigEndian( enum Endianness endianness ) const
+template<typename T>  bool Dataset<T>::bigEndian( enum Endianness endianness ) const
 {
   switch (endianness) {
     union {
@@ -249,7 +249,7 @@ template<typename T>  bool HDF5DatasetBase<T>::bigEndian( enum Endianness endian
   };
 }
 
-template<typename T> void HDF5DatasetBase<T>::matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read )
+template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read )
 {
   const size_t rank = ndims();
   const bool use_strides = strides.size() == rank;

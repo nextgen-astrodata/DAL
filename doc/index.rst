@@ -42,29 +42,29 @@ The code to create a file ``foo.h5`` with such a structure is (in Python)::
 
   from DAL import *
 
-  f = HDF5FileBase("foo.h5", HDF5FileBase.CREATE)
+  f = File("foo.h5", File.CREATE)
 
-  group1    = HDF5GroupBase(f,      "GROUP_1").create()
-  subgroup1 = HDF5GroupBase(group1, "SUBGROUP_1").create()
+  group1    = Group(f,      "GROUP_1").create()
+  subgroup1 = Group(group1, "SUBGROUP_1").create()
 
-  group2    = HDF5GroupBase(f,      "GROUP_2").create()
-  subgroup2 = HDF5GroupBase(group2, "SUBGROUP_2").create()
+  group2    = Group(f,      "GROUP_2").create()
+  subgroup2 = Group(group2, "SUBGROUP_2").create()
 
 and in C++::
 
-  #include "dal/hdf5/HDF5FileBase.h"
-  #include "dal/hdf5/HDF5GroupBase.h"
+  #include "dal/hdf5/File.h"
+  #include "dal/hdf5/Group.h"
 
   using namespace DAL;
 
   int main() {
-    HDF5FileBase f("foo.h5", HDF5FileBase.CREATE);
+    File f("foo.h5", File.CREATE);
 
-    HDF5GroupBase group1    = HDF5GroupBase(f,      "GROUP_1"),create();
-    HDF5GroupBase subgroup1 = HDF5GroupBase(group1, "SUBGROUP_1").create();
+    Group group1    = Group(f,      "GROUP_1"),create();
+    Group subgroup1 = Group(group1, "SUBGROUP_1").create();
 
-    HDF5GroupBase group2    = HDF5GroupBase(f,      "GROUP_2"),create();
-    HDF5GroupBase subgroup2 = HDF5GroupBase(group2, "SUBGROUP_2").create();
+    Group group2    = Group(f,      "GROUP_2"),create();
+    Group subgroup2 = Group(group2, "SUBGROUP_2").create();
   }
 
 The HDF5 tool ``h5dump`` is ideal to quickly inspect any HDF5 file, and will reveal that ``foo.h5`` indeed contains the described structure::
@@ -101,7 +101,7 @@ The code to create a file ``foo.h5`` with such a structure is (in Python)::
 
   from DAL import *
 
-  f = HDF5FileBase("foo.h5", HDF5FileBase.CREATE)
+  f = File("foo.h5", File.CREATE)
 
   my_integer = AttributeInt(f, "MY_INTEGER")
   my_integer.value = 42
@@ -109,19 +109,19 @@ The code to create a file ``foo.h5`` with such a structure is (in Python)::
   my_string  = AttributeString(f, "MY_STRING")
   my_string.value = "hello world"
 
-  group1    = HDF5GroupBase(f,      "GROUP_1").create()
+  group1    = Group(f,      "GROUP_1").create()
   my_complexnumber = AttributeComplexFloat(group1, "MY_COMPLEXNUMBER")
   my_complexnumber.value = 1 + 2i
 
-  subgroup1 = HDF5GroupBase(group1, "SUBGROUP_1").create()
+  subgroup1 = Group(group1, "SUBGROUP_1").create()
   my_stringlist = AttributeVString(subgroup1, "MY_STRINGLIST")
   my_stringlist.value = ["foo", "bar"]
 
 and in C++::
 
-  #include "dal/hdf5/HDF5FileBase.h"
-  #include "dal/hdf5/HDF5GroupBase.h"
-  #include "dal/hdf5/HDF5Attribute.h"
+  #include "dal/hdf5/File.h"
+  #include "dal/hdf5/Group.h"
+  #include "dal/hdf5/Attribute.h"
   #include <string>
   #include <complex>
   #include <vector>
@@ -130,7 +130,7 @@ and in C++::
   using namespace std;
 
   int main() {
-    HDF5FileBase f("foo.h5", HDF5FileBase.CREATE);
+    File f("foo.h5", File.CREATE);
 
     Attribute<int> my_integer(f, "MY_INTEGER");
     f.value = 42;
@@ -138,11 +138,11 @@ and in C++::
     Attribute<string> my_string(f, "MY_STRING");
     f.value = "hello world";
 
-    HDF5GroupBase group1 = HDF5GroupBase(f, "GROUP_1"),create();
+    Group group1 = Group(f, "GROUP_1"),create();
     Attribute< complex<float> > my_complexnumber(group1, "MY_COMPLEXNUMBER");
     my_complexnumber.value = complex<float>(1, 2); // 1 + 2i
 
-    HDF5GroupBase subgroup1 = HDF5GroupBase(group1, "SUBGROUP_1").create();
+    Group subgroup1 = Group(group1, "SUBGROUP_1").create();
     Attribute< vector<string> > my_stringlist(subgroup1, "MY_STRINGLIST");
     vector<string> v(2);
     v[0] = "foo";

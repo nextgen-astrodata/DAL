@@ -5,8 +5,8 @@
 #include <vector>
 #include <ostream>
 #include "hdf5/types/hid_gc.h"
-#include "hdf5/HDF5Node.h"
-#include "hdf5/HDF5GroupBase.h"
+#include "hdf5/Node.h"
+#include "hdf5/Group.h"
 
 /*
  * NOTE: Setting attributes is not thread-safe if the same attribute is modified by multiple
@@ -18,12 +18,12 @@ namespace DAL {
 /*!
  * Represents core functionality for an attribute inside a group.
  */
-class AttributeBase: public HDF5Node {
+class AttributeBase: public Node {
 public:
   /*!
    * Create a generic Attribute object, providing meta functionality.
    */
-  AttributeBase( HDF5GroupBase &parent, const std::string &name ): HDF5Node(parent, name) {}
+  AttributeBase( Group &parent, const std::string &name ): Node(parent, name) {}
 
   /*!
    * Returns whether this attribute exists in the HDF5 file.
@@ -48,7 +48,7 @@ public:
   virtual bool valid() const;
 
 protected:
-  AttributeBase( const hid_gc &parent, const std::string &name ): HDF5Node(parent, name) {}
+  AttributeBase( const hid_gc &parent, const std::string &name ): Node(parent, name) {}
 };
 
 #ifndef SWIG
@@ -114,7 +114,7 @@ template<typename T> std::ostream& operator<<(std::ostream &out, const Attribute
  * Python example:
  * \code
  *     # Create a new HDF5 file with some string attribute
- *     >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+ *     >>> f = File("example.h5", File.CREATE)
  *     >>> a = AttributeString(f, "EXAMPLE_STRING")
  *
  *     # Because we are creating the file, the attribute does initially not exist
@@ -168,7 +168,7 @@ public:
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( HDF5GroupBase &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+  Attribute( Group &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
@@ -198,7 +198,7 @@ public:
    * Python example:
    * \code
    *     # Create a new HDF5 file with some string attribute
-   *     >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *     >>> f = File("example.h5", File.CREATE)
    *
    *     # Refer to a string attribute
    *     >>> a = AttributeString(f, "EXAMPLE_STRING")
@@ -242,7 +242,7 @@ public:
   /*!
    * Represent an attribute called `name' within group `parent'.
    */
-  Attribute( HDF5GroupBase &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
+  Attribute( Group &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
@@ -277,7 +277,7 @@ public:
 
 }
 
-#include "hdf5/HDF5Attribute.tcc"
+#include "hdf5/Attribute.tcc"
 
 #endif
 

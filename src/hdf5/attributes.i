@@ -26,7 +26,7 @@ namespace DAL {
 
   // Force node `name' in nodeset `nodeSet' to be of our type
   // (will throw std::bad_cast on failure)
-  static Attribute< T > _castNode( HDF5GroupBase &nodeSet, const std::string &name ) {
+  static Attribute< T > _castNode( Group &nodeSet, const std::string &name ) {
     return nodeSet.getNode(name);
   }
 }  
@@ -44,8 +44,8 @@ namespace DAL {
 %rename(get_hid_t)  operator hid_t;
 %rename(get_hid_gc) operator hid_gc;
 
-%include hdf5/HDF5Node.h
-%include hdf5/HDF5Attribute.h
+%include hdf5/Node.h
+%include hdf5/Attribute.h
 
 %extend DAL::Attribute {
   %pythoncode {

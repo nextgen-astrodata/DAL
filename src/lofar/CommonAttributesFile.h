@@ -4,15 +4,15 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "hdf5/HDF5Attribute.h"
-#include "hdf5/HDF5FileBase.h"
+#include "hdf5/Attribute.h"
+#include "hdf5/File.h"
 
 namespace DAL {
 
 /*!
  * Wraps an HDF5 file implementing the Common LOFAR Attributes.
  */
-class CommonAttributesFile: public HDF5FileBase {
+class CommonAttributesFile: public File {
 public:
   CommonAttributesFile( const std::string &filename, enum fileMode mode = READ );
 

@@ -4,7 +4,7 @@ using namespace std;
 
 namespace DAL {
 
-BF_File::BF_File( const std::string &filename, enum HDF5FileBase::fileMode mode )
+BF_File::BF_File( const std::string &filename, enum File::fileMode mode )
 :
   CommonAttributesFile(filename, mode)
 {
@@ -142,7 +142,7 @@ BF_SysLog BF_File::sysLog()
 }
 
 void BF_ProcessingHistory::initNodes() {
-  HDF5GroupBase::initNodes();
+  Group::initNodes();
 
   addNode( new Attribute<bool>(*this, "PARSET_OBS") );
   addNode( new Attribute<bool>(*this, "LOG_PRESTO") );
@@ -165,7 +165,7 @@ Attribute<bool> BF_ProcessingHistory::parFile()
 }
 
 void BF_SubArrayPointing::initNodes() {
-  HDF5GroupBase::initNodes();
+  Group::initNodes();
 
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
@@ -285,7 +285,7 @@ BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
 }
 
 void BF_BeamGroup::initNodes() {
-  HDF5GroupBase::initNodes();
+  Group::initNodes();
 
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
@@ -440,7 +440,7 @@ CoordinatesGroup BF_BeamGroup::coordinates()
 
 void BF_StokesDataset::initNodes()
 {
-  HDF5GroupBase::initNodes();
+  Group::initNodes();
 
   addNode( new Attribute<string>(*this, "STOKES_COMPONENT") );
   addNode( new Attribute< vector<unsigned> >(*this, "NOF_CHANNELS") );

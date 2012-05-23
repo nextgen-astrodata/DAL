@@ -2,27 +2,27 @@
 // because SWIG generates a new wrapper object and does not
 // know how to do the memory management right between
 // both wrapper objects. So we write our own further below.
-%rename(_create) DAL::HDF5GroupBase::create;
+%rename(_create) DAL::Group::create;
 
 %{
 #include <typeinfo>
 %}
 
-// To replace HDF5GroupBase.getNode, SWIG requires us to first
+// To replace Group.getNode, SWIG requires us to first
 // %extend it, and then %ignore the original, both before
 // loading the actual class.
-%extend DAL::HDF5GroupBase {
+%extend DAL::Group {
   /*
-   * Each HDF5GroupBase allows nodes to be registered in a generic
-   * map<string, HDF5Node*> using the addNode method. The getNode method
+   * Each Group allows nodes to be registered in a generic
+   * map<string, Node*> using the addNode method. The getNode method
    * is used for node lookup in that map. Nodes in the map are typically
-   * subclasses of HDF5Node. In C++, we can use dynamic_cast to cast
+   * subclasses of Node. In C++, we can use dynamic_cast to cast
    * the received object to its proper type.
    *
    * In SWIG however, we prefer to pass around regular objects instead
    * of references and pointers, to prevent crashes due to incorrect
    * memory management between C++ and Python. Exposing the C++ getNode
-   * function to Python directly would thus result in returning HDF5Node
+   * function to Python directly would thus result in returning Node
    * objects, which are sliced copies of the object retained in the map.
    *
    * Much nicer behaviour is obtained by letting Python return
@@ -42,27 +42,27 @@
    *      returns the internal C++ ABI type name of the wrapped Attribute<T> class.
    * 2) Attributes
    *      is a dict resolving C++ ABI type names to AttributeXXXX classes.
-   * 3) HDF5GroupBase._getNodeTypeName(name)
+   * 3) Group._getNodeTypeName(name)
    *      returns the internal C++ ABI type name of a node
    * 4) AttributeXXXX._castNode(nodeSet, name)
    *      returns nodeSet.getNode(name) forcably upcast to AttributeXXXX.
-   * 5) HDF5Node.getNode(name) (Python implementation to allow weakly typed return values)
+   * 5) Node.getNode(name) (Python implementation to allow weakly typed return values)
    *      returns a node, forcably downcast to the AttributeXXXX class
    *      registered to the internal C++ ABI name of the node.
    *
-   * In short, HDF5Node.getNode(name) will return an object of the proper
+   * In short, Node.getNode(name) will return an object of the proper
    * AttributeXXXX type. If the type of the node is not registered, a generic
-   * HDF5Node object is returned instead.
+   * Node object is returned instead.
    */
 
-  // A generic getNode replacement that always returns an HDF5Node
-  HDF5Node _getNode( const std::string &name ) {
+  // A generic getNode replacement that always returns an Node
+  Node _getNode( const std::string &name ) {
     return $self->getNode(name);
   }
 
   // The C++ ABI name of a specific node
   std::string _getNodeTypeName( const std::string &name ) {
-    const HDF5Node &obj = $self->getNode(name);
+    const Node &obj = $self->getNode(name);
     return typeid(obj).name();
   }
 
@@ -73,12 +73,12 @@
         
         If the attribute type is present in DAL.Attributes.values(),
         the returned object will have the correct type. Otherwise,
-        a generic HDF5Node object is returned.
+        a generic Node object is returned.
 
         Python example:
 
              # Create a new HDF5 file with a predefined format
-             >>> f = BF_File("example.h5", HDF5FileBase.CREATE)
+             >>> f = BF_File("example.h5", File.CREATE)
 
              # Set one of the attributes
              >>> f.observationID().value = '12345'
@@ -112,13 +112,13 @@
 }
 
 // ignore the original getNode routine, which cannot be exported
-// because it returns a fancy ImplicitDowncast<HDF5Node>.
-%ignore DAL::HDF5GroupBase::getNode;
+// because it returns a fancy ImplicitDowncast<Node>.
+%ignore DAL::Group::getNode;
 
 
-%include hdf5/HDF5GroupBase.h
+%include hdf5/Group.h
 
-%extend DAL::HDF5GroupBase {
+%extend DAL::Group {
   %pythoncode {
     def create(self):
       self._create()

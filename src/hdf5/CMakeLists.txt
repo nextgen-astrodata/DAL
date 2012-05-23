@@ -1,11 +1,11 @@
 install (FILES
-  HDF5Attribute.h
-  HDF5Attribute.tcc
-  HDF5DatasetBase.h
-  HDF5DatasetBase.tcc
-  HDF5FileBase.h
-  HDF5GroupBase.h
-  HDF5Node.h
+  Attribute.h
+  Attribute.tcc
+  Dataset.h
+  Dataset.tcc
+  File.h
+  Group.h
+  Node.h
 
   DESTINATION include/dal/hdf5
 )

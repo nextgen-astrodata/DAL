@@ -5,7 +5,7 @@ import DAL
 # within HDF5.
 
 try:
-  f = DAL.HDF5FileBase("does_not_exist.h5", DAL.HDF5FileBase.READ)
+  f = DAL.File("does_not_exist.h5", DAL.File.READ)
 except DAL.HDF5Exception, e:
   print("Caught exception: %s" % (e,))
 

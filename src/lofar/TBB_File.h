@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "hdf5/HDF5Attribute.h"
-#include "hdf5/HDF5GroupBase.h"
-#include "hdf5/HDF5DatasetBase.h"
+#include "hdf5/Attribute.h"
+#include "hdf5/Group.h"
+#include "hdf5/Dataset.h"
 #include "lofar/CommonAttributesFile.h"
 
 namespace DAL {
@@ -37,14 +37,14 @@ public:
   virtual TBB_Trigger    triggerData();
 };
 
-class TBB_SysLog: public HDF5GroupBase {
+class TBB_SysLog: public Group {
 public:
-  TBB_SysLog( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  TBB_SysLog( Group &parent, const std::string &name ): Group(parent, name) {}
 };
 
-class TBB_Station: public HDF5GroupBase {
+class TBB_Station: public Group {
 public:
-  TBB_Station( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  TBB_Station( Group &parent, const std::string &name ): Group(parent, name) {}
 
   Attribute<std::string>                stationName();
 
@@ -65,9 +65,9 @@ public:
   virtual TBB_DipoleDataset             dipole( const std::string &dipoleName );
 };
 
-class TBB_DipoleDataset: public HDF5DatasetBase<short> {
+class TBB_DipoleDataset: public Dataset<short> {
 public:
-  TBB_DipoleDataset( HDF5GroupBase &parent, const std::string &name ): HDF5DatasetBase<short>(parent, name) {}
+  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<short>(parent, name) {}
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();
@@ -108,21 +108,21 @@ public:
   Attribute<std::string>                tileDipolePositionFrame();
 };
 
-class TBB_Trigger: public HDF5GroupBase {
+class TBB_Trigger: public Group {
 public:
-  TBB_Trigger( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  TBB_Trigger( Group &parent, const std::string &name ): Group(parent, name) {}
 };
 
 class TBB_UnknownTrigger: public TBB_Trigger {
 public:
-  TBB_UnknownTrigger( HDF5GroupBase &parent, const std::string &name ): TBB_Trigger(parent, name) {}
+  TBB_UnknownTrigger( Group &parent, const std::string &name ): TBB_Trigger(parent, name) {}
 
   Attribute<std::string> metadata();
 };
 
 class TBB_VHECRTrigger: public TBB_Trigger {
 public:
-  TBB_VHECRTrigger( HDF5GroupBase &parent, const std::string &name ): TBB_Trigger(parent, name) {}
+  TBB_VHECRTrigger( Group &parent, const std::string &name ): TBB_Trigger(parent, name) {}
 
   Attribute<std::string> triggerSource();
 

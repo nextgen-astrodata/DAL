@@ -4,15 +4,15 @@ using namespace std;
 
 namespace DAL {
 
-CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum HDF5FileBase::fileMode mode )
+CommonAttributesFile::CommonAttributesFile( const std::string &filename, enum File::fileMode mode )
 :
-  HDF5FileBase(filename, mode, "ICD_VERSION")
+  File(filename, mode, "ICD_VERSION")
 {
 }
 
 void CommonAttributesFile::initNodes()
 {
-  HDF5FileBase::initNodes();
+  File::initNodes();
 
   addNode( new Attribute<string>(*this, "FILENAME") );
   addNode( new Attribute<string>(*this, "FILEDATE") );

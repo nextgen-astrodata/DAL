@@ -25,9 +25,9 @@ install (FILES
 set(dal_sources
   dal_version.cc
 
-  hdf5/HDF5FileBase.cc
-  hdf5/HDF5GroupBase.cc
-  hdf5/HDF5Node.cc
+  hdf5/File.cc
+  hdf5/Group.cc
+  hdf5/Node.cc
   hdf5/exceptions/h5exception.cc
   hdf5/exceptions/h5errorstack.cc
   hdf5/types/versiontype.cc

@@ -1,44 +1,44 @@
-#include "HDF5GroupBase.h"
+#include "Group.h"
 #include <hdf5.h>
 
 using namespace std;
 
 namespace DAL {
 
-HDF5GroupBase::HDF5GroupBase( const HDF5GroupBase &other )
+Group::Group( const Group &other )
 :
-  HDF5Node(other.parent, other._name),
+  Node(other.parent, other._name),
   _group(other._group),
   mapInitialised(false)
 {
 }
 
-HDF5GroupBase::HDF5GroupBase( HDF5GroupBase &parent, const std::string &name )
+Group::Group( Group &parent, const std::string &name )
 :
-  HDF5Node(parent, name),
+  Node(parent, name),
   mapInitialised(false)
 {
 }
 
-HDF5GroupBase::HDF5GroupBase( const hid_gc &fileid )
+Group::Group( const hid_gc &fileid )
 :
-  HDF5Node(fileid, ""),
+  Node(fileid, ""),
   _group(fileid),
   mapInitialised(false)
 {
 }
 
-HDF5GroupBase::~HDF5GroupBase() {
+Group::~Group() {
   freeNodeMap();
 }
 
-void HDF5GroupBase::create() {
+void Group::create() {
   hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list for group " + _name);
 
   _group = hid_gc(H5Gcreate2(parent, _name.c_str(), H5P_DEFAULT, gcpl, H5P_DEFAULT), H5Gclose, "Could not create group " + _name);
 }
 
-bool HDF5GroupBase::exists() const {
+bool Group::exists() const {
   // The root group always exists, but H5Lexists won't work on it
   if (_name == "/")
     return true;
@@ -46,12 +46,12 @@ bool HDF5GroupBase::exists() const {
   return H5Lexists(parent, _name.c_str(), H5P_DEFAULT) > 0; // does this check whether the link is a group?
 }
 
-void HDF5GroupBase::remove() const {
+void Group::remove() const {
   if (H5Ldelete(parent, _name.c_str(), H5P_DEFAULT) < 0)
     throw HDF5Exception("Could not delete group " + _name); 
 }
 
-void HDF5GroupBase::set( const HDF5GroupBase &other, bool deepcopy ) {
+void Group::set( const Group &other, bool deepcopy ) {
   if (exists()) {
     // maybe rename the attribute instead, in case the copying fails?
     remove();
@@ -71,22 +71,22 @@ void HDF5GroupBase::set( const HDF5GroupBase &other, bool deepcopy ) {
     throw HDF5Exception("Could not copy object for group " + _name);
 }
 
-hid_gc HDF5GroupBase::open( hid_t parent, const std::string &name ) const
+hid_gc Group::open( hid_t parent, const std::string &name ) const
 {
   return hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group " + _name);
 }
 
-void HDF5GroupBase::initNodes()
+void Group::initNodes()
 {
   addNode(new Attribute<string>(*this, "GROUPTYPE"));
 }
 
-Attribute<string> HDF5GroupBase::groupType()
+Attribute<string> Group::groupType()
 {
   return getNode("GROUPTYPE");
 }
 
-const hid_gc &HDF5GroupBase::group() {
+const hid_gc &Group::group() {
   // deferred opening of group, as it may need to be created first
   if (!_group.isset())
     _group = open(parent, _name);
@@ -94,7 +94,7 @@ const hid_gc &HDF5GroupBase::group() {
   return _group;
 }
 
-void HDF5GroupBase::addNode( HDF5Node *attr )
+void Group::addNode( Node *attr )
 {
   if (!attr)
     throw DALValueError("attr cannot be NULL");
@@ -105,7 +105,7 @@ void HDF5GroupBase::addNode( HDF5Node *attr )
   nodeMap[attr->name()] = attr;
 }
 
-void HDF5GroupBase::ensureNodesExist()
+void Group::ensureNodesExist()
 {
   if (!exists())
     throw DALException("Cannot access nodes in a non-existing group " + _name);
@@ -116,7 +116,7 @@ void HDF5GroupBase::ensureNodesExist()
   }
 }
 
-ImplicitDowncast<HDF5Node> HDF5GroupBase::getNode( const std::string &name )
+ImplicitDowncast<Node> Group::getNode( const std::string &name )
 {
   ensureNodesExist();
  
@@ -126,29 +126,29 @@ ImplicitDowncast<HDF5Node> HDF5GroupBase::getNode( const std::string &name )
   return *nodeMap[name];
 }
 
-vector<string> HDF5GroupBase::nodeNames() {
+vector<string> Group::nodeNames() {
   ensureNodesExist();
 
   vector<string> names;
   names.reserve(nodeMap.size());
 
-  for( map<string, HDF5Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
+  for( map<string, Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
     names.push_back(i->first);
   }
 
   return names;
 }
 
-void HDF5GroupBase::freeNodeMap()
+void Group::freeNodeMap()
 {
-  for( map<string, HDF5Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
+  for( map<string, Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
     delete i->second;
   }
 
   nodeMap.clear();
 }
 
-vector<string> HDF5GroupBase::memberNames() {
+vector<string> Group::memberNames() {
   vector<string> names;
   H5G_info_t groupInfo;
 

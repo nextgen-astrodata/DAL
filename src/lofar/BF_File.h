@@ -3,9 +3,9 @@
 
 #include <string>
 #include <hdf5.h>
-#include "hdf5/HDF5Attribute.h"
-#include "hdf5/HDF5GroupBase.h"
-#include "hdf5/HDF5DatasetBase.h"
+#include "hdf5/Attribute.h"
+#include "hdf5/Group.h"
+#include "hdf5/Dataset.h"
 #include "lofar/CommonAttributesFile.h"
 #include "lofar/Coordinates.h"
 
@@ -62,14 +62,14 @@ protected:
   std::string                     subArrayPointingName( unsigned nr );
 };
 
-class BF_SysLog: public HDF5GroupBase {
+class BF_SysLog: public Group {
 public:
-  BF_SysLog( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_SysLog( Group &parent, const std::string &name ): Group(parent, name) {}
 };
 
-class BF_ProcessingHistory: public HDF5GroupBase {
+class BF_ProcessingHistory: public Group {
 public:
-  BF_ProcessingHistory( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_ProcessingHistory( Group &parent, const std::string &name ): Group(parent, name) {}
 
   Attribute<bool>         parsetObs();
   Attribute<bool>         logPresto();
@@ -79,9 +79,9 @@ protected:
   virtual void            initNodes();
 };
 
-class BF_SubArrayPointing: public HDF5GroupBase {
+class BF_SubArrayPointing: public Group {
 public:
-  BF_SubArrayPointing( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_SubArrayPointing( Group &parent, const std::string &name ): Group(parent, name) {}
 
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
@@ -115,9 +115,9 @@ protected:
   std::string             beamName( unsigned nr );
 };
 
-class BF_BeamGroup: public HDF5GroupBase {
+class BF_BeamGroup: public Group {
 public:
-  BF_BeamGroup( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  BF_BeamGroup( Group &parent, const std::string &name ): Group(parent, name) {}
 
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
@@ -158,9 +158,9 @@ protected:
   std::string             coordinatesName();
 };
 
-class BF_StokesDataset: public HDF5DatasetBase<float> {
+class BF_StokesDataset: public Dataset<float> {
 public:
-  BF_StokesDataset( HDF5GroupBase &parent, const std::string &name ): HDF5DatasetBase<float>(parent, name) {}
+  BF_StokesDataset( Group &parent, const std::string &name ): Dataset<float>(parent, name) {}
 
   Attribute<std::string>  stokesComponent();
   Attribute< std::vector<unsigned> >    nofChannels();

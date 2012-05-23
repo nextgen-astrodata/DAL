@@ -3,14 +3,14 @@
 
 #include <casa/Arrays/Array.h>
 #include "hdf5/exceptions/h5exception.h"
-#include "HDF5DatasetBase.h"
+#include "Dataset.h"
 
 namespace DAL {
 
 /*!
- * Adds casacore functionality to an HDF5DatasetBase<T> class or any of its derivatives.
+ * Adds casacore functionality to an Dataset<T> class or any of its derivatives.
  */
-template<typename T, typename BASE = HDF5DatasetBase<T> > class CasaDatasetExtend: public BASE {
+template<typename T, typename BASE = Dataset<T> > class CasaDatasetExtend: public BASE {
 public:
   CasaDatasetExtend( const BASE &other ): BASE(other) {}
 

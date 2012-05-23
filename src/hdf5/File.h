@@ -4,12 +4,12 @@
 #include <string>
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
-#include "hdf5/HDF5GroupBase.h"
-#include "hdf5/HDF5Attribute.h"
+#include "hdf5/Group.h"
+#include "hdf5/Attribute.h"
 
 namespace DAL {
 
-class HDF5FileBase: public HDF5GroupBase {
+class File: public Group {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
 
@@ -19,11 +19,11 @@ public:
    * Python example:
    * \code
    *    # Create and close a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *    >>> del f
    *
    *    # Open (and close) the same file for reading
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.READ)
+   *    >>> f = File("example.h5", File.READ)
    *    >>> del f
    *
    *    # Clean up
@@ -31,7 +31,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  HDF5FileBase( const std::string &filename, enum fileMode mode, const std::string versionAttrName = "VERSION" );
+  File( const std::string &filename, enum fileMode mode, const std::string versionAttrName = "VERSION" );
 
   /*!
    * Commit any changes to disk.
@@ -61,7 +61,7 @@ public:
    * Python example:
    * \code
    *    # Create and close a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *
    *    # Set and get the file version
    *    >>> f.setFileVersion(VersionType(1,2,3))
@@ -71,7 +71,7 @@ public:
    *    '1.2.3'
    *
    *    # Groups and attributes inherit the Version
-   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> g = Group(f, "GROUP")
    *    >>> str(g.fileVersion())
    *    '1.2.3'
    *
@@ -85,7 +85,7 @@ public:
    *
    *    # Reload other objects to refresh the file info,
    *    # including the newly set version.
-   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> g = Group(f, "GROUP")
    *    >>> str(g.fileVersion())
    *    '4.5.6'
    *

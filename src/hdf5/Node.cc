@@ -1,13 +1,13 @@
-#include "hdf5/HDF5Node.h"
-#include "hdf5/HDF5Attribute.h"
-#include "hdf5/HDF5GroupBase.h"
+#include "hdf5/Node.h"
+#include "hdf5/Attribute.h"
+#include "hdf5/Group.h"
 #include <string>
 
 using namespace std;
 
 namespace DAL {
 
-HDF5Node::HDF5Node( HDF5GroupBase &parent, const std::string &name )
+Node::Node( Group &parent, const std::string &name )
 :
   minVersion(parent.minVersion),
   parent(parent.group()),
@@ -30,19 +30,19 @@ HDF5Node::HDF5Node( HDF5GroupBase &parent, const std::string &name )
       data.parentNodePath = data.parentNodePath + "/" + parent.name();
 }
 
-HDF5Node::HDF5Node( const hid_gc &parent, const std::string &name )
+Node::Node( const hid_gc &parent, const std::string &name )
 :
   parent(parent),
   _name(name)
 {
 }
 
-VersionType HDF5Node::fileVersion()
+VersionType Node::fileVersion()
 {
   return data.fileVersion;
 }
 
-bool HDF5Node::canWrite() const
+bool Node::canWrite() const
 {
   return data.canWrite;
 }

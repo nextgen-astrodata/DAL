@@ -42,12 +42,12 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 %ignore *::getMatrix;
 %ignore *::setMatrix;
 
-%include hdf5/HDF5DatasetBase.h
+%include hdf5/Dataset.h
 
 namespace DAL {
-  %template(HDF5DatasetBaseShort)        HDF5DatasetBase<short>;
-  %template(HDF5DatasetBaseFloat)        HDF5DatasetBase<float>;
-  %template(HDF5DatasetBaseComplexFloat) HDF5DatasetBase< std::complex<float> >;
+  %template(DatasetShort)        Dataset<short>;
+  %template(DatasetFloat)        Dataset<float>;
+  %template(DatasetComplexFloat) Dataset< std::complex<float> >;
 }
 
 // -------------------------------
@@ -58,9 +58,9 @@ namespace DAL {
   import numpy
 
   # record the numpy datatypes used in the various datasets
-  HDF5DatasetBaseShort.dtype = numpy.short
-  HDF5DatasetBaseFloat.dtype = numpy.single
-  HDF5DatasetBaseComplexFloat.dtype = numpy.csingle
+  DatasetShort.dtype = numpy.short
+  DatasetFloat.dtype = numpy.single
+  DatasetComplexFloat.dtype = numpy.csingle
 
   del numpy
 %}

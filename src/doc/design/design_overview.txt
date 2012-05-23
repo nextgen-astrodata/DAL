@@ -84,10 +84,10 @@ The DAL allows any HDF5 file structure consisting of groups, data sets, and attr
 
 An HDF5 file in the DAL is thus represented in its abstract form -- the developer does not need to call any HDF5 functions to define, examine, or use a document structure. To do so, DAL defines the following C++ class structure:
 
-        HDF5Node                  - Represents any HDF5 node (attribute/group/dataset/file).
-          HDF5GroupBase           - Any HDF5 group that is not a root group.
-            HDF5FileBase          - Wraps an HDF5 file itself (the root group).
-            HDF5DatasetBase<T>    - An HDF5 data set with data of type T.
+        Node                  - Represents any HDF5 node (attribute/group/dataset/file).
+          Group           - Any HDF5 group that is not a root group.
+            File          - Wraps an HDF5 file itself (the root group).
+            Dataset<T>    - An HDF5 data set with data of type T.
           AttributeBase           - Common functionality for all attributes.
             Attribute<T>          - An HDF5 attribute (a key/value pair; key = string, value = data type T)
 
@@ -108,10 +108,10 @@ The above class structure allows the developer to represent a simple HDF5 struct
 
         HDF5 name:                              C++ type:                               Python type:
         --------------------------------------------------------------------------------------------------------------
-        foo.h5                                  HDF5FileBase                            HDF5FileBase
+        foo.h5                                  File                            File
         |- NAME                                 Attribute<string>                       AttributeString
         |- AGE                                  Attribute<unsigned>                     AttributeUnsigned
-        \- MY_DATASET                           HDF5DatasetBase<float>                  HDF5DataseBaseFloat
+        \- MY_DATASET                           Dataset<float>                  HDF5DataseBaseFloat
            \- DESCRIPTION                       Attribute<string>                       AttributeString
 
 Note that for Python, alternate names are needed because < and > are not valid characters.
@@ -121,7 +121,7 @@ The HDF5 structure described above can be created and populated in C++ as follow
         using namespace DAL;
         using namespace std;
 
-        HDF5FileBase f("foo.h5", HDF5FileBase.CREATE);
+        File f("foo.h5", File.CREATE);
 
         Attribute<string> name(f, "NAME");
         name.value = "John Doe";
@@ -129,7 +129,7 @@ The HDF5 structure described above can be created and populated in C++ as follow
         Attribute<unsigned> age(f, "AGE");
         age.value = 21;
 
-        HDF5DatasetBase<float > d(f, "MY_DATASET");
+        Dataset<float > d(f, "MY_DATASET");
         vector<ssize_t> dims(2,2);
         d.create(dims);
 
@@ -140,7 +140,7 @@ or alternatively, in Python:
 
         import DAL
 
-        f = DAL.HDF5FileBase("foo.h5", DAL.HDF5FileBase.CREATE)
+        f = DAL.File("foo.h5", DAL.File.CREATE)
 
         name = DAL.AttributeString(f, "NAME")
         name.value = "John Doe"
@@ -148,7 +148,7 @@ or alternatively, in Python:
         age = DAL.AttributeString(f, "AGE")
         age.value = 21;
 
-        d = DAL.HDF5DatasetBaseFloat(f, "MY_DATASET")
+        d = DAL.DatasetFloat(f, "MY_DATASET")
         d.create([2,2])
 
         desc = DAL.AttributeString(d, "DESCRIPTION")
@@ -163,16 +163,16 @@ The DAL ships with classes that wrap the HDF5 structures as described in the ICD
 
         class MyDataset;
 
-        class MyFile: public HDF5FileBase {
-          MyFile(const string &name, enum fileMode mode = READ): HDF5FileBase(name, mode) {}
+        class MyFile: public File {
+          MyFile(const string &name, enum fileMode mode = READ): File(name, mode) {}
 
           Attribute<string>  name() { return Attribute<string>(*this, "NAME"); }
           Attribute<unsigned> age() { return Attribute<unsigned>(*this, "AGE"); }
           MyDataset myDataset()     { return MyDataset(*this, "MY_DATASET"); }
         };
 
-        class MyDataset: public HDF5DatasetBase<float> {
-          MyDataset(const hid_gc &parent, const string &name): HDF5DatasetBase<float>(parent, name) {}
+        class MyDataset: public Dataset<float> {
+          MyDataset(const hid_gc &parent, const string &name): Dataset<float>(parent, name) {}
 
           Attribute<string>  description() { return Attribute<string>(*this, "DESCRIPTION"); }
         };

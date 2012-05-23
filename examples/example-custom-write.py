@@ -1,7 +1,7 @@
 import DAL
 
 # create the file
-f = DAL.HDF5FileBase("foo.h5", DAL.HDF5FileBase.CREATE)
+f = DAL.File("foo.h5", DAL.File.CREATE)
 
 # create an attribute
 a = DAL.AttributeString(f, "MY_ATTRIBUTE")
@@ -18,7 +18,7 @@ del b.value
 assert b.value is None
 
 # create a dataset
-d = DAL.HDF5DatasetBaseComplexFloat(f, "MY_DATASET")
+d = DAL.DatasetComplexFloat(f, "MY_DATASET")
 d.create([4,4])
 
 # insert some data points

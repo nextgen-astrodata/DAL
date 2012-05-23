@@ -12,13 +12,13 @@ The HDF5 data types are endianness and size aware, but need to be converted
 to their native C++ counterparts. The file hdf5core/h5typemap.h contains
 this conversion for basic types.
 
-Vectors and arrays are converted in HDF5Attribute.h and HDF5DatasetBase.h
+Vectors and arrays are converted in Attribute.h and Dataset.h
 respectively.
 
 3. C++ <-> casacore
 
 The casacore arrays can be non-contiguous and require FORTRAN dimension
-ordering. The file HDF5DatasetBase.h contains get/set routines to
+ordering. The file Dataset.h contains get/set routines to
 interface casacore arrays with datasets.
 
 4. C++ <-> Python

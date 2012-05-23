@@ -6,22 +6,22 @@
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
 #include "hdf5/exceptions/h5exception.h"
-#include "hdf5/HDF5GroupBase.h"
+#include "hdf5/Group.h"
 
 namespace DAL {
 
 /*!
- * \class HDF5DatasetBase
+ * \class Dataset
  *
  * Provides generic functionality for HDF5 Datasets.
  *
  * Python example:
  * \code
  *    # Create a new HDF5 file called "example.h5"
- *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+ *    >>> f = File("example.h5", File.CREATE)
  *
  *    # Create a 2 x 3 dataset of floats within the given file
- *    >>> d = HDF5DatasetBaseFloat(f, "EXAMPLE_DATASET")
+ *    >>> d = DatasetFloat(f, "EXAMPLE_DATASET")
  *    >>> d.create([2,3])
  *
  *    # Retrieve some information about the dataset
@@ -57,11 +57,11 @@ namespace DAL {
  *    >>> os.remove("example.h5")
  * \endcode
  */
-template<typename T> class HDF5DatasetBase: public HDF5GroupBase {
+template<typename T> class Dataset: public Group {
 public:
   enum Endianness { NATIVE = 0, LITTLE, BIG };
 
-  HDF5DatasetBase( HDF5GroupBase &parent, const std::string &name ): HDF5GroupBase(parent, name) {}
+  Dataset( Group &parent, const std::string &name ): Group(parent, name) {}
 
   /*!
    * Creates a new dataset with dimensions sized `dims'. If `maxdims' is set, the dataset can be scaled up to `maxdims'.
@@ -220,7 +220,7 @@ protected:
 
 }
 
-#include "hdf5/HDF5DatasetBase.tcc"
+#include "hdf5/Dataset.tcc"
 
 #endif
 

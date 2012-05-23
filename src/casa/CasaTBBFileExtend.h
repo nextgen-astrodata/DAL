@@ -5,12 +5,12 @@
 #include "hdf5/exceptions/h5exception.h"
 #include "TBB_File.h"
 #include "CasaDatasetExtend.h"
-#include "HDF5Attribute.h"
+#include "Attribute.h"
 
 namespace DAL {
 
 /*!
- * Adds casacore functionality to an HDF5DatasetBase<T> class or any of its derivatives.
+ * Adds casacore functionality to an Dataset<T> class or any of its derivatives.
  */
 class CasaTBBDipoleDatasetExtend: public CasaDatasetExtend<short, TBB_DipoleDataset> {
 public:

@@ -49,7 +49,7 @@
 %include "hdf5/groups.i"
 %include "hdf5/datasets.i"
 
-%include hdf5/HDF5FileBase.h
+%include hdf5/File.h
 
 %include lofar/CommonTuples.h
 

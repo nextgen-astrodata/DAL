@@ -5,7 +5,7 @@
 #include <vector>
 #include <hdf5.h>
 #include "hdf5/types/hid_gc.h"
-#include "hdf5/HDF5Node.h"
+#include "hdf5/Node.h"
 
 namespace DAL {
 
@@ -14,16 +14,16 @@ template<typename T> class Attribute;
 /*!
  * Wraps an HDF5 group, providing core functionality.
  *
- * An HDF5GroupBase maintains a set of registered HDF5Nodes that it
+ * An Group maintains a set of registered Nodes that it
  * expects to be present.
  */
-class HDF5GroupBase: public HDF5Node {
+class Group: public Node {
 public:
-  HDF5GroupBase( HDF5GroupBase &parent, const std::string &name );
+  Group( Group &parent, const std::string &name );
 
-  HDF5GroupBase( const HDF5GroupBase &other );
+  Group( const Group &other );
 
-  virtual ~HDF5GroupBase();
+  virtual ~Group();
 
   /*!
    * Add this group to the HDF5 file.
@@ -43,10 +43,10 @@ public:
    * Python example:
    * \code
    *    # Create and close a new HDF5 file called "example.h5"
-   *    >>> f = HDF5FileBase("example.h5", HDF5FileBase.CREATE)
+   *    >>> f = File("example.h5", File.CREATE)
    *
    *    # Create a group
-   *    >>> g = HDF5GroupBase(f, "GROUP")
+   *    >>> g = Group(f, "GROUP")
    *    >>> g.create()
    *    >>> g.exists()
    *    True
@@ -68,7 +68,7 @@ public:
    *
    * If `deepcopy` is set, subgroups and datasets are copied as well.
    */
-  void set( const HDF5GroupBase &other, bool deepcopy );
+  void set( const Group &other, bool deepcopy );
 
   Attribute<std::string> groupType();
 
@@ -91,8 +91,8 @@ public:
    * if needed, and an exception is thrown if the group
    * has not been opened or created yet.
    *
-   * ImplicitDowncast<HDF5Node> allows getNode to be automatically
-   * cast to the required type (a subclass of HDF5Node), for example:
+   * ImplicitDowncast<Node> allows getNode to be automatically
+   * cast to the required type (a subclass of Node), for example:
    *
    * Attribute<int> &attr = getNode("MY_INTEGER");
    *
@@ -100,14 +100,14 @@ public:
    * that is compatible with the type of object that is retrieved.
    * If not, an std::bad_cast exception is thrown.
    */
-  ImplicitDowncast<HDF5Node> getNode( const std::string &name );
+  ImplicitDowncast<Node> getNode( const std::string &name );
 
 #endif
 
   /*!
    * Add a node to the map. Ownerschip is taken.
    */
-  void addNode( HDF5Node *attr );
+  void addNode( Node *attr );
 
   /*!
    * Remove all registered nodes from the map and delete them.
@@ -124,11 +124,11 @@ protected:
   std::vector<std::string> memberNames();
 
   // constructor for root group
-  HDF5GroupBase( const hid_gc &fileid );
+  Group( const hid_gc &fileid );
 
 private:
   //! The map containing all (registered) nodes in this set
-  std::map<std::string, HDF5Node*> nodeMap;
+  std::map<std::string, Node*> nodeMap;
 
   //! Whether nodeMap is initialised through initNodes()
   bool mapInitialised;
@@ -140,7 +140,7 @@ private:
 }
 
 // make sure that Attribute is actually defined
-#include "hdf5/HDF5Attribute.h"
+#include "hdf5/Attribute.h"
 
 #endif
 
