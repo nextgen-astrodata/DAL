@@ -16,108 +16,77 @@ Contents:
 Introduction
 ************
 
-The DAL, or Data Access Library, is a library to read and write astronomical data sets. More specifically, the DAL provides an interface in both C++ and Python to access various astronomical file formats that use HDF5, but also allows you to define your custom HDF5 structure on the fly.
+The DAL, or Data Access Library, is a library to read and write HDF5 files, and is tuned to process astronomical data sets. More specifically, the DAL provides an interface in both C++ and Python to access various astronomical file formats that use HDF5, but also allows you to define your custom HDF5 structure on the fly.
 
-====
-HDF5
-====
+=====
+Installation
+=====
 
-To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 file encodes an hierarchical structure of groups, attributes, and datasets.
+For now, please read INSTALL.txt.
 
-Groups
-------
+=====
+Usage
+=====
 
-At the core of the HDF5 file format is the *group*, which is a generic container of sub structures. The HDF5 file itself represents a so-called *root group*, which can contain any number of sub groups. Each group in turn can contain its own sub groups, allowing a nearly infinite nesting. Each group has a name (the root group is called ``/``).
+To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 file encodes an hierarchical structure consisting of a set of *groups*. Each group has a name, and can have sub groups, as well as a set of key-value pairs called *attributes*. Finally, a *dataset* is a specialised group which has a large array of data associated with it. An HDF5 file itself starts with a so-called *root group*, named ``/``.
 
-For example, if we have an HDF5 file that contains two groups, each of which contains one sub group, we can represent such a structure as follows::
+An hierarchical structure is typically represented by a tree. For example, consider the following example structure of groups, attributes and datasets, annotated with their respective data type::
 
   /
+  +-- NUMELEMENTS (int)
+  +-- DATETIME    (string)
+  |
   +-- GROUP_1
+  |   +-- PHASE (complex float)
   |   +-- SUBGROUP_1
+  |       +-- STATIONS (list of strings)
   |
   +-- GROUP_2
-      +-- SUBGROUP_2
-
-The code to create a file ``foo.h5`` with such a structure is (in Python)::
-
-  from DAL import *
-
-  f = File("foo.h5", File.CREATE)
-
-  group1    = Group(f,      "GROUP_1").create()
-  subgroup1 = Group(group1, "SUBGROUP_1").create()
-
-  group2    = Group(f,      "GROUP_2").create()
-  subgroup2 = Group(group2, "SUBGROUP_2").create()
-
-and in C++::
-
-  #include "dal/hdf5/File.h"
-  #include "dal/hdf5/Group.h"
-
-  using namespace DAL;
-
-  int main() {
-    File f("foo.h5", File.CREATE);
-
-    Group group1    = Group(f,      "GROUP_1"),create();
-    Group subgroup1 = Group(group1, "SUBGROUP_1").create();
-
-    Group group2    = Group(f,      "GROUP_2"),create();
-    Group subgroup2 = Group(group2, "SUBGROUP_2").create();
-  }
-
-The HDF5 tool ``h5dump`` is ideal to quickly inspect any HDF5 file, and will reveal that ``foo.h5`` indeed contains the described structure::
-
-  $ h5dump foo.h5
-  HDF5 "foo.h5" {
-  GROUP "/" {
-     GROUP "GROUP_1" {
-        GROUP "SUBGROUP_1" {
-        }
-     }
-     GROUP "GROUP_2" {
-        GROUP "SUBGROUP_2" {
-        }
-     }
-  }
-  }
-
-Attributes
-----------
-
-Each group, including the root group, can contain *attributes*, which represent (small) data values, such as ints, floats, strings, lists, tuples, etc. The DAL allows the user to define their own types as well. For example, we can alter the previous group structure as follows::
-
-  /
-  +-- MY_INTEGER (int = 42)
-  +-- MY_STRING  (string = "hello world")
+  |   +-- SUBGROUP_2
   |
-  +-- GROUP_1
-      +-- MY_COMPLEXNUMBER (complex float = 1 + 2i)
-      +-- SUBGROUP_1
-          +-- MY_STRINGLIST (list of strings = ["foo","bar"])
+  +-- DATASET (array[10][20] of float)
+      +-- DESCRIPTION (string)
 
-The code to create a file ``foo.h5`` with such a structure is (in Python)::
+The above structure consists of a root group ``/``, which contains two sub groups (``GROUP_1`` and ``GROUP_2``), one dataset (``DATASET``), and two attributes (``NUMELEMENTS``, an integer, and ``DATETIME``, a string). These groups as well as the dataset have their own attributes and sub groups.
+
+The following code creates the above structure in Python in a file called ``foo.h5``::
 
   from DAL import *
 
   f = File("foo.h5", File.CREATE)
 
-  my_integer = AttributeInt(f, "MY_INTEGER")
-  my_integer.value = 42
+  # create the attributes in the root group
+  numelements = AttributeInt(f, "NUMELEMENTS")
+  numelements.value = 42
 
-  my_string  = AttributeString(f, "MY_STRING")
-  my_string.value = "hello world"
+  datetime = AttributeInt(f, "DATETIME")
+  datetime.value = "2012-05-24 15:03:52"
 
-  group1    = Group(f,      "GROUP_1").create()
-  my_complexnumber = AttributeComplexFloat(group1, "MY_COMPLEXNUMBER")
-  my_complexnumber.value = 1 + 2i
+  # create GROUP_1 and its contents
+  group1 = Group(f, "GROUP_1")
+  group1.create()
 
-  subgroup1 = Group(group1, "SUBGROUP_1").create()
-  my_stringlist = AttributeVString(subgroup1, "MY_STRINGLIST")
-  my_stringlist.value = ["foo", "bar"]
+  phase = AttributeComplexFloat(group1, "PHASE")
+  phase.value = 1.5 + 0.5i
 
-and in C++::
+  subgroup1 = Group(group1, "SUBGROUP_1")
+  subgroup1.create()
+
+  stations = AttributeVString(subgroup1, "STATIONS")
+  stations.value = ["CS001", "CS002", "CS003"]
+
+  # create GROUP_2 and its contents
+  group2  = Group(f, "GROUP_2")
+  group2.create()
+
+  subgroup2 = Group(group2, "SUBGROUP_2")
+  subgroup2.create()
+
+  # create DATASET and its contents
+  dataset   = DatasetFloat(f, "DATASET")
+  dataset.create([10,20])
+
+Or, in C++::
 
   #include "dal/hdf5/File.h"
   #include "dal/hdf5/Group.h"
@@ -132,47 +101,48 @@ and in C++::
   int main() {
     File f("foo.h5", File.CREATE);
 
-    Attribute<int> my_integer(f, "MY_INTEGER");
-    f.value = 42;
+    Attribute<int> numelements(f, "NUMELEMENTS");
+    numelements.value = 42;
 
-    Attribute<string> my_string(f, "MY_STRING");
-    f.value = "hello world";
+    Attribute<string> datetime(f, "DATETIME");
+    datetime.value = "2012-05-24 15:03:52";
 
-    Group group1 = Group(f, "GROUP_1"),create();
-    Attribute< complex<float> > my_complexnumber(group1, "MY_COMPLEXNUMBER");
-    my_complexnumber.value = complex<float>(1, 2); // 1 + 2i
+    // create GROUP_1 and its contents
+    Group group1(f, "GROUP_1");
+    group1.create();
 
-    Group subgroup1 = Group(group1, "SUBGROUP_1").create();
-    Attribute< vector<string> > my_stringlist(subgroup1, "MY_STRINGLIST");
-    vector<string> v(2);
-    v[0] = "foo";
-    v[1] = "bar";
-    my_stringlist.value = v;
+    Attribute< complex<float> > phase(group1, "PHASE");
+    phase.value = complex<float>(1.5, 0.5); // 1.5 + 0.5i
+
+    Group subgroup1(group1, "SUBGROUP_1");
+    subgroup1.create();
+
+    Attribute< vector<string> > stations(subgroup1, "STATIONS");
+    vector<string> v(3);
+    v[0] = "CS001";
+    v[1] = "CS002";
+    v[2] = "CS003";
+    stations.value = v;
+
+    // create GROUP_2 and its contents
+    Group group2(f, "GROUP_2");
+    group2.create();
+
+    Group subgroup2(group2, "SUBGROUP_2");
+    subgroup2.create();
+
+    // create DATASET and its contents
+    Dataset<float> dataset(f, "DATASET");
+    vector<size_t> dims(2);
+    dims[0] = 10;
+    dims[1] = 20;
+    dataset.create(dims);
   }
 
-The HDF5 tool ``h5dump`` is ideal to quickly inspect any HDF5 file, and will reveal that ``foo.h5`` indeed contains the described structure::
+Both the Python and C++ codes produce the same HDF5 file. Although we'll later learn how to read back data using the DAL, the ``h5dump`` inspection tool (part of the HDF5 toolset) allows easy inspection of any HDF5 file. Running ``h5dump -A foo.h5`` yields::
 
-  $ h5dump foo.h5
   (TODO)
 
-Datasets
---------
-
-Finally, HDF5 has special groups called *datasets*. A dataset is a group accompanied by a (large) array of data values. The array can have any number of dimensions and any size. Because a dataset is a group, it can contain its own attributes as well as sub groups. For example, if we extend the group structure with a dataset, we get::
-
-  /
-  +-- MY_INTEGER (int)
-  +-- MY_STRING  (string)
-  |
-  +-- GROUP_1
-  |   +-- MY_COMPLEXNUMBER (complex float)
-  |   +-- SUBGROUP_1
-  |       +-- MY_STRINGLIST (list of strings)
-  |
-  +-- GROUP_2
-  |   +-- SUBGROUP_2
-  |
-  +-- DATASET (array[10][20] of float)
 
 *italic* **bold** ``code``
 
