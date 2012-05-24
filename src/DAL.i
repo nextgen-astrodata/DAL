@@ -43,11 +43,11 @@
   using namespace DAL;
 %}
 
-%include "hdf5/types/tuples.i"
-%include "hdf5/attributes.i"
+%include "hdf5/types/h5tuple.i"
+%include "hdf5/Attribute.i"
 
-%include "hdf5/groups.i"
-%include "hdf5/datasets.i"
+%include "hdf5/Group.i"
+%include "hdf5/Dataset.i"
 
 %include hdf5/File.h
 
