@@ -1,15 +1,3 @@
-
-%include dal/hdf5/types/versiontype.h
-
-%extend DAL::VersionType {
-  %pythoncode {
-    def __repr__(self):
-      return "%s('%s')" % (self.__class__.__name__,self.toString())
-
-    __str__ = toString
-  }
-}
-
 // prevent SWIG from requiring a default constructor for AttributeBase
 namespace DAL {
   %valuewrapper AttributeBase;
@@ -40,11 +28,6 @@ namespace DAL {
 // We will provide an Attribute.value implementation in Python
 %ignore DAL::Attribute::value;
 
-// rename otherwise unreachable functions
-%rename(get_hid_t)  operator hid_t;
-%rename(get_hid_gc) operator hid_gc;
-
-%include dal/hdf5/Node.h
 %include dal/hdf5/Attribute.h
 
 %extend DAL::Attribute {
