@@ -283,7 +283,16 @@ template<> inline std::string Attribute<std::string>::get() const
 {
   // H5Aread will allocate memory for us (use free() to free)
 
-  char *buf;
+  char *buf = 0;
+
+  // make sure any allocated memory is always freed
+  struct D {
+    char * &buf;
+
+    ~D() { free(buf); }
+
+  } destructor = { buf };
+  (void)destructor;
 
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute " + _name);
   hid_gc_noref diskdatatype(H5Aget_type(attr), H5Tclose, "Could not open attribute datatype for attribute " + _name);
@@ -310,7 +319,6 @@ template<> inline std::string Attribute<std::string>::get() const
 
   std::string value = buf;
 
-  free(buf);
   return value;
 }
 
@@ -356,7 +364,20 @@ template<> inline void Attribute< std::vector<std::string> >::set( const std::ve
 template<> inline std::vector<std::string> Attribute< std::vector<std::string> >::get() const
 {
   // H5Aread will allocate memory for us (use free() to free each element)
-  std::vector<char *> c_strs(size());
+  std::vector<char *> c_strs(size(), 0);
+
+  // make sure any allocated memory is always freed
+  struct D {
+    std::vector<char *> &c_strs;
+
+    ~D() {
+       for (unsigned i = 0; i < c_strs.size(); i++)
+         free(c_strs[i]);
+     }  
+
+  } destructor = { c_strs };
+  (void)destructor;
+
 
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype for attribute " + _name);
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open attribute " + _name);
@@ -366,10 +387,8 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
 
   // convert from C-style strings
   std::vector<std::string> value(c_strs.size());
-  for (unsigned i = 0; i < value.size(); i++) {
+  for (unsigned i = 0; i < value.size(); i++)
     value[i] = c_strs[i];
-    free(c_strs[i]);
-  }
 
   return value;
 }
