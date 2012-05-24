@@ -18,9 +18,9 @@ Introduction
 
 The DAL, or Data Access Library, is a library to read and write HDF5 files, and is tuned to process astronomical data sets. More specifically, the DAL provides an interface in both C++ and Python to access various astronomical file formats that use HDF5, but also allows you to define your custom HDF5 structure on the fly.
 
-=====
+============
 Installation
-=====
+============
 
 For now, please read INSTALL.txt.
 
@@ -142,6 +142,18 @@ Or, in C++::
 Both the Python and C++ codes produce the same HDF5 file. Although we'll later learn how to read back data using the DAL, the ``h5dump`` inspection tool (part of the HDF5 toolset) allows easy inspection of any HDF5 file. Running ``h5dump -A foo.h5`` yields::
 
   (TODO)
+
+***********************
+Predefined file formats
+***********************
+
+==========
+Versioning
+==========
+
+=============
+Introspection
+=============
 
 
 *italic* **bold** ``code``
