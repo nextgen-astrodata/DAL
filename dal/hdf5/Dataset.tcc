@@ -1,5 +1,5 @@
-#include "dal/hdf5/types/h5typemap.h"
-#include "dal/hdf5/Dataset.h"
+#include "types/h5typemap.h"
+#include "Dataset.h"
 
 namespace DAL {
 

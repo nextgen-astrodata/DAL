@@ -5,10 +5,10 @@
 #include <map>
 #include <vector>
 #include <typeinfo>
-#include "dal/hdf5/exceptions/h5exception.h"
-#include "dal/hdf5/types/hid_gc.h"
-#include "dal/hdf5/types/implicitdowncast.h"
-#include "dal/hdf5/types/versiontype.h"
+#include "exceptions/h5exception.h"
+#include "types/hid_gc.h"
+#include "types/implicitdowncast.h"
+#include "types/versiontype.h"
 
 namespace DAL {
 
@@ -250,7 +250,7 @@ protected:
 }
 
 // make sure that Group is defined
-#include "dal/hdf5/Group.h"
+#include "Group.h"
 
 #endif
 

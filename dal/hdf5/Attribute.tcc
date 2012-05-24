@@ -1,5 +1,5 @@
-#include "dal/hdf5/Attribute.h"
-#include "dal/hdf5/types/h5typemap.h"
+#include "Attribute.h"
+#include "types/h5typemap.h"
 #include <cstdlib>
 #include <hdf5.h>
 

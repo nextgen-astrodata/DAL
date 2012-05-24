@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 #include <ostream>
-#include "dal/hdf5/types/hid_gc.h"
-#include "dal/hdf5/Node.h"
-#include "dal/hdf5/Group.h"
+#include "types/hid_gc.h"
+#include "Node.h"
+#include "Group.h"
 
 /*
  * NOTE: Setting attributes is not thread-safe if the same attribute is modified by multiple
@@ -277,7 +277,7 @@ public:
 
 }
 
-#include "dal/hdf5/Attribute.tcc"
+#include "Attribute.tcc"
 
 #endif
 

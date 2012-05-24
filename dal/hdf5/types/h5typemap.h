@@ -2,10 +2,10 @@
 #define __H5TYPEMAP__
 
 #include <hdf5.h>
-#include "dal/hdf5/types/hid_gc.h"
-#include "dal/hdf5/types/h5complex.h"
-#include "dal/hdf5/types/h5tuple.h"
-#include "dal/hdf5/types/isderivedfrom.h"
+#include "hid_gc.h"
+#include "h5complex.h"
+#include "h5tuple.h"
+#include "isderivedfrom.h"
 
 namespace DAL {
 

@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "dal/hdf5/types/hid_gc.h"
-#include "dal/hdf5/Node.h"
+#include "types/hid_gc.h"
+#include "Node.h"
 
 namespace DAL {
 
@@ -140,7 +140,7 @@ private:
 }
 
 // make sure that Attribute is actually defined
-#include "dal/hdf5/Attribute.h"
+#include "Attribute.h"
 
 #endif
 

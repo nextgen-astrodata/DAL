@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "dal/hdf5/types/hid_gc.h"
-#include "dal/hdf5/exceptions/h5exception.h"
-#include "dal/hdf5/Group.h"
+#include "types/hid_gc.h"
+#include "exceptions/h5exception.h"
+#include "Group.h"
 
 namespace DAL {
 
@@ -220,7 +220,7 @@ protected:
 
 }
 
-#include "dal/hdf5/Dataset.tcc"
+#include "Dataset.tcc"
 
 #endif
 

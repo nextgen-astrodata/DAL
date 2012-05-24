@@ -1,6 +1,6 @@
-#include "dal/hdf5/Node.h"
-#include "dal/hdf5/Attribute.h"
-#include "dal/hdf5/Group.h"
+#include "Node.h"
+#include "Attribute.h"
+#include "Group.h"
 #include <string>
 
 using namespace std;

@@ -3,7 +3,7 @@
 
 #include <hdf5.h>
 #include <algorithm>
-#include "dal/hdf5/types/hid_gc.h"
+#include "hid_gc.h"
 #include "dal/hdf5/exceptions/h5exception.h"
 
 namespace DAL {
