@@ -88,28 +88,25 @@ namespace DAL {
   }
 %enddef
 
+%define AddAttributeAndVector( PythonName, CPPName )
+  AddAttribute( PythonName, %arg(CPPName) );
+
+  AddVector( PythonName, CPPName );
+  AddAttribute( V ## PythonName, %arg(std::vector< CPPName >) );
+%enddef
+
 %pythoncode {
   # DAL::Attribute templates can be registered here
   Attributes = {}
 }
 
 AddAttribute( Bool,       bool );
-
-AddAttribute( Int,        int );
-AddAttribute( VInt,       std::vector<int> );
-
-AddAttribute( Unsigned,   unsigned );
-AddAttribute( VUnsigned,  std::vector<unsigned> );
-
-AddAttribute( Double,     double );
-AddAttribute( VDouble,    std::vector<double> );
-
-AddAttribute( String,     std::string );
-AddAttribute( VString,    std::vector<std::string> );
-
-AddAttribute( Unsigned3,  %arg(Tuple<unsigned,3>) );
-AddAttribute( VUnsigned3, %arg(std::vector< Tuple<unsigned,3> >) );
-
-AddAttribute( Double3,    %arg(Tuple<double,3>) );
-AddAttribute( VDouble3,   %arg(std::vector< Tuple<double,3> >) );
+AddAttributeAndVector( Int,          int );
+AddAttributeAndVector( Long,         long );
+AddAttributeAndVector( Unsigned,     %arg(unsigned int) );
+AddAttributeAndVector( UnsignedLong, %arg(unsigned long) );
+AddAttributeAndVector( Double,       double );
+AddAttributeAndVector( String,       std::string );
+AddAttributeAndVector( Unsigned3,    %arg(Tuple<unsigned,3>) );
+AddAttributeAndVector( Double3,      %arg(Tuple<double,3>) );
 

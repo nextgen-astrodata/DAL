@@ -70,13 +70,13 @@
   }
 }
 
-%define AddVector( PythonName, CPPName )
+%define AddVector( PythonName, CPPName... )
   // create the Python class VectorXXX
   %template(Vector ## PythonName) std::vector< CPPName >;
 
   // register it in our Vectors dict
   %pythoncode {
-    Vectors[#CPPName] = Vector ## PythonName;
+    Vectors[`CPPName`] = Vector ## PythonName;
   }
 %enddef
 
@@ -84,18 +84,3 @@
   # std::vector templates can be registered here
   Vectors = {}
 }
-
-AddVector(Unsigned,     unsigned int)
-AddVector(UnsignedLong, unsigned long)
-AddVector(Int,          int)
-AddVector(Long,         long)
-AddVector(Double,       double)
-AddVector(String,       std::string)
-
-// Define Vector aliases for python for size_t and ssize_t
-%pythoncode %{
-  VectorSizeT    = Vectors[typeof_size_t];
-  VectorSSizeT   = Vectors[typeof_ssize_t];
-  VectorPtrDiffT = Vectors[typeof_ptrdiff_t];
-%}
-

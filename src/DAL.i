@@ -48,21 +48,16 @@
 
 %include "hdf5/Group.i"
 %include "hdf5/Dataset.i"
-
 %include hdf5/File.h
 
-%include lofar/CommonTuples.h
+// Define Vector aliases for python for size_t and ssize_t
+%pythoncode %{
+  VectorSizeT    = Vectors[typeof_size_t];
+  VectorSSizeT   = Vectors[typeof_ssize_t];
+  VectorPtrDiffT = Vectors[typeof_ptrdiff_t];
+%}
 
-%template(VectorCoordinate3DDouble)     std::vector< DAL::Coordinate3D<double> >;
-
-namespace DAL {
-  using namespace std;
-
-  %template(Coordinate3DDouble)           Coordinate3D<double>;
-  %template(AttributeCoordinate3DDouble)  Attribute< Coordinate3D<double> >;
-  %template(AttributeVCoordinate3DDouble) Attribute< vector< Coordinate3D<double> > >;
-}
-
+%include "lofar/CommonTuples.i"
 %include lofar/CommonAttributesFile.h
 %include lofar/Coordinates.h
 %include lofar/BF_File.h

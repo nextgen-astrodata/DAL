@@ -69,10 +69,8 @@
 }
 
 %define AddTuple( PythonName, CPPName )
-  // instantiate the template, and a vector variant
+  // instantiate the template
   %template(PythonName) CPPName;
-
-  AddVector(PythonName, %arg(CPPName));
 %enddef
 
 namespace DAL {

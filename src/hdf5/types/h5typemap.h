@@ -50,10 +50,28 @@ template<> struct h5typemap<int> {
   static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I32BE : H5T_STD_I32LE; }
 };
 
+template<> struct h5typemap<unsigned long> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_ULONG; }
+  static inline hid_t attributeType()            { return H5T_STD_U64LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_U64BE : H5T_STD_U64LE; }
+};
+
+template<> struct h5typemap<long> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_LONG; }
+  static inline hid_t attributeType()            { return H5T_STD_I64LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I64BE : H5T_STD_I64LE; }
+};
+
 template<> struct h5typemap<short> {
   static inline hid_t memoryType()               { return H5T_NATIVE_SHORT; }
   static inline hid_t attributeType()            { return H5T_STD_I16LE;   }
   static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I16BE : H5T_STD_I16LE; }
+};
+
+template<> struct h5typemap<unsigned short> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_USHORT; }
+  static inline hid_t attributeType()            { return H5T_STD_U16LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_U16BE : H5T_STD_U16LE; }
 };
 
 template<> struct h5typemap<bool> {
