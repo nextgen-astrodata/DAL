@@ -17,9 +17,14 @@ enable_testing()
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(BUILD_SHARED_LIBS ON)
 
+include_directories (
+  ${CMAKE_CURRENT_SOURCE_DIR} # to find regular headers
+  ${CMAKE_CURRENT_BINARY_DIR} # to find generated headers
+  )
+
 # Start processing the source tree
 
-add_subdirectory(src)
+add_subdirectory(dal)
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif(BUILD_TESTING)
@@ -27,3 +32,4 @@ endif(BUILD_TESTING)
 if(GENERATE_DOCS)
   add_subdirectory(doc)
 endif(GENERATE_DOCS)
+

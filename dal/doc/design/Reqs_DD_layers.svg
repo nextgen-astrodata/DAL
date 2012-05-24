@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created by diasvg.py -->
+<svg width="23.200cm" height="18.200cm" viewBox="10.900 2.900 34.100 21.100"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect x="17.000" y="18.000" width="11.000" height="3.000" fill="#FFFFFF" stroke="none" stroke-width="0/>
+<rect x="17.000" y="18.000" width="11.000" height="3.000" fill="none" stroke="#BFBFBF" stroke-width="0.200" />
+<text x="22.500" y="19.295"  fill="#000000" text-anchor="middle" font-size="0.80" font-family="sans" font-style="normal" font-weight="400">
+Operating</text>
+<text x="22.500" y="20.095"  fill="#000000" text-anchor="middle" font-size="0.80" font-family="sans" font-style="normal" font-weight="400">
+System</text>
+<rect x="18.000" y="15.000" width="9.000" height="3.000" fill="#FFFFFF" stroke="none" stroke-width="0/>
+<rect x="18.000" y="15.000" width="9.000" height="3.000" fill="none" stroke="#BFBFBF" stroke-width="0.200" />
+<text x="22.500" y="16.714"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+libhdf5</text>
+<rect x="21.000" y="3.000" width="6.000" height="6.000" fill="#FFFFFF" stroke="none" stroke-width="0/>
+<rect x="21.000" y="3.000" width="6.000" height="6.000" fill="none" stroke="#BFBFBF" stroke-width="0.200" />
+<text x="24.000" y="4.450"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+User</text>
+<text x="24.000" y="5.332"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Applications</text>
+<rect x="18.000" y="9.000" width="9.000" height="6.000" fill="#FFFFFF" stroke="none" stroke-width="0/>
+<rect x="18.000" y="9.000" width="9.000" height="6.000" fill="none" stroke="#000000" stroke-width="0.200" />
+<text x="22.500" y="10.450"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Data Product</text>
+<text x="22.500" y="11.332"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Spec. Impl.</text>
+<text x="22.500" y="13.096"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+HDF5/C</text>
+<text x="22.500" y="13.978"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Abstraction</text>
+<line x1="17.000" y1="15.000" x2="11.000" y2="15.000" stroke="#000000" stroke-width="0.200" stroke-dasharray="0.20,0.20/>
+<line x1="17.000" y1="9.000" x2="11.000" y2="9.000" stroke="#000000" stroke-width="0.200" stroke-dasharray="0.20,0.20/>
+<line x1="17.000" y1="6.000" x2="11.000" y2="6.000" stroke="#000000" stroke-width="0.200" stroke-dasharray="0.20,0.20/>
+<text x="12.500" y="13.500"  fill="#000000" text-anchor="start" font-size="0.88" font-family="sans" font-style="normal" font-weight="700">
+Layer 1a</text>
+<text x="12.500" y="11.000"  fill="#000000" text-anchor="start" font-size="0.88" font-family="sans" font-style="normal" font-weight="700">
+Layer 1b</text>
+<text x="12.500" y="7.750"  fill="#000000" text-anchor="start" font-size="0.88" font-family="sans" font-style="normal" font-weight="700">
+Layer 2</text>
+<text x="12.500" y="16.750"  fill="#000000" text-anchor="start" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Layer 0</text>
+<text x="12.500" y="4.500"  fill="#000000" text-anchor="start" font-size="0.88" font-family="sans" font-style="normal" font-weight="700">
+Layer N+1</text>
+<line x1="28.000" y1="3.000" x2="34.000" y2="3.000" stroke="#000000" stroke-width="0.200" stroke-dasharray="0.20,0.20/>
+<line x1="28.000" y1="15.000" x2="34.000" y2="15.000" stroke="#000000" stroke-width="0.200" stroke-dasharray="0.20,0.20/>
+<text x="29.500" y="9.500"  fill="#000000" text-anchor="start" font-size="0.88" font-family="sans" font-style="normal" font-weight="700">
+DAL2</text>
+<rect x="18.000" y="6.000" width="6.000" height="3.000" fill="#FFFFFF" stroke="none" stroke-width="0/>
+<rect x="18.000" y="6.000" width="6.000" height="3.000" fill="none" stroke="#000000" stroke-width="0.200" />
+<text x="21.000" y="7.273"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Tuple get/set,</text>
+<text x="21.000" y="8.155"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Slicing, ???</text>
+<line x1="27.000" y1="12.000" x2="18.000" y2="12.000" stroke="#000000" stroke-width="0.200" stroke-dasharray="1.00,1.00/>
+<rect x="18.000" y="3.000" width="3.055" height="3.000" fill="#FFFFFF" stroke="none" stroke-width="0/>
+<rect x="18.000" y="3.000" width="3.055" height="3.000" fill="none" stroke="#000000" stroke-width="0.200" />
+<text x="19.528" y="4.273"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+DAL2</text>
+<text x="19.528" y="5.155"  fill="#000000" text-anchor="middle" font-size="0.88" font-family="sans" font-style="normal" font-weight="400">
+Tools</text>
+</svg>
