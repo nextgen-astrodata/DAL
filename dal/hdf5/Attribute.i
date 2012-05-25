@@ -83,13 +83,16 @@ namespace DAL {
   Attributes = {}
 }
 
-AddAttribute( Bool,       bool );
-AddAttributeAndVector( Int,          int );
-AddAttributeAndVector( Long,         long );
-AddAttributeAndVector( Unsigned,     %arg(unsigned int) );
-AddAttributeAndVector( UnsignedLong, %arg(unsigned long) );
-AddAttributeAndVector( Double,       double );
-AddAttributeAndVector( String,       std::string );
-AddAttributeAndVector( Unsigned3,    %arg(Tuple<unsigned,3>) );
-AddAttributeAndVector( Double3,      %arg(Tuple<double,3>) );
+AddAttribute( Bool, bool );
+AddAttributeAndVector( Int,           int );
+AddAttributeAndVector( Long,          long );
+AddAttributeAndVector( Unsigned,      %arg(unsigned int) );
+AddAttributeAndVector( UnsignedLong,  %arg(unsigned long) );
+AddAttributeAndVector( Float,         float );
+AddAttributeAndVector( Double,        double );
+AddAttributeAndVector( ComplexFloat,  %arg(std::complex<float>) );
+AddAttributeAndVector( ComplexDouble, %arg(std::complex<double>) );
+AddAttributeAndVector( String,        std::string );
+AddAttributeAndVector( Unsigned3,     %arg(Tuple<unsigned,3>) );
+AddAttributeAndVector( Double3,       %arg(Tuple<double,3>) );
 
