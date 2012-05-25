@@ -28,9 +28,7 @@ For now, please read INSTALL.txt.
 Usage
 =====
 
-To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 file encodes an hierarchical structure consisting of a set of *groups*. Each group has a name, and can have sub groups, as well as a set of key-value pairs called *attributes*. Finally, a *dataset* is a specialised group which has a large array of data associated with it. An HDF5 file itself starts with a so-called *root group*, named ``/``.
-
-An hierarchical structure is typically represented by a tree. For example, consider the following example structure of groups, attributes and datasets, annotated with their respective data type::
+To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 file encodes an hierarchical structure consisting of a set of *groups*. Each group has a name, and can have sub groups, as well as a set of key-value pairs called *attributes*. Finally, a *dataset* is a specialised group which has a large array of data associated with it. An HDF5 file itself starts with a so-called *root group*, named ``/``. All of these elements in a file are typically represented by a tree. For example, consider the following example structure of groups, attributes and datasets, annotated with their respective data type::
 
   /
   +-- NUMELEMENTS (int)
@@ -59,7 +57,7 @@ The following code creates the above structure in Python in a file called ``foo.
   numelements = AttributeInt(f, "NUMELEMENTS")
   numelements.value = 42
 
-  datetime = AttributeInt(f, "DATETIME")
+  datetime = AttributeString(f, "DATETIME")
   datetime.value = "2012-05-24 15:03:52"
 
   # create GROUP_1 and its contents
@@ -90,6 +88,7 @@ Or, in C++::
 
   #include "dal/hdf5/File.h"
   #include "dal/hdf5/Group.h"
+  #include "dal/hdf5/Dataset.h"
   #include "dal/hdf5/Attribute.h"
   #include <string>
   #include <complex>
@@ -99,7 +98,7 @@ Or, in C++::
   using namespace std;
 
   int main() {
-    File f("foo.h5", File.CREATE);
+    File f("foo.h5", File::CREATE);
 
     Attribute<int> numelements(f, "NUMELEMENTS");
     numelements.value = 42;
@@ -133,7 +132,7 @@ Or, in C++::
 
     // create DATASET and its contents
     Dataset<float> dataset(f, "DATASET");
-    vector<size_t> dims(2);
+    vector<ssize_t> dims(2);
     dims[0] = 10;
     dims[1] = 20;
     dataset.create(dims);
@@ -141,7 +140,163 @@ Or, in C++::
 
 Both the Python and C++ codes produce the same HDF5 file. Although we'll later learn how to read back data using the DAL, the ``h5dump`` inspection tool (part of the HDF5 toolset) allows easy inspection of any HDF5 file. Running ``h5dump -A foo.h5`` yields::
 
-  (TODO)
+  HDF5 "foo.h5" {
+  GROUP "/" {
+     ATTRIBUTE "DATETIME" {
+        DATATYPE  H5T_STRING {
+              STRSIZE H5T_VARIABLE;
+              STRPAD H5T_STR_NULLTERM;
+              CSET H5T_CSET_ASCII;
+              CTYPE H5T_C_S1;
+           }
+        DATASPACE  SCALAR
+        DATA {
+        (0): "2012-05-24 15:03:52"
+        }
+     }
+     ATTRIBUTE "NUMELEMENTS" {
+        DATATYPE  H5T_STD_I32LE
+        DATASPACE  SCALAR
+        DATA {
+        (0): 42
+        }
+     }
+     DATASET "DATASET" {
+        DATATYPE  H5T_IEEE_F32LE
+        DATASPACE  SIMPLE { ( 10, 20 ) / ( 10, 20 ) }
+     }
+     GROUP "GROUP_1" {
+        ATTRIBUTE "PHASE" {
+           DATATYPE  H5T_COMPOUND {
+              H5T_IEEE_F32LE "real";
+              H5T_IEEE_F32LE "imag";
+           }
+           DATASPACE  SCALAR
+           DATA {
+           (0): {
+                 1.5,
+                 0.5
+              }
+           }
+        }
+        GROUP "SUBGROUP_1" {
+           ATTRIBUTE "STATIONS" {
+              DATATYPE  H5T_STRING {
+                    STRSIZE H5T_VARIABLE;
+                    STRPAD H5T_STR_NULLTERM;
+                    CSET H5T_CSET_ASCII;
+                    CTYPE H5T_C_S1;
+                 }
+              DATASPACE  SIMPLE { ( 3 ) / ( 3 ) }
+              DATA {
+              (0): "CS001", "CS002", "CS003"
+              }
+           }
+        }
+     }
+     GROUP "GROUP_2" {
+        GROUP "SUBGROUP_2" {
+        }
+     }
+  }
+  }
+
+which, albeit verbose, shows the entire structure as our program defined it.  The individual data can also be read using the DAL, of course. For example, the following programs extract the values of a few attributes, as well as a few scalars from the dataset from ``foo.h5``. In Python::
+
+  from DAL import *
+
+  f = File("foo.h5", File.READ)
+
+  # reference the attributes in the root group
+  numelements = AttributeInt(f, "NUMELEMENTS")
+  print "numelements =", numelements.value
+
+  datetime = AttributeString(f, "DATETIME")
+  print "datetime =", datetime.value
+
+  # reference GROUP_1 and its contents
+  group1 = Group(f, "GROUP_1")
+
+  phase = AttributeComplexFloat(group1, "PHASE")
+  print "group1.phase =", phase.value
+
+  subgroup1 = Group(group1, "SUBGROUP_1")
+
+  stations = AttributeVString(subgroup1, "STATIONS")
+  print "group1.subgroup1.stations =", stations.value
+
+  # reference DATASET and its contents
+  dataset   = DatasetFloat(f, "DATASET")
+  print "dataset has", dataset.ndims(), "dimensions"
+  print "dataset[0][0] =", dataset.getScalar([0,0])
+
+Yielding::
+
+  numelements = 42
+  datetime = 2012-05-24 15:03:52
+  group1.phase = (1.5+0.5j)
+  group1.subgroup1.stations = ('CS001', 'CS002', 'CS003')
+  dataset has 2 dimensions
+  dataset[0][0] = 0.0
+
+In C++::
+
+  #include "dal/hdf5/File.h"
+  #include "dal/hdf5/Group.h"
+  #include "dal/hdf5/Dataset.h"
+  #include "dal/hdf5/Attribute.h"
+  #include <string>
+  #include <complex>
+  #include <vector>
+  #include <iostream>
+
+  using namespace DAL;
+  using namespace std;
+
+  int main() {
+    File f("foo.h5", File::READ);
+
+    Attribute<int> numelements(f, "NUMELEMENTS");
+    cout << "numelements = " << numelements.value << endl;
+
+    Attribute<string> datetime(f, "DATETIME");
+    cout << "datetime = " << datetime.value << endl;
+
+    // reference GROUP_1 and its contents
+    Group group1(f, "GROUP_1");
+
+    Attribute< complex<float> > phase(group1, "PHASE");
+    cout << "group1.phase = " << phase.value << endl;
+
+    Group subgroup1(group1, "SUBGROUP_1");
+
+    Attribute< vector<string> > stations(subgroup1, "STATIONS");
+    vector<string> stations_val = stations.value;
+    cout << "group1.subgroup1.stations = (";
+    for (size_t i = 0; i < stations_val.size(); i++) {
+      if (i > 0) cout << ", ";
+      cout << "'" << stations_val[i] << "'";
+    }
+    cout << ")" << endl;
+
+    // create DATASET and its contents
+    Dataset<float> dataset(f, "DATASET");
+    cout << "dataset has " << dataset.ndims() << " dimensions" << endl;
+    vector<size_t> pos(2);
+    pos[0] = 0;
+    pos[1] = 0;
+    cout << "dataset[0][0] = " << dataset.getScalar(pos) << endl;
+  }
+
+Yielding::
+
+  numelements = 42
+  datetime = 2012-05-24 15:03:52
+  group1.phase = (1.5,0.5)
+  group1.subgroup1.stations = ('CS001', 'CS002', 'CS003')
+  dataset has 2 dimensions
+  dataset[0][0] = 0
+
 
 ***********************
 Predefined file formats
