@@ -18,6 +18,11 @@ Introduction
 
 The DAL, or Data Access Library, is a library to read and write HDF5 files, and is tuned to process astronomical data sets. More specifically, the DAL provides an interface in both C++ and Python to access various astronomical file formats that use HDF5, but also allows you to define your custom HDF5 structure on the fly.
 
+The DAL was created for two reasons:
+
+* You do not want to deal with the HDF5 library directly. While the HDF5 library is very powerful, its use is also quite technical.
+* To wrap standardised HDF5 file formats, and to provide higher-level functionality on top of them.
+
 ============
 Installation
 ============
@@ -28,7 +33,14 @@ For now, please read INSTALL.txt.
 Usage
 =====
 
-To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 file encodes an hierarchical structure consisting of a set of *groups*. Each group has a name, and can have sub groups, as well as a set of key-value pairs called *attributes*. Finally, a *dataset* is a specialised group which has a large array of data associated with it. An HDF5 file itself starts with a so-called *root group*, named ``/``. All of these elements in a file are typically represented by a tree. For example, consider the following example structure of groups, attributes and datasets, annotated with their respective data type::
+To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 file encodes an hierarchical structure consisting of a set of *groups*. Each group has a name, and can have sub groups, as well as a set of key-value pairs called *attributes*. Finally, a *dataset* is a specialised group which has a large array of data associated with it. An HDF5 file itself starts with a so-called *root group*, named ``/``. All of these elements in a file are typically represented by a tree.
+
+The rest of this section will provide an example of how you can read and write such structures using the DAL. Subsequent sections will cover the used functionality in more detail.
+
+Example HDF5 structure
+----------------------
+
+Consider the following example structure of groups, attributes and datasets, annotated with their respective data type::
 
   /
   +-- NUMELEMENTS (int)
@@ -46,6 +58,9 @@ To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 
       +-- DESCRIPTION (string)
 
 The above structure consists of a root group ``/``, which contains two sub groups (``GROUP_1`` and ``GROUP_2``), one dataset (``DATASET``), and two attributes (``NUMELEMENTS``, an integer, and ``DATETIME``, a string). These groups as well as the dataset have their own attributes and sub groups.
+
+Creating the structure using the DAL
+------------------------------------
 
 The following code creates the above structure in Python in a file called ``foo.h5``::
 
@@ -84,7 +99,7 @@ The following code creates the above structure in Python in a file called ``foo.
   dataset   = DatasetFloat(f, "DATASET")
   dataset.create([10,20])
 
-Or, in C++::
+Or, in C++, producing the same HDF5 file::
 
   #include "dal/hdf5/File.h"
   #include "dal/hdf5/Group.h"
@@ -138,7 +153,10 @@ Or, in C++::
     dataset.create(dims);
   }
 
-Both the Python and C++ codes produce the same HDF5 file. Although we'll later learn how to read back data using the DAL, the ``h5dump`` inspection tool (part of the HDF5 toolset) allows easy inspection of any HDF5 file. Running ``h5dump -A foo.h5`` yields::
+Reading the structure using HDF5 tools
+--------------------------------------
+
+Although we'll later learn how to read back data using the DAL, the ``h5dump`` inspection tool (part of the HDF5 toolset) allows easy inspection of any HDF5 file. Running ``h5dump -A foo.h5`` yields::
 
   HDF5 "foo.h5" {
   GROUP "/" {
@@ -201,7 +219,12 @@ Both the Python and C++ codes produce the same HDF5 file. Although we'll later l
   }
   }
 
-which, albeit verbose, shows the entire structure as our program defined it.  The individual data can also be read using the DAL, of course. For example, the following programs extract the values of a few attributes, as well as a few scalars from the dataset from ``foo.h5``. In Python::
+which, albeit verbose, shows the entire structure as our program defined it. 
+
+Reading the structure using the DAL
+-----------------------------------
+
+The individual data can also be read using the DAL, of course. For example, the following programs extract the values of a few attributes, as well as a few scalars from the dataset from ``foo.h5``. In Python::
 
   from DAL import *
 
@@ -297,6 +320,44 @@ Yielding::
   dataset has 2 dimensions
   dataset[0][0] = 0
 
+*********
+Basic API
+*********
+
+====
+File
+====
+
+.. autoclass:: DAL::File
+   :members:
+
+=====
+Group
+=====
+
+.. autoclass:: DAL::Group
+   :members:
+
+=======
+Dataset
+=======
+
+.. autoclass:: DAL::DatasetFloat
+   :members:
+
+=========
+Attribute
+=========
+
+.. autoclass:: DAL::AttributeInt
+   :members:
+
+.. autoclass:: DAL::AttributeVInt
+   :members:
+
+**********
+Exceptions
+**********
 
 ***********************
 Predefined file formats
