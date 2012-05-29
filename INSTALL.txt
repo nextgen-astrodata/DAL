@@ -66,8 +66,11 @@ Maintainer and developer builds, additionally:
 	- git
 	- casacore
 	- swig 1.3+	(regenerate Python bindings)
-	- doxygen 1.6+	(regenerate documentation and python docstring support)
-	- pdflatex	(regenerate user manual, data product specification, and design documentation)
+
+	- doxygen 1.6+	(regenerate API documentation and python docstring support)
+	- python-sphinx	(regenerate user manual)
+	- pdflatex	(regenerate design documentation (default: off))
+
 	- ccmake	(see all DAL CMake config variables)
 	- valgrind	(run test suite tracking memory related bugs)
 
