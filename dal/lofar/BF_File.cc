@@ -6,12 +6,12 @@ namespace DAL {
 
 BF_File::BF_File( const std::string &filename, enum File::fileMode mode )
 :
-  CommonAttributesFile(filename, mode)
+  CLA_File(filename, mode)
 {
 }
 
 void BF_File::initNodes() {
-  CommonAttributesFile::initNodes();
+  CLA_File::initNodes();
 
   addNode( new Attribute<string>(*this, "CREATE_OFFLINE_ONLINE") );
   addNode( new Attribute<string>(*this, "BF_FORMAT") );

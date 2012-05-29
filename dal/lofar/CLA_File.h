@@ -1,5 +1,5 @@
-#ifndef __CLAFILE__
-#define __CLAFILE__
+#ifndef __CLA_FILE__
+#define __CLA_FILE__
 
 #include <string>
 #include <vector>
@@ -12,9 +12,9 @@ namespace DAL {
 /*!
  * Wraps an HDF5 file implementing the Common LOFAR Attributes.
  */
-class CommonAttributesFile: public File {
+class CLA_File: public File {
 public:
-  CommonAttributesFile( const std::string &filename, enum fileMode mode = READ );
+  CLA_File( const std::string &filename, enum fileMode mode = READ );
 
   Attribute<std::string> fileName();
   Attribute<std::string> fileDate();
