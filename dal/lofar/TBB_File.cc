@@ -6,7 +6,7 @@ namespace DAL {
 
 TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode )
 :
-  CommonAttributesFile(filename, mode)
+  CLA_File(filename, mode)
 {
 }
 

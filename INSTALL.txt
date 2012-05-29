@@ -71,6 +71,6 @@ Maintainer and developer builds, additionally:
 	- python-sphinx	(regenerate user manual)
 	- pdflatex	(regenerate design documentation (default: off))
 
-	- ccmake	(see all DAL CMake config variables)
+	- cmake-curses-gui (ccmake) (see all DAL CMake config variables)
 	- valgrind	(run test suite tracking memory related bugs)
 

@@ -28,7 +28,7 @@ set(dal_sources
   hdf5/types/versiontype.cc
 
   lofar/BF_File.cc
-  lofar/CommonAttributesFile.cc
+  lofar/CLA_File.cc
   lofar/Coordinates.cc
   lofar/TBB_File.cc
 )
@@ -39,7 +39,7 @@ add_library (dal
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wno-unused-function -ansi -pedantic")
+  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-g3 -Wall -Wextra -Wno-unused-function -ansi -pedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 target_link_libraries(dal ${HDF5_LIBRARIES})

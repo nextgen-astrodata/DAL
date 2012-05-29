@@ -6,7 +6,7 @@
 #include "dal/hdf5/Attribute.h"
 #include "dal/hdf5/Group.h"
 #include "dal/hdf5/Dataset.h"
-#include "dal/lofar/CommonAttributesFile.h"
+#include "dal/lofar/CLA_File.h"
 #include "dal/lofar/Coordinates.h"
 
 namespace DAL {
@@ -21,7 +21,7 @@ class BF_StokesDataset;
 /*!
  * Interface for Beam-formed Data.
  */
-class BF_File: public CommonAttributesFile {
+class BF_File: public CLA_File {
 public:
   /*!
    * Open `filename` for reading/writing/creation.

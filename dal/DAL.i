@@ -60,7 +60,7 @@
 %}
 
 %include "dal/lofar/CommonTuples.i"
-%include dal/lofar/CommonAttributesFile.h
+%include dal/lofar/CLA_File.h
 %include dal/lofar/Coordinates.h
 %include dal/lofar/BF_File.h
 %include dal/lofar/TBB_File.h

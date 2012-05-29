@@ -7,7 +7,7 @@
 #include "dal/hdf5/Attribute.h"
 #include "dal/hdf5/Group.h"
 #include "dal/hdf5/Dataset.h"
-#include "dal/lofar/CommonAttributesFile.h"
+#include "dal/lofar/CLA_File.h"
 
 namespace DAL {
 
@@ -22,7 +22,7 @@ class TBB_VHECRTrigger;
 /*!
  * Interface for TBB Time-Series Data.
  */
-class TBB_File: public CommonAttributesFile {
+class TBB_File: public CLA_File {
 public:
   /*!
    * Open `filename` for reading/writing/creation.

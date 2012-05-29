@@ -1,7 +1,7 @@
 install (FILES
   BF_File.h
   Coordinates.h
-  CommonAttributesFile.h
+  CLA_File.h
   CommonTuples.h
   TBB_File.h
 
