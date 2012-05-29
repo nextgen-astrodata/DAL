@@ -328,32 +328,40 @@ Basic API
 File
 ====
 
-.. autoclass:: DAL::File
-   :members:
+.. class:: File
+
+   .. attribute:: READ
+                  READWRITE
+                  CREATE
+
+   Various file modes to be used in the constructor.
+
+   .. method:: [C++] File( const std::string &filename, enum fileMode mode )
+               [Python] __init__( filename, mode )
+
+   Opens or creates an HDF5 file. 
+
+   .. method:: [C++] void flush()
+               [Python] flush()
+
+   Commits any changes to disk.
+
+   blablabla
 
 =====
 Group
 =====
 
-.. autoclass:: DAL::Group
+.. autoclass:: DAL.Group
    :members:
 
 =======
 Dataset
 =======
 
-.. autoclass:: DAL::DatasetFloat
-   :members:
-
 =========
 Attribute
 =========
-
-.. autoclass:: DAL::AttributeInt
-   :members:
-
-.. autoclass:: DAL::AttributeVInt
-   :members:
 
 **********
 Exceptions
