@@ -375,6 +375,34 @@ Predefined file formats
 Versioning
 ==========
 
+File formats evolve, and typically have a version number attached to document its evolution. The DAL provides the basic tools to store and retrieve version information. First, each file can have a version associated with it. The following code creates a new HDF5 file, and sets its version number to 1.0.0::
+
+  [C++]
+  File f("example.h5", File::CREATE);
+  f.setFileVersion(VersionType("1.0.0"));
+
+  [Python]
+  f = File("example.h5", File.CREATE)
+  f.setFileVersion(VersionType("1.0.0"))
+
+Once the version number is set, it can be retrieved through the ``fileVersion`` call, which is actually available through any attribute, group, and dataset object::
+
+  [C++]
+  File f("example.h5", File::READWRITE);
+  cout << f.fileVersion() << endl;
+
+  Group g(f, "MYGROUP");
+  g.create();
+  cout << g.fileVersion() << endl;
+
+  [Python]
+  f = File("example.h5", File.READWRITE)
+  print f.fileVersion()
+
+  g = Group(f, "MYGROUP")
+  g.create()
+  print g.fileVersion()
+
 =============
 Introspection
 =============
