@@ -328,6 +328,17 @@ Basic API
 File
 ====
 
+The File class is typically the first class to be instantiated for accessing an HDF5 file. To open a file for reading, use the following construct::
+
+  [C++]    File f( filename, File::READ );
+  [Python] f = File( filename, File.READ )
+
+Similarly, to create a new HDF5 file, use:
+
+  [C++]    File f( filename, File::CREATE );
+  [Python] f = File( filename, File.CREATE )
+
+
 .. class:: File
 
    .. attribute:: READ
