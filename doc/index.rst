@@ -396,6 +396,10 @@ File formats evolve, and typically have a version number attached to document it
   f = File("example.h5", File.CREATE)
   f.setFileVersion(VersionType("1.0.0"))
 
+.. note::
+
+  The version number is stored in a string attribute called ``VERSION`` in the root group.
+
 Once the version number is set, it can be retrieved through the ``fileVersion`` call, which is actually available through any attribute, group, and dataset object::
 
   [C++]
@@ -413,6 +417,40 @@ Once the version number is set, it can be retrieved through the ``fileVersion`` 
   g = Group(f, "MYGROUP")
   g.create()
   print g.fileVersion()
+
+.. note::
+
+  See the class documentation on ``VersionType`` for the interface VersionType allows to compare versions and to retrieve the individual version components (major, minor, release).
+
+The version number is primarily used to document the specification version that was used to generate the file. However, the DAL also allows any attribute, group, or dataset to be annotated with a minimal required version::
+
+  [C++]
+  File f("example.h5", File::READ);
+  Group g(f, "MYGROUP");
+
+  g.minVersion = VersionType("2.0.0");
+
+  [Python]
+  f = File("example.h5", File.READ)
+  g = Group(f, "MYGROUP")
+
+  g.minVersion = VersionType("2.0.0")
+
+In the above code, we read a file with a version that was previously set to 1.0.0, and refer to a group for which we set the minimally required version to 2.0.0 (note that whether the group actually exists is not relevant for this example). Once the above configuration is set up, we can query whether group ``g`` is actually supported by the file we've just opened. The following relations will hold::
+
+  [C++]
+  g.supported() == false
+  g.minVersion <= g.fileVersion()
+
+  [Python]
+  g.supported() == False
+  g.minVersion <= g.fileVersion()
+
+In a predefined file format implemented through the DAL, one can thus annotate each attribute/group/dataset with the minimal version required for that element. Doing so allows anyone working with the documents to verify what elements should and should not be present in the file, based on the file's version.
+
+.. note::
+
+  Versioning information is currently not enforced. It is thus possible to, for example, create an element defined in version 2.0.0 inside a file that is set up as version 1.0.0.
 
 =============
 Introspection
