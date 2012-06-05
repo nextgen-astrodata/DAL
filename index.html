@@ -1,0 +1,744 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to DAL’s documentation! &mdash; DAL v2.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="DAL v2.0.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">DAL v2.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-dal-s-documentation">
+<h1>Welcome to DAL&#8217;s documentation!<a class="headerlink" href="#welcome-to-dal-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<ul class="simple">
+</ul>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The DAL, or Data Access Library, is a library to read and write HDF5 files, and is tuned to process astronomical data sets. More specifically, the DAL provides an interface in both C++ and Python to access various astronomical file formats that use HDF5, but also allows you to define your custom HDF5 structure on the fly.</p>
+<p>The DAL was created for two reasons:</p>
+<ul class="simple">
+<li>You do not want to deal with the HDF5 library directly. While the HDF5 library is very powerful, its use is also quite technical.</li>
+<li>To wrap standardised HDF5 file formats, and to provide higher-level functionality on top of them.</li>
+</ul>
+<p>As a very brief example, the following code creates an Common LOFAR Attributes File (= a LOFAR file format), and sets its observation ID attribute, which is a string:</p>
+<div class="highlight-python"><pre>[C++]
+#include &lt;dal/lofar/CLA_File.h&gt;
+
+int main {
+  DAL::CLA_File f("example.h5", DAL::File::CREATE);
+  f.observationID().value = "12345";
+}
+
+[Python]
+import DAL
+
+f = DAL.CLA_File("example.h5", DAL.File.CREATE)
+f.observationID().value = "12345"</pre>
+</div>
+<p>And the following code reads it back out:</p>
+<div class="highlight-python"><pre>[C++]
+#include &lt;dal/lofar/CLA_File.h&gt;
+#include &lt;iostream&gt;
+
+int main {
+  DAL::CLA_File f("example.h5");
+  std::cout &lt;&lt; f.observationID().value &lt;&lt; std::endl;
+}
+
+[Python]
+import DAL
+
+f = DAL.CLA_File("example.h5")
+print f.observationID().value</pre>
+</div>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>For now, please read INSTALL.txt.</p>
+</div>
+<div class="section" id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>To work with the DAL, a (very) basic understanding of HDF5 is required. An HDF5 file encodes an hierarchical structure consisting of a set of <em>groups</em>. Each group has a name, and can have sub groups, as well as a set of key-value pairs called <em>attributes</em>. Finally, a <em>dataset</em> is a specialised group which has a large array of data associated with it. An HDF5 file itself starts with a so-called <em>root group</em>, named <tt class="docutils literal"><span class="pre">/</span></tt>. All of these elements in a file are typically represented by a tree.</p>
+<p>The rest of this section will provide an example of how you can read and write such structures using the DAL. Subsequent sections will cover the used functionality in more detail.</p>
+<div class="section" id="example-hdf5-structure">
+<h4>Example HDF5 structure<a class="headerlink" href="#example-hdf5-structure" title="Permalink to this headline">¶</a></h4>
+<p>Consider the following example structure of groups, attributes and datasets, annotated with their respective data type:</p>
+<div class="highlight-python"><pre>/
++-- NUMELEMENTS (int)
++-- DATETIME    (string)
+|
++-- GROUP_1
+|   +-- PHASE (complex float)
+|   +-- SUBGROUP_1
+|       +-- STATIONS (list of strings)
+|
++-- GROUP_2
+|   +-- SUBGROUP_2
+|
++-- DATASET (array[10][20] of float)
+    +-- DESCRIPTION (string)</pre>
+</div>
+<p>The above structure consists of a root group <tt class="docutils literal"><span class="pre">/</span></tt>, which contains two sub groups (<tt class="docutils literal"><span class="pre">GROUP_1</span></tt> and <tt class="docutils literal"><span class="pre">GROUP_2</span></tt>), one dataset (<tt class="docutils literal"><span class="pre">DATASET</span></tt>), and two attributes (<tt class="docutils literal"><span class="pre">NUMELEMENTS</span></tt>, an integer, and <tt class="docutils literal"><span class="pre">DATETIME</span></tt>, a string). These groups as well as the dataset have their own attributes and sub groups.</p>
+</div>
+<div class="section" id="creating-the-structure-using-the-dal">
+<h4>Creating the structure using the DAL<a class="headerlink" href="#creating-the-structure-using-the-dal" title="Permalink to this headline">¶</a></h4>
+<p>The following code creates the above structure in Python in a file called <tt class="docutils literal"><span class="pre">foo.h5</span></tt>:</p>
+<div class="highlight-python"><pre>from DAL import *
+
+f = File("foo.h5", File.CREATE)
+
+# create the attributes in the root group
+numelements = AttributeInt(f, "NUMELEMENTS")
+numelements.value = 42
+
+datetime = AttributeString(f, "DATETIME")
+datetime.value = "2012-05-24 15:03:52"
+
+# create GROUP_1 and its contents
+group1 = Group(f, "GROUP_1")
+group1.create()
+
+phase = AttributeComplexFloat(group1, "PHASE")
+phase.value = 1.5 + 0.5i
+
+subgroup1 = Group(group1, "SUBGROUP_1")
+subgroup1.create()
+
+stations = AttributeVString(subgroup1, "STATIONS")
+stations.value = ["CS001", "CS002", "CS003"]
+
+# create GROUP_2 and its contents
+group2  = Group(f, "GROUP_2")
+group2.create()
+
+subgroup2 = Group(group2, "SUBGROUP_2")
+subgroup2.create()
+
+# create DATASET and its contents
+dataset   = DatasetFloat(f, "DATASET")
+dataset.create([10,20])</pre>
+</div>
+<p>Or, in C++, producing the same HDF5 file:</p>
+<div class="highlight-python"><pre>#include "dal/hdf5/File.h"
+#include "dal/hdf5/Group.h"
+#include "dal/hdf5/Dataset.h"
+#include "dal/hdf5/Attribute.h"
+#include &lt;string&gt;
+#include &lt;complex&gt;
+#include &lt;vector&gt;
+
+using namespace DAL;
+using namespace std;
+
+int main() {
+  File f("foo.h5", File::CREATE);
+
+  Attribute&lt;int&gt; numelements(f, "NUMELEMENTS");
+  numelements.value = 42;
+
+  Attribute&lt;string&gt; datetime(f, "DATETIME");
+  datetime.value = "2012-05-24 15:03:52";
+
+  // create GROUP_1 and its contents
+  Group group1(f, "GROUP_1");
+  group1.create();
+
+  Attribute&lt; complex&lt;float&gt; &gt; phase(group1, "PHASE");
+  phase.value = complex&lt;float&gt;(1.5, 0.5); // 1.5 + 0.5i
+
+  Group subgroup1(group1, "SUBGROUP_1");
+  subgroup1.create();
+
+  Attribute&lt; vector&lt;string&gt; &gt; stations(subgroup1, "STATIONS");
+  vector&lt;string&gt; v(3);
+  v[0] = "CS001";
+  v[1] = "CS002";
+  v[2] = "CS003";
+  stations.value = v;
+
+  // create GROUP_2 and its contents
+  Group group2(f, "GROUP_2");
+  group2.create();
+
+  Group subgroup2(group2, "SUBGROUP_2");
+  subgroup2.create();
+
+  // create DATASET and its contents
+  Dataset&lt;float&gt; dataset(f, "DATASET");
+  vector&lt;ssize_t&gt; dims(2);
+  dims[0] = 10;
+  dims[1] = 20;
+  dataset.create(dims);
+}</pre>
+</div>
+</div>
+<div class="section" id="reading-the-structure-using-hdf5-tools">
+<h4>Reading the structure using HDF5 tools<a class="headerlink" href="#reading-the-structure-using-hdf5-tools" title="Permalink to this headline">¶</a></h4>
+<p>Although we&#8217;ll later learn how to read back data using the DAL, the <tt class="docutils literal"><span class="pre">h5dump</span></tt> inspection tool (part of the HDF5 toolset) allows easy inspection of any HDF5 file. Running <tt class="docutils literal"><span class="pre">h5dump</span> <span class="pre">-A</span> <span class="pre">foo.h5</span></tt> yields:</p>
+<div class="highlight-python"><pre>HDF5 "foo.h5" {
+GROUP "/" {
+   ATTRIBUTE "DATETIME" {
+      DATATYPE  H5T_STRING {
+            STRSIZE H5T_VARIABLE;
+            STRPAD H5T_STR_NULLTERM;
+            CSET H5T_CSET_ASCII;
+            CTYPE H5T_C_S1;
+         }
+      DATASPACE  SCALAR
+      DATA {
+      (0): "2012-05-24 15:03:52"
+      }
+   }
+   ATTRIBUTE "NUMELEMENTS" {
+      DATATYPE  H5T_STD_I32LE
+      DATASPACE  SCALAR
+      DATA {
+      (0): 42
+      }
+   }
+   DATASET "DATASET" {
+      DATATYPE  H5T_IEEE_F32LE
+      DATASPACE  SIMPLE { ( 10, 20 ) / ( 10, 20 ) }
+   }
+   GROUP "GROUP_1" {
+      ATTRIBUTE "PHASE" {
+         DATATYPE  H5T_COMPOUND {
+            H5T_IEEE_F32LE "real";
+            H5T_IEEE_F32LE "imag";
+         }
+         DATASPACE  SCALAR
+         DATA {
+         (0): {
+               1.5,
+               0.5
+            }
+         }
+      }
+      GROUP "SUBGROUP_1" {
+         ATTRIBUTE "STATIONS" {
+            DATATYPE  H5T_STRING {
+                  STRSIZE H5T_VARIABLE;
+                  STRPAD H5T_STR_NULLTERM;
+                  CSET H5T_CSET_ASCII;
+                  CTYPE H5T_C_S1;
+               }
+            DATASPACE  SIMPLE { ( 3 ) / ( 3 ) }
+            DATA {
+            (0): "CS001", "CS002", "CS003"
+            }
+         }
+      }
+   }
+   GROUP "GROUP_2" {
+      GROUP "SUBGROUP_2" {
+      }
+   }
+}
+}</pre>
+</div>
+<p>which, albeit verbose, shows the entire structure as our program defined it.</p>
+</div>
+<div class="section" id="reading-the-structure-using-the-dal">
+<h4>Reading the structure using the DAL<a class="headerlink" href="#reading-the-structure-using-the-dal" title="Permalink to this headline">¶</a></h4>
+<p>The individual data can also be read using the DAL, of course. For example, the following programs extract the values of a few attributes, as well as a few scalars from the dataset from <tt class="docutils literal"><span class="pre">foo.h5</span></tt>. In Python:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">DAL</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="s">&quot;foo.h5&quot;</span><span class="p">,</span> <span class="n">File</span><span class="o">.</span><span class="n">READ</span><span class="p">)</span>
+
+<span class="c"># reference the attributes in the root group</span>
+<span class="n">numelements</span> <span class="o">=</span> <span class="n">AttributeInt</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;NUMELEMENTS&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;numelements =&quot;</span><span class="p">,</span> <span class="n">numelements</span><span class="o">.</span><span class="n">value</span>
+
+<span class="n">datetime</span> <span class="o">=</span> <span class="n">AttributeString</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;DATETIME&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;datetime =&quot;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">value</span>
+
+<span class="c"># reference GROUP_1 and its contents</span>
+<span class="n">group1</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;GROUP_1&quot;</span><span class="p">)</span>
+
+<span class="n">phase</span> <span class="o">=</span> <span class="n">AttributeComplexFloat</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span> <span class="s">&quot;PHASE&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;group1.phase =&quot;</span><span class="p">,</span> <span class="n">phase</span><span class="o">.</span><span class="n">value</span>
+
+<span class="n">subgroup1</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span> <span class="s">&quot;SUBGROUP_1&quot;</span><span class="p">)</span>
+
+<span class="n">stations</span> <span class="o">=</span> <span class="n">AttributeVString</span><span class="p">(</span><span class="n">subgroup1</span><span class="p">,</span> <span class="s">&quot;STATIONS&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;group1.subgroup1.stations =&quot;</span><span class="p">,</span> <span class="n">stations</span><span class="o">.</span><span class="n">value</span>
+
+<span class="c"># reference DATASET and its contents</span>
+<span class="n">dataset</span>   <span class="o">=</span> <span class="n">DatasetFloat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;DATASET&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;dataset has&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ndims</span><span class="p">(),</span> <span class="s">&quot;dimensions&quot;</span>
+<span class="k">print</span> <span class="s">&quot;dataset[0][0] =&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">getScalar</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Yielding:</p>
+<div class="highlight-python"><pre>numelements = 42
+datetime = 2012-05-24 15:03:52
+group1.phase = (1.5+0.5j)
+group1.subgroup1.stations = ('CS001', 'CS002', 'CS003')
+dataset has 2 dimensions
+dataset[0][0] = 0.0</pre>
+</div>
+<p>In C++:</p>
+<div class="highlight-python"><pre>#include "dal/hdf5/File.h"
+#include "dal/hdf5/Group.h"
+#include "dal/hdf5/Dataset.h"
+#include "dal/hdf5/Attribute.h"
+#include &lt;string&gt;
+#include &lt;complex&gt;
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+using namespace DAL;
+using namespace std;
+
+int main() {
+  File f("foo.h5", File::READ);
+
+  Attribute&lt;int&gt; numelements(f, "NUMELEMENTS");
+  cout &lt;&lt; "numelements = " &lt;&lt; numelements.value &lt;&lt; endl;
+
+  Attribute&lt;string&gt; datetime(f, "DATETIME");
+  cout &lt;&lt; "datetime = " &lt;&lt; datetime.value &lt;&lt; endl;
+
+  // reference GROUP_1 and its contents
+  Group group1(f, "GROUP_1");
+
+  Attribute&lt; complex&lt;float&gt; &gt; phase(group1, "PHASE");
+  cout &lt;&lt; "group1.phase = " &lt;&lt; phase.value &lt;&lt; endl;
+
+  Group subgroup1(group1, "SUBGROUP_1");
+
+  Attribute&lt; vector&lt;string&gt; &gt; stations(subgroup1, "STATIONS");
+  vector&lt;string&gt; stations_val = stations.value;
+  cout &lt;&lt; "group1.subgroup1.stations = (";
+  for (size_t i = 0; i &lt; stations_val.size(); i++) {
+    if (i &gt; 0) cout &lt;&lt; ", ";
+    cout &lt;&lt; "'" &lt;&lt; stations_val[i] &lt;&lt; "'";
+  }
+  cout &lt;&lt; ")" &lt;&lt; endl;
+
+  // create DATASET and its contents
+  Dataset&lt;float&gt; dataset(f, "DATASET");
+  cout &lt;&lt; "dataset has " &lt;&lt; dataset.ndims() &lt;&lt; " dimensions" &lt;&lt; endl;
+  vector&lt;size_t&gt; pos(2);
+  pos[0] = 0;
+  pos[1] = 0;
+  cout &lt;&lt; "dataset[0][0] = " &lt;&lt; dataset.getScalar(pos) &lt;&lt; endl;
+}</pre>
+</div>
+<p>Yielding:</p>
+<div class="highlight-python"><pre>numelements = 42
+datetime = 2012-05-24 15:03:52
+group1.phase = (1.5,0.5)
+group1.subgroup1.stations = ('CS001', 'CS002', 'CS003')
+dataset has 2 dimensions
+dataset[0][0] = 0</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="basic-api">
+<h2>Basic API<a class="headerlink" href="#basic-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="file">
+<h3>File<a class="headerlink" href="#file" title="Permalink to this headline">¶</a></h3>
+<p>The File class is typically the first class to be instantiated for accessing an HDF5 file. To open a file for reading, use the following construct:</p>
+<div class="highlight-python"><pre>[C++]    File f( filename, File::READ );
+[Python] f = File( filename, File.READ )</pre>
+</div>
+<p>Similarly, to create a new HDF5 file, use:</p>
+<div class="highlight-python"><pre>[C++]    File f( filename, File::CREATE );
+[Python] f = File( filename, File.CREATE )</pre>
+</div>
+<p>The file is closed when all object references to it (by a File object or anything else) are destructed.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Thread safety: DAL, like the HDF5 library, is not thread safe. Please use your own locks surrounding concurrent access to the same file.</p>
+</div>
+</div>
+<div class="section" id="group">
+<h3>Group<a class="headerlink" href="#group" title="Permalink to this headline">¶</a></h3>
+<p>The Group class is used to create a tree structure inside an HDF5 file. It only needs to know in which group (or file) to address the new group, and under what name. For example, to address a group <tt class="docutils literal"><span class="pre">GROUPNAME</span></tt> in a file <tt class="docutils literal"><span class="pre">f</span></tt>:</p>
+<div class="highlight-python"><pre>[C++]    Group g( f, "GROUPNAME" );
+[Python] g = Group( f, "GROUPNAME" )</pre>
+</div>
+<p>And similarly, to address a subgroup <tt class="docutils literal"><span class="pre">SUBGROUPNAME</span></tt> in that group <tt class="docutils literal"><span class="pre">g</span></tt>, do:</p>
+<div class="highlight-python"><pre>[C++]    Group s( g, "SUBGROUPNAME" );
+[Python] s = Group( g, "SUBGROUPNAME" )</pre>
+</div>
+<p>Note that the addressed group does not need to exist. Once we have a Group object, we can test whether it exists, and create the Group if we want to (and if the file was opened to allow writing):</p>
+<div class="highlight-python"><pre>[C++]
+if (!g.exists())
+  g.create();
+
+[Python]
+if not g.exists():
+  g.create()</pre>
+</div>
+<p>If we&#8217;re just reading the file, the Group will automatically be opened once we access its content. Should the Group not exist when we do access its contents, an exception will be thrown.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The File class is a Group, so it shares the same functionality. A File however does always exist, because the File constructor will throw an exception if the file cannot be opened.</p>
+</div>
+</div>
+<div class="section" id="attribute">
+<h3>Attribute<a class="headerlink" href="#attribute" title="Permalink to this headline">¶</a></h3>
+<p>An Attribute is a simple key-value pair that can be stored anywhere in a Group. It is defined by its name and type, and the group or file which it is in. For example, to address an attribute <tt class="docutils literal"><span class="pre">MYSTRING</span></tt> in a file <tt class="docutils literal"><span class="pre">f</span></tt> of type <tt class="docutils literal"><span class="pre">string</span></tt>:</p>
+<div class="highlight-python"><pre>[C++]    Attribute&lt;string&gt; a( f, "MYSTRING" );
+[Python] a = AttributeString( f, "MYSTRING" )</pre>
+</div>
+<p>Again, the file <tt class="docutils literal"><span class="pre">f</span></tt> can also be substituted for a group <tt class="docutils literal"><span class="pre">g</span></tt>, if the attribute is stored below the top layer. Again, note that the attribute does not necessarily exist. Although we can test for existence using the <tt class="docutils literal"><span class="pre">exists()</span></tt> member function, the Attribute class allows us short cuts in reading and writing through the <tt class="docutils literal"><span class="pre">value</span></tt> property. Assigning a value to this property sets the attribute, creating it if needed, and reading the <tt class="docutils literal"><span class="pre">value</span></tt> property returns the value of the attribute. For example, use:</p>
+<div class="highlight-python"><pre>[C++]    a.value = "hello world";
+[Python] a.value = "hello world"</pre>
+</div>
+<p>to (create and) set attribute <tt class="docutils literal"><span class="pre">a</span></tt>. To read it, simply do:</p>
+<div class="highlight-python"><pre>[C++]    std::cout &lt;&lt; a.value &lt;&lt; std::endl;
+[Python] print a.value</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In C++, an exception will be thrown if you try to read an attribute that does not exist. In Python, the special value <tt class="xref docutils literal"><span class="pre">None</span></tt> is returned instead.</p>
+</div>
+<p>The previous examples only addressed attributes of type <tt class="docutils literal"><span class="pre">std::string</span></tt>/<tt class="docutils literal"><span class="pre">str</span></tt>. The following basic value types are supported by the DAL, along with their C++ and Python class name:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="34%" />
+<col width="18%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">C++ data type</th>
+<th class="head">C++ Attribute class</th>
+<th class="head">Python data type</th>
+<th class="head">Python Attribute class</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;int&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeInt</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">unsigned</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;unsigned&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeUnsigned</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">long</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;long&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeLong</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;unsigned</span> <span class="pre">long&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeUnsignedLong</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">float</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;float&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">float</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeFloat</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">double</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;double&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">float</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeDouble</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">complex&lt;float&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;</span> <span class="pre">complex&lt;float&gt;</span> <span class="pre">&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">complex</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeComplexFloat</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">complex&lt;double&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;</span> <span class="pre">complex&lt;double&gt;</span> <span class="pre">&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">complex</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeComplexDouble</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">string</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;string&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">str</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeString</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p>An attribute can also encode a list of values of one of the data types in the previous table. Even though the corresponding Python type is always <tt class="docutils literal"><span class="pre">list</span></tt>, the DAL will require and supply only lists with values that can be converted to the corresponding C++ data type:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="34%" />
+<col width="18%" />
+<col width="24%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">C++ data type</th>
+<th class="head">C++ Attribute class</th>
+<th class="head">Python data type</th>
+<th class="head">Python Attribute class</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">vector&lt;int&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;</span> <span class="pre">vector&lt;int&gt;</span> <span class="pre">&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">list</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeVInt</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">vector&lt;string&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;</span> <span class="pre">vector&lt;string&gt;</span> <span class="pre">&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">list</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributeVString</span></tt></td>
+</tr>
+<tr><td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">vector&lt;XXX&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Attribute&lt;</span> <span class="pre">vector&lt;XXX&gt;</span> <span class="pre">&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">list</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">AttributrVXXX</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p>For example, to create an attribute containing a list of strings:</p>
+<div class="highlight-python"><pre>[C++]
+Attribute&lt; vector&lt;string&gt; &gt; a( f, "MYSTRINGLIST" );
+vector&lt;string&gt; values(2);
+values[0] = "one";
+values[1] = "two";
+a.value = values;
+
+[Python]
+a = AttributeVString( f, "MYSTRINGLIST" )
+a.value = ["one", "two"]</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">User-defined attribute types, such as tuples, can be added by extending DAL in C++ (see <tt class="docutils literal"><span class="pre">hdf5/types/h5tuple.h</span></tt>, <tt class="docutils literal"><span class="pre">lofar/CommonTuples.h</span></tt>, as well as the accompanying <tt class="docutils literal"><span class="pre">.i</span></tt> files which marshall the tuples from C++ to Python).</p>
+</div>
+</div>
+<div class="section" id="dataset">
+<h3>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h3>
+<p>A Dataset is a special Group that has a (multidimensional) data set attached. The data set can have any number of dimensions, and be of any size. All of its elements have to be of the same type, however. Also, because a Dataset is a Group, a data set can have its own attributes and sub groups attached. The data type stored in the data set has to be known from the start. For example, to address a data set called <tt class="docutils literal"><span class="pre">DATASET</span></tt> of type <tt class="docutils literal"><span class="pre">float</span></tt> stored directly in File <tt class="docutils literal"><span class="pre">f</span></tt>, use:</p>
+<div class="highlight-python"><pre>[C++]    Dataset&lt;float&gt; d( f, "DATASET" );
+[Python] d = DatasetFloat( f, "DATASET" )</pre>
+</div>
+<p>Again, we can test using the <tt class="docutils literal"><span class="pre">exists()</span></tt> method whether the data set exists. The following code creates a 10x20 data set:</p>
+<div class="highlight-python"><pre>[C++]
+if (!d.exists()) {
+  vector&lt;ssize_t&gt; dimensions(2);
+  dimensions[0] = 10;
+  dimensions[1] = 20;
+  d.create( dimensions );
+}
+
+[Python]
+if not d.exists():
+  d.create( [10, 20] )</pre>
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="predefined-file-formats">
+<h2>Predefined file formats<a class="headerlink" href="#predefined-file-formats" title="Permalink to this headline">¶</a></h2>
+<p>The DAL allows wrapping <em>predefined file formats</em>, of which the group structure and attribute names and types are known. For example, DAL defines the Common LOFAR Attributes File format, which is accessed through the <tt class="docutils literal"><span class="pre">CLA_File</span></tt> class. This file format is simple, as it happens to only define attributes in the root group, for example the observation ID. The following example creates a CLA File and sets the observationID:</p>
+<div class="highlight-python"><pre>[C++]
+CLA_File f("example.h5", File::CREATE);
+f.observationID().value = "12345";
+
+[Python]
+f = CLA_File("example.h5", File.CREATE)
+f.observationID().value = "12345"</pre>
+</div>
+<p>The way this works is that <tt class="docutils literal"><span class="pre">CLA_File.observationID</span></tt> actually wraps the appropriate Attribute class for us. It indirectly returns:</p>
+<div class="highlight-python"><pre>Attribute&lt;std::string&gt;(f, "OBSERVATION_ID")</pre>
+</div>
+<p>without requiring the user to know the actual key name and type (or allowing the user to make a mistake in supplying them). The same construct is used to create groups and datasets as defined in a file format, allowing robust and reliable access to files adhering to a specified standard.</p>
+<p>A predefined file formats class can be extended to maintain more meta data than just the element names and types. The next sections will talk about how multiple versions of the same file format can be handled properly, and how attribute introspection can be done to aid writing file format validators.</p>
+<div class="section" id="versioning">
+<h3>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h3>
+<p>File formats evolve, and typically have a version number attached to document its evolution. The DAL provides the basic tools to store and retrieve version information. First, each file can have a version associated with it. The following code creates a new HDF5 file, and sets its version number to 1.0.0:</p>
+<div class="highlight-python"><pre>[C++]
+File f("example.h5", File::CREATE);
+f.setFileVersion(VersionType("1.0.0"));
+
+[Python]
+f = File("example.h5", File.CREATE)
+f.setFileVersion(VersionType("1.0.0"))</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The version number is stored in a string attribute called <tt class="docutils literal"><span class="pre">VERSION</span></tt> in the root group.</p>
+</div>
+<p>Once the version number is set, it can be retrieved through the <tt class="docutils literal"><span class="pre">fileVersion</span></tt> call, which is actually available through any attribute, group, and dataset object:</p>
+<div class="highlight-python"><pre>[C++]
+File f("example.h5", File::READWRITE);
+cout &lt;&lt; f.fileVersion() &lt;&lt; endl;
+
+Group g(f, "MYGROUP");
+g.create();
+cout &lt;&lt; g.fileVersion() &lt;&lt; endl;
+
+[Python]
+f = File("example.h5", File.READWRITE)
+print f.fileVersion()
+
+g = Group(f, "MYGROUP")
+g.create()
+print g.fileVersion()</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See the class documentation on <tt class="docutils literal"><span class="pre">VersionType</span></tt> for the interface VersionType allows to compare versions and to retrieve the individual version components (major, minor, release).</p>
+</div>
+<p>The version number is primarily used to document the specification version that was used to generate the file. However, the DAL also allows any attribute, group, or dataset to be annotated with a minimal required version:</p>
+<div class="highlight-python"><pre>[C++]
+File f("example.h5", File::READ);
+Group g(f, "MYGROUP");
+
+g.minVersion = VersionType("2.0.0");
+
+[Python]
+f = File("example.h5", File.READ)
+g = Group(f, "MYGROUP")
+
+g.minVersion = VersionType("2.0.0")</pre>
+</div>
+<p>In the above code, we read a file with a version that was previously set to 1.0.0, and refer to a group for which we set the minimally required version to 2.0.0 (note that whether the group actually exists is not relevant for this example). Once the above configuration is set up, we can query whether group <tt class="docutils literal"><span class="pre">g</span></tt> is actually supported by the file we&#8217;ve just opened. The following relations will hold:</p>
+<div class="highlight-python"><pre>[C++]
+g.supported() == false
+g.minVersion &lt;= g.fileVersion()
+
+[Python]
+g.supported() == False
+g.minVersion &lt;= g.fileVersion()</pre>
+</div>
+<p>In a predefined file format implemented through the DAL, one can thus annotate each attribute/group/dataset with the minimal version required for that element. Doing so allows anyone working with the documents to verify what elements should and should not be present in the file, based on the file&#8217;s version.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Versioning information is currently not enforced. It is thus possible to, for example, create an element defined in version 2.0.0 inside a file that is set up as version 1.0.0.</p>
+</div>
+</div>
+<div class="section" id="introspection">
+<h3>Introspection<a class="headerlink" href="#introspection" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="supporting-your-own-file-format">
+<h3>Supporting your own file format<a class="headerlink" href="#supporting-your-own-file-format" title="Permalink to this headline">¶</a></h3>
+<p>TODO for now, but do look at <tt class="docutils literal"><span class="pre">lofar/BF_File.h</span></tt> for an example implementation.</p>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference external" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference external" href="modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference external" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="#">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Welcome to DAL&#8217;s documentation!</a><ul>
+<li><a class="reference external" href="#introduction">Introduction</a><ul>
+<li><a class="reference external" href="#installation">Installation</a></li>
+<li><a class="reference external" href="#usage">Usage</a><ul>
+<li><a class="reference external" href="#example-hdf5-structure">Example HDF5 structure</a></li>
+<li><a class="reference external" href="#creating-the-structure-using-the-dal">Creating the structure using the DAL</a></li>
+<li><a class="reference external" href="#reading-the-structure-using-hdf5-tools">Reading the structure using HDF5 tools</a></li>
+<li><a class="reference external" href="#reading-the-structure-using-the-dal">Reading the structure using the DAL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference external" href="#basic-api">Basic API</a><ul>
+<li><a class="reference external" href="#file">File</a></li>
+<li><a class="reference external" href="#group">Group</a></li>
+<li><a class="reference external" href="#attribute">Attribute</a></li>
+<li><a class="reference external" href="#dataset">Dataset</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+<li><a class="reference external" href="#predefined-file-formats">Predefined file formats</a><ul>
+<li><a class="reference external" href="#versioning">Versioning</a></li>
+<li><a class="reference external" href="#introspection">Introspection</a></li>
+<li><a class="reference external" href="#supporting-your-own-file-format">Supporting your own file format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference external" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">DAL v2.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2012, Jan David Mol, Alexander van Amesfoort, Lars Baehren.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>
