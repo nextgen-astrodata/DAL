@@ -23,6 +23,39 @@ The DAL was created for two reasons:
 * You do not want to deal with the HDF5 library directly. While the HDF5 library is very powerful, its use is also quite technical.
 * To wrap standardised HDF5 file formats, and to provide higher-level functionality on top of them.
 
+As a very brief example, the following code creates an Common LOFAR Attributes File (= a LOFAR file format), and sets its observation ID attribute, which is a string::
+
+  [C++]
+  #include <dal/lofar/CLA_File.h>
+
+  int main {
+    DAL::CLA_File f("example.h5", DAL::File::CREATE);
+    f.observationID().value = "12345";
+  }
+
+  [Python]
+  import DAL
+
+  f = DAL.CLA_File("example.h5", DAL.File.CREATE)
+  f.observationID().value = "12345"
+
+And the following code reads it back out::
+
+  [C++]
+  #include <dal/lofar/CLA_File.h>
+  #include <iostream>
+
+  int main {
+    DAL::CLA_File f("example.h5");
+    std::cout << f.observationID().value << std::endl;
+  }
+
+  [Python]
+  import DAL
+
+  f = DAL.CLA_File("example.h5")
+  print f.observationID().value
+
 ============
 Installation
 ============
@@ -338,41 +371,103 @@ Similarly, to create a new HDF5 file, use:
   [C++]    File f( filename, File::CREATE );
   [Python] f = File( filename, File.CREATE )
 
+The file is closed when all object references to it (by a File object or anything else) are destructed.
 
-.. class:: File
+.. warning::
 
-   .. attribute:: READ
-                  READWRITE
-                  CREATE
-
-   Various file modes to be used in the constructor.
-
-   .. method:: [C++] File( const std::string &filename, enum fileMode mode )
-               [Python] __init__( filename, mode )
-
-   Opens or creates an HDF5 file. 
-
-   .. method:: [C++] void flush()
-               [Python] flush()
-
-   Commits any changes to disk.
-
-   blablabla
+  Thread safety: DAL, like the HDF5 library, is not thread safe. Please use your own locks surrounding concurrent access to the same file.
 
 =====
 Group
 =====
 
-.. autoclass:: DAL.Group
-   :members:
+The Group class is used to create a tree structure inside an HDF5 file. It only needs to know in which group (or file) to address the new group, and under what name. For example, to address a group ``GROUPNAME`` in a file ``f``::
 
-=======
-Dataset
-=======
+  [C++]    Group g( f, "GROUPNAME" );
+  [Python] g = Group( f, "GROUPNAME" )
+
+And similarly, to address a subgroup ``SUBGROUPNAME`` in that group ``g``, do::
+
+  [C++]    Group s( g, "SUBGROUPNAME" );
+  [Python] s = Group( g, "SUBGROUPNAME" )
+
+Note that the addressed group does not need to exist. Once we have a Group object, we can test whether it exists, and create the Group if we want to (and if the file was opened to allow writing)::
+
+  [C++]
+  if (!g.exists())
+    g.create();
+
+  [Python]
+  if not g.exists():
+    g.create()
+
+If we're just reading the file, the Group will automatically be opened once we access its content. Should the Group not exist when we do access its contents, an exception will be thrown.
+
+.. note::
+
+  The File class is a Group, so it shares the same functionality. A File however does always exist, because the File constructor will throw an exception if the file cannot be opened.
 
 =========
 Attribute
 =========
+
+An Attribute is a simple key-value pair that can be stored anywhere in a Group. It is defined by its name and type, and the group or file which it is in. For example, to address an attribute ``MYSTRING`` in a file ``f`` of type ``string``::
+
+  [C++]    Attribute<string> a( f, "MYSTRING" );
+  [Python] a = AttributeString( f, "MYSTRING" )
+
+Again, the file ``f`` can also be substituted for a group ``g``, if the attribute is stored below the top layer. Again, note that the attribute does not necessarily exist. Although we can test for existence using the ``exists()`` member function, the Attribute class allows us short cuts in reading and writing through the ``value`` property. Assigning a value to this property sets the attribute, creating it if needed, and reading the ``value`` property returns the value of the attribute. For example, use::
+
+  [C++]    a.value = "hello world";
+  [Python] a.value = "hello world"
+
+to (create and) set attribute ``a``. To read it, simply do::
+
+  [C++]    std::cout << a.value << std::endl;
+  [Python] print a.value
+
+.. note::
+
+  In C++, an exception will be thrown if you try to read an attribute that does not exist. In Python, the special value ``None`` is returned instead.
+
+The previous examples only addressed attributes of type ``std::string``/``str``. The following basic value types are supported by the DAL, along with their C++ and Python class name:
+
++---------------+-----------------------+------------------+------------------------+
+| C++ data type | C++ Attribute class   | Python data type | Python Attribute class |
++===============+=======================+==================+========================+
+| ``int``       | ``Attribute<int>``    | ``int``          | ``AttributeInt``       |
+| ``string``    | ``Attribute<string>`` | ``str``          | ``AttributeString``    |
++---------------+-----------------------+------------------+------------------------+
+
+An attribute can also encode a list of values, using one of the following classes. Even though the corresponding Python type is always ``list``, the DAL will require and supply only lists with values that can be converted to the corresponding C++ data type:
+
++-----------------------+---------------------------------+------------------+------------------------+
+| C++ data type         | C++ Attribute class             | Python data type | Python Attribute class |
++=======================+=================================+==================+========================+
+| ``vector<int>``       | ``Attribute< vector<int> >``    | ``list``         | ``AttributeVInt``      |
+| ``vector<string>``    | ``Attribute< vector<string> >`` | ``list``         | ``AttributeVString``   |
++-----------------------+---------------------------------+------------------+------------------------+
+
+For example, to create an attribute containing a list of strings::
+
+  [C++]
+  Attribute< vector<string> > a( f, "MYSTRINGLIST" );
+  vector<string> values(2);
+  values[0] = "one";
+  values[1] = "two";
+  a.value = values;
+
+  [Python]
+  a = AttributeVString( f, "MYSTRINGLIST" )
+  a.value = ["one", "two"]
+
+.. note::
+
+  User-defined attribute types, such as tuples, can be added by extending DAL in C++ (see ``hdf5/types/h5tuple.h``, ``lofar/CommonTuples.h``, as well as the accompanying ``.i`` files which marshall the tuples from C++ to Python).
+
+=======
+Dataset
+=======
 
 **********
 Exceptions
@@ -381,6 +476,24 @@ Exceptions
 ***********************
 Predefined file formats
 ***********************
+
+The DAL allows wrapping *predefined file formats*, of which the group structure and attribute names and types are known. For example, DAL defines the Common LOFAR Attributes File format, which is accessed through the ``CLA_File`` class. This file format is simple, as it happens to only define attributes in the root group, for example the observation ID. The following example creates a CLA File and sets the observationID::
+
+  [C++]
+  CLA_File f("example.h5", File::CREATE);
+  f.observationID().value = "12345";
+
+  [Python]
+  f = CLA_File("example.h5", File.CREATE)
+  f.observationID().value = "12345"
+
+The way this works is that ``CLA_File.observationID`` actually wraps the appropriate Attribute class for us. It indirectly returns::
+
+  Attribute<std::string>(f, "OBSERVATION_ID")
+
+without requiring the user to know the actual key name and type (or allowing the user to make a mistake in supplying them). The same construct is used to create groups and datasets as defined in a file format, allowing robust and reliable access to files adhering to a specified standard.
+
+A predefined file formats class can be extended to maintain more meta data than just the element names and types. The next sections will talk about how multiple versions of the same file format can be handled properly, and how attribute introspection can be done to aid writing file format validators.
 
 ==========
 Versioning
@@ -456,11 +569,11 @@ In a predefined file format implemented through the DAL, one can thus annotate e
 Introspection
 =============
 
+===============================
+Supporting your own file format
+===============================
 
-*italic* **bold** ``code``
-
-* list
-* list
+TODO for now, but do look at ``lofar/BF_File.h`` for an example implementation.
 
 Indices and tables
 ==================
