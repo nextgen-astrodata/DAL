@@ -508,9 +508,97 @@ Again, we can test using the ``exists()`` method whether the data set exists. Th
   if not d.exists():
     d.create( [10, 20] )
 
+The DAL provides several functions to query the dimensionality of an existing data set::
+
+  [C++]
+  const size_t rank = d.ndims();
+  const vector<ssize_t> dims = d.dims();
+
+  for (size_t i = 0; i < rank; i++)
+    std::cout << "Dimension " << i << " has size " << dims[i] << std::endl;
+
+  [Python]
+  rank = d.ndims()
+  dims = d.dims()
+
+  for i in range(rank):
+    print "Dimension %u has size %u" % (i, dims[i])
+
+Individual elements can be set using the ``getScalar`` and ``setScalar`` methods. For example, to read and write the element at [1,2]::
+
+  [C++]
+  const vector<size_t> pos(2);
+  pos[0] = 1;
+  pos[1] = 2;
+
+  std::cout << "Element at [1,2] = " << d.getScalar(pos) << std::endl;
+  d.setScalar(pos, 42.0);
+  std::cout << "Element at [1,2] = " << d.getScalar(pos) << std::endl;
+
+  [Python]
+  pos = [1,2]
+
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+  d.setScalar(pos, 42.0)
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+
+The data set can also be sliced to access blocks of elements in a single call, which is a lot faster than accessing each element individually. In C++, data is referred to using raw pointers and providing the sizes of the slice. In Python, the numpy library is used to represent raw data. The example below extracts a 2D slice of data from our data set using the ``get2D`` and ``set2D`` methods. It reads and writes a block of size 3x3 starting at location [1,2] in the data set::
+
+  [C++]
+  const vector<size_t> pos(2);
+  pos[0] = 1;
+  pos[1] = 2;
+
+  std::cout << "Element [1,2] = " << d.getScalar(pos) << std::endl;
+
+  // a pointer to any data set will do, for instance, these all work:
+  //
+  // data type:                         pointer to first element:
+  // -----------------------------------------------------
+  // float data[3][3]                   &data[0][0]
+  // float data[3 * 3]                  &data[0]
+  // vector<float> data(3 * 3)          &data[0]
+  // float *data = new float[3 * 3]     data
+  float data[3][3];
+
+  d.get2D( pos, 3, 3, &data[0][0] );
+  data[0][0] = 1.0;
+  d.set2D( pos, 3, 3, &data[0][0] );
+
+  std::cout << "Element [1,2] = " << d.getScalar(pos) << std::endl;
+
+  [Python]
+  pos = [1,2]
+
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+
+  # we need a numpy array for data storage; the dataset provides
+  # us with the numpy data type that we need to use
+
+  import numpy
+  data = numpy.zeros((3, 3), dtype=d.dtype)
+
+  d.get2D(pos, data)
+
+  data[1][1] = 1.0
+  d.set2D(pos, data)
+
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+
 **********
 Exceptions
 **********
+
+Almost all of the DAL functions can throw an exception in case of an error. The following exceptions can be thrown:
+
++---------------------------+----------------------+-------------------------+
+| C++ exception             | Python exception     | Meaning                 |
++===========================+======================+=========================+
+| ``DALException``          | ``RuntimeError``     | Something went wrong    |
+| ``+-- HDF5Exception``     | ``DAL.HDF5Exception``| HDF5 threw an error     |
+| ``+-- DALValueError``     | ``ValueError``       | Invalid parameter value |
+| ``    +-- DALIndexError`` | ``IndexError``       | Out-of-bounds access    |
++---------------------------+----------------------+-------------------------+
 
 ***********************
 Predefined file formats
