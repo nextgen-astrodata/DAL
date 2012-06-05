@@ -1,0 +1,189 @@
+        DAL Design Overview
+        ===================
+
+The Data Access Library (DAL) allows the management of several HDF5 LOFAR data products, implementing the file formats as described in the various ICDs, which are currently available at
+
+        http://lus.lofar.org/wiki/doku.php?id=documents:lofar_data_products
+
+The contents of the DAL is as follows:
+        cmake/          - custom scripts for the CMake build environment.
+        examples/       - small self-contained programs using the DAL.
+        src/            - all of the DAL source code.
+
+        Features
+        -----------------
+
+1. ICDs: the DAL aims to implement ICD001 (TBB Time-Series Data) and ICD003 (Beam-Formed Data).
+
+2. Python bindings are available, closely matching the C++ API. Docstrings are generated from the comments included in the header files. Numpy is used for marshalling data sets.
+
+        Build environment
+        -----------------
+
+The DAL uses CMake to build and install. The following packages are requires:
+        - cmake 2.8+
+        - g++
+        - make
+        - swig
+        - libhdf5-*-dev
+        - libhdf5-*
+
+For the python bindings (optional), additional packages are needed:
+        - python-dev
+        - numpy
+
+To generate documentation and python docstrings (both optional):
+        - doxygen
+
+        Scope and Software stack
+        ------------------------
+
+The DAL implements the astronomical data format description as described by the ICD documents, and provides functions to implement similar file structures. In diagram form:
+
+        
+        +---------------------------+
+        | Application               |
+        +---------------------------+
+        | High-level interpretation |
+        +---------------------------+
+        | Low-level interpretation  |
+        +---------------------------+
+        | Structure format          | - provided by the DAL
+        +---------------------------+
+        | File format               | - provided by the HDF5 library
+        +---------------------------+
+        | File-system access        | - provided by the Operating System
+        +---------------------------+
+
+As the diagram shows, the DAL currently lacks any level of data interpretation (other than type-safety and interface conformance). Low-level interpretation would involve a basic coupling of data fields, to provide physical units instead of C++ data types (for example, jointly interpreting a value field X and a unit field X_UNIT). High-level interpretation would involve expensive calculations based on values across many data fields (for example, generate an image).
+
+        HDF5 in the DAL
+        -----------------
+
+The HDF5 file format is a hierarchical structure, consisting of a root `group' (the file itself) which can iteratively contain (sub) groups, forming a tree. Each group can contain a set of `attributes' (key-value pairs). All groups and attributes have a name, which is unique within the encompassing group. High-volume data is stored in special groups called `data sets', which are essentially groups with a single (multidimensional) data set attached. A data set itself thus can have attributes and sub groups as well. All elements are named with a string, typically all-capital. An example HDF5 structure:
+
+        foo.h5                    - root group
+        |- NAME                   - attribute (string)
+        |- AGE                    - attribute (unsigned integer)
+        \- MY_DATASET             - data set (2-dimensional, float)
+           \- DESCRIPTION         - attribute (string)
+
+The DAL allows any HDF5 file structure consisting of groups, data sets, and attributes, to be represented as classes in C++ and Python. For example, the DAL easily allows the above structure to be wrapped, such that access through Python can be done as follows:
+
+        f = MyStructure("foo.h5")
+
+        name = f.name().value
+        age  = f.age().value
+        print "File describes %s, age %u" % (name, age)
+
+        dataset    = f.myDataset()
+        desc       = dataset.description().value
+        firstValue = dataset.getScalar([0,0])
+
+        print "Dataset is described as %s and the first value is %f" % (description, firstValue)
+
+An HDF5 file in the DAL is thus represented in its abstract form -- the developer does not need to call any HDF5 functions to define, examine, or use a document structure. To do so, DAL defines the following C++ class structure:
+
+        Node                  - Represents any HDF5 node (attribute/group/dataset/file).
+          Group           - Any HDF5 group that is not a root group.
+            File          - Wraps an HDF5 file itself (the root group).
+            Dataset<T>    - An HDF5 data set with data of type T.
+          AttributeBase           - Common functionality for all attributes.
+            Attribute<T>          - An HDF5 attribute (a key/value pair; key = string, value = data type T)
+
+        hid_gc                    - Identifier for any HDF5 object; reference counted and garbage collected
+        HDF5Exception             - Thrown in case of errors reported by HDF5
+
+All supported data types are enumerated in hdf5core/h5typemap.h, which provides translations between C++ and HDF5 for:
+
+        float, double,
+        short, int, unsigned, bool,
+        std::string,
+        std::complex<T> (T = a supported scalar type),
+        std::vector<T> (T = any of the previous types).
+
+For data sets, the endianness of the data to store can be provided explicitly. For attributes, data is always written in the little-endian format.
+
+The above class structure allows the developer to represent a simple HDF5 structure directly in C++ (and through bindings, in Python as well). For example, the following HDF5 structure is annotated by the classes used in the DAL to represent the individual components:
+
+        HDF5 name:                              C++ type:                               Python type:
+        --------------------------------------------------------------------------------------------------------------
+        foo.h5                                  File                            File
+        |- NAME                                 Attribute<string>                       AttributeString
+        |- AGE                                  Attribute<unsigned>                     AttributeUnsigned
+        \- MY_DATASET                           Dataset<float>                  HDF5DataseBaseFloat
+           \- DESCRIPTION                       Attribute<string>                       AttributeString
+
+Note that for Python, alternate names are needed because < and > are not valid characters.
+
+The HDF5 structure described above can be created and populated in C++ as follows:
+
+        using namespace DAL;
+        using namespace std;
+
+        File f("foo.h5", File.CREATE);
+
+        Attribute<string> name(f, "NAME");
+        name.value = "John Doe";
+
+        Attribute<unsigned> age(f, "AGE");
+        age.value = 21;
+
+        Dataset<float > d(f, "MY_DATASET");
+        vector<ssize_t> dims(2,2);
+        d.create(dims);
+
+        Attribute<string> desc(d.group(), "DESCRIPTION");
+        desc.value = "This is an example dataset";
+
+or alternatively, in Python:
+
+        import DAL
+
+        f = DAL.File("foo.h5", DAL.File.CREATE)
+
+        name = DAL.AttributeString(f, "NAME")
+        name.value = "John Doe"
+
+        age = DAL.AttributeString(f, "AGE")
+        age.value = 21;
+
+        d = DAL.DatasetFloat(f, "MY_DATASET")
+        d.create([2,2])
+
+        desc = DAL.AttributeString(d, "DESCRIPTION")
+        desc.value = "This is an example dataset"
+
+Note that the f and d.group() functions are used to access named elements within those groups. The group() functions provide an identifier for that group, with which child elements can be referenced.
+
+The DAL ships with classes that wrap the HDF5 structures as described in the ICD documents in a similar way. For example, the above structure could be wrapped in C++ classes as follows:
+
+        using namespace DAL;
+        using namespace std;
+
+        class MyDataset;
+
+        class MyFile: public File {
+          MyFile(const string &name, enum fileMode mode = READ): File(name, mode) {}
+
+          Attribute<string>  name() { return Attribute<string>(*this, "NAME"); }
+          Attribute<unsigned> age() { return Attribute<unsigned>(*this, "AGE"); }
+          MyDataset myDataset()     { return MyDataset(*this, "MY_DATASET"); }
+        };
+
+        class MyDataset: public Dataset<float> {
+          MyDataset(const hid_gc &parent, const string &name): Dataset<float>(parent, name) {}
+
+          Attribute<string>  description() { return Attribute<string>(*this, "DESCRIPTION"); }
+        };
+
+For the ICDs, the following wrappers are available:
+
+        ICD001 - TBB Time-Series Data - DAL class TBB_File
+        ICD003 - Beam-Formed Data     - DAL class BF_File
+
+        Python Bindings
+        -----------------
+
+The Python bindings of the DAL are generated using SWIG, which parses the C++ header files to define the Python classes. The main advantage of this approach is its light weight, making the bindings easy to maintain.
+

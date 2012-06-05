@@ -5,14 +5,21 @@ from itertools import count
 # open the file for reading
 f = DAL.BF_File("test.h5")
 
-# functions like f.observationID() return attribute objects, which support the following
-# methods:
+# functions like f.observationID() return attribute objects, which has a `value' property
+# that can be get, set, or deleted:
+#
+# a = f.observationID()
+# a.value = "12345"   # setter
+# print a.value       # getter
+# del a.value         # removes the attribute from the HDF5 file
+#
+# more low-level functionality is offered by the following methods:
 #       get()    retrieve the attribute (but bail if it does not exist)
 #       set(x)   set the attribute to value x (creating the attribute if needed)
 #       exists() check for the existence of the attribute
 #       remove() delete the attribute from the group
 #       name()   the name of the attribute in the HDF5 file (f.e. "OBSERVATION_ID")
-print "Observation %s ran from %s UTC to %s UTC" % (f.observationID().get(), f.observationStartUTC().get(), f.observationEndUTC().get())
+print "Observation %s ran from %s UTC to %s UTC" % (f.observationID().value, f.observationStartUTC().value, f.observationEndUTC().value)
 
 for sapnr in count():
   # functions like f.subArrayPointing(x) return group objects, which have their own attributes.
@@ -27,7 +34,7 @@ for sapnr in count():
   if not sap.exists():
     break
 
-  print "SAP %u points to (%.2f, %.2f)" % (sapnr, sap.pointRA().get(), sap.pointDEC().get())
+  print "SAP %u points to (%.2f, %.2f)" % (sapnr, sap.pointRA().value, sap.pointDEC().value)
 
   for beamnr in count():
     beam = sap.beam(beamnr)
@@ -35,7 +42,7 @@ for sapnr in count():
     if not beam.exists():
       break
 
-    print "    Beam %u points to (%.2f, %.2f)" % (beamnr, beam.pointRA().get(), beam.pointDEC().get())
+    print "    Beam %u points to (%.2f, %.2f)" % (beamnr, beam.pointRA().value, beam.pointDEC().value)
 
     for stokesnr in [0,1,2,3]:
       # any stokes [0..3] can exist
@@ -45,7 +52,7 @@ for sapnr in count():
       if not stokes.exists():
         continue
 
-      print "        Stokes %s has %u subbands and %u samples" % (stokes.stokesComponent().get(), stokes.nofSubbands().get(), stokes.nofSamples().get())
+      print "        Stokes %s has %u subbands and %u samples" % (stokes.stokesComponent().value, stokes.nofSubbands().value, stokes.nofSamples().value)
 
       # data sets can get and set slices of data in the form of numpy arrays.
       # The dimensions of the provided numpy arrays determine the amount of data

@@ -1,20 +1,25 @@
 import DAL
 
 # create the file
-f = DAL.HDF5FileBase("foo.h5", DAL.HDF5FileBase.CREATE)
+f = DAL.File("foo.h5", DAL.File.CREATE)
 
 # create an attribute
-a = DAL.AttributeString(f.group(), "MY_ATTRIBUTE")
-a.set("hello world!")
+a = DAL.AttributeString(f, "MY_ATTRIBUTE")
+a.value = "hello world!"
 
 # create and destroy a second attribute
-b = DAL.AttributeString(f.group(), "FAULTY_ATTRIBUTE")
-b.set("hello world!")
-b.remove()
+b = DAL.AttributeString(f, "FAULTY_ATTRIBUTE")
+assert b.value is None
+
+b.value = "foo"
+assert b.value == "foo"
+
+del b.value
+assert b.value is None
 
 # create a dataset
-d = DAL.HDF5DatasetBaseComplexFloat(f.group(), "MY_DATASET")
-d.create([4,4],[4,4])
+d = DAL.DatasetComplexFloat(f, "MY_DATASET")
+d.create([4,4])
 
 # insert some data points
 d.setScalar([0,0],1+2j)
