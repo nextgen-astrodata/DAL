@@ -366,7 +366,7 @@ The File class is typically the first class to be instantiated for accessing an 
   [C++]    File f( filename, File::READ );
   [Python] f = File( filename, File.READ )
 
-Similarly, to create a new HDF5 file, use:
+Similarly, to create a new HDF5 file, use::
 
   [C++]    File f( filename, File::CREATE );
   [Python] f = File( filename, File.CREATE )
@@ -432,12 +432,27 @@ to (create and) set attribute ``a``. To read it, simply do::
 
 The previous examples only addressed attributes of type ``std::string``/``str``. The following basic value types are supported by the DAL, along with their C++ and Python class name:
 
-+---------------+-----------------------+------------------+------------------------+
-| C++ data type | C++ Attribute class   | Python data type | Python Attribute class |
-+===============+=======================+==================+========================+
-| ``int``       | ``Attribute<int>``    | ``int``          | ``AttributeInt``       |
-| ``string``    | ``Attribute<string>`` | ``str``          | ``AttributeString``    |
-+---------------+-----------------------+------------------+------------------------+
++---------------------+----------------------------------+------------------+----------------------------+
+| C++ data type       | C++ Attribute class              | Python data type | Python Attribute class     |
++=====================+==================================+==================+============================+
+| ``int``             | ``Attribute<int>``               | ``int``          | ``AttributeInt``           |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``unsigned``        | ``Attribute<unsigned>``          | ``int``          | ``AttributeUnsigned``      |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``long``            | ``Attribute<long>``              | ``int``          | ``AttributeLong``          |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``unsigned long``   | ``Attribute<unsigned long>``     | ``int``          | ``AttributeUnsignedLong``  |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``float``           | ``Attribute<float>``             | ``float``        | ``AttributeFloat``         |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``double``          | ``Attribute<double>``            | ``float``        | ``AttributeDouble``        |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``complex<float>``  | ``Attribute< complex<float> >``  | ``complex``      | ``AttributeComplexFloat``  |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``complex<double>`` | ``Attribute< complex<double> >`` | ``complex``      | ``AttributeComplexDouble`` |
++---------------------+----------------------------------+------------------+----------------------------+
+| ``string``          | ``Attribute<string>``            | ``str``          | ``AttributeString``        |
++---------------------+----------------------------------+------------------+----------------------------+
 
 An attribute can also encode a list of values, using one of the following classes. Even though the corresponding Python type is always ``list``, the DAL will require and supply only lists with values that can be converted to the corresponding C++ data type:
 
@@ -445,7 +460,12 @@ An attribute can also encode a list of values, using one of the following classe
 | C++ data type         | C++ Attribute class             | Python data type | Python Attribute class |
 +=======================+=================================+==================+========================+
 | ``vector<int>``       | ``Attribute< vector<int> >``    | ``list``         | ``AttributeVInt``      |
++-----------------------+---------------------------------+------------------+------------------------+
 | ``vector<string>``    | ``Attribute< vector<string> >`` | ``list``         | ``AttributeVString``   |
++-----------------------+---------------------------------+------------------+------------------------+
+| ...                   | ...                             | ...              | ...                    |
++-----------------------+---------------------------------+------------------+------------------------+
+| ``vector<XXX>``       | ``Attribute< vector<XXX> >``    | ``list``         | ``AttributrVXXX``      |
 +-----------------------+---------------------------------+------------------+------------------------+
 
 For example, to create an attribute containing a list of strings::
