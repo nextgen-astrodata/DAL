@@ -454,7 +454,7 @@ The previous examples only addressed attributes of type ``std::string``/``str``.
 | ``string``          | ``Attribute<string>``            | ``str``          | ``AttributeString``        |
 +---------------------+----------------------------------+------------------+----------------------------+
 
-An attribute can also encode a list of values, using one of the following classes. Even though the corresponding Python type is always ``list``, the DAL will require and supply only lists with values that can be converted to the corresponding C++ data type:
+An attribute can also encode a list of values of one of the data types in the previous table. Even though the corresponding Python type is always ``list``, the DAL will require and supply only lists with values that can be converted to the corresponding C++ data type:
 
 +-----------------------+---------------------------------+------------------+------------------------+
 | C++ data type         | C++ Attribute class             | Python data type | Python Attribute class |
@@ -488,6 +488,25 @@ For example, to create an attribute containing a list of strings::
 =======
 Dataset
 =======
+
+A Dataset is a special Group that has a (multidimensional) data set attached. The data set can have any number of dimensions, and be of any size. All of its elements have to be of the same type, however. Also, because a Dataset is a Group, a data set can have its own attributes and sub groups attached. The data type stored in the data set has to be known from the start. For example, to address a data set called ``DATASET`` of type ``float`` stored directly in File ``f``, use::
+
+  [C++]    Dataset<float> d( f, "DATASET" );
+  [Python] d = DatasetFloat( f, "DATASET" )
+
+Again, we can test using the ``exists()`` method whether the data set exists. The following code creates a 10x20 data set::
+
+  [C++]
+  if (!d.exists()) {
+    vector<ssize_t> dimensions(2);
+    dimensions[0] = 10;
+    dimensions[1] = 20;
+    d.create( dimensions );
+  }  
+
+  [Python]
+  if not d.exists():
+    d.create( [10, 20] )
 
 **********
 Exceptions
