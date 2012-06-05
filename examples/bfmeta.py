@@ -51,6 +51,12 @@ class bfmeta:
       print "Backend                = ", self.fh.filterSelection().get()
     if self.fh.projectID().exists():
       print "Project ID             = ", self.fh.projectID().get()
+    if self.fh.projectTitle().exists():
+      print "Project title          = ", self.fh.projectTitle().get()
+    if self.fh.projectPI().exists():
+      print "Project PI             = ", self.fh.projectPI().get()
+    if self.fh.projectContact().exists():
+      print "Project contact        = ", self.fh.projectContact().get()
     if self.fh.observationStartUTC().exists():
       print "UTC start time         = ", self.fh.observationStartUTC().get()
     if self.fh.observationEndUTC().exists():
