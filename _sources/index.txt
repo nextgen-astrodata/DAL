@@ -613,14 +613,24 @@ Exceptions
 
 Almost all of the DAL functions can throw an exception in case of an error. The following exceptions can be thrown:
 
-+---------------------------+----------------------+-------------------------+
-| C++ exception             | Python exception     | Meaning                 |
-+===========================+======================+=========================+
-| ``DALException``          | ``RuntimeError``     | Something went wrong    |
-| ``+-- HDF5Exception``     | ``DAL.HDF5Exception``| HDF5 threw an error     |
-| ``+-- DALValueError``     | ``ValueError``       | Invalid parameter value |
-| ``    +-- DALIndexError`` | ``IndexError``       | Out-of-bounds access    |
-+---------------------------+----------------------+-------------------------+
++-------------------+----------------------+-------------------------+
+| C++ exception     | Python exception     | Meaning                 |
++===================+======================+=========================+
+| ``DALException``  | ``RuntimeError``     | Something went wrong    |
++-------------------+----------------------+-------------------------+
+| ``HDF5Exception`` | ``DAL.HDF5Exception``| HDF5 threw an error     |
++-------------------+----------------------+-------------------------+
+| ``DALValueError`` | ``ValueError``       | Invalid parameter value |
++-------------------+----------------------+-------------------------+
+| ``DALIndexError`` | ``IndexError``       | Out-of-bounds access    |
++-------------------+----------------------+-------------------------+
+
+The above classes adhere to the following class hierarchy in C++::
+
+  DALException
+  +-- HDF5Exception
+  +-- DALValueError
+      +-- DALIndexError
 
 All exceptions carry an error message (``e.what()`` in C++ and ``str(e)`` in Python) explaining what went wrong.
 

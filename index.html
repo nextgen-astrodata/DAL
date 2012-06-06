@@ -664,9 +664,9 @@ print "Element at [1,2] = %.2f" % d.getScalar(pos)</pre>
 <p>Almost all of the DAL functions can throw an exception in case of an error. The following exceptions can be thrown:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="36%" />
-<col width="30%" />
-<col width="34%" />
+<col width="29%" />
+<col width="33%" />
+<col width="38%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">C++ exception</th>
@@ -675,21 +675,30 @@ print "Element at [1,2] = %.2f" % d.getScalar(pos)</pre>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">DALException</span></tt>
-<tt class="docutils literal"><span class="pre">+--</span> <span class="pre">HDF5Exception</span></tt>
-<tt class="docutils literal"><span class="pre">+--</span> <span class="pre">DALValueError</span></tt>
-``    +&#8211; DALIndexError``</td>
-<td><tt class="docutils literal"><span class="pre">RuntimeError</span></tt>
-<tt class="docutils literal"><span class="pre">DAL.HDF5Exception</span></tt>
-<tt class="docutils literal"><span class="pre">ValueError</span></tt>
-<tt class="docutils literal"><span class="pre">IndexError</span></tt></td>
-<td>Something went wrong
-HDF5 threw an error
-Invalid parameter value
-Out-of-bounds access</td>
+<tr><td><tt class="docutils literal"><span class="pre">DALException</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">RuntimeError</span></tt></td>
+<td>Something went wrong</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">HDF5Exception</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">DAL.HDF5Exception</span></tt></td>
+<td>HDF5 threw an error</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">DALValueError</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">ValueError</span></tt></td>
+<td>Invalid parameter value</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">DALIndexError</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">IndexError</span></tt></td>
+<td>Out-of-bounds access</td>
 </tr>
 </tbody>
 </table>
+<p>The above classes adhere to the following class hierarchy in C++:</p>
+<div class="highlight-python"><pre>DALException
++-- HDF5Exception
++-- DALValueError
+    +-- DALIndexError</pre>
+</div>
 <p>All exceptions carry an error message (<tt class="docutils literal"><span class="pre">e.what()</span></tt> in C++ and <tt class="docutils literal"><span class="pre">str(e)</span></tt> in Python) explaining what went wrong.</p>
 <div class="section" id="hdf5exception-error-stack">
 <h3>HDF5Exception error stack<a class="headerlink" href="#hdf5exception-error-stack" title="Permalink to this headline">¶</a></h3>
