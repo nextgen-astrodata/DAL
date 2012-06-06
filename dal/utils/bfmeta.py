@@ -51,6 +51,12 @@ class bfmeta:
       print "Backend                = ", self.fh.filterSelection().get()
     if self.fh.projectID().exists():
       print "Project ID             = ", self.fh.projectID().get()
+    if self.fh.projectTitle().exists():
+      print "Project title          = ", self.fh.projectTitle().get()
+    if self.fh.projectPI().exists():
+      print "Project PI             = ", self.fh.projectPI().get()
+    if self.fh.projectContact().exists():
+      print "Project contact        = ", self.fh.projectContact().get()
     if self.fh.observationStartUTC().exists():
       print "UTC start time         = ", self.fh.observationStartUTC().get()
     if self.fh.observationEndUTC().exists():
@@ -378,6 +384,29 @@ class bfmeta:
       print self.prefix + "Rest wavelength unit = ", coord.restWavelengthUnit().get()
 
 
+  def handleArg(self, arg):
+    print "handleArg()"
+
+    if "[" in arg and "]" in arg:    
+      handleList(arg)
+    else:
+      return(int(arg))  # treat as integer
+
+  # Handle command line options supplied as list
+  #
+  def handleList(self, list):
+    print "handleList()"
+    
+    # strip off [ and ]
+    # separate on ,
+    # Detect ~ for ranges
+
+  # Handle command line options supplied as a range
+  #
+  def handleRange(self, range):
+    print "handleList()"
+  
+
 #############################################
 #
 # Helper class for color terminal printing
@@ -390,7 +419,8 @@ class bcolors:
     HEADER = '\033[95m'
     SAP = '\033[94m'        # blue
     BEAM = '\033[92m'       # green
-    DATASET = '\033[93m'    # yellow
+    #DATASET = '\033[93m'    # yellow
+    DATASET= '\033[91m'     # red
     COORD = '\033[0m'       # fat white
     FAIL = '\033[91m'
     ENDC = '\033[0m'

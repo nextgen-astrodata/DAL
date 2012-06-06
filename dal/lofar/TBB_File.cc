@@ -26,7 +26,7 @@ vector<TBB_Station> TBB_File::stations()
   return stationGroups;
 }
 
-TBB_Station TBB_File::station( const string &stationName )
+TBB_Station TBB_File::station( const std::string &stationName )
 {
   return TBB_Station(*this, "STATION_" + stationName);
 }
@@ -125,7 +125,7 @@ vector<TBB_DipoleDataset> TBB_Station::dipoles()
   return dipoleDatasets;
 }
 
-TBB_DipoleDataset TBB_Station::dipole( const string &dipoleName )
+TBB_DipoleDataset TBB_Station::dipole( const std::string &dipoleName )
 {
   return TBB_DipoleDataset(*this, "DIPOLE_" + dipoleName);
 }
