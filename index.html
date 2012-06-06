@@ -72,7 +72,7 @@ f.observationID().value = "12345"</pre>
 
 int main {
   DAL::CLA_File f("example.h5");
-  std::cout &lt;&lt; f.observationID().value &lt;&lt; std::endl;
+  cout &lt;&lt; f.observationID().value &lt;&lt; endl;
 }
 
 [Python]
@@ -367,6 +367,26 @@ dataset[0][0] = 0</pre>
 </div>
 <div class="section" id="basic-api">
 <h2>Basic API<a class="headerlink" href="#basic-api" title="Permalink to this headline">¶</a></h2>
+<p>The following sections will explain basic functionality offered by the DAL to work with both HDF5 files in general, and with predefined file formats in particular. To keep the code examples short, they all assume a context in which HDF5 classes have been imported:</p>
+<div class="highlight-python"><pre>[C++]
+#include &lt;dal/hdf5/File.h&gt;
+... include necessary DAL headers ...
+#include &lt;dal/hdf5/Attribute.h&gt;
+#include &lt;iostream&gt;
+
+using namespace DAL;
+using namespace std;
+
+int main() {
+  ... insert example here ...
+}
+
+[Python]
+from DAL import *
+
+... insert example here ...</pre>
+</div>
+<p>Also, most examples assume that files and variables created by previous examples are still available.</p>
 <div class="section" id="file">
 <h3>File<a class="headerlink" href="#file" title="Permalink to this headline">¶</a></h3>
 <p>The File class is typically the first class to be instantiated for accessing an HDF5 file. To open a file for reading, use the following construct:</p>
@@ -378,8 +398,8 @@ dataset[0][0] = 0</pre>
 [Python] f = File( filename, File.CREATE )</pre>
 </div>
 <p>The file is closed when all object references to it (by a File object or anything else) are destructed.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
 <p class="last">Thread safety: DAL, like the HDF5 library, is not thread safe. Please use your own locks surrounding concurrent access to the same file.</p>
 </div>
 </div>
@@ -419,14 +439,14 @@ if not g.exists():
 [Python] a.value = "hello world"</pre>
 </div>
 <p>to (create and) set attribute <tt class="docutils literal"><span class="pre">a</span></tt>. To read it, simply do:</p>
-<div class="highlight-python"><pre>[C++]    std::cout &lt;&lt; a.value &lt;&lt; std::endl;
+<div class="highlight-python"><pre>[C++]    cout &lt;&lt; a.value &lt;&lt; endl;
 [Python] print a.value</pre>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">In C++, an exception will be thrown if you try to read an attribute that does not exist. In Python, the special value <tt class="xref docutils literal"><span class="pre">None</span></tt> is returned instead.</p>
 </div>
-<p>The previous examples only addressed attributes of type <tt class="docutils literal"><span class="pre">std::string</span></tt>/<tt class="docutils literal"><span class="pre">str</span></tt>. The following basic value types are supported by the DAL, along with their C++ and Python class name:</p>
+<p>The previous examples only addressed attributes of type <tt class="docutils literal"><span class="pre">string</span></tt>/<tt class="docutils literal"><span class="pre">str</span></tt>. The following basic value types are supported by the DAL, along with their C++ and Python class name:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="21%" />
@@ -563,10 +583,148 @@ if (!d.exists()) {
 if not d.exists():
   d.create( [10, 20] )</pre>
 </div>
+<p>The DAL provides several functions to query the dimensionality of an existing data set:</p>
+<div class="highlight-python"><pre>[C++]
+const size_t rank = d.ndims();
+const vector&lt;ssize_t&gt; dims = d.dims();
+
+for (size_t i = 0; i &lt; rank; i++)
+  cout &lt;&lt; "Dimension " &lt;&lt; i &lt;&lt; " has size " &lt;&lt; dims[i] &lt;&lt; endl;
+
+[Python]
+rank = d.ndims()
+dims = d.dims()
+
+for i in range(rank):
+  print "Dimension %u has size %u" % (i, dims[i])</pre>
+</div>
+<p>Individual elements can be set using the <tt class="docutils literal"><span class="pre">getScalar</span></tt> and <tt class="docutils literal"><span class="pre">setScalar</span></tt> methods. For example, to read and write the element at [1,2]:</p>
+<div class="highlight-python"><pre>[C++]
+const vector&lt;size_t&gt; pos(2);
+pos[0] = 1;
+pos[1] = 2;
+
+cout &lt;&lt; "Element at [1,2] = " &lt;&lt; d.getScalar(pos) &lt;&lt; endl;
+d.setScalar(pos, 42.0);
+cout &lt;&lt; "Element at [1,2] = " &lt;&lt; d.getScalar(pos) &lt;&lt; endl;
+
+[Python]
+pos = [1,2]
+
+print "Element at [1,2] = %.2f" % d.getScalar(pos)
+d.setScalar(pos, 42.0)
+print "Element at [1,2] = %.2f" % d.getScalar(pos)</pre>
+</div>
+<p>The data set can also be sliced to access blocks of elements in a single call, which is a lot faster than accessing each element individually. In C++, data is referred to using raw pointers and providing the sizes of the slice. In Python, the numpy library is used to represent raw data. The example below extracts a 2D slice of data from our data set using the <tt class="docutils literal"><span class="pre">get2D</span></tt> and <tt class="docutils literal"><span class="pre">set2D</span></tt> methods. It reads and writes a block of size 3x3 starting at location [1,2] in the data set:</p>
+<div class="highlight-python"><pre>[C++]
+const vector&lt;size_t&gt; pos(2);
+pos[0] = 1;
+pos[1] = 2;
+
+cout &lt;&lt; "Element [1,2] = " &lt;&lt; d.getScalar(pos) &lt;&lt; endl;
+
+// a pointer to any data set will do, for instance, these all work:
+//
+// data type:                         pointer to first element:
+// -----------------------------------------------------
+// float data[3][3]                   &amp;data[0][0]
+// float data[3 * 3]                  &amp;data[0]
+// vector&lt;float&gt; data(3 * 3)          &amp;data[0]
+// float *data = new float[3 * 3]     data
+float data[3][3];
+
+d.get2D( pos, 3, 3, &amp;data[0][0] );
+data[0][0] = 1.0;
+d.set2D( pos, 3, 3, &amp;data[0][0] );
+
+cout &lt;&lt; "Element [1,2] = " &lt;&lt; d.getScalar(pos) &lt;&lt; endl;
+
+[Python]
+pos = [1,2]
+
+print "Element at [1,2] = %.2f" % d.getScalar(pos)
+
+# we need a numpy array for data storage; the dataset provides
+# us with the numpy data type that we need to use
+
+import numpy
+data = numpy.zeros((3, 3), dtype=d.dtype)
+
+d.get2D(pos, data)
+
+data[1][1] = 1.0
+d.set2D(pos, data)
+
+print "Element at [1,2] = %.2f" % d.getScalar(pos)</pre>
+</div>
 </div>
 </div>
 <div class="section" id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Almost all of the DAL functions can throw an exception in case of an error. The following exceptions can be thrown:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="30%" />
+<col width="34%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">C++ exception</th>
+<th class="head">Python exception</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">DALException</span></tt>
+<tt class="docutils literal"><span class="pre">+--</span> <span class="pre">HDF5Exception</span></tt>
+<tt class="docutils literal"><span class="pre">+--</span> <span class="pre">DALValueError</span></tt>
+``    +&#8211; DALIndexError``</td>
+<td><tt class="docutils literal"><span class="pre">RuntimeError</span></tt>
+<tt class="docutils literal"><span class="pre">DAL.HDF5Exception</span></tt>
+<tt class="docutils literal"><span class="pre">ValueError</span></tt>
+<tt class="docutils literal"><span class="pre">IndexError</span></tt></td>
+<td>Something went wrong
+HDF5 threw an error
+Invalid parameter value
+Out-of-bounds access</td>
+</tr>
+</tbody>
+</table>
+<p>All exceptions carry an error message (<tt class="docutils literal"><span class="pre">e.what()</span></tt> in C++ and <tt class="docutils literal"><span class="pre">str(e)</span></tt> in Python) explaining what went wrong.</p>
+<div class="section" id="hdf5exception-error-stack">
+<h3>HDF5Exception error stack<a class="headerlink" href="#hdf5exception-error-stack" title="Permalink to this headline">¶</a></h3>
+<p>The HDF5Exception indicates an error generated by the HDF5 library used by DAL. It carries a copy of the error stack inside the HDF5 library, which provides a more detailed explanation of what was attempted and why it failed. The error stack of an HDF5Exception can be accessed as follows:</p>
+<div class="highlight-python"><pre>[C++]
+try {
+  File f("non_existing_file.h5");
+} catch( HDF5Exception &amp;e ) {
+  // print the error message
+  cout &lt;&lt; e.what() &lt;&lt; endl;
+
+  // print a summary
+  cout &lt;&lt; e.stackSummary() &lt;&lt; endl;
+
+  // inspect each stack line individually -- each line has both a shortDesc() and a longDesc()
+  for( vector&lt;HDF5StackLine&gt;::const_iterator i = e.stack.stack.begin(); i != e.stack.stack.end(); i++ )
+    cout &lt;&lt; (*i).shortDesc() &lt;&lt; endl;
+}
+
+[Python]
+try:
+  f = File("non_existing_file.h5")
+except HDF5Exception, e:
+  # print the error message
+  print e
+
+  # print a summary
+
+  # inspect each stack line individually -- each line has both a shortDesc() and a longDesc()</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Inspecting HDF5 error stacks in Python is not yet implemented.</p>
+</div>
+</div>
 </div>
 <div class="section" id="predefined-file-formats">
 <h2>Predefined file formats<a class="headerlink" href="#predefined-file-formats" title="Permalink to this headline">¶</a></h2>
@@ -580,7 +738,8 @@ f = CLA_File("example.h5", File.CREATE)
 f.observationID().value = "12345"</pre>
 </div>
 <p>The way this works is that <tt class="docutils literal"><span class="pre">CLA_File.observationID</span></tt> actually wraps the appropriate Attribute class for us. It indirectly returns:</p>
-<div class="highlight-python"><pre>Attribute&lt;std::string&gt;(f, "OBSERVATION_ID")</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Attribute</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;OBSERVATION_ID&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
 <p>without requiring the user to know the actual key name and type (or allowing the user to make a mistake in supplying them). The same construct is used to create groups and datasets as defined in a file format, allowing robust and reliable access to files adhering to a specified standard.</p>
 <p>A predefined file formats class can be extended to maintain more meta data than just the element names and types. The next sections will talk about how multiple versions of the same file format can be handled properly, and how attribute introspection can be done to aid writing file format validators.</p>
@@ -650,6 +809,61 @@ g.minVersion &lt;= g.fileVersion()</pre>
 </div>
 <div class="section" id="introspection">
 <h3>Introspection<a class="headerlink" href="#introspection" title="Permalink to this headline">¶</a></h3>
+<p>Classes that wrap predefined file formats can be written such that each group maintains a list of all of the attributes that should be present in files conforming to the file format. This list of <em>registered</em> attributes can be introspected, in order to iteratively process all required attributes. The <tt class="docutils literal"><span class="pre">nodeNames()</span></tt> method present in each Group provides a list of attribute names that the class knows about. The <tt class="docutils literal"><span class="pre">getNode()</span></tt> method subsequently returns a requested attribute as the appropriate type:</p>
+<div class="highlight-python"><pre>[C++]
+CLA_File f("example.h5");
+
+cout &lt;&lt; setw(40) &lt;&lt; "HDF5 Node name" &lt;&lt; "   supp" &lt;&lt; " exists" &lt;&lt; "  valid" &lt;&lt; endl;
+
+const vector&lt;string&gt; nodeNames = f.nodeNames();
+
+for (vector&lt;string&gt;::const_iterator i = nodeNames.begin(); i != nodeNames.end(); i++) {
+  string name = *i;
+
+  // cast to a common base class
+  AttributeBase &amp;node = f.getNode(name);
+
+  // whether the attribute is supported by the version of this file.
+  // i.e. node.minVersion &lt;= node.fileVersion()
+  bool supported = node.supported();
+
+  // whether the node exists in the file
+  bool exists = node.exists();
+
+  // whether the node is valid (exists and is (or can be converted to) the correct type)
+  bool valid = node.valid();
+
+  // due to C++'s static typing, we can't retrieve the value if we don't know the attribute type
+  // ??? value = node.value;
+
+  cout &lt;&lt; setw(40) &lt;&lt; name &lt;&lt; setw(7) &lt;&lt; supported &lt;&lt; setw(7) &lt;&lt; exists &lt;&lt; setw(7) &lt;&lt; valid &lt;&lt; endl;
+
+  print "%40s %6s %6s %6s %s" % (n, supported, exists, valid, node.value)
+}
+
+[Python]
+f = CLA_File("example.h5")
+
+print "%40s %6s %6s %6s %s" % ("HDF5 Node name", "supp", "exists", "valid", "value")
+
+for name in f.nodeNames():
+  node = f.getNode(name)
+
+  # whether the attribute is supported by the version of this file.
+  # i.e. node.minVersion &lt;= node.fileVersion()
+  supported = node.supported()
+
+  # whether the node exists in the file
+  exists = node.exists()
+
+  # whether the node is valid (exists and is (or can be converted to) the correct type)
+  valid = node.valid()
+
+  # the value of this node (None if the attribute does not exist)
+  value = node.value
+
+  print "%40s %6s %6s %6s %s" % (n, supported, exists, valid, node.value)</pre>
+</div>
 </div>
 <div class="section" id="supporting-your-own-file-format">
 <h3>Supporting your own file format<a class="headerlink" href="#supporting-your-own-file-format" title="Permalink to this headline">¶</a></h3>
@@ -693,7 +907,10 @@ g.minVersion &lt;= g.fileVersion()</pre>
 <li><a class="reference external" href="#dataset">Dataset</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+<li><a class="reference external" href="#exceptions">Exceptions</a><ul>
+<li><a class="reference external" href="#hdf5exception-error-stack">HDF5Exception error stack</a></li>
+</ul>
+</li>
 <li><a class="reference external" href="#predefined-file-formats">Predefined file formats</a><ul>
 <li><a class="reference external" href="#versioning">Versioning</a></li>
 <li><a class="reference external" href="#introspection">Introspection</a></li>
