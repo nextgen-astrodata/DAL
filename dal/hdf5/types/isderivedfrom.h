@@ -57,7 +57,7 @@ private:
   }
 
 public:
-  IsDerivedFrom() { void(*p)(D*) = Constraints; }
+  IsDerivedFrom() { void(*p)(D*) = Constraints; (void)p; }
 };
 
 // Force it to fail in the case where B is void
