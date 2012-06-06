@@ -62,7 +62,7 @@
 
   // The C++ ABI name of a specific node
   std::string _getNodeTypeName( const std::string &name ) {
-    const Node &obj = $self->getNode(name);
+    Node &obj = $self->getNode(name);
     return typeid(obj).name();
   }
 
