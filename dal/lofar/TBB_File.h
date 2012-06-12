@@ -44,6 +44,7 @@ public:
 
 class TBB_Station: public Group {
 public:
+  TBB_Station(): Group(0) {}
   TBB_Station( Group &parent, const std::string &name ): Group(parent, name) {}
 
   Attribute<std::string>                stationName();
@@ -67,6 +68,7 @@ public:
 
 class TBB_DipoleDataset: public Dataset<short> {
 public:
+  TBB_DipoleDataset(): Dataset<short>(0) {}
   TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<short>(parent, name) {}
 
   Attribute<unsigned>                   stationID();

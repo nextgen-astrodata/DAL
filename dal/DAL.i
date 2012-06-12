@@ -63,7 +63,7 @@
 %include dal/lofar/CLA_File.h
 %include dal/lofar/Coordinates.h
 %include dal/lofar/BF_File.h
-%include dal/lofar/TBB_File.h
+%include "dal/lofar/TBB_File.i"
 
 // -------------------------------
 // Run doctest if module is executed

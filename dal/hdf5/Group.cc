@@ -20,10 +20,10 @@ Group::Group( Group &parent, const std::string &name )
 {
 }
 
-Group::Group( const hid_gc &fileid )
+Group::Group( const hid_gc &fileId )
 :
-  Node(fileid, ""),
-  _group(fileid),
+  Node(fileId, ""),
+  _group(fileId),
   mapInitialised(false)
 {
 }
