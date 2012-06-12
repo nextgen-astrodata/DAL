@@ -2,7 +2,7 @@
 #define __HIDGC__
 
 #include <hdf5.h>
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 
 namespace DAL {
 
