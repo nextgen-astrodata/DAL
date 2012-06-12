@@ -4,7 +4,7 @@ using namespace std;
 
 namespace DAL {
 
-File::File( const std::string &filename, enum File::fileMode mode, const std::string versionAttrName )
+File::File( const std::string &filename, enum File::fileMode mode, const std::string &versionAttrName )
 :
   // see docs on H5Fclose for caveats when closing the file while having subgroups open
   // (in normal circumstances, HDF5 will only close the file if all access to it has been
