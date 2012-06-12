@@ -1,4 +1,4 @@
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 #include <sstream>
 
 using namespace std;

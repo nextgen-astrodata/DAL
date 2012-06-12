@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 #include <string>
-#include "dal/hdf5/exceptions/h5errorstack.h"
+#include "dal/hdf5/exceptions/errorstack.h"
 
 namespace DAL {
 

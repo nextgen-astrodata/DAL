@@ -23,8 +23,8 @@ set(dal_sources
   hdf5/File.cc
   hdf5/Group.cc
   hdf5/Node.cc
-  hdf5/exceptions/h5exception.cc
-  hdf5/exceptions/h5errorstack.cc
+  hdf5/exceptions/exceptions.cc
+  hdf5/exceptions/errorstack.cc
   hdf5/types/versiontype.cc
 
   lofar/BF_File.cc

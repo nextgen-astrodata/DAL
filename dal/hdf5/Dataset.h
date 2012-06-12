@@ -5,7 +5,7 @@
 #include <vector>
 #include <hdf5.h>
 #include "types/hid_gc.h"
-#include "exceptions/h5exception.h"
+#include "exceptions/exceptions.h"
 #include "Group.h"
 
 namespace DAL {
