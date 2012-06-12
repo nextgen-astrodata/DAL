@@ -6,7 +6,7 @@
 # File:         bfmeta.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-02
-# Last change:  2012-04-02
+# Last change:  2012-06-06
 
 
 import sys
@@ -28,9 +28,8 @@ class bfmeta:
     self.beam=beam
     self.stokes=stokes
     self.verbose=verbose
-    
     self.displayInfo()
-
+    
   # High-level function to display all info, calling display ftns for classes
   #  
   def displayInfo(self):
@@ -40,54 +39,54 @@ class bfmeta:
   # Display information about BF_File
   #
   def displayFileInfo(self):
-    #print "displayFileInfo()"       # DEBUG
+    print "displayFileInfo()"       # DEBUG
     if self.fh.telescope().exists():
-      print "Telescope              = ", self.fh.telescope().get()
+      print "Telescope              = ", self.fh.telescope().value
     if self.fh.observer().exists():
-      print "Observer               = ", self.fh.observer().get()
+      print "Observer               = ", self.fh.observer().value
     if self.fh.target().exists():
-      print "Target                 = ", self.fh.target().get()
+      print "Target                 = ", self.fh.target().value
     if self.fh.filterSelection().exists():
-      print "Backend                = ", self.fh.filterSelection().get()
+      print "Backend                = ", self.fh.filterSelection().value
     if self.fh.projectID().exists():
-      print "Project ID             = ", self.fh.projectID().get()
+      print "Project ID             = ", self.fh.projectID().value
     if self.fh.projectTitle().exists():
-      print "Project title          = ", self.fh.projectTitle().get()
+      print "Project title          = ", self.fh.projectTitle().value
     if self.fh.projectPI().exists():
-      print "Project PI             = ", self.fh.projectPI().get()
+      print "Project PI             = ", self.fh.projectPI().value
     if self.fh.projectContact().exists():
-      print "Project contact        = ", self.fh.projectContact().get()
+      print "Project contact        = ", self.fh.projectContact().value
     if self.fh.observationStartUTC().exists():
-      print "UTC start time         = ", self.fh.observationStartUTC().get()
+      print "UTC start time         = ", self.fh.observationStartUTC().value
     if self.fh.observationEndUTC().exists():
-      print "UTC end time           = ", self.fh.observationEndUTC().get()
+      print "UTC end time           = ", self.fh.observationEndUTC().value
     if self.fh.observationStartMJD().exists():
-      print "MJD start time         = ", self.fh.observationStartMJD().get()  
+      print "MJD start time         = %(mjd)16.9f" %{'mjd':self.fh.observationStartMJD().value}
     if self.fh.observationEndMJD().exists():
-      print "MJD end time           = ", self.fh.observationEndMJD().get() 
+      print "MJD end time           = %(mjd)16.9f" %{'mjd':self.fh.observationEndMJD().value}
     if self.fh.observationStartTAI().exists():
-      print "TAI start time         = ", self.fh.observationStartTAI().get()
+      print "TAI start time         = ", self.fh.observationStartTAI().value
     if self.fh.observationEndTAI().exists():
-      print "TAI end time           = ", self.fh.observationEndTAI().get()
+      print "TAI end time           = ", self.fh.observationEndTAI().value
     if self.fh.totalIntegrationTime().exists():
-      print "Total integration time = ", self.fh.totalIntegrationTime().get()
+      print "Total integration time = %(ti) %(tiu)" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
     if self.fh.observationDatatype().exists():
-      print "Observation datatype   = ", self.fh.observationDatatype().get()
+      print "Observation datatype   = ", self.fh.observationDatatype().value
     if self.fh.subArrayPointingDiameter().exists():
-      print "Subarray pointing diameter = ", self.fh.subArrayPointingDiameter().get()
+      print "Subarray pointing diameter = %(sapd) %(sapdu)" %{'sapd':self.fh.subArrayPointingDiameter().value, 'sapdu':self.fh.subArrayPointingDiameterUnit().value}
     if self.fh.bandwidth().exists():
-      print "Bandwidth              = ", self.fh.bandwidth().get()
+      print "Bandwidth              = %(bw) %(bwu)" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidth().value}
     if self.fh.beamDiameter().exists():
-      print "Beam diameter          = ", self.fh.beamDiameter().get()
+      print "Beam diameter          = %(bd) %(bdu)" %{'bd':self.fh.beamDiameter().value, 'bdu':self.fh.beamDiameterUnit().value}
     if self.fh.nofSubArrayPointings().exists():
-      print "No. of SAP             = ", self.fh.nofSubArrayPointings().get()
+      print "No. of SAP             = ", self.fh.nofSubArrayPointings().value
     self.prefix=bcolors.ENDC      # reset printing options
   
   # Display Sub Array Pointing information for SAPs
   #
   def displaySAP(self):
     if self.sap=="all":
-      for nr in range(0, self.fh.nofSubArrayPointings().get()):   
+      for nr in range(0, self.fh.nofSubArrayPointings().value):   
         self.displaySAPInfo(nr)
     else:
       if isinstance(self.sap, list):
@@ -117,36 +116,36 @@ class bfmeta:
       return    
 
     if sap.nofStations().exists():   
-      print self.prefix + "No. of stations        = ", sap.nofStations().get()
+      print self.prefix + "No. of stations        = ", sap.nofStations().value
     if sap.stationsList().exists():
-      print self.prefix + "Stationlist            = ", sap.stationsList().get()
+      print self.prefix + "Stationlist            = ", sap.stationsList().value
     if sap.pointRA().exists():
-      print self.prefix + "pointing RA            = ", sap.pointRA().get()
+      print self.prefix + "pointing RA            = ", sap.pointRA().value
     if sap.pointDEC().exists():
-      print self.prefix + "pointing DEC           = ", sap.pointDEC().get()
+      print self.prefix + "pointing DEC           = ", sap.pointDEC().value
     if sap.clockRate().exists() and sap.clockRateUnit().exists()==False:
-      #sys.stdout.write(self.prefix + "Clock rate             = "+str(sap.clockRate().get()))
-      print self.prefix + "Clock rate             = ", sap.clockRate().get()
+      #sys.stdout.write(self.prefix + "Clock rate             = "+str(sap.clockRate().value))
+      print self.prefix + "Clock rate             = ", sap.clockRate().value
     if sap.clockRate().exists() and sap.clockRateUnit().exists():
-      print self.prefix + "Clock rate             = ", sap.clockRate().get(), sap.clockRateUnit().get()
+      print self.prefix + "Clock rate             = ", sap.clockRate().value, sap.clockRateUnit().value
     if sap.nofSamples().exists():
-      print self.prefix + "No. of samples         = ", sap.nofSamples().get()
+      print self.prefix + "No. of samples         = ", sap.nofSamples().value
     if sap.samplingRate().exists() and sap.samplingRateUnit().exists()==False:
-      print self.prefix + "Sampling rate          = ", sap.samplingRate().get()      
+      print self.prefix + "Sampling rate          = ", sap.samplingRate().value      
     if sap.samplingRate().exists() and sap.samplingRateUnit().exists():
-      print self.prefix + "Sampling rate          = ", sap.samplingRate().get(), sap.samplingRateUnit().get()      
+      print self.prefix + "Sampling rate          = ", sap.samplingRate().value, sap.samplingRateUnit().value      
     if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
-      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().get()
+      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().value
     if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
-      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().get(), sap.subbandWidth().get()
+      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().value, sap.subbandWidth().value
     if sap.channelsPerSubband().exists() and sap.subbandWidthUnit().exists():
-      print self.prefix + "Subband width unit     = ", sap.subbandWidthUnit().get()      
+      print self.prefix + "Subband width unit     = ", sap.subbandWidthUnit().value      
     if sap.channelWidth().exists()  and sap.channelWidthUnit().exists()==False:
-      print self.prefix + "Channel width          = ", sap.channelWidth().get()
+      print self.prefix + "Channel width          = ", sap.channelWidth().value
     if sap.channelWidth().exists() and sap.channelWidthUnit().exists():
-      print self.prefix + "Channel width          = ", sap.channelWidth().get(), sap.channelWidthUnit().get()
+      print self.prefix + "Channel width          = ", sap.channelWidth().value, sap.channelWidthUnit().value
     if sap.nofBeams().exists():
-      print self.prefix + "No. of beams           = ", sap.nofBeams().get()      
+      print self.prefix + "No. of beams           = ", sap.nofBeams().value      
 
     # Beams within this SAP
     self.displayBeam(sap)
@@ -159,7 +158,7 @@ class bfmeta:
     #print "displayBeam()"               # DEBUG
   
     if self.beam=="all":
-      for n in range(0, sap.nofBeams().get()):   
+      for n in range(0, sap.nofBeams().value):   
           self.displayBeamInfo(sap, int(n))
     elif isinstance(self.beam, list):
       for b in self.beam:
@@ -185,7 +184,7 @@ class bfmeta:
       return
 
     # only display beam if it is in the list to be shown
-    print "str(nr) = ", str(nr), " self.beam = ",self.beam    # DEBUG
+    #print "str(nr) = ", str(nr), " self.beam = ",self.beam    # DEBUG
 
     if str(nr) not in self.beam and self.beam!="all":    
       return
@@ -195,55 +194,55 @@ class bfmeta:
         
 
     # Only beams with selected Stokes components
-    if self.stokes not in beam.stokesComponents().get() and self.stokes!="all":
+    if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
       return
 
     if beam.nofStations().exists():
-      print self.prefix + "No of stations         = ", beam.nofStations().get()
+      print self.prefix + "No of stations         = ", beam.nofStations().value
     if beam.stationsList().exists():
-      print self.prefix + "Stations               = ", beam.stationsList().get()
+      print self.prefix + "Stations               = ", beam.stationsList().value
     if beam.pointRA().exists():
-      print self.prefix + "pointing RA            = ", beam.pointRA().get()
+      print self.prefix + "pointing RA            = ", beam.pointRA().value
     if beam.pointDEC().exists():
-      print self.prefix + "pointing DEC           = ", beam.pointDEC().get()
+      print self.prefix + "pointing DEC           = ", beam.pointDEC().value
     if beam.pointOffsetRA().exists():
-      print self.prefix + "pointing offset RA     = ", beam.pointOffsetRA().get()
+      print self.prefix + "pointing offset RA     = ", beam.pointOffsetRA().value
     if beam.pointOffsetDEC().exists():
-      print self.prefix + "pointing offset DEC    = ", beam.pointOffsetDEC().get()
+      print self.prefix + "pointing offset DEC    = ", beam.pointOffsetDEC().value
     if beam.beamDiameterRA().exists():
-      print self.prefix + "beam diameter RA       = ", beam.beamDiameterRA().get()
+      print self.prefix + "beam diameter RA       = ", beam.beamDiameterRA().value
     if beam.beamDiameterDEC().exists():
-      print self.prefix + "beam diameter DEC      = ", beam.beamDiameterDEC().get()      
+      print self.prefix + "beam diameter DEC      = ", beam.beamDiameterDEC().value      
     if beam.beamFrequencyCenter().exists() and beam.beamFrequencyCenterUnit().exists()==False:
-      print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().get()
+      print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().value
     if beam.beamFrequencyCenter().exists() and beam.beamFrequencyCenterUnit().exists():
-      print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().get(), beam.beamFrequencyCenterUnit().get()
-#      sys.stdout.write(beam.beamFrequencyCenterUnit().get())
+      print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().value, beam.beamFrequencyCenterUnit().value
+#      sys.stdout.write(beam.beamFrequencyCenterUnit().value)
     if beam.foldedData().exists():
-      print self.prefix + "folded data            = ", beam.foldedData().get()
+      print self.prefix + "folded data            = ", beam.foldedData().value
     if beam.foldPeriod().exists() and beam.foldPeriodUnit().exists()==False:
-      sys.stdout.write(self.prefix + "folded period          = " + str(beam.foldPeriod().get()))
+      sys.stdout.write(self.prefix + "folded period          = " + str(beam.foldPeriod().value))
     if beam.foldPeriodUnit().exists():
-      print " ", beam.foldPeriodUnit().get()
+      print " ", beam.foldPeriodUnit().value
     if beam.dedispersion().exists():
-      print self.prefix + "dedispersion           = ", beam.dedispersion().get()
+      print self.prefix + "dedispersion           = ", beam.dedispersion().value
     if beam.dedispersionMeasure().exists():
-      sys.stdout.write(self.prefix + "dedispersion Measure   = " + str(beam.dedispersionMeasure().get()))
+      sys.stdout.write(self.prefix + "dedispersion Measure   = " + str(beam.dedispersionMeasure().value))
     if beam.dedispersionMeasureUnit().exists():
-      print " " + beam.dedispersionMeasureUnit().get()
+      print " " + beam.dedispersionMeasureUnit().value
     if beam.barycentered().exists():
-      print self.prefix + "barycentered           = ", beam.barycentered().get()
+      print self.prefix + "barycentered           = ", beam.barycentered().value
     if beam.nofStokes().exists():
-      print self.prefix + "No of Stokes           = ", beam.nofStokes().get()
+      print self.prefix + "No of Stokes           = ", beam.nofStokes().value
     if beam.stokesComponents().exists():
-      print self.prefix + "Stokes components      = ", beam.stokesComponents().get()
+      print self.prefix + "Stokes components      = ", beam.stokesComponents().value
     if beam.complexVoltages().exists():
-      print self.prefix + "Complex voltages       = ", beam.complexVoltages().get()
+      print self.prefix + "Complex voltages       = ", beam.complexVoltages().value
     if beam.signalSum().exists():
-      print self.prefix + "Signal sum             = ", beam.signalSum().get()
+      print self.prefix + "Signal sum             = ", beam.signalSum().value
 
     # Display Stokes datasets
-    for d in range(0, beam.nofStokes().get()):
+    for d in range(0, beam.nofStokes().value):
       self.displayStokesDatasetInfo(beam, d)
    
     self.displayCoordinates(beam)
@@ -255,7 +254,7 @@ class bfmeta:
   #
   def displayStokesDataset(self, beam, nr="all"):
     if nr=="all":
-      for n in range(0, beam.nofStokes().get()):
+      for n in range(0, beam.nofStokes().value):
         self.displayStokesDatasetInfo(n)
     else:
       self.displayStokesDatasetInfo(nr)
@@ -275,13 +274,13 @@ class bfmeta:
       return
 
     if stokes.stokesComponent().exists():
-      print self.prefix + "Stokes             = ", stokes.stokesComponent().get()    
+      print self.prefix + "Stokes             = ", stokes.stokesComponent().value    
     if stokes.nofChannels().exists():
-      print self.prefix + "No. of channels    = ", stokes.nofChannels().get()    
+      print self.prefix + "No. of channels    = ", stokes.nofChannels().value    
     if stokes.nofSubbands().exists():
-      print self.prefix + "No. of subbands    = ", stokes.nofSubbands().get()    
+      print self.prefix + "No. of subbands    = ", stokes.nofSubbands().value    
     if stokes.nofSamples().exists():
-      print self.prefix + "No. of samples     = ", stokes.nofSamples().get()    
+      print self.prefix + "No. of samples     = ", stokes.nofSamples().value    
      
     self.prefix=bcolors.ENDC        # reset printing options     
     print self.prefix
@@ -309,25 +308,25 @@ class bfmeta:
 
       # This is buggy in the Swig bindings
       #if coords.refLocationValue().exists():
-      #  print "refLocationValue     = ", coords.refLocationValue().get()
+      #  print "refLocationValue     = ", coords.refLocationValue().value
       if coords.refLocationUnit().exists():
-        print self.prefix + "refLocationUnit    = ", coords.refLocationUnit().get()
+        print self.prefix + "refLocationUnit    = ", coords.refLocationUnit().value
       if coords.refLocationFrame().exists():
-        print self.prefix + "refLocationFrame   = ", coords.refLocationFrame().get()
+        print self.prefix + "refLocationFrame   = ", coords.refLocationFrame().value
       if coords.refTimeValue().exists():
-        print self.prefix + "refTimeValue       = ", coords.refTimeValue().get()
+        print self.prefix + "refTimeValue       = ", coords.refTimeValue().value
       if coords.refTimeUnit().exists():
-        print self.prefix + "refTimeUnit        = ", coords.refTimeUnit().get()
+        print self.prefix + "refTimeUnit        = ", coords.refTimeUnit().value
       if coords.refTimeFrame().exists():
-        print self.prefix + "refTimeFrame       = ", coords.refTimeFrame().get()
+        print self.prefix + "refTimeFrame       = ", coords.refTimeFrame().value
       if coords.nofCoordinates().exists():
-        print self.prefix + "No. of Coordinates = ", coords.nofCoordinates().get()
+        print self.prefix + "No. of Coordinates = ", coords.nofCoordinates().value
       if coords.nofAxes().exists():
-        print self.prefix + "No. of Axes        = ", coords.nofAxes().get()
+        print self.prefix + "No. of Axes        = ", coords.nofAxes().value
       if coords.coordinateTypes().exists():
-        print self.prefix + "Coordinate types   = ", coords.coordinateTypes().get()
+        print self.prefix + "Coordinate types   = ", coords.coordinateTypes().value
 
-      for c in range(0, coords.nofCoordinates().get()):
+      for c in range(0, coords.nofCoordinates().value):
         self.displayCoordinate(coords, c)
 
       self.prefix=bcolors.ENDC
@@ -345,43 +344,43 @@ class bfmeta:
     else:
       coord=coords.coordinate(nr)         # pick coordinate
       if coord.coordinateType().exists():
-        print self.prefix + "Coordinate type    = ", coord.coordinateType().get()
+        print self.prefix + "Coordinate type    = ", coord.coordinateType().value
       if coord.storageType().exists():
-        print self.prefix + "Storage type       = ", coord.storageType().get()
+        print self.prefix + "Storage type       = ", coord.storageType().value
       if coord.nofAxes().exists():
-        print self.prefix + "No. of axes        = ", coord.nofAxes().get()
+        print self.prefix + "No. of axes        = ", coord.nofAxes().value
       if coord.axisNames().exists():
-        print self.prefix + "Axis names         = ", coord.axisNames().get()
+        print self.prefix + "Axis names         = ", coord.axisNames().value
       if coord.axisUnits().exists():
-        print self.prefix + "Axis units         = ", coord.axisUnits().get()
+        print self.prefix + "Axis units         = ", coord.axisUnits().value
 
       #if coord.coordinateType().exists():
-      #  if coord.coordinateType().get() == "Time":
-      #    print "coord.coordinateType().get() = ", coord.coordinateType().get()
+      #  if coord.coordinateType().value == "Time":
+      #    print "coord.coordinateType().value = ", coord.coordinateType().value
       #    #self.displayTimeCoordinate(coord)
       #  else:
-      #    print "coord.coordinateType().get()", coord.coordinateType().get()
+      #    print "coord.coordinateType().value", coord.coordinateType().value
       #    self.displaySpectralCoordinate(coord)
           
   # Time coordinate information
   #
   def displayTimeCoordinate(self, coord):
     if coord.referenceFrame().exists():
-      print self.prefix + "Reference frame    = ", coord.referenceFrame().get()
+      print self.prefix + "Reference frame    = ", coord.referenceFrame().value
 
   # Spectral coordinate information
   #
   def displaySpectralCoordinate(self, coord):
     if coord.referenceFrame().exists():
-      print self.prefix + "Reference frame    = ", coord.referenceFrame().get()
+      print self.prefix + "Reference frame    = ", coord.referenceFrame().value
     if coord.restFrequency().exists():
-      print self.prefix + "Rest frequency     = ", coord.restFrequency().get()
+      print self.prefix + "Rest frequency     = ", coord.restFrequency().value
     if coord.restFrequencyUnit().exists():
-      print self.prefix + "Rest frequency unit = ", coord.restFrequencyUnit().get()
+      print self.prefix + "Rest frequency unit = ", coord.restFrequencyUnit().value
     if coord.restWavelength().exists():
-      print self.prefix + "Rest wavelength    = ", coord.restWavelength().get()
+      print self.prefix + "Rest wavelength    = ", coord.restWavelength().value
     if coord.restWavelengthUnit().exists():
-      print self.prefix + "Rest wavelength unit = ", coord.restWavelengthUnit().get()
+      print self.prefix + "Rest wavelength unit = ", coord.restWavelengthUnit().value
 
 
   def handleArg(self, arg):
