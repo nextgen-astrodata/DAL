@@ -61,9 +61,9 @@ class bfmeta:
     if self.fh.observationEndUTC().exists():
       print "UTC end time           = ", self.fh.observationEndUTC().value
     if self.fh.observationStartMJD().exists():
-      print "MJD start time         = %(mjd)16.9f" %{'mjd':self.fh.observationStartMJD().value}
+      print "MJD start time         = %(mjd)19.12f" %{'mjd':self.fh.observationStartMJD().value}
     if self.fh.observationEndMJD().exists():
-      print "MJD end time           = %(mjd)16.9f" %{'mjd':self.fh.observationEndMJD().value}
+      print "MJD end time           = %(mjd)19.12f" %{'mjd':self.fh.observationEndMJD().value}
     if self.fh.observationStartTAI().exists():
       print "TAI start time         = ", self.fh.observationStartTAI().value
     if self.fh.observationEndTAI().exists():
