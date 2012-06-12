@@ -66,10 +66,10 @@ public:
   virtual TBB_DipoleDataset             dipole( const std::string &dipoleName );
 };
 
-class TBB_DipoleDataset: public Dataset<short> {
+class TBB_DipoleDataset: public Dataset<int16_t> {
 public:
-  TBB_DipoleDataset(): Dataset<short>(0) {}
-  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<short>(parent, name) {}
+  TBB_DipoleDataset(): Dataset<int16_t>(0) {}
+  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<int16_t>(parent, name) {}
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();
