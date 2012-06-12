@@ -1,5 +1,5 @@
-#ifndef __CASATBBFILEEXTEND__
-#define __CASATBBFILEEXTEND__
+#ifndef DAL_CASATBBFILEEXTEND_H
+#define DAL_CASATBBFILEEXTEND_H
 
 #include <casa/Measures/MPosition.h>
 #include "dal/hdf5/exceptions/exceptions.h"

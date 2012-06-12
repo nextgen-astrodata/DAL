@@ -1,5 +1,5 @@
-#ifndef __COMMONTUPLES__
-#define __COMMONTUPLES__
+#ifndef DAL_COMMONTUPLES_H
+#define DAL_COMMONTUPLES_H
 
 #include "dal/hdf5/types/h5tuple.h"
 

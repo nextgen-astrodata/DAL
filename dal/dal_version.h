@@ -1,5 +1,5 @@
-#ifndef __DALVERSION__
-#define __DALVERSION__
+#ifndef DAL_DAL_VERSION_H
+#define DAL_DAL_VERSION_H
 
 #include <string>
 #include <cstdio>

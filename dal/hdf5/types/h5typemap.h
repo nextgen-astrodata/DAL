@@ -1,5 +1,5 @@
-#ifndef __H5TYPEMAP__
-#define __H5TYPEMAP__
+#ifndef DAL_H5TYPEMAP_H
+#define DAL_H5TYPEMAP_H
 
 #include <hdf5.h>
 #include "hid_gc.h"

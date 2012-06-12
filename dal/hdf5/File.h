@@ -1,5 +1,5 @@
-#ifndef __HDF5_FILE_BASE__
-#define __HDF5_FILE_BASE__
+#ifndef DAL_FILE_H
+#define DAL_FILE_H
 
 #include <string>
 #include <hdf5.h>

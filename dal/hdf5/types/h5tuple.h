@@ -1,5 +1,5 @@
-#ifndef __H5TUPLE__
-#define __H5TUPLE__
+#ifndef DAL_H5TUPLE_H
+#define DAL_H5TUPLE_H
 
 #include <hdf5.h>
 #include <algorithm>

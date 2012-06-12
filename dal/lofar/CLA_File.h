@@ -1,5 +1,5 @@
-#ifndef __CLA_FILE__
-#define __CLA_FILE__
+#ifndef DAL_CLA_FILE_H
+#define DAL_CLA_FILE_H
 
 #include <string>
 #include <vector>

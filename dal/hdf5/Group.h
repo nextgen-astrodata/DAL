@@ -1,5 +1,5 @@
-#ifndef __HDF5_GROUP_BASE__
-#define __HDF5_GROUP_BASE__
+#ifndef DAL_GROUP_H
+#define DAL_GROUP_H
 
 #include <string>
 #include <vector>

@@ -1,5 +1,5 @@
-#ifndef __ISSAME__
-#define __ISSAME__
+#ifndef DAL_ISSAME_H
+#define DAL_ISSAME_H
 
 namespace DAL {
 

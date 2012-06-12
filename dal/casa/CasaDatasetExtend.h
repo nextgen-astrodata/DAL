@@ -1,5 +1,5 @@
-#ifndef __CASADATASETEXTEND__
-#define __CASADATASETEXTEND__
+#ifndef DAL_CASADATASETEXTEND_H
+#define DAL_CASADATASETEXTEND_H
 
 #include <casa/Arrays/Array.h>
 #include "dal/hdf5/exceptions/exceptions.h"

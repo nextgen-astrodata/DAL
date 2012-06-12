@@ -1,5 +1,5 @@
-#ifndef __H5ERRORSTACK__
-#define __H5ERRORSTACK__
+#ifndef DAL_ERRORSTACK_H
+#define DAL_ERRORSTACK_H
 
 #include <hdf5.h>
 #include <string>

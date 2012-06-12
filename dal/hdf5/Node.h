@@ -1,5 +1,5 @@
-#ifndef __HDF5_NODE__
-#define __HDF5_NODE__
+#ifndef DAL_NODE_H
+#define DAL_NODE_H
 
 #include <string>
 #include <map>

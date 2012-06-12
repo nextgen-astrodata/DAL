@@ -1,5 +1,5 @@
-#ifndef __BF_FILE__
-#define __BF_FILE__
+#ifndef DAL_BF_FILE_H
+#define DAL_BF_FILE_H
 
 #include <string>
 #include <hdf5.h>

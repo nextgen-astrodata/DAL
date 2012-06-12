@@ -1,5 +1,5 @@
-#ifndef __HDF5_DATASET_BASE__
-#define __HDF5_DATASET_BASE__
+#ifndef DAL_DATASET_H
+#define DAL_DATASET_H
 
 #include <string>
 #include <vector>

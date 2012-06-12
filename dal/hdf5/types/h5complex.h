@@ -1,5 +1,5 @@
-#ifndef __H5COMPLEX__
-#define __H5COMPLEX__
+#ifndef DAL_H5COMPLEX_H
+#define DAL_H5COMPLEX_H
 
 #include <complex>
 #include <hdf5.h>

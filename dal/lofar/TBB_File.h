@@ -1,5 +1,5 @@
-#ifndef __TBB_FILE__
-#define __TBB_FILE__
+#ifndef DAL_TBB_FILE_H
+#define DAL_TBB_FILE_H
 
 #include <string>
 #include <vector>

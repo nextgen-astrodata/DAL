@@ -1,5 +1,5 @@
-#ifndef __HDF5_ATTRIBUTE__
-#define __HDF5_ATTRIBUTE__
+#ifndef DAL_ATTRIBUTE_H
+#define DAL_ATTRIBUTE_H
 
 #include <string>
 #include <vector>

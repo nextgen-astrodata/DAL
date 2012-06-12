@@ -1,5 +1,5 @@
-#ifndef __H5EXCEPTION__
-#define __H5EXCEPTION__
+#ifndef DAL_EXCEPTIONS_H
+#define DAL_EXCEPTIONS_H
 
 #include <stdexcept>
 #include <string>
