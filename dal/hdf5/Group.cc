@@ -157,11 +157,11 @@ vector<string> Group::memberNames() {
 
   // Loop around H5Lget_name_by_idx(). Can also use H5Literate(), but it is more fuss for what we need here.
   char linkName[128];
-  hid_gc_noref lapl(H5Pcreate(H5P_LINK_ACCESS), H5Pclose, "Could not create link access property list for group " + _name);
   for (size_t i = 0; i < groupInfo.nlinks; i++) {
-    ssize_t size = H5Lget_name_by_idx(group(), ".", H5_INDEX_CRT_ORDER, H5_ITER_NATIVE, i, linkName, sizeof linkName, lapl);
+	// Use H5_INDEX_NAME, because for H5_INDEX_CRT_ORDER, we it had to be created with a creation index (and we don't care).
+    ssize_t size = H5Lget_name_by_idx(group(), ".", H5_INDEX_NAME, H5_ITER_NATIVE, i, linkName, sizeof linkName, H5P_DEFAULT);
     if (size < 0)
-      throw HDF5Exception("could not get link name by index for group " + _name);
+      throw HDF5Exception("could not get link name by index for group " + _name); // TODO: _name is "" for TBB_File::stations(); should be "/"
 
     names.push_back(linkName);
   }
