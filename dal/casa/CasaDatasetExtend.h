@@ -2,7 +2,7 @@
 #define __CASADATASETEXTEND__
 
 #include <casa/Arrays/Array.h>
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 #include "Dataset.h"
 
 namespace DAL {

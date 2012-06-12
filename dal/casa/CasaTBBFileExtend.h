@@ -2,7 +2,7 @@
 #define __CASATBBFILEEXTEND__
 
 #include <casa/Measures/MPosition.h>
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 #include "TBB_File.h"
 #include "CasaDatasetExtend.h"
 #include "Attribute.h"
