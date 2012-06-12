@@ -23,13 +23,19 @@ void BF_File::initNodes() {
   addNode( new Attribute<double>(*this, "EXPTIME_END_MJD") );
   addNode( new Attribute<string>(*this, "EXPTIME_END_TAI") );
   addNode( new Attribute<double>(*this, "TOTAL_INTEGRATION_TIME") );
+  addNode( new Attribute<string>(*this, "TOTAL_INTEGRATION_TIME_UNIT") );
   addNode( new Attribute<string>(*this, "OBSERVATION_DATATYPE") );
   addNode( new Attribute<double>(*this, "SUB_ARRAY_POINTING_DIAMETER") );
+  addNode( new Attribute<string>(*this, "SUB_ARRAY_POINTING_DIAMETER_UNIT") );
   addNode( new Attribute<double>(*this, "BANDWIDTH") );
+  addNode( new Attribute<string>(*this, "BANDWIDTH_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER") );
   addNode( new Attribute< vector<double> >(*this, "WEATHER_TEMPERATURE") );
+  addNode( new Attribute<string>(*this, "WEATHER_TEMPERATURE_UNIT") );
   addNode( new Attribute< vector<double> >(*this, "WEATHER_HUMIDITY") );
+  addNode( new Attribute<string>(*this, "WEATHER_HUMIDITY_UNIT") );
   addNode( new Attribute< vector<double> >(*this, "SYSTEM_TEMPERATURE") );
+  addNode( new Attribute<string>(*this, "SYSTEM_TEMPERATURE_UNIT") );
   addNode( new Attribute<unsigned>(*this, "NOF_SUB_ARRAY_POINTINGS") );
 }
 
@@ -83,6 +89,11 @@ Attribute<double> BF_File::totalIntegrationTime()
   return getNode("TOTAL_INTEGRATION_TIME");
 }
 
+Attribute<string> BF_File::totalIntegrationTimeUnit()
+{
+  return getNode("TOTAL_INTEGRATION_TIME_UNIT");
+}  
+  
 Attribute<string> BF_File::observationDatatype()
 {
   return getNode("OBSERVATION_DATATYPE");
@@ -93,31 +104,61 @@ Attribute<double> BF_File::subArrayPointingDiameter()
   return getNode("SUB_ARRAY_POINTING_DIAMETER");
 }
 
+Attribute<string> BF_File::subArrayPointingDiameterUnit()
+{
+  return getNode("SUB_ARRAY_POINTING_DIAMETER_UNIT");
+}  
+  
 Attribute<double> BF_File::bandwidth()
 {
   return getNode("BANDWIDTH");
 }
 
+Attribute<string> BF_File::bandwidthUnit()
+{
+  return getNode("BANDWIDTH_UNIT");
+}
+  
 Attribute<double> BF_File::beamDiameter()
 {
   return getNode("BEAM_DIAMETER");
 }
 
+Attribute<string> BF_File::beamDiameterUnit()
+{
+  return getNode("BEAM_DIAMETER_UNIT");
+}
+  
 Attribute< vector<double> > BF_File::weatherTemperature()
 {
   return getNode("WEATHER_TEMPERATURE");
 }
 
+Attribute<string> BF_File::weatherTemperatureUnit()
+{
+  return getNode("WEATHER_TEMPERATURE_UNIT");
+}
+  
 Attribute< vector<double> > BF_File::weatherHumidity()
 {
   return getNode("WEATHER_HUMIDITY");
 }
 
+Attribute<string> BF_File::weatherHumidityUnit()
+{
+  return getNode("WEATHER_HUMIDITY_UNIT");
+}  
+  
 Attribute< vector<double> > BF_File::systemTemperature()
 {
   return getNode("SYSTEM_TEMPERATURE");
 }
 
+Attribute<string> BF_File::systemTemperatureUnit()
+{
+  return getNode("SYSTEM_TEMPERATURE_UNIT");
+}
+  
 Attribute<unsigned> BF_File::nofSubArrayPointings()
 {
   return getNode("NOF_SUB_ARRAY_POINTINGS");
