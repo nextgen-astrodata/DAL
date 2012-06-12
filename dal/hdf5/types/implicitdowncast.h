@@ -1,6 +1,8 @@
 #ifndef __IMPLICITDOWNCAST__
 #define __IMPLICITDOWNCAST__
 
+#include "isderivedfrom.h"
+
 namespace DAL {
 
 /*!
@@ -34,6 +36,10 @@ public:
 
   // the cast-operator can be templated based on return-type: just what we need!
   template<typename D> operator D&() {
+    // trigger a compile error if an incompatible cast is requested
+    IsDerivedFrom<D,B> type_safety;
+    (void)type_safety;
+
     return dynamic_cast<D&>(base);
   }
 

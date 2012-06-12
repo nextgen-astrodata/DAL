@@ -47,7 +47,7 @@ And the following code reads it back out::
 
   int main {
     DAL::CLA_File f("example.h5");
-    std::cout << f.observationID().value << std::endl;
+    cout << f.observationID().value << endl;
   }
 
   [Python]
@@ -357,6 +357,28 @@ Yielding::
 Basic API
 *********
 
+The following sections will explain basic functionality offered by the DAL to work with both HDF5 files in general, and with predefined file formats in particular. To keep the code examples short, they all assume a context in which HDF5 classes have been imported::
+
+  [C++]
+  #include <dal/hdf5/File.h>
+  ... include necessary DAL headers ...
+  #include <dal/hdf5/Attribute.h>
+  #include <iostream>
+
+  using namespace DAL;
+  using namespace std;
+
+  int main() {
+    ... insert example here ...
+  }
+
+  [Python]
+  from DAL import *
+
+  ... insert example here ...
+
+Also, most examples assume that files and variables created by previous examples are still available.
+
 ====
 File
 ====
@@ -373,7 +395,7 @@ Similarly, to create a new HDF5 file, use::
 
 The file is closed when all object references to it (by a File object or anything else) are destructed.
 
-.. warning::
+.. note::
 
   Thread safety: DAL, like the HDF5 library, is not thread safe. Please use your own locks surrounding concurrent access to the same file.
 
@@ -423,14 +445,14 @@ Again, the file ``f`` can also be substituted for a group ``g``, if the attribut
 
 to (create and) set attribute ``a``. To read it, simply do::
 
-  [C++]    std::cout << a.value << std::endl;
+  [C++]    cout << a.value << endl;
   [Python] print a.value
 
 .. note::
 
   In C++, an exception will be thrown if you try to read an attribute that does not exist. In Python, the special value ``None`` is returned instead.
 
-The previous examples only addressed attributes of type ``std::string``/``str``. The following basic value types are supported by the DAL, along with their C++ and Python class name:
+The previous examples only addressed attributes of type ``string``/``str``. The following basic value types are supported by the DAL, along with their C++ and Python class name:
 
 +---------------------+----------------------------------+------------------+----------------------------+
 | C++ data type       | C++ Attribute class              | Python data type | Python Attribute class     |
@@ -508,9 +530,135 @@ Again, we can test using the ``exists()`` method whether the data set exists. Th
   if not d.exists():
     d.create( [10, 20] )
 
+The DAL provides several functions to query the dimensionality of an existing data set::
+
+  [C++]
+  const size_t rank = d.ndims();
+  const vector<ssize_t> dims = d.dims();
+
+  for (size_t i = 0; i < rank; i++)
+    cout << "Dimension " << i << " has size " << dims[i] << endl;
+
+  [Python]
+  rank = d.ndims()
+  dims = d.dims()
+
+  for i in range(rank):
+    print "Dimension %u has size %u" % (i, dims[i])
+
+Individual elements can be set using the ``getScalar`` and ``setScalar`` methods. For example, to read and write the element at [1,2]::
+
+  [C++]
+  const vector<size_t> pos(2);
+  pos[0] = 1;
+  pos[1] = 2;
+
+  cout << "Element at [1,2] = " << d.getScalar(pos) << endl;
+  d.setScalar(pos, 42.0);
+  cout << "Element at [1,2] = " << d.getScalar(pos) << endl;
+
+  [Python]
+  pos = [1,2]
+
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+  d.setScalar(pos, 42.0)
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+
+The data set can also be sliced to access blocks of elements in a single call, which is a lot faster than accessing each element individually. In C++, data is referred to using raw pointers and providing the sizes of the slice. In Python, the numpy library is used to represent raw data. The example below extracts a 2D slice of data from our data set using the ``get2D`` and ``set2D`` methods. It reads and writes a block of size 3x3 starting at location [1,2] in the data set::
+
+  [C++]
+  const vector<size_t> pos(2);
+  pos[0] = 1;
+  pos[1] = 2;
+
+  cout << "Element [1,2] = " << d.getScalar(pos) << endl;
+
+  // a pointer to any data set will do, for instance, these all work:
+  //
+  // data type:                         pointer to first element:
+  // -----------------------------------------------------
+  // float data[3][3]                   &data[0][0]
+  // float data[3 * 3]                  &data[0]
+  // vector<float> data(3 * 3)          &data[0]
+  // float *data = new float[3 * 3]     data
+  float data[3][3];
+
+  d.get2D( pos, 3, 3, &data[0][0] );
+  data[0][0] = 1.0;
+  d.set2D( pos, 3, 3, &data[0][0] );
+
+  cout << "Element [1,2] = " << d.getScalar(pos) << endl;
+
+  [Python]
+  pos = [1,2]
+
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+
+  # we need a numpy array for data storage; the dataset provides
+  # us with the numpy data type that we need to use
+
+  import numpy
+  data = numpy.zeros((3, 3), dtype=d.dtype)
+
+  d.get2D(pos, data)
+
+  data[1][1] = 1.0
+  d.set2D(pos, data)
+
+  print "Element at [1,2] = %.2f" % d.getScalar(pos)
+
 **********
 Exceptions
 **********
+
+Almost all of the DAL functions can throw an exception in case of an error. The following exceptions can be thrown:
+
++---------------------------+----------------------+-------------------------+
+| C++ exception             | Python exception     | Meaning                 |
++===========================+======================+=========================+
+| ``DALException``          | ``RuntimeError``     | Something went wrong    |
+| ``+-- HDF5Exception``     | ``DAL.HDF5Exception``| HDF5 threw an error     |
+| ``+-- DALValueError``     | ``ValueError``       | Invalid parameter value |
+| ``    +-- DALIndexError`` | ``IndexError``       | Out-of-bounds access    |
++---------------------------+----------------------+-------------------------+
+
+All exceptions carry an error message (``e.what()`` in C++ and ``str(e)`` in Python) explaining what went wrong.
+
+=========================
+HDF5Exception error stack
+=========================
+
+The HDF5Exception indicates an error generated by the HDF5 library used by DAL. It carries a copy of the error stack inside the HDF5 library, which provides a more detailed explanation of what was attempted and why it failed. The error stack of an HDF5Exception can be accessed as follows::
+
+  [C++]
+  try {
+    File f("non_existing_file.h5");
+  } catch( HDF5Exception &e ) {
+    // print the error message
+    cout << e.what() << endl;
+
+    // print a summary
+    cout << e.stackSummary() << endl;
+
+    // inspect each stack line individually -- each line has both a shortDesc() and a longDesc()
+    for( vector<HDF5StackLine>::const_iterator i = e.stack.stack.begin(); i != e.stack.stack.end(); i++ )
+      cout << (*i).shortDesc() << endl;
+  }
+
+  [Python]
+  try:
+    f = File("non_existing_file.h5")
+  except HDF5Exception, e:
+    # print the error message
+    print e
+
+    # print a summary
+
+    # inspect each stack line individually -- each line has both a shortDesc() and a longDesc()
+
+.. note::
+
+  Inspecting HDF5 error stacks in Python is not yet implemented.
 
 ***********************
 Predefined file formats
@@ -528,7 +676,7 @@ The DAL allows wrapping *predefined file formats*, of which the group structure 
 
 The way this works is that ``CLA_File.observationID`` actually wraps the appropriate Attribute class for us. It indirectly returns::
 
-  Attribute<std::string>(f, "OBSERVATION_ID")
+  Attribute<string>(f, "OBSERVATION_ID")
 
 without requiring the user to know the actual key name and type (or allowing the user to make a mistake in supplying them). The same construct is used to create groups and datasets as defined in a file format, allowing robust and reliable access to files adhering to a specified standard.
 
@@ -607,6 +755,63 @@ In a predefined file format implemented through the DAL, one can thus annotate e
 =============
 Introspection
 =============
+
+Classes that wrap predefined file formats can be written such that each group maintains a list of all of the attributes that should be present in files conforming to the file format. This list of *registered* attributes can be introspected, in order to iteratively process all required attributes. The ``nodeNames()`` method present in each Group provides a list of attribute names that the class knows about. The ``getNode()`` method subsequently returns a requested attribute as the appropriate type::
+
+  [C++]
+  CLA_File f("example.h5");
+
+  cout << setw(40) << "HDF5 Node name" << "   supp" << " exists" << "  valid" << endl;
+
+  const vector<string> nodeNames = f.nodeNames();
+
+  for (vector<string>::const_iterator i = nodeNames.begin(); i != nodeNames.end(); i++) {
+    string name = *i;
+
+    // cast to a common base class
+    AttributeBase &node = f.getNode(name);
+
+    // whether the attribute is supported by the version of this file.
+    // i.e. node.minVersion <= node.fileVersion()
+    bool supported = node.supported();
+
+    // whether the node exists in the file
+    bool exists = node.exists();
+
+    // whether the node is valid (exists and is (or can be converted to) the correct type)
+    bool valid = node.valid();
+
+    // due to C++'s static typing, we can't retrieve the value if we don't know the attribute type
+    // ??? value = node.value;
+
+    cout << setw(40) << name << setw(7) << supported << setw(7) << exists << setw(7) << valid << endl;
+
+    print "%40s %6s %6s %6s %s" % (n, supported, exists, valid, node.value)
+  }
+
+  [Python]
+  f = CLA_File("example.h5")
+
+  print "%40s %6s %6s %6s %s" % ("HDF5 Node name", "supp", "exists", "valid", "value")
+
+  for name in f.nodeNames():
+    node = f.getNode(name)
+
+    # whether the attribute is supported by the version of this file.
+    # i.e. node.minVersion <= node.fileVersion()
+    supported = node.supported()
+
+    # whether the node exists in the file
+    exists = node.exists()
+
+    # whether the node is valid (exists and is (or can be converted to) the correct type)
+    valid = node.valid()
+
+    # the value of this node (None if the attribute does not exist)
+    value = node.value
+
+    print "%40s %6s %6s %6s %s" % (n, supported, exists, valid, node.value)
+
 
 ===============================
 Supporting your own file format
