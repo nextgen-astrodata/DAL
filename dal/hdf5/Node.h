@@ -1,11 +1,11 @@
-#ifndef __HDF5_NODE__
-#define __HDF5_NODE__
+#ifndef DAL_NODE_H
+#define DAL_NODE_H
 
 #include <string>
 #include <map>
 #include <vector>
 #include <typeinfo>
-#include "exceptions/h5exception.h"
+#include "exceptions/exceptions.h"
 #include "types/hid_gc.h"
 #include "types/implicitdowncast.h"
 #include "types/versiontype.h"

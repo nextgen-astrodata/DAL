@@ -1,8 +1,8 @@
-#ifndef __HIDGC__
-#define __HIDGC__
+#ifndef DAL_HID_GC_H
+#define DAL_HID_GC_H
 
 #include <hdf5.h>
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 
 namespace DAL {
 

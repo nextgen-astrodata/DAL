@@ -1,10 +1,10 @@
-#ifndef __H5TUPLE__
-#define __H5TUPLE__
+#ifndef DAL_H5TUPLE_H
+#define DAL_H5TUPLE_H
 
 #include <hdf5.h>
 #include <algorithm>
 #include "hid_gc.h"
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 
 namespace DAL {
 
@@ -87,7 +87,7 @@ public:
    */
   void set( const std::vector<T> &other ) {
     if (other.size() != size())
-      throw DALValueError("Tuples can only be initialised with vectors of the same size");
+      throw DALValueError("Can not set a tuple using a vector of a different size");
 
     std::copy(other.begin(), other.end(), begin());
   }

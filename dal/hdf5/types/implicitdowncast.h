@@ -1,5 +1,5 @@
-#ifndef __IMPLICITDOWNCAST__
-#define __IMPLICITDOWNCAST__
+#ifndef DAL_IMPLICITDOWNCAST_H
+#define DAL_IMPLICITDOWNCAST_H
 
 #include "isderivedfrom.h"
 

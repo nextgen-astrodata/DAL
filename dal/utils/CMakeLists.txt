@@ -1,6 +1,7 @@
 if(PYTHON_BINDINGS)
   install (PROGRAMS
     bfheaderinfo.py
+    tbb-lostframes.py
     DESTINATION bin
   ) 
 

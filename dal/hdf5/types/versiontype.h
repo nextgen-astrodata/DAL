@@ -1,5 +1,5 @@
-#ifndef __VERSIONTYPE__
-#define __VERSIONTYPE__
+#ifndef DAL_VERSIONTYPE_H
+#define DAL_VERSIONTYPE_H
 
 #include <string>
 

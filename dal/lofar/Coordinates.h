@@ -1,5 +1,5 @@
-#ifndef __COORDINATES__
-#define __COORDINATES__
+#ifndef DAL_COORDINATES_H
+#define DAL_COORDINATES_H
 
 #include <string>
 #include <hdf5.h>

@@ -1,5 +1,5 @@
-#ifndef __BF_FILE__
-#define __BF_FILE__
+#ifndef DAL_BF_FILE_H
+#define DAL_BF_FILE_H
 
 #include <string>
 #include <hdf5.h>
@@ -41,17 +41,24 @@ public:
   Attribute<std::string>  expTimeEndTAI();
 
   Attribute<double>       totalIntegrationTime();
-
+  Attribute<std::string>  totalIntegrationTimeUnit();
+  
   Attribute<std::string>  observationDatatype();
 
   Attribute<double>       subArrayPointingDiameter();
+  Attribute<std::string>  subArrayPointingDiameterUnit();
   Attribute<double>       bandwidth();
+  Attribute<std::string>  bandwidthUnit();
   Attribute<double>       beamDiameter();
-
+  Attribute<std::string>  beamDiameterUnit();
+  
   Attribute< std::vector<double> >      weatherTemperature();
+  Attribute<std::string>                weatherTemperatureUnit();
   Attribute< std::vector<double> >      weatherHumidity();
+  Attribute<std::string>                weatherHumidityUnit();
   Attribute< std::vector<double> >      systemTemperature();
-
+  Attribute<std::string>                systemTemperatureUnit();
+  
   Attribute<unsigned>     nofSubArrayPointings();
   virtual BF_SubArrayPointing subArrayPointing( unsigned nr );
 

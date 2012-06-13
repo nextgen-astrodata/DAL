@@ -37,10 +37,10 @@
 }
 
 %{
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 %}
 
-%include "hdf5/exceptions/h5exception.h"
+%include "hdf5/exceptions/exceptions.h"
 
 %extend DAL::HDF5Exception {
   %pythoncode {
@@ -82,7 +82,7 @@
 /*
  * Marshall and extend HDF5 error stack classes.
  */
-%include "hdf5/exceptions/h5errorstack.h"
+%include "hdf5/exceptions/errorstack.h"
 
 %template(VectorStackLine)        std::vector<DAL::HDF5StackLine>;
 

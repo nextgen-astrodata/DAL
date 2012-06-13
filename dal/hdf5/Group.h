@@ -1,5 +1,5 @@
-#ifndef __HDF5_GROUP_BASE__
-#define __HDF5_GROUP_BASE__
+#ifndef DAL_GROUP_H
+#define DAL_GROUP_H
 
 #include <string>
 #include <vector>
@@ -123,8 +123,8 @@ protected:
 
   std::vector<std::string> memberNames();
 
-  // constructor for root group
-  Group( const hid_gc &fileid );
+  // constructor for root group (and default initialized sub-class obj; undesirable)
+  Group( const hid_gc &fileId );
 
 private:
   //! The map containing all (registered) nodes in this set

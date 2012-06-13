@@ -1,7 +1,7 @@
 #include "dal/dal_config.h"
 #include "dal/dal_version.h"
-#include "dal/hdf5/exceptions/h5errorstack.h"
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/errorstack.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 #include <hdf5.h>
 
 namespace DAL {

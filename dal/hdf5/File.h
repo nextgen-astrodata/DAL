@@ -1,5 +1,5 @@
-#ifndef __HDF5_FILE_BASE__
-#define __HDF5_FILE_BASE__
+#ifndef DAL_FILE_H
+#define DAL_FILE_H
 
 #include <string>
 #include <hdf5.h>
@@ -31,7 +31,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  File( const std::string &filename, enum fileMode mode = READ, const std::string versionAttrName = "VERSION" );
+  File( const std::string &filename, enum fileMode mode = READ, const std::string &versionAttrName = "VERSION" );
 
   /*!
    * Commit any changes to disk.

@@ -1,5 +1,5 @@
-#ifndef __ISDERIVEDFROM__
-#define __ISDERIVEDFROM__
+#ifndef DAL_ISDERIVEDFROM_H
+#define DAL_ISDERIVEDFROM_H
 
 namespace DAL {
 

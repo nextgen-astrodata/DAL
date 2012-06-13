@@ -1,5 +1,5 @@
-#ifndef __TBB_FILE__
-#define __TBB_FILE__
+#ifndef DAL_TBB_FILE_H
+#define DAL_TBB_FILE_H
 
 #include <string>
 #include <vector>
@@ -44,6 +44,7 @@ public:
 
 class TBB_Station: public Group {
 public:
+  TBB_Station(): Group(0) {}
   TBB_Station( Group &parent, const std::string &name ): Group(parent, name) {}
 
   Attribute<std::string>                stationName();
@@ -65,9 +66,10 @@ public:
   virtual TBB_DipoleDataset             dipole( const std::string &dipoleName );
 };
 
-class TBB_DipoleDataset: public Dataset<short> {
+class TBB_DipoleDataset: public Dataset<int16_t> {
 public:
-  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<short>(parent, name) {}
+  TBB_DipoleDataset(): Dataset<int16_t>(0) {}
+  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<int16_t>(parent, name) {}
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();

@@ -1,9 +1,9 @@
-#ifndef __H5EXCEPTION__
-#define __H5EXCEPTION__
+#ifndef DAL_EXCEPTIONS_H
+#define DAL_EXCEPTIONS_H
 
 #include <stdexcept>
 #include <string>
-#include "dal/hdf5/exceptions/h5errorstack.h"
+#include "dal/hdf5/exceptions/errorstack.h"
 
 namespace DAL {
 

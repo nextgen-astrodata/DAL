@@ -1,11 +1,11 @@
-#ifndef __HDF5_DATASET_BASE__
-#define __HDF5_DATASET_BASE__
+#ifndef DAL_DATASET_H
+#define DAL_DATASET_H
 
 #include <string>
 #include <vector>
 #include <hdf5.h>
 #include "types/hid_gc.h"
-#include "exceptions/h5exception.h"
+#include "exceptions/exceptions.h"
 #include "Group.h"
 
 namespace DAL {
@@ -214,8 +214,11 @@ protected:
   void matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read );
 
   virtual void create() {
-    throw HDF5Exception("create() without parameters not supported on a dataset");
+    throw HDF5Exception("create() without parameters not supported on a dataset " + _name);
   }
+
+  // constructor default initialized sub-class obj; undesirable
+  Dataset( const hid_gc &fileId ) : Group(fileId) { }
 };
 
 }

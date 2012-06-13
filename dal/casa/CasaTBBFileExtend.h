@@ -1,8 +1,8 @@
-#ifndef __CASATBBFILEEXTEND__
-#define __CASATBBFILEEXTEND__
+#ifndef DAL_CASATBBFILEEXTEND_H
+#define DAL_CASATBBFILEEXTEND_H
 
 #include <casa/Measures/MPosition.h>
-#include "dal/hdf5/exceptions/h5exception.h"
+#include "dal/hdf5/exceptions/exceptions.h"
 #include "TBB_File.h"
 #include "CasaDatasetExtend.h"
 #include "Attribute.h"
@@ -41,12 +41,12 @@ protected:
     using namespace casa;
 
     if (values.size() != 3)
-      throw HDF5Exception("Values must be an array of length 3");
+      throw HDF5Exception("Cannot get position with a values vector that is not of length 3");
 
     MPosition::Types type;
 
     if (!MPosition::getType(type, frame))
-      throw HDF5Exception("Invalid position type");
+      throw HDF5Exception("Cannot get position with invalid position type");
 
     switch (type) {
       case MPosition::ITRF:
@@ -58,7 +58,7 @@ protected:
                                     Quantity(values[2], String(unit))), type);
 
       default:
-        throw HDF5Exception("Cannot convert position type");
+        throw HDF5Exception("Cannot get position with an unsupported position type");
     }
   }
 };
