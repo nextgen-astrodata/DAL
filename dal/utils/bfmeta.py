@@ -6,8 +6,7 @@
 # File:         bfmeta.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-02
-# Last change:  2012-06-06
-
+# Last change:  2012-06-13
 
 import sys
 import DAL
@@ -69,15 +68,15 @@ class bfmeta:
     if self.fh.observationEndTAI().exists():
       print "TAI end time           = ", self.fh.observationEndTAI().value
     if self.fh.totalIntegrationTime().exists():
-      print "Total integration time = %(ti) %(tiu)" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
+      print "Total integration time = %(ti).2f %(tiu)s" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
     if self.fh.observationDatatype().exists():
       print "Observation datatype   = ", self.fh.observationDatatype().value
     if self.fh.subArrayPointingDiameter().exists():
-      print "Subarray pointing diameter = %(sapd) %(sapdu)" %{'sapd':self.fh.subArrayPointingDiameter().value, 'sapdu':self.fh.subArrayPointingDiameterUnit().value}
+      print "Subarray pointing diameter = %(sapd).2f %(sapdu)s" %{'sapd':self.fh.subArrayPointingDiameter().value, 'sapdu':self.fh.subArrayPointingDiameterUnit().value}
     if self.fh.bandwidth().exists():
-      print "Bandwidth              = %(bw) %(bwu)" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidth().value}
+      print "Bandwidth              = %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}
     if self.fh.beamDiameter().exists():
-      print "Beam diameter          = %(bd) %(bdu)" %{'bd':self.fh.beamDiameter().value, 'bdu':self.fh.beamDiameterUnit().value}
+      print "Beam diameter          = %(bd).2f %(bdu)s" %{'bd':self.fh.beamDiameter().value, 'bdu':self.fh.beamDiameterUnit().value}
     if self.fh.nofSubArrayPointings().exists():
       print "No. of SAP             = ", self.fh.nofSubArrayPointings().value
     self.prefix=bcolors.ENDC      # reset printing options
@@ -120,7 +119,7 @@ class bfmeta:
     if sap.stationsList().exists():
       print self.prefix + "Stationlist            = ", sap.stationsList().value
     if sap.pointRA().exists():
-      print self.prefix + "pointing RA            = ", sap.pointRA().value
+      print self.prefix + "pointing RA            = %(pra)3.10%f %(prau)s" %{ 'pra': sap.pointRA().value, 'prau': sap.pointRAUnit().value}
     if sap.pointDEC().exists():
       print self.prefix + "pointing DEC           = ", sap.pointDEC().value
     if sap.clockRate().exists() and sap.clockRateUnit().exists()==False:

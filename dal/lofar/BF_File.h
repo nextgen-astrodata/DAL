@@ -94,7 +94,9 @@ public:
   Attribute< std::vector<std::string> > stationsList();
 
   Attribute<double>       pointRA();
+  Attribute<std::string>  pointRAUnit();  
   Attribute<double>       pointDEC();
+  Attribute<std::string>  pointDECUnit();  
 
   Attribute<double>       clockRate();
   Attribute<std::string>  clockRateUnit();
@@ -130,13 +132,19 @@ public:
   Attribute< std::vector<std::string> > stationsList();
 
   Attribute<double>       pointRA();
+  Attribute<std::string>  pointRAUnit();    
   Attribute<double>       pointDEC();
-
+  Attribute<std::string>  pointDECUnit();  
+  
   Attribute<double>       pointOffsetRA();
+  Attribute<std::string>  pointOffsetRAUnit();  
   Attribute<double>       pointOffsetDEC();
+  Attribute<std::string>  pointOffsetDECUnit();  
 
   Attribute<double>       beamDiameterRA();
+  Attribute<std::string>  beamDiameterRAUnit();
   Attribute<double>       beamDiameterDEC();
+  Attribute<std::string>  beamDiameterDECUnit();
   Attribute<double>       beamFrequencyCenter();
   Attribute<std::string>  beamFrequencyCenterUnit();
 

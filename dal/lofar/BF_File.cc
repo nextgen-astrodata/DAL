@@ -211,7 +211,9 @@ void BF_SubArrayPointing::initNodes() {
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
+  addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
+  addNode( new Attribute<string>(*this, "POINT_DEC_UNIT") );
   addNode( new Attribute<double>(*this, "CLOCK_RATE") );
   addNode( new Attribute<string>(*this, "CLOCK_RATE_UNIT") );
   addNode( new Attribute<unsigned>(*this, "NOF_SAMPLES") );
@@ -242,9 +244,19 @@ Attribute<double> BF_SubArrayPointing::pointRA()
   return getNode("POINT_RA");
 }
 
+Attribute<string> BF_SubArrayPointing::pointRAUnit()
+{
+  return getNode("POINT_RA_UNIT");
+}
+
 Attribute<double> BF_SubArrayPointing::pointDEC()
 {
   return getNode("POINT_DEC");
+}
+
+Attribute<string> BF_SubArrayPointing::pointDECUnit()
+{
+  return getNode("POINT_DEC_UNIT");
 }
 
 Attribute<double> BF_SubArrayPointing::clockRate()
@@ -331,11 +343,17 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
+  addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
+  addNode( new Attribute<double>(*this, "POINT_DEC_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_OFFSET_RA") );
+  addNode( new Attribute<string>(*this, "POINT_OFFSET_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_OFFSET_DEC") );
+  addNode( new Attribute<string>(*this, "POINT_OFFSET_DEC_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER_RA") );
+  addNode( new Attribute<string>(*this, "BEAM_DIAMETER_RA_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER_DEC") );
+  addNode( new Attribute<string>(*this, "BEAM_DIAMETER_DEC_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_FREQUENCY_CENTER") );
   addNode( new Attribute<string>(*this, "BEAM_FREQUENCY_CENTER_UNIT") );
   addNode( new Attribute<bool>(*this, "FOLDED_DATA") );
@@ -366,9 +384,19 @@ Attribute<double> BF_BeamGroup::pointRA()
   return getNode("POINT_RA");
 }
 
+Attribute<string> BF_BeamGroup::pointRAUnit()
+{
+  return getNode("POINT_RA_UNIT");
+}
+
 Attribute<double> BF_BeamGroup::pointDEC()
 {
   return getNode("POINT_DEC");
+}
+
+Attribute<string> BF_BeamGroup::pointDECUnit()
+{
+  return getNode("POINT_DEC_UNIT");
 }
 
 Attribute<double> BF_BeamGroup::pointOffsetRA()
@@ -376,9 +404,19 @@ Attribute<double> BF_BeamGroup::pointOffsetRA()
   return getNode("POINT_OFFSET_RA");
 }
 
+Attribute<string> BF_BeamGroup::pointOffsetRAUnit()
+{
+  return getNode("POINT_OFFSET_RA_UNIT");
+}
+
 Attribute<double> BF_BeamGroup::pointOffsetDEC()
 {
   return getNode("POINT_OFFSET_DEC");
+}
+
+Attribute<string> BF_BeamGroup::pointOffsetDECUnit()
+{
+  return getNode("POINT_OFFSET_DEC_UNIT");
 }
 
 Attribute<double> BF_BeamGroup::beamDiameterRA()
@@ -386,9 +424,19 @@ Attribute<double> BF_BeamGroup::beamDiameterRA()
   return getNode("BEAM_DIAMETER_RA");
 }
 
+Attribute<string> BF_BeamGroup::beamDiameterRAUnit()
+{
+  return getNode("BEAM_DIAMETER_RA_UNIT");
+}
+
 Attribute<double> BF_BeamGroup::beamDiameterDEC()
 {
   return getNode("BEAM_DIAMETER_DEC");
+}
+
+Attribute<string> BF_BeamGroup::beamDiameterDECUnit()
+{
+  return getNode("BEAM_DIAMETER_DEC_UNIT");
 }
 
 Attribute<double> BF_BeamGroup::beamFrequencyCenter()
