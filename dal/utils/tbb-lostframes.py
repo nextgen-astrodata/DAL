@@ -6,24 +6,25 @@
 # File:         tbb-lostframes.py
 # Author:       Alexander S. van Amesfoort (amesfoort_at_astron.nl)
 # Date:         2012-06-11
-# Last change:  2012-06-11
+# Last change:  2012-06-13
 
 import sys
 import numpy
 import DAL
 
-def get_lost_frame_nrs(arr, block_len):
+def get_lost_frame_nrs(data, block_len):
 	lost_frame_nrs = [ ]
 
-	for frame in range(0, len(arr), block_len):
-		all_zero = true
-		for offset in range(frame, frame + block_len):
-			if arr[offset] != 0:
-				all_zeros = false
+	for frame_nr in range((len(data) + block_len-1) / block_len):
+		all_zeros = True
+		# min(): avoid out of bounds access if last frame is shorter than block_len
+		for offset in range(min(block_len, len(data) - frame_nr * block_len)):
+			if data[offset] != 0:
+				all_zeros = False
 				break
 
-		if not all_zeros:
-			lost_frame_nrs.append(frame)
+		if all_zeros:
+			lost_frame_nrs.append(frame_nr)
 
 	return lost_frame_nrs
 
@@ -37,19 +38,26 @@ def print_lost_frame_nrs(filename):
 	for st in station_groups:
 		dipole_datasets = st.dipoles();
 		for dp in dipole_datasets:
-			arr = numpy.zeros((len(dp), ), dtype=dp.dtype) # TODO: needs len to work on TBB_DipoleDataset
-			#arr = numpy.array(dp, dtype=dp.dtype) # TODO: works if Python version of TBB_DipoleDataset exposes the array interface, __array__ returns an array or (nested) sequence
-			total_frames += len(arr)
-			block_len = dp.samplesPerFrame().value # always 1024
-			lost_frame_nrs = get_lost_frame_nrs(arr, block_len)
-			if lost_frame_nrs:
-				print('Station', st.stationName().value, 'Dipole', str(dp.rcpId().value) + str(rcuId().value) + ':', 'zeroed frame numbers of size', block_len + ':')
-				for frame_nr in lost_frame_nrs:
-					print(frame_nr, '')
-				total_lost += block_len # TODO: doesn't account for lost frames at the end...
+			data_len = len(dp) # actual data len; should be equal to dp.dataLength().get()
+			data = numpy.zeros((data_len, ), dtype=dp.dtype)
+			#data = numpy.array(dp, dtype=dp.dtype) # TODO: works if Python version of TBB_DipoleDataset exposes the array interface, __array__ returns an array or (nested) sequence
+			pos = (0, ) # must be a tuple, even for 1D
+			#dp.get1D(pos, data_len, data)
+			dp.get1D((data_len, ), data)
 
-	if total_lost:
-		print('Data loss:', total_lost, '/', total_frames, '(' + total_lost / total_frames * 100.0 + '%)')
+			block_len = 1024 #dp.samplesPerFrame().get() # always 1024
+			total_frames += (data_len + block_len-1) / block_len # rounded up division
+			lost_frame_nrs = get_lost_frame_nrs(data, block_len)
+			if lost_frame_nrs: # does not account for missing frames at the end
+				total_lost += len(lost_frame_nrs)
+				print 'Station', st.stationName().value, 'rsp', str(dp.rspID().value), 'rcu', str(dp.rcuID().value) + ':', 'zeroed frame numbers of size', str(block_len) + ':'
+				for frame_nr in lost_frame_nrs:
+					print frame_nr,
+				print
+
+	if lost_frame_nrs:
+		print
+		print 'Total data loss:', total_lost, '/', total_frames, '(' + str(total_lost / total_frames * 100.0) + '%)'
 
 def print_usage():
 	print 'Usage:', sys.argv[0], 'L12345_xxx_tbb.h5 ...'
@@ -63,6 +71,8 @@ def main():
 	try:
 		for filename in filenames:
 			print_lost_frame_nrs(filename)
+	except KeyboardInterrupt as exc:
+		return 1
 	except Exception as exc:
 		sys.stderr.write('Error: ' + str(exc) + '\n')
 		return 1
