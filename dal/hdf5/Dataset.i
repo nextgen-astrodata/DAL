@@ -45,7 +45,7 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 %include hdf5/Dataset.h
 
 namespace DAL {
-  %template(DatasetShort)        Dataset<short>;
+  %template(DatasetInt16T)       Dataset<int16_t>;
   %template(DatasetFloat)        Dataset<float>;
   %template(DatasetComplexFloat) Dataset< std::complex<float> >;
 }
