@@ -33,7 +33,7 @@ Group::~Group() {
 }
 
 void Group::create() {
-  hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list for group " + _name);
+  hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list to create group " + _name);
 
   _group = hid_gc(H5Gcreate2(parent, _name.c_str(), H5P_DEFAULT, gcpl, H5P_DEFAULT), H5Gclose, "Could not create group " + _name);
 }
@@ -48,7 +48,7 @@ bool Group::exists() const {
 
 void Group::remove() const {
   if (H5Ldelete(parent, _name.c_str(), H5P_DEFAULT) < 0)
-    throw HDF5Exception("Could not delete group " + _name); 
+    throw HDF5Exception("Could not remove group " + _name); 
 }
 
 void Group::set( const Group &other, bool deepcopy ) {
@@ -57,18 +57,18 @@ void Group::set( const Group &other, bool deepcopy ) {
     remove();
   }
 
-  hid_gc ocpl(H5Pcreate(H5P_OBJECT_COPY), H5Pclose, "Could not create object creation property list for group " + _name);
+  hid_gc ocpl(H5Pcreate(H5P_OBJECT_COPY), H5Pclose, "Could not create object creation property list to set group " + _name);
 
   if (!deepcopy) {
     // do a shallow copy
     if (H5Pset_copy_object(ocpl, H5O_COPY_SHALLOW_HIERARCHY_FLAG) < 0) {
-      throw HDF5Exception("Could not enable shallow copy mode for group " + _name);
+      throw HDF5Exception("Could not enable shallow copy mode to set group " + _name);
     }
   }
 
   // H5Ocopy allows us to copy all properties, subgroups, etc, even across files
   if (H5Ocopy(other.parent, other._name.c_str(), parent, _name.c_str(), ocpl, H5P_DEFAULT) < 0)
-    throw HDF5Exception("Could not copy object for group " + _name);
+    throw HDF5Exception("Could not copy object to set group " + _name);
 }
 
 hid_gc Group::open( hid_t parent, const std::string &name ) const
@@ -97,10 +97,10 @@ const hid_gc &Group::group() {
 void Group::addNode( Node *attr )
 {
   if (!attr)
-    throw DALValueError("attr cannot be NULL");
+    throw DALValueError("Could not add NULL node");
 
   if (nodeMap.find(attr->name()) != nodeMap.end())
-    throw DALValueError("Node already exists: " + attr->name()); 
+    throw DALValueError("Could not add already existing node " + attr->name()); 
 
   nodeMap[attr->name()] = attr;
 }
@@ -108,7 +108,7 @@ void Group::addNode( Node *attr )
 void Group::ensureNodesExist()
 {
   if (!exists())
-    throw DALException("Cannot access nodes in a non-existing group " + _name);
+    throw DALException("Could not access nodes in a non-existing group " + _name);
 
   if (!mapInitialised) {
     initNodes();
@@ -121,7 +121,7 @@ ImplicitDowncast<Node> Group::getNode( const std::string &name )
   ensureNodesExist();
  
   if (nodeMap.find(name) == nodeMap.end())
-    throw DALValueError(string("Node not found: ") + name);
+    throw DALValueError("Could not get (find) node " + name);
 
   return *nodeMap[name];
 }
@@ -153,15 +153,15 @@ vector<string> Group::memberNames() {
   H5G_info_t groupInfo;
 
   if (H5Gget_info(group(), &groupInfo) < 0)
-    throw HDF5Exception("could not get info for group " + _name);
+    throw HDF5Exception("Could not get info with number of member names for group " + _name);
 
   // Loop around H5Lget_name_by_idx(). Can also use H5Literate(), but it is more fuss for what we need here.
   char linkName[128];
   for (size_t i = 0; i < groupInfo.nlinks; i++) {
-	// Use H5_INDEX_NAME, because for H5_INDEX_CRT_ORDER, we it had to be created with a creation index (and we don't care).
+    // Use H5_INDEX_NAME, because for H5_INDEX_CRT_ORDER, we it had to be created with a creation index (and we don't care).
     ssize_t size = H5Lget_name_by_idx(group(), ".", H5_INDEX_NAME, H5_ITER_NATIVE, i, linkName, sizeof linkName, H5P_DEFAULT);
     if (size < 0)
-      throw HDF5Exception("could not get link name by index for group " + _name); // TODO: _name is "" for TBB_File::stations(); should be "/"
+      throw HDF5Exception("Could not get link member name by index for group " + _name); // TODO: _name is "" for TBB_File::stations(); should be "/"
 
     names.push_back(linkName);
   }

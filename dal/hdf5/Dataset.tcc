@@ -8,7 +8,7 @@ template<typename T> void Dataset<T>::create( const std::vector<ssize_t> &dims, 
   const size_t rank = dims.size();
 
   if (!maxdims.empty() && maxdims.size() != rank)
-    throw DALValueError("Current and maximum dimensions vectors must have equal length; dataset " + _name);
+    throw DALValueError("Current and maximum dimensions vectors must have equal length to create dataset " + _name);
 
   // convert from ssize_t -> hsize_t
   std::vector<hsize_t> hdims(rank), hmaxdims(rank);
@@ -23,11 +23,11 @@ template<typename T> void Dataset<T>::create( const std::vector<ssize_t> &dims, 
   // define the layout and the location of the data
   hid_gc_noref filespace(H5Screate_simple(rank, &hdims[0], &hmaxdims[0]), H5Sclose, "Could not create simple dataspace " + _name);
 
-  hid_gc_noref dcpl(H5Pcreate(H5P_DATASET_CREATE), H5Pclose, "Could not create dataset creation property list for dataset " + _name);
+  hid_gc_noref dcpl(H5Pcreate(H5P_DATASET_CREATE), H5Pclose, "Could not create dataset creation property list to create dataset " + _name);
   H5Pset_layout(dcpl, H5D_CONTIGUOUS);
   if (filename != "") {
     if (H5Pset_external(dcpl, filename.c_str(), 0, H5F_UNLIMITED) < 0)
-      throw HDF5Exception("Could not add external file to dataset " + _name);
+      throw HDF5Exception("Could not add external file to create dataset " + _name);
   }
 
   // create the dataset
@@ -40,12 +40,12 @@ template<typename T> size_t Dataset<T>::ndims()
   // ndims() might lead to concurrency issues. Maybe only cache if data
   // is read-only or only allow access through this API?
 
-  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset " + _name);
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not get dataspace to get number of dimenstions of dataset " + _name);
 
   int rank = H5Sget_simple_extent_ndims(dataspace);
 
   if (rank < 0)
-    throw HDF5Exception("Could not obtain rank of dataspace " + _name);
+    throw HDF5Exception("Could not get number of dimensions of dataset " + _name);
 
   return rank;
 }
@@ -56,10 +56,10 @@ template<typename T> std::vector<ssize_t> Dataset<T>::dims()
   std::vector<hsize_t> dims(rank);
   std::vector<ssize_t> result(rank);
 
-  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset " + _name);
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not get dataspace to get number of dimensions of dataset " + _name);
 
   if (H5Sget_simple_extent_dims(dataspace, &dims[0], NULL) < 0)
-    throw HDF5Exception("Could not obtain dimensions of dataspace " + _name);
+    throw HDF5Exception("Could not get number of dimensions of dataset " + _name);
 
   for (size_t i = 0; i < rank; i++) {
     result[i] = dims[i];
@@ -74,10 +74,10 @@ template<typename T> std::vector<ssize_t> Dataset<T>::maxdims()
   std::vector<hsize_t> maxdims(rank);
   std::vector<ssize_t> result(rank);
 
-  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not obtain dataspace of dataset " + _name);
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not get dataspace to get maximum number of dimensions of dataset " + _name);
 
   if (H5Sget_simple_extent_dims(dataspace, &maxdims[0], NULL) < 0)
-    throw HDF5Exception("Could not obtain maximum dimensions of dataspace " + _name);
+    throw HDF5Exception("Could not get maximum number of dimensions of dataset " + _name);
 
   for (size_t i = 0; i < rank; i++) {
     result[i] = maxdims[i];
@@ -92,7 +92,7 @@ template<typename T> void Dataset<T>::resize( const std::vector<ssize_t> &newdim
   std::vector<hsize_t> newdims_hsize_t(rank);
 
   if (newdims.size() != rank)
-    throw DALValueError("resize() cannot change the number of dimensions; dataset " + _name);
+    throw DALValueError("Cannot resize the number of dimensions of dataset " + _name);
 
   for (size_t i = 0; i < rank; i++ ) {
     newdims_hsize_t[i] = newdims[i];
@@ -104,19 +104,19 @@ template<typename T> void Dataset<T>::resize( const std::vector<ssize_t> &newdim
 
 template<typename T> std::vector<std::string> Dataset<T>::externalFiles()
 {
-  hid_gc_noref dcpl(H5Dget_create_plist(group()), H5Pclose, "Could not open dataset creation property list for dataset " + _name);
+  hid_gc_noref dcpl(H5Dget_create_plist(group()), H5Pclose, "Could not open dataset creation property list to get external files of dataset " + _name);
 
   int numfiles = H5Pget_external_count(dcpl);
 
   if (numfiles < 0)
-    throw HDF5Exception("Could not obtain number of external files for dataset " + _name);
+    throw HDF5Exception("Could not get number of external files for dataset " + _name);
 
   std::vector<std::string> files(numfiles);
 
   for (int i = 0; i < numfiles; i++) {
     char buf[1024];
     if (H5Pget_external(dcpl, i, sizeof buf, buf, NULL, NULL) < 0)
-      throw HDF5Exception("Could not obtain file name of external file for dataset " + _name);
+      throw HDF5Exception("Could not get file name of external file for dataset " + _name);
 
     // null-terminate in case file name is >=1024 characters long
     buf[sizeof buf - 1] = 0;
@@ -146,17 +146,17 @@ template<typename T> void Dataset<T>::get2D( const std::vector<size_t> &pos, siz
   std::vector<size_t> size(ndims(),1);
 
   if (size.size() < 2)
-    throw DALValueError("get2D requires a dataset of at least 2 dimensions; dataset " + _name);
+    throw DALValueError("Cannot get2D on fewer than 2 dimensional dataset " + _name);
 
   if (dim1index >= size.size())
-    throw DALIndexError("First dimension index exceeds rank for dataset " + _name);
+    throw DALIndexError("Cannot get2D if first dimension index exceeds rank for dataset " + _name);
 
   if (dim2index >= size.size())
-    throw DALIndexError("Second dimension index exceeds rank for dataset " + _name);
+    throw DALIndexError("Cannot get2D if second dimension index exceeds rank for dataset " + _name);
 
   // we don't do transposes
   if (dim1index >= dim2index)
-    throw DALValueError("Dimensions must be addressed in-order; dataset " + _name);
+    throw DALValueError("Cannot get2D if dimensions are not addressed in-order for dataset " + _name);
 
   size[dim1index] = dim1;
   size[dim2index] = dim2;
@@ -169,17 +169,17 @@ template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos, siz
   std::vector<size_t> size(ndims(),1);
 
   if (size.size() < 2)
-    throw DALValueError("set2D requires a dataset of at least 2 dimensions; dataset " + _name);
+    throw DALValueError("Cannot set2D on fewer than 2 dimensional dataset " + _name);
 
   if (dim1index >= size.size())
-    throw DALIndexError("First dimension index exceeds rank for dataset " + _name);
+    throw DALIndexError("Cannot set2D if first dimension index exceeds rank for dataset " + _name);
 
   if (dim2index >= size.size())
-    throw DALIndexError("Second dimension index exceeds rank for dataset " + _name);
+    throw DALIndexError("Cannot set2D if second dimension index exceeds rank for dataset " + _name);
 
   // we don't do transposes
   if (dim1index >= dim2index)
-    throw DALValueError("Dimensions must be addressed in-order; dataset " + _name);
+    throw DALValueError("Cannot set2D if dimensions are not addressed in-order for dataset " + _name);
 
   size[dim1index] = dim1;
   size[dim2index] = dim2;
@@ -192,7 +192,7 @@ template<typename T> void Dataset<T>::get1D( const std::vector<size_t> &pos, siz
   std::vector<size_t> size(ndims(),1);
 
   if (dim1index >= size.size())
-    throw DALIndexError("Dimension index exceeds rank of dataset " + _name);
+    throw DALIndexError("Cannot get1D if index exceeds rank of dataset " + _name);
 
   size[dim1index] = dim1;
 
@@ -204,7 +204,7 @@ template<typename T> void Dataset<T>::set1D( const std::vector<size_t> &pos, siz
   std::vector<size_t> size(ndims(),1);
 
   if (dim1index >= size.size())
-    throw DALIndexError("Dimension index exceeds rank of dataset " + _name);
+    throw DALIndexError("Cannot set1D if index exceeds rank of dataset " + _name);
 
   size[dim1index] = dim1;
 
@@ -257,10 +257,10 @@ template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos, 
   std::vector<hsize_t> offset(rank), count(rank), stride(rank);
 
   if (pos.size() != rank)
-    throw DALValueError("Specified position does not match dimensionality of dataset " + _name);
+    throw DALValueError("Cannot perform matrixIO if specified position does not match dimensionality of dataset " + _name);
 
   if (size.size() != rank)
-    throw DALValueError("Specified block size does not match dimensionality of dataset " + _name);
+    throw DALValueError("Cannot perform matrixIO if specified block size does not match dimensionality of dataset " + _name);
 
   for (size_t i = 0; i < rank; i++) {
     offset[i] = pos[i];
@@ -270,7 +270,7 @@ template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos, 
   hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not retrieve dataspace " + _name);
 
   if (H5Sselect_hyperslab(dataspace, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL) < 0)
-    throw HDF5Exception("Could not select hyperslab in dataspace " + _name);
+    throw HDF5Exception("Could not select hyperslab to perform matrixIO on dataset " + _name);
 
   if (use_strides) {
     // HDF5 doesn't support strides directly (*), so we present it with a larger continuous array which matches
@@ -292,7 +292,7 @@ template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos, 
     }
   }
 
-  hid_gc_noref memspace(H5Screate_simple(rank, &count[0], NULL), H5Sclose, "Could not create simple dataspace " + _name);
+  hid_gc_noref memspace(H5Screate_simple(rank, &count[0], NULL), H5Sclose, "Could not create simple dataspace to perform matrixIO on dataset " + _name);
 
   for (size_t i = 0; i < rank; i++) {
     offset[i] = 0;
@@ -300,15 +300,15 @@ template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos, 
   }
 
   if (H5Sselect_hyperslab(memspace, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL) < 0)
-    throw HDF5Exception("Could not select hyperslab in dataspace " + _name);
+    throw HDF5Exception("Could not select hyperslab (2) to perform matrixIO on dataset " + _name);
 
 
   if (read) {
     if (H5Dread(group(), h5typemap<T>::memoryType(), memspace, dataspace, H5P_DEFAULT, buffer) < 0)
-      throw HDF5Exception("Could not read data from dataset " + _name);
+      throw HDF5Exception("Could not perform matrixIO to read data from dataset " + _name);
   } else {
     if (H5Dwrite(group(), h5typemap<T>::memoryType(), memspace, dataspace, H5P_DEFAULT, buffer) < 0)
-      throw HDF5Exception("Could not write data to dataset " + _name);
+      throw HDF5Exception("Could not perform matrixIO to write data to dataset " + _name);
   }    
 }
 

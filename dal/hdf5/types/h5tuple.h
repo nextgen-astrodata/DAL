@@ -87,7 +87,7 @@ public:
    */
   void set( const std::vector<T> &other ) {
     if (other.size() != size())
-      throw DALValueError("Tuples can only be initialised with vectors of the same size");
+      throw DALValueError("Can not set a tuple using a vector of a different size");
 
     std::copy(other.begin(), other.end(), begin());
   }

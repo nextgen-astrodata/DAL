@@ -38,7 +38,7 @@ hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
   switch (mode) {
     case CREATE:
       {
-        hid_gc_noref fapl(H5Pcreate(H5P_FILE_ACCESS), H5Pclose, "Could not create file access property list");
+        hid_gc_noref fapl(H5Pcreate(H5P_FILE_ACCESS), H5Pclose, "Could not create file access property list to create file " + filename);
 
         /*
          * We want to use 1.8 features, but always be able to read back any created file.
@@ -51,16 +51,16 @@ hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
 #else // >= 1.10
         if (H5Pset_libver_bounds(fapl, H5F_LIBVER_18, H5F_LIBVER_18) < 0)
 #endif
-          return -1;
+          return -1; // TODO: throw exception
 
-        return hid_gc(H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl), H5Fclose, "Could not create file");
+        return hid_gc(H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl), H5Fclose, "Could not create file " + filename);
       }  
 
     case READ:  
-      return hid_gc(H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT), H5Fclose, "Could not open file for read-only access");
+      return hid_gc(H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT), H5Fclose, "Could not open file for read-only access; file " + filename);
 
     case READWRITE:  
-      return hid_gc(H5Fopen(filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT), H5Fclose, "Could not open file for read-write access");
+      return hid_gc(H5Fopen(filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT), H5Fclose, "Could not open file for read-write access; file " + filename);
 
     default:
       return 0;
