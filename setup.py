@@ -31,7 +31,7 @@ else:
   hdf5_lib     = "/opt/cep/hdf5/lib"
 
 DAL_module = Extension('_DAL',
-			sources=['DAL.i', 'CommonAttributesFile.cc', 'BF_File.cc', 'TBB_File.cc', 'File.cc', 'Group.cc'],
+			sources=['DAL.i', 'CLA_File.cc', 'BF_File.cc', 'TBB_File.cc', 'File.cc', 'Group.cc'],
 			include_dirs=[hdf5_include, numpy_include],
 			library_dirs=[hdf5_lib],
 			extra_compile_args=['-include','%s/hdf5.h' % hdf5_include], # force right hdf5.h instead of from /usr/include
