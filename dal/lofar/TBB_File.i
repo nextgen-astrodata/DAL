@@ -1,5 +1,5 @@
-%include dal/lofar/TBB_File.h
+AddVector( TBB_Station,       DAL::TBB_Station );
+AddVector( TBB_DipoleDataset, DAL::TBB_DipoleDataset );
 
-AddVector( TBB_Station,       TBB_Station );
-AddVector( TBB_DipoleDataset, TBB_DipoleDataset );
+%include dal/lofar/TBB_File.h
 
