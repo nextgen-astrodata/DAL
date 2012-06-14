@@ -289,7 +289,7 @@ template<> inline std::string Attribute<std::string>::get() const
   struct D {
     char * &buf;
 
-    ~D() { free(buf); }
+    ~D() { std::free(buf); }
 
   } destructor = { buf };
   (void)destructor;
@@ -306,7 +306,7 @@ template<> inline std::string Attribute<std::string>::get() const
   } else {
     // string type on disk is fixed -- allocate memory and read it
     size_t diskdatasize = H5Tget_size(diskdatatype);
-    buf = static_cast<char*>(malloc(diskdatasize));
+    buf = static_cast<char*>(std::malloc(diskdatasize));
 
     if (!buf)
       throw DALException("Could not allocate memory to get attribute " + _name);
@@ -371,8 +371,8 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
     std::vector<char *> &c_strs;
 
     ~D() {
-       for (unsigned i = 0; i < c_strs.size(); i++)
-         free(c_strs[i]);
+       for (unsigned i = c_strs.size(); i > 0; )
+         std::free(c_strs[--i]);
      }  
 
   } destructor = { c_strs };
