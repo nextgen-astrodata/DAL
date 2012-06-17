@@ -41,7 +41,7 @@ def main():
     filename=args[0]
     fh=DAL.BF_File(filename)      # open file
 
-    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, verbose=options.verbose)
+    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes) #verbose=options.verbose)
 
 # Entry point on call
 #  
