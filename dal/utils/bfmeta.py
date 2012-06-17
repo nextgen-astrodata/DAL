@@ -6,7 +6,7 @@
 # File:         bfmeta.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-02
-# Last change:  2012-06-13
+# Last change:  2012-06-17
 
 import sys
 import DAL
@@ -38,7 +38,7 @@ class bfmeta:
   # Display information about BF_File
   #
   def displayFileInfo(self):
-    print "displayFileInfo()"       # DEBUG
+    #print "displayFileInfo()"       # DEBUG
     if self.fh.telescope().exists():
       print "Telescope              = ", self.fh.telescope().value
     if self.fh.observer().exists():
@@ -68,15 +68,15 @@ class bfmeta:
     if self.fh.observationEndTAI().exists():
       print "TAI end time           = ", self.fh.observationEndTAI().value
     if self.fh.totalIntegrationTime().exists():
-      print "Total integration time = %(ti).2f %(tiu)s" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
+      print "Total integration time =  %(ti).2f %(tiu)s" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
     if self.fh.observationDatatype().exists():
       print "Observation datatype   = ", self.fh.observationDatatype().value
     if self.fh.subArrayPointingDiameter().exists():
-      print "Subarray pointing diameter = %(sapd).2f %(sapdu)s" %{'sapd':self.fh.subArrayPointingDiameter().value, 'sapdu':self.fh.subArrayPointingDiameterUnit().value}
+      print "Subarray pointing diameter = %(sapd)7.2f %(sapdu)s" %{'sapd':self.fh.subArrayPointingDiameter().value, 'sapdu':self.fh.subArrayPointingDiameterUnit().value}
     if self.fh.bandwidth().exists():
-      print "Bandwidth              = %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}
+      print "Bandwidth              =  %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}
     if self.fh.beamDiameter().exists():
-      print "Beam diameter          = %(bd).2f %(bdu)s" %{'bd':self.fh.beamDiameter().value, 'bdu':self.fh.beamDiameterUnit().value}
+      print "Beam diameter          =  %(bd).2f %(bdu)s" %{'bd':self.fh.beamDiameter().value, 'bdu':self.fh.beamDiameterUnit().value}
     if self.fh.nofSubArrayPointings().exists():
       print "No. of SAP             = ", self.fh.nofSubArrayPointings().value
     self.prefix=bcolors.ENDC      # reset printing options
@@ -119,9 +119,9 @@ class bfmeta:
     if sap.stationsList().exists():
       print self.prefix + "Stationlist            = ", sap.stationsList().value
     if sap.pointRA().exists():
-      print self.prefix + "pointing RA            = %(pra)3.10%f %(prau)s" %{ 'pra': sap.pointRA().value, 'prau': sap.pointRAUnit().value}
+      print self.prefix + "pointing RA            =  %(pra)3.10f %(prau)s" %{ 'pra': sap.pointRA().value, 'prau': sap.pointRAUnit().value}
     if sap.pointDEC().exists():
-      print self.prefix + "pointing DEC           = ", sap.pointDEC().value
+      print self.prefix + "pointing DEC           =  %(decra)4.10f %(decrau)s" %{'decra': sap.pointDEC().value, 'decrau': sap.pointDECUnit().value}
     if sap.clockRate().exists() and sap.clockRateUnit().exists()==False:
       #sys.stdout.write(self.prefix + "Clock rate             = "+str(sap.clockRate().value))
       print self.prefix + "Clock rate             = ", sap.clockRate().value
@@ -194,6 +194,7 @@ class bfmeta:
 
     # Only beams with selected Stokes components
     if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
+      print self.prefix + "Stokes component " + str(self.stokes) + " doesn't exist in beam Nr. " + str(nr)
       return
 
     if beam.nofStations().exists():
@@ -216,7 +217,6 @@ class bfmeta:
       print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().value
     if beam.beamFrequencyCenter().exists() and beam.beamFrequencyCenterUnit().exists():
       print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().value, beam.beamFrequencyCenterUnit().value
-#      sys.stdout.write(beam.beamFrequencyCenterUnit().value)
     if beam.foldedData().exists():
       print self.prefix + "folded data            = ", beam.foldedData().value
     if beam.foldPeriod().exists() and beam.foldPeriodUnit().exists()==False:
@@ -226,9 +226,7 @@ class bfmeta:
     if beam.dedispersion().exists():
       print self.prefix + "dedispersion           = ", beam.dedispersion().value
     if beam.dedispersionMeasure().exists():
-      sys.stdout.write(self.prefix + "dedispersion Measure   = " + str(beam.dedispersionMeasure().value))
-    if beam.dedispersionMeasureUnit().exists():
-      print " " + beam.dedispersionMeasureUnit().value
+      print self.prefix + "dedispersion Measure   =  %(dm) %(dmu)" %{'dm': beam.dedispersionMeasure().value, 'dmu': beam.dedispersionMeasureUnit().value}
     if beam.barycentered().exists():
       print self.prefix + "barycentered           = ", beam.barycentered().value
     if beam.nofStokes().exists():
@@ -271,7 +269,7 @@ class bfmeta:
       self.prefix=bcolors.ENDC
       print self.prefix
       return
-
+    print self.prefix + "-----------------------------------"
     if stokes.stokesComponent().exists():
       print self.prefix + "Stokes             = ", stokes.stokesComponent().value    
     if stokes.nofChannels().exists():

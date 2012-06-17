@@ -39,7 +39,7 @@ def main():
     parser.print_help()
     sys.exit()
   else:
-    filename=sys.argv[1]
+    filename=args[0]
     fh=DAL.BF_File(filename)      # open file
 
     bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, verbose=options.verbose)
