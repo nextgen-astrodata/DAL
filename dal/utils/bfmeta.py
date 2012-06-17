@@ -190,7 +190,6 @@ class bfmeta:
 
     print self.prefix + "------------------------------------"
     print self.prefix + "Beam Nr                = ", nr
-        
 
     # Only beams with selected Stokes components
     if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
