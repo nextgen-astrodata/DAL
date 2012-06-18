@@ -30,6 +30,7 @@ public:
   TBB_File( const std::string &filename, enum fileMode mode = READ );
 
   virtual TBB_SysLog     sysLog();
+  Attribute<unsigned>    nofStations();
   virtual std::vector<TBB_Station> stations();
   virtual TBB_Station    station( const std::string &stationName );
 
@@ -62,6 +63,7 @@ public:
 
   Attribute<double>                     triggerOffset();
 
+  Attribute<unsigned>                   nofDipoles();
   virtual std::vector<TBB_DipoleDataset> dipoles();
   virtual TBB_DipoleDataset             dipole( const std::string &dipoleName );
 };
