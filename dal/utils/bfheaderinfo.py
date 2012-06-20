@@ -30,19 +30,18 @@ def main():
                     action="store", type="string", help="display this beam, one out of  [0->NBeam] or 'all'")
   parser.add_option("-s", "--stokes", dest="stokes", default="all",
                     action="store", type="string", help="display these stokes one out of [IQUV], [XXYY], or 'all'")
-  parser.add_option("-v", "--verbose", dest="verbose", default=False,
-                    action="store_true", help="display verbose output")
-#  parser.add_option()
+  #parser.add_option("-v", "--verbose", dest="verbose", default=False,
+  #                  action="store_true", help="display verbose output")
   (options, args) = parser.parse_args()
   
   if len(sys.argv)==1:
     parser.print_help()
     sys.exit()
   else:
-    filename=sys.argv[1]
+    filename=args[0]
     fh=DAL.BF_File(filename)      # open file
 
-    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, verbose=options.verbose)
+    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes) #verbose=options.verbose)
 
 # Entry point on call
 #  

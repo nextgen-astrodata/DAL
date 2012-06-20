@@ -10,6 +10,11 @@ TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode )
 {
 }
 
+Attribute<unsigned> TBB_File::nofStations()
+{
+  return Attribute<unsigned>(*this, "NOF_STATIONS");
+}
+
 vector<TBB_Station> TBB_File::stations()
 {
   const string stPrefix("STATION_");
@@ -107,6 +112,11 @@ Attribute<string> TBB_Station::clockOffsetUnit()
 Attribute<double> TBB_Station::triggerOffset()
 {
   return Attribute<double>(*this, "TRIGGER_OFFSET");
+}
+
+Attribute<unsigned> TBB_Station::nofDipoles()
+{
+  return Attribute<unsigned>(*this, "NOF_DIPOLES");
 }
 
 vector<TBB_DipoleDataset> TBB_Station::dipoles()
