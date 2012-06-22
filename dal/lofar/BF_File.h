@@ -35,7 +35,7 @@ public:
   Attribute<double>       totalIntegrationTime();
   Attribute<std::string>  totalIntegrationTimeUnit();
   
-  Attribute<std::string>  observationDatatype();
+  Attribute<std::string>  observationDataType();
 
   Attribute<double>       subArrayPointingDiameter();
   Attribute<std::string>  subArrayPointingDiameterUnit();
@@ -121,6 +121,8 @@ public:
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
 
+  Attribute<bool>         tracking();
+
   Attribute<unsigned>     nofSamples();
   Attribute<double>       samplingRate();
   Attribute<std::string>  samplingRateUnit();
@@ -159,6 +161,7 @@ public:
 
   Attribute<bool>         barycentered();
 
+  Attribute<unsigned>     observationNofStokes();
   Attribute<unsigned>     nofStokes();
   Attribute< std::vector<std::string> > stokesComponents();
   Attribute<bool>         complexVoltages();
@@ -179,6 +182,8 @@ protected:
 class BF_StokesDataset: public Dataset<float> {
 public:
   BF_StokesDataset( Group &parent, const std::string &name ): Dataset<float>(parent, name) {}
+
+  Attribute<std::string>  dataType();
 
   Attribute<std::string>  stokesComponent();
   Attribute< std::vector<unsigned> >    nofChannels();

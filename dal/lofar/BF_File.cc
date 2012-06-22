@@ -59,7 +59,7 @@ Attribute<string> BF_File::totalIntegrationTimeUnit()
   return getNode("TOTAL_INTEGRATION_TIME_UNIT");
 }  
   
-Attribute<string> BF_File::observationDatatype()
+Attribute<string> BF_File::observationDataType()
 {
   return getNode("OBSERVATION_DATATYPE");
 }
@@ -328,6 +328,7 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<double>(*this, "DEDISPERSION_MEASURE") );
   addNode( new Attribute<string>(*this, "DEDISPERSION_MEASURE_UNIT") );
   addNode( new Attribute<bool>(*this, "BARYCENTERED") );
+  addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_STOKES") );
   addNode( new Attribute<unsigned>(*this, "NOF_STOKES") );
   addNode( new Attribute< vector<string> >(*this, "STOKES_COMPONENTS") );
   addNode( new Attribute<bool>(*this, "COMPLEX_VOLTAGES") );
@@ -489,6 +490,11 @@ Attribute<bool> BF_BeamGroup::barycentered()
   return getNode("BARYCENTERED");
 }
 
+Attribute<unsigned> BF_BeamGroup::observationNofStokes()
+{
+  return getNode("OBSERVATION_NOF_STOKES");
+}
+
 Attribute<unsigned> BF_BeamGroup::nofStokes()
 {
   return getNode("NOF_STOKES");
@@ -541,10 +547,16 @@ void BF_StokesDataset::initNodes()
 {
   Group::initNodes();
 
+  addNode( new Attribute<string>(*this, "DATATYPE") );
   addNode( new Attribute<string>(*this, "STOKES_COMPONENT") );
   addNode( new Attribute< vector<unsigned> >(*this, "NOF_CHANNELS") );
   addNode( new Attribute<unsigned>(*this, "NOF_SUBBANDS") );
   addNode( new Attribute<unsigned>(*this, "NOF_SAMPLES") );
+}
+
+Attribute<string> BF_StokesDataset::dataType()
+{
+  return getNode("DATATYPE");
 }
 
 Attribute<string> BF_StokesDataset::stokesComponent()
