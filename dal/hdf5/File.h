@@ -31,7 +31,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  File( const std::string &filename, enum fileMode mode = READ, const std::string &versionAttrName = "VERSION" );
+  File( const std::string &filename, enum fileMode mode = READ, const std::string &versionAttrName = "DOC_VERSION" );
 
   /*!
    * Commit any changes to disk.

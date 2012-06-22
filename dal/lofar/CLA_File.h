@@ -52,13 +52,13 @@ public:
   Attribute<std::string>  clockFrequencyUnit();
   Attribute<std::string>  antennaSet();
   Attribute<std::string>  filterSelection();
-  Attribute<std::string>  target();
+  Attribute< std::vector<std::string> >  targets();
 
   Attribute<std::string>  systemVersion();
   Attribute<std::string>  pipelineName();
   Attribute<std::string>  pipelineVersion();
-  Attribute<std::string>  ICDNumber();
-  Attribute<std::string>  ICDVersion();
+  Attribute<std::string>  docName();
+  Attribute<std::string>  docVersion();
   Attribute<std::string>  notes();
 
 protected:

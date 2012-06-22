@@ -16,12 +16,6 @@ void BF_File::initNodes() {
   addNode( new Attribute<string>(*this, "CREATE_OFFLINE_ONLINE") );
   addNode( new Attribute<string>(*this, "BF_FORMAT") );
   addNode( new Attribute<string>(*this, "BF_VERSION") );
-  addNode( new Attribute<string>(*this, "EXPTIME_START_UTC") );
-  addNode( new Attribute<double>(*this, "EXPTIME_START_MJD") );
-  addNode( new Attribute<string>(*this, "EXPTIME_START_TAI") );
-  addNode( new Attribute<string>(*this, "EXPTIME_END_UTC") );
-  addNode( new Attribute<double>(*this, "EXPTIME_END_MJD") );
-  addNode( new Attribute<string>(*this, "EXPTIME_END_TAI") );
   addNode( new Attribute<double>(*this, "TOTAL_INTEGRATION_TIME") );
   addNode( new Attribute<string>(*this, "TOTAL_INTEGRATION_TIME_UNIT") );
   addNode( new Attribute<string>(*this, "OBSERVATION_DATATYPE") );
@@ -36,6 +30,7 @@ void BF_File::initNodes() {
   addNode( new Attribute<string>(*this, "WEATHER_HUMIDITY_UNIT") );
   addNode( new Attribute< vector<double> >(*this, "SYSTEM_TEMPERATURE") );
   addNode( new Attribute<string>(*this, "SYSTEM_TEMPERATURE_UNIT") );
+  addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_SUB_ARRAY_POINTINGS") );
   addNode( new Attribute<unsigned>(*this, "NOF_SUB_ARRAY_POINTINGS") );
 }
 
@@ -52,36 +47,6 @@ Attribute<string> BF_File::BFFormat()
 Attribute<string> BF_File::BFVersion()
 {
   return getNode("BF_VERSION");
-}
-
-Attribute<string> BF_File::expTimeStartUTC()
-{
-  return getNode("EXPTIME_START_UTC");
-}
-
-Attribute<double> BF_File::expTimeStartMJD()
-{
-  return getNode("EXPTIME_START_MJD");
-}
-
-Attribute<string> BF_File::expTimeStartTAI()
-{
-  return getNode("EXPTIME_START_TAI");
-}
-
-Attribute<string> BF_File::expTimeEndUTC()
-{
-  return getNode("EXPTIME_END_UTC");
-}
-
-Attribute<double> BF_File::expTimeEndMJD()
-{
-  return getNode("EXPTIME_END_MJD");
-}
-
-Attribute<string> BF_File::expTimeEndTAI()
-{
-  return getNode("EXPTIME_END_TAI");
 }
 
 Attribute<double> BF_File::totalIntegrationTime()
@@ -158,6 +123,11 @@ Attribute<string> BF_File::systemTemperatureUnit()
 {
   return getNode("SYSTEM_TEMPERATURE_UNIT");
 }
+
+Attribute<unsigned> BF_File::observationNofSubArrayPointings()
+{
+  return getNode("OBSERVATION_NOF_SUB_ARRAY_POINTINGS");
+}
   
 Attribute<unsigned> BF_File::nofSubArrayPointings()
 {
@@ -185,58 +155,85 @@ BF_SysLog BF_File::sysLog()
 void BF_ProcessingHistory::initNodes() {
   Group::initNodes();
 
-  addNode( new Attribute<bool>(*this, "PARSET_OBS") );
-  addNode( new Attribute<bool>(*this, "LOG_PRESTO") );
-  addNode( new Attribute<bool>(*this, "PARFILE") );
+  addNode( new Attribute<string>(*this, "OBSERVATION_PARSET") );
+  addNode( new Attribute<string>(*this, "OBSERVATION_LOG") );
+  addNode( new Attribute<string>(*this, "PRESTO_PARSET") );
+  addNode( new Attribute<string>(*this, "PRESTO_LOG") );
 }
 
-Attribute<bool> BF_ProcessingHistory::parsetObs()
+Attribute<string> BF_ProcessingHistory::observationParset()
 {
-  return getNode("PARSET_OBS");
+  return getNode("OBSERVATION_PARSET");
 }
 
-Attribute<bool> BF_ProcessingHistory::logPresto()
+Attribute<string> BF_ProcessingHistory::observationLog()
 {
-  return getNode("LOG_PRESTO");
+  return getNode("OBSERVATION_LOG");
 }
 
-Attribute<bool> BF_ProcessingHistory::parFile()
+Attribute<string> BF_ProcessingHistory::prestoParset()
 {
-  return getNode("PARFILE");
+  return getNode("PRESTO_PARSET");
+}
+
+Attribute<string> BF_ProcessingHistory::prestoLog()
+{
+  return getNode("PRESTO_LOG");
 }
 
 void BF_SubArrayPointing::initNodes() {
   Group::initNodes();
 
-  addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
-  addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
+  addNode( new Attribute<string>(*this, "TARGET") );
+  addNode( new Attribute<string>(*this, "EXPTIME_START_UTC") );
+  addNode( new Attribute<double>(*this, "EXPTIME_START_MJD") );
+  addNode( new Attribute<string>(*this, "EXPTIME_START_TAI") );
+  addNode( new Attribute<string>(*this, "EXPTIME_END_UTC") );
+  addNode( new Attribute<double>(*this, "EXPTIME_END_MJD") );
+  addNode( new Attribute<string>(*this, "EXPTIME_END_TAI") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
   addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
   addNode( new Attribute<string>(*this, "POINT_DEC_UNIT") );
-  addNode( new Attribute<double>(*this, "CLOCK_RATE") );
-  addNode( new Attribute<string>(*this, "CLOCK_RATE_UNIT") );
-  addNode( new Attribute<unsigned>(*this, "NOF_SAMPLES") );
-  addNode( new Attribute<double>(*this, "SAMPLING_RATE") );
-  addNode( new Attribute<string>(*this, "SAMPLING_RATE_UNIT") );
-  addNode( new Attribute<double>(*this, "SAMPLING_TIME") );
-  addNode( new Attribute<string>(*this, "SAMPLING_TIME_UNIT") );
-  addNode( new Attribute<unsigned>(*this, "CHANNELS_PER_SUBBAND") );
   addNode( new Attribute<double>(*this, "SUBBAND_WIDTH") );
   addNode( new Attribute<string>(*this, "SUBBAND_WIDTH_UNIT") );
-  addNode( new Attribute<double>(*this, "CHANNEL_WIDTH") );
-  addNode( new Attribute<string>(*this, "CHANNEL_WIDTH_UNIT") );
+  addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_BEAMS") );
   addNode( new Attribute<unsigned>(*this, "NOF_BEAMS") );
 }
 
-Attribute<unsigned> BF_SubArrayPointing::nofStations()
+Attribute<string> BF_SubArrayPointing::target()
 {
-  return getNode("NOF_STATIONS");
+  return getNode("TARGET");
 }
 
-Attribute< vector<string> > BF_SubArrayPointing::stationsList()
+Attribute<string> BF_SubArrayPointing::expTimeStartUTC()
 {
-  return getNode("STATIONS_LIST");
+  return getNode("EXPTIME_START_UTC");
+}
+
+Attribute<double> BF_SubArrayPointing::expTimeStartMJD()
+{
+  return getNode("EXPTIME_START_MJD");
+}
+
+Attribute<string> BF_SubArrayPointing::expTimeStartTAI()
+{
+  return getNode("EXPTIME_START_TAI");
+}
+
+Attribute<string> BF_SubArrayPointing::expTimeEndUTC()
+{
+  return getNode("EXPTIME_END_UTC");
+}
+
+Attribute<double> BF_SubArrayPointing::expTimeEndMJD()
+{
+  return getNode("EXPTIME_END_MJD");
+}
+
+Attribute<string> BF_SubArrayPointing::expTimeEndTAI()
+{
+  return getNode("EXPTIME_END_TAI");
 }
 
 Attribute<double> BF_SubArrayPointing::pointRA()
@@ -259,46 +256,6 @@ Attribute<string> BF_SubArrayPointing::pointDECUnit()
   return getNode("POINT_DEC_UNIT");
 }
 
-Attribute<double> BF_SubArrayPointing::clockRate()
-{
-  return getNode("CLOCK_RATE");
-}
-
-Attribute<string> BF_SubArrayPointing::clockRateUnit()
-{
-  return getNode("CLOCK_RATE_UNIT");
-}
-
-Attribute<unsigned> BF_SubArrayPointing::nofSamples()
-{
-  return getNode("NOF_SAMPLES");
-}
-
-Attribute<double> BF_SubArrayPointing::samplingRate()
-{
-  return getNode("SAMPLING_RATE");
-}
-
-Attribute<string> BF_SubArrayPointing::samplingRateUnit()
-{
-  return getNode("SAMPLING_RATE_UNIT");
-}
-
-Attribute<double> BF_SubArrayPointing::samplingTime()
-{
-  return getNode("SAMPLING_TIME");
-}
-
-Attribute<string> BF_SubArrayPointing::samplingTimeUnit()
-{
-  return getNode("SAMPLING_TIME_UNIT");
-}
-
-Attribute<unsigned> BF_SubArrayPointing::channelsPerSubband()
-{
-  return getNode("CHANNELS_PER_SUBBAND");
-}
-
 Attribute<double> BF_SubArrayPointing::subbandWidth()
 {
   return getNode("SUBBAND_WIDTH");
@@ -309,14 +266,9 @@ Attribute<string> BF_SubArrayPointing::subbandWidthUnit()
   return getNode("SUBBAND_WIDTH_UNIT");
 }
 
-Attribute<double> BF_SubArrayPointing::channelWidth()
+Attribute<unsigned> BF_SubArrayPointing::observationNofBeams()
 {
-  return getNode("CHANNEL_WIDTH");
-}
-
-Attribute<string> BF_SubArrayPointing::channelWidthUnit()
-{
-  return getNode("CHANNEL_WIDTH_UNIT");
+  return getNode("OBSERVATION_NOF_BEAMS");
 }
 
 Attribute<unsigned> BF_SubArrayPointing::nofBeams()
@@ -337,11 +289,24 @@ BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
   return BF_BeamGroup(*this, beamName(nr));
 }
 
+BF_ProcessingHistory BF_SubArrayPointing::processHistory()
+{
+  return BF_ProcessingHistory(*this, "PROCESS_HISTORY");
+}
+
 void BF_BeamGroup::initNodes() {
   Group::initNodes();
 
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
+  addNode( new Attribute<unsigned>(*this, "NOF_SAMPLES") );
+  addNode( new Attribute<double>(*this, "SAMPLING_RATE") );
+  addNode( new Attribute<string>(*this, "SAMPLING_RATE_UNIT") );
+  addNode( new Attribute<double>(*this, "SAMPLING_TIME") );
+  addNode( new Attribute<string>(*this, "SAMPLING_TIME_UNIT") );
+  addNode( new Attribute<unsigned>(*this, "CHANNELS_PER_SUBBAND") );
+  addNode( new Attribute<double>(*this, "CHANNEL_WIDTH") );
+  addNode( new Attribute<string>(*this, "CHANNEL_WIDTH_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
   addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
@@ -377,6 +342,46 @@ Attribute<unsigned> BF_BeamGroup::nofStations()
 Attribute< vector<string> > BF_BeamGroup::stationsList()
 {
   return getNode("STATIONS_LIST");
+}
+
+Attribute<unsigned> BF_BeamGroup::nofSamples()
+{
+  return getNode("NOF_SAMPLES");
+}
+
+Attribute<double> BF_BeamGroup::samplingRate()
+{
+  return getNode("SAMPLING_RATE");
+}
+
+Attribute<string> BF_BeamGroup::samplingRateUnit()
+{
+  return getNode("SAMPLING_RATE_UNIT");
+}
+
+Attribute<double> BF_BeamGroup::samplingTime()
+{
+  return getNode("SAMPLING_TIME");
+}
+
+Attribute<string> BF_BeamGroup::samplingTimeUnit()
+{
+  return getNode("SAMPLING_TIME_UNIT");
+}
+
+Attribute<unsigned> BF_BeamGroup::channelsPerSubband()
+{
+  return getNode("CHANNELS_PER_SUBBAND");
+}
+
+Attribute<double> BF_BeamGroup::channelWidth()
+{
+  return getNode("CHANNEL_WIDTH");
+}
+
+Attribute<string> BF_BeamGroup::channelWidthUnit()
+{
+  return getNode("CHANNEL_WIDTH_UNIT");
 }
 
 Attribute<double> BF_BeamGroup::pointRA()
@@ -525,6 +530,11 @@ BF_StokesDataset BF_BeamGroup::stokes( unsigned nr )
 CoordinatesGroup BF_BeamGroup::coordinates()
 {
   return CoordinatesGroup(*this, coordinatesName());
+}
+
+BF_ProcessingHistory BF_BeamGroup::processHistory()
+{
+  return BF_ProcessingHistory(*this, "PROCESS_HISTORY");
 }
 
 void BF_StokesDataset::initNodes()

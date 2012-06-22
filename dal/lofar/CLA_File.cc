@@ -42,7 +42,7 @@ void CLA_File::initNodes()
   addNode( new Attribute<string>(*this, "CLOCK_FREQUENCY_UNIT") );
   addNode( new Attribute<string>(*this, "ANTENNA_SET") );
   addNode( new Attribute<string>(*this, "FILTER_SELECTION") );
-  addNode( new Attribute<string>(*this, "TARGET") );
+  addNode( new Attribute< vector<string> >(*this, "TARGETS") );
   addNode( new Attribute<string>(*this, "SYSTEM_VERSION") );
   addNode( new Attribute<string>(*this, "PIPELINE_NAME") );
   addNode( new Attribute<string>(*this, "PIPELINE_VERSION") );
@@ -191,9 +191,9 @@ Attribute<string> CLA_File::filterSelection()
   return getNode("FILTER_SELECTION");
 }
 
-Attribute<string> CLA_File::target()
+Attribute< vector<string> > CLA_File::targets()
 {
-  return getNode("TARGET");
+  return getNode("TARGETS");
 }
 
 Attribute<string> CLA_File::systemVersion()
@@ -211,14 +211,14 @@ Attribute<string> CLA_File::pipelineVersion()
   return getNode("PIPELINE_VERSION");
 }
 
-Attribute<string> CLA_File::ICDNumber()
+Attribute<string> CLA_File::docName()
 {
-  return getNode("ICD_NUMBER");
+  return getNode("DOC_NAME");
 }
 
-Attribute<string> CLA_File::ICDVersion()
+Attribute<string> CLA_File::docVersion()
 {
-  return getNode("ICD_VERSION");
+  return getNode("DOC_VERSION");
 }
 
 Attribute<string> CLA_File::notes()

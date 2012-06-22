@@ -32,14 +32,6 @@ public:
   Attribute<std::string>  BFFormat();
   Attribute<std::string>  BFVersion();
 
-  Attribute<std::string>  expTimeStartUTC();
-  Attribute<double>       expTimeStartMJD();
-  Attribute<std::string>  expTimeStartTAI();
-
-  Attribute<std::string>  expTimeEndUTC();
-  Attribute<double>       expTimeEndMJD();
-  Attribute<std::string>  expTimeEndTAI();
-
   Attribute<double>       totalIntegrationTime();
   Attribute<std::string>  totalIntegrationTimeUnit();
   
@@ -59,6 +51,7 @@ public:
   Attribute< std::vector<double> >      systemTemperature();
   Attribute<std::string>                systemTemperatureUnit();
   
+  Attribute<unsigned>     observationNofSubArrayPointings();
   Attribute<unsigned>     nofSubArrayPointings();
   virtual BF_SubArrayPointing subArrayPointing( unsigned nr );
 
@@ -78,9 +71,10 @@ class BF_ProcessingHistory: public Group {
 public:
   BF_ProcessingHistory( Group &parent, const std::string &name ): Group(parent, name) {}
 
-  Attribute<bool>         parsetObs();
-  Attribute<bool>         logPresto();
-  Attribute<bool>         parFile();
+  Attribute<std::string>         observationParset();
+  Attribute<std::string>         observationLog();
+  Attribute<std::string>         prestoParset();
+  Attribute<std::string>         prestoLog();
 
 protected:
   virtual void            initNodes();
@@ -90,33 +84,29 @@ class BF_SubArrayPointing: public Group {
 public:
   BF_SubArrayPointing( Group &parent, const std::string &name ): Group(parent, name) {}
 
-  Attribute<unsigned>     nofStations();
-  Attribute< std::vector<std::string> > stationsList();
+  Attribute<std::string>  target();
+
+  Attribute<std::string>  expTimeStartUTC();
+  Attribute<double>       expTimeStartMJD();
+  Attribute<std::string>  expTimeStartTAI();
+
+  Attribute<std::string>  expTimeEndUTC();
+  Attribute<double>       expTimeEndMJD();
+  Attribute<std::string>  expTimeEndTAI();
 
   Attribute<double>       pointRA();
   Attribute<std::string>  pointRAUnit();  
   Attribute<double>       pointDEC();
   Attribute<std::string>  pointDECUnit();  
 
-  Attribute<double>       clockRate();
-  Attribute<std::string>  clockRateUnit();
-
-  Attribute<unsigned>     nofSamples();
-  Attribute<double>       samplingRate();
-  Attribute<std::string>  samplingRateUnit();
-  Attribute<double>       samplingTime();
-  Attribute<std::string>  samplingTimeUnit();
-
-  Attribute<unsigned>     channelsPerSubband();
-
   Attribute<double>       subbandWidth();
   Attribute<std::string>  subbandWidthUnit();
 
-  Attribute<double>       channelWidth();
-  Attribute<std::string>  channelWidthUnit();
-
+  Attribute<unsigned>     observationNofBeams();
   Attribute<unsigned>     nofBeams();
   virtual BF_BeamGroup    beam( unsigned nr );
+
+  virtual BF_ProcessingHistory processHistory();
 
 protected:
   virtual void            initNodes();
@@ -130,6 +120,17 @@ public:
 
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
+
+  Attribute<unsigned>     nofSamples();
+  Attribute<double>       samplingRate();
+  Attribute<std::string>  samplingRateUnit();
+  Attribute<double>       samplingTime();
+  Attribute<std::string>  samplingTimeUnit();
+
+  Attribute<unsigned>     channelsPerSubband();
+
+  Attribute<double>       channelWidth();
+  Attribute<std::string>  channelWidthUnit();
 
   Attribute<double>       pointRA();
   Attribute<std::string>  pointRAUnit();    
@@ -165,6 +166,8 @@ public:
   virtual BF_StokesDataset stokes( unsigned nr );
 
   virtual CoordinatesGroup coordinates();
+
+  virtual BF_ProcessingHistory processHistory();
 
 protected:
   virtual void            initNodes();
