@@ -4,14 +4,6 @@
 
 using namespace std;
 
-// Returns the LOFAR station name (e.g. "CS011") corresponding to stationID.
-// Returns "ST<stationID>" (always 5 chars) if stationID is unknown.
-std::string stationIDToName(unsigned stationID);
-
-// Returns LOFAR station ID corresponding to stationName (e.g. "CS011" or "CS011HBA0", same result).
-// Throws DAL::DALValueError if stationName contains an invalid number.
-unsigned stationNameToID(const std::string& stationName);
-
 namespace DAL {
 
 string stationIDToName(unsigned stationID) {
@@ -140,8 +132,8 @@ unsigned stationNameToID(const string& stationName) {
 	}
 
 	unsigned id = (unsigned)atoi(&stationName.c_str()[2]);
-	if (id > 999) { // Don't bother checking the first 2 chars and don't deny unknown 3 digit IDs incl from conv err.
-		throw DALValueError("stationNameToID(): station name must end with 3 digits");
+	if (id > 999) { // Don't bother checking the first 2 chars and don't error on unknown 3 digit IDs incl from conv err.
+		throw DALValueError("stationNameToID(): number in station name must have 3 digits");
 	}
 
 	if (id > 200) {
