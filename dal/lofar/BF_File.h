@@ -121,7 +121,7 @@ public:
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
 
-  Attribute<bool>         tracking();
+  Attribute<std::string>  tracking();
 
   Attribute<unsigned>     nofSamples();
   Attribute<double>       samplingRate();

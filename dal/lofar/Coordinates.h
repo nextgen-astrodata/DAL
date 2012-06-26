@@ -75,6 +75,7 @@ public:
   Attribute<double>                     referenceValue();
   Attribute<double>                     referencePixel();
   Attribute<double>                     increment();
+  Attribute<double>                     pc();
 
   // tabular coordinates use these attributes
   Attribute<unsigned>                   axisLength();

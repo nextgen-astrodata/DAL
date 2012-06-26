@@ -299,7 +299,7 @@ void BF_BeamGroup::initNodes() {
 
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
-  addNode( new Attribute<bool>(*this, "TRACKING") );
+  addNode( new Attribute<string>(*this, "TRACKING") );
   addNode( new Attribute<unsigned>(*this, "NOF_SAMPLES") );
   addNode( new Attribute<double>(*this, "SAMPLING_RATE") );
   addNode( new Attribute<string>(*this, "SAMPLING_RATE_UNIT") );
@@ -346,7 +346,7 @@ Attribute< vector<string> > BF_BeamGroup::stationsList()
   return getNode("STATIONS_LIST");
 }
 
-Attribute<bool> BF_BeamGroup::tracking()
+Attribute<string> BF_BeamGroup::tracking()
 {
   return getNode("TRACKING");
 }

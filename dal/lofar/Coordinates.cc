@@ -135,6 +135,11 @@ Attribute<double> NumericalCoordinate::increment()
   return Attribute<double>(*this, "INCREMENT");
 }
 
+Attribute<double> NumericalCoordinate::pc()
+{
+  return Attribute<double>(*this, "PC");
+}
+
 Attribute<unsigned> NumericalCoordinate::axisLength()
 {
   return Attribute<unsigned>(*this, "AXIS_LENGTH");
