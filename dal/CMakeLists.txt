@@ -27,6 +27,7 @@ set(dal_sources
   hdf5/exceptions/errorstack.cc
   hdf5/types/versiontype.cc
 
+  lofar/Station.cc
   lofar/BF_File.cc
   lofar/CLA_File.cc
   lofar/Coordinates.cc
