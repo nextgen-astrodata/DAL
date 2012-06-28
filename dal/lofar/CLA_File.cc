@@ -6,7 +6,7 @@ namespace DAL {
 
 CLA_File::CLA_File( const std::string &filename, enum File::fileMode mode )
 :
-  File(filename, mode, "ICD_VERSION")
+  File(filename, mode, "DOC_VERSION")
 {
 }
 
@@ -46,8 +46,8 @@ void CLA_File::initNodes()
   addNode( new Attribute<string>(*this, "SYSTEM_VERSION") );
   addNode( new Attribute<string>(*this, "PIPELINE_NAME") );
   addNode( new Attribute<string>(*this, "PIPELINE_VERSION") );
-  addNode( new Attribute<string>(*this, "ICD_NUMBER") );
-  addNode( new Attribute<string>(*this, "ICD_VERSION") );
+  addNode( new Attribute<string>(*this, "DOC_NAME") );
+  addNode( new Attribute<string>(*this, "DOC_VERSION") );
   addNode( new Attribute<string>(*this, "NOTES") );
 }
 
