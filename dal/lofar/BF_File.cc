@@ -311,7 +311,7 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<double>(*this, "POINT_RA") );
   addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
-  addNode( new Attribute<double>(*this, "POINT_DEC_UNIT") );
+  addNode( new Attribute<string>(*this, "POINT_DEC_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_OFFSET_RA") );
   addNode( new Attribute<string>(*this, "POINT_OFFSET_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_OFFSET_DEC") );
