@@ -36,6 +36,9 @@ public:
 
   Attribute<std::string> triggerType();
   virtual TBB_Trigger    triggerData();
+
+private:
+  std::string            stationGroupName( const std::string &stationName );
 };
 
 class TBB_SysLog: public Group {
@@ -65,7 +68,10 @@ public:
 
   Attribute<unsigned>                   nofDipoles();
   virtual std::vector<TBB_DipoleDataset> dipoles();
-  virtual TBB_DipoleDataset             dipole( const std::string &dipoleName );
+  virtual TBB_DipoleDataset             dipole( unsigned stationID, unsigned rspID, unsigned rcuID );
+
+private:
+  std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
 };
 
 class TBB_DipoleDataset: public Dataset<int16_t> {

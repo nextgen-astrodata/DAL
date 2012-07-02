@@ -24,7 +24,7 @@ vector<TBB_Station> TBB_File::stations()
   for (vector<string>::const_iterator it(membNames.begin()); it != membNames.end(); ++it) {
     // Filter the names that appear to be stations and fill the vector with objects of the right type.
     if (it->find(stPrefix) == 0) {
-      stationGroups.push_back(station(it->substr(stPrefix.size())));
+      stationGroups.push_back(TBB_Station(*this, *it));
     }
   }
 
@@ -33,7 +33,11 @@ vector<TBB_Station> TBB_File::stations()
 
 TBB_Station TBB_File::station( const std::string &stationName )
 {
-  return TBB_Station(*this, "STATION_" + stationName);
+  return TBB_Station(*this, stationGroupName(stationName));
+}
+
+string TBB_File::stationGroupName( const std::string &stationName) {
+  return "STATION_" + stationName;
 }
 
 Attribute<string> TBB_File::triggerType()
@@ -128,16 +132,24 @@ vector<TBB_DipoleDataset> TBB_Station::dipoles()
   for (vector<string>::const_iterator it(membNames.begin()); it != membNames.end(); ++it) {
     // Filter the names that appear to be dipoles and fill the vector with objects of the right type.
     if (it->find(dpPrefix) == 0) {
-      dipoleDatasets.push_back(dipole(it->substr(dpPrefix.size())));
+      dipoleDatasets.push_back(TBB_DipoleDataset(*this, *it));
     }
   }
 
   return dipoleDatasets;
 }
 
-TBB_DipoleDataset TBB_Station::dipole( const std::string &dipoleName )
+TBB_DipoleDataset TBB_Station::dipole( unsigned stationID, unsigned rspID, unsigned rcuID )
 {
-  return TBB_DipoleDataset(*this, "DIPOLE_" + dipoleName);
+  return TBB_DipoleDataset(*this, dipoleDatasetName(stationID, rspID, rcuID));
+}
+
+string TBB_Station::dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID )
+{
+  char buf[sizeof("DIPOLE_") + 3*3]; // sizeof("...") includes space for the '\0'
+  snprintf(buf, sizeof buf, "DIPOLE_%03u%03u%03u", stationID, rspID, rcuID);
+
+  return string(buf);
 }
 
 Attribute<unsigned> TBB_DipoleDataset::stationID()
