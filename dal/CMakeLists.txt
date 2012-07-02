@@ -40,7 +40,7 @@ add_library (dal
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-g3 -Wall -Wextra -Wno-unused-function -ansi -pedantic")
+  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-g3 -Wall -Wextra -Wno-unused-function -Wno-long-long -ansi -pedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 target_link_libraries(dal ${HDF5_LIBRARIES})
