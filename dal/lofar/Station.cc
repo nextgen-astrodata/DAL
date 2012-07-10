@@ -6,6 +6,7 @@ using namespace std;
 
 namespace DAL {
 
+// Names from LOFAR/MAC/Deployment/data/StaticMetaData/StationInfo.dat
 string stationIDToName(unsigned stationID) {
 	string name;
 
