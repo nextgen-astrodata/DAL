@@ -75,7 +75,7 @@ public:
   Attribute<double>                     referenceValue();
   Attribute<double>                     referencePixel();
   Attribute<double>                     increment();
-  Attribute<double>                     pc();
+  Attribute< std::vector<double> >      pc();
 
   // tabular coordinates use these attributes
   Attribute<unsigned>                   axisLength();

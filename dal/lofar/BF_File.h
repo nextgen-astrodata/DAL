@@ -84,8 +84,6 @@ class BF_SubArrayPointing: public Group {
 public:
   BF_SubArrayPointing( Group &parent, const std::string &name ): Group(parent, name) {}
 
-  Attribute<std::string>  target();
-
   Attribute<std::string>  expTimeStartUTC();
   Attribute<double>       expTimeStartMJD();
   Attribute<std::string>  expTimeStartTAI();
@@ -94,13 +92,13 @@ public:
   Attribute<double>       expTimeEndMJD();
   Attribute<std::string>  expTimeEndTAI();
 
+  Attribute<double>       totalIntegrationTime();
+  Attribute<std::string>  totalIntegrationTimeUnit();
+
   Attribute<double>       pointRA();
   Attribute<std::string>  pointRAUnit();  
   Attribute<double>       pointDEC();
   Attribute<std::string>  pointDECUnit();  
-
-  Attribute<double>       subbandWidth();
-  Attribute<std::string>  subbandWidthUnit();
 
   Attribute<unsigned>     observationNofBeams();
   Attribute<unsigned>     nofBeams();
@@ -120,6 +118,8 @@ public:
 
   Attribute<unsigned>     nofStations();
   Attribute< std::vector<std::string> > stationsList();
+
+  Attribute< std::vector<std::string> >  targets();
 
   Attribute<std::string>  tracking();
 
@@ -144,6 +144,9 @@ public:
   Attribute<double>       pointOffsetDEC();
   Attribute<std::string>  pointOffsetDECUnit();  
 
+  Attribute<double>       subbandWidth();
+  Attribute<std::string>  subbandWidthUnit();
+
   Attribute<double>       beamDiameterRA();
   Attribute<std::string>  beamDiameterRAUnit();
   Attribute<double>       beamDiameterDEC();
@@ -164,7 +167,7 @@ public:
   Attribute<unsigned>     observationNofStokes();
   Attribute<unsigned>     nofStokes();
   Attribute< std::vector<std::string> > stokesComponents();
-  Attribute<bool>         complexVoltages();
+  Attribute<bool>         complexVoltage();
   Attribute<std::string>  signalSum();
   virtual BF_StokesDataset stokes( unsigned nr );
 

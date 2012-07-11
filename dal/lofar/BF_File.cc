@@ -184,26 +184,20 @@ Attribute<string> BF_ProcessingHistory::prestoLog()
 void BF_SubArrayPointing::initNodes() {
   Group::initNodes();
 
-  addNode( new Attribute<string>(*this, "TARGET") );
   addNode( new Attribute<string>(*this, "EXPTIME_START_UTC") );
   addNode( new Attribute<double>(*this, "EXPTIME_START_MJD") );
   addNode( new Attribute<string>(*this, "EXPTIME_START_TAI") );
   addNode( new Attribute<string>(*this, "EXPTIME_END_UTC") );
   addNode( new Attribute<double>(*this, "EXPTIME_END_MJD") );
   addNode( new Attribute<string>(*this, "EXPTIME_END_TAI") );
+  addNode( new Attribute<double>(*this, "TOTAL_INTEGRATION_TIME") );
+  addNode( new Attribute<string>(*this, "TOTAL_INTEGRATION_TIME_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
   addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
   addNode( new Attribute<string>(*this, "POINT_DEC_UNIT") );
-  addNode( new Attribute<double>(*this, "SUBBAND_WIDTH") );
-  addNode( new Attribute<string>(*this, "SUBBAND_WIDTH_UNIT") );
   addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_BEAMS") );
   addNode( new Attribute<unsigned>(*this, "NOF_BEAMS") );
-}
-
-Attribute<string> BF_SubArrayPointing::target()
-{
-  return getNode("TARGET");
 }
 
 Attribute<string> BF_SubArrayPointing::expTimeStartUTC()
@@ -236,6 +230,16 @@ Attribute<string> BF_SubArrayPointing::expTimeEndTAI()
   return getNode("EXPTIME_END_TAI");
 }
 
+Attribute<double> BF_SubArrayPointing::totalIntegrationTime()
+{
+  return getNode("TOTAL_INTEGRATION_TIME");
+}
+
+Attribute<string> BF_SubArrayPointing::totalIntegrationTimeUnit()
+{
+  return getNode("TOTAL_INTEGRATION_TIME_UNIT");
+}  
+
 Attribute<double> BF_SubArrayPointing::pointRA()
 {
   return getNode("POINT_RA");
@@ -254,16 +258,6 @@ Attribute<double> BF_SubArrayPointing::pointDEC()
 Attribute<string> BF_SubArrayPointing::pointDECUnit()
 {
   return getNode("POINT_DEC_UNIT");
-}
-
-Attribute<double> BF_SubArrayPointing::subbandWidth()
-{
-  return getNode("SUBBAND_WIDTH");
-}
-
-Attribute<string> BF_SubArrayPointing::subbandWidthUnit()
-{
-  return getNode("SUBBAND_WIDTH_UNIT");
 }
 
 Attribute<unsigned> BF_SubArrayPointing::observationNofBeams()
@@ -299,6 +293,7 @@ void BF_BeamGroup::initNodes() {
 
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
+  addNode( new Attribute< vector<string> >(*this, "TARGETS") );
   addNode( new Attribute<string>(*this, "TRACKING") );
   addNode( new Attribute<unsigned>(*this, "NOF_SAMPLES") );
   addNode( new Attribute<double>(*this, "SAMPLING_RATE") );
@@ -316,6 +311,8 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<string>(*this, "POINT_OFFSET_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_OFFSET_DEC") );
   addNode( new Attribute<string>(*this, "POINT_OFFSET_DEC_UNIT") );
+  addNode( new Attribute<double>(*this, "SUBBAND_WIDTH") );
+  addNode( new Attribute<string>(*this, "SUBBAND_WIDTH_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER_RA") );
   addNode( new Attribute<string>(*this, "BEAM_DIAMETER_RA_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER_DEC") );
@@ -332,7 +329,7 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_STOKES") );
   addNode( new Attribute<unsigned>(*this, "NOF_STOKES") );
   addNode( new Attribute< vector<string> >(*this, "STOKES_COMPONENTS") );
-  addNode( new Attribute<bool>(*this, "COMPLEX_VOLTAGES") );
+  addNode( new Attribute<bool>(*this, "COMPLEX_VOLTAGE") );
   addNode( new Attribute<string>(*this, "SIGNAL_SUM") );
 }
 
@@ -344,6 +341,11 @@ Attribute<unsigned> BF_BeamGroup::nofStations()
 Attribute< vector<string> > BF_BeamGroup::stationsList()
 {
   return getNode("STATIONS_LIST");
+}
+
+Attribute< vector<string> > BF_BeamGroup::targets()
+{
+  return getNode("TARGETS");
 }
 
 Attribute<string> BF_BeamGroup::tracking()
@@ -431,6 +433,16 @@ Attribute<string> BF_BeamGroup::pointOffsetDECUnit()
   return getNode("POINT_OFFSET_DEC_UNIT");
 }
 
+Attribute<double> BF_BeamGroup::subbandWidth()
+{
+  return getNode("SUBBAND_WIDTH");
+}
+
+Attribute<string> BF_BeamGroup::subbandWidthUnit()
+{
+  return getNode("SUBBAND_WIDTH_UNIT");
+}
+
 Attribute<double> BF_BeamGroup::beamDiameterRA()
 {
   return getNode("BEAM_DIAMETER_RA");
@@ -511,9 +523,9 @@ Attribute< vector<string> > BF_BeamGroup::stokesComponents()
   return getNode("STOKES_COMPONENTS");
 }
 
-Attribute<bool> BF_BeamGroup::complexVoltages()
+Attribute<bool> BF_BeamGroup::complexVoltage()
 {
-  return getNode("COMPLEX_VOLTAGES");
+  return getNode("COMPLEX_VOLTAGE");
 }
 
 Attribute<string> BF_BeamGroup::signalSum()
