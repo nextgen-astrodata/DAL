@@ -1,0 +1,17 @@
+The Data Access Library (DAL) - CHANGELOG
+=========================================
+
+2.0.0 (initial release, after DAL 1 and LDA)
+- Improved support for beamforming (bf) and transient buffer boards (tbb) data formats
+- Improved Python bindings in functionality, type mapping, and error handling + messages
+- Added versioning system to support backward compatibility and per-attribute/group/dataset version checks
+- Extended support for HDF5 custom tuple types
+- Added exception hierarchy
+- Fixed many usability issues and bugs
+- Added utilities (bfheader[edit|info].py, tbb-lostframes.py)
+- Added examples (bf introspection, bf read, bf custom write, exceptions, tbb read, types)
+- Added .h5 example files, also to allow all utilities and examples as test cases
+- Improved documentation: Added user manual, extended API reference, added requirements/design decisions document
+- Made user manual and API reference available online at http://nextgen-astrodata.github.com/DAL
+- Improved compatibility with various Linux and MacOS enviroments
+

@@ -1,0 +1,15 @@
+The Data Access Library (DAL) - KNOWN ISSUES
+============================================
+
+KI 1: No support for Python 3
+Description: The build system does not support Python 3, whether 2 and 3 are installed or only 3.
+  This used to work after it was fixed in LDA, even if 2 and 3 were both installed, but is now unsupported again. 
+  Note that the LOFAR software does not support Python 3 either.
+Workaround: Use Python 2.6 or 2.7.
+Status: Low. This will not be worked on for 2.0.0.
+
+KI 2: No support for Windows
+Description: We do not build/run under Windows.
+Workaround: None (use Linux or MacOS).
+Status: Won't fix. Radio astronomers don't use Windows.
+
