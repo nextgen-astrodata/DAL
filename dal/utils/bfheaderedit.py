@@ -14,7 +14,7 @@ import numpy
 from optparse import OptionParser         # command line argument parsing
 import DAL
 import bfmeta
-
+import bfheader
 
 def main():
   basename=os.path.basename(sys.argv[0]) 
@@ -24,45 +24,42 @@ def main():
   else:
 
     parser = OptionParser(usage="usage: %prog [options] filename", )
-    parser.add_option("-v", "--verbose", dest="verbose",
-                      action="store_true", help="verbose display")
+    parser.add_option("-v", "--view", dest="view",
+                      action="store_true", help="view header attribute")
+    parser.add_option("-o", "--overwrite", dest="overwrite", default=False,
+                      action="store_true", help="write output to temporary file first")
     parser.add_option("-e", "--edit", dest="edit", default=False,
                       action="store_true", help="allow editing of attributes")
     parser.add_option("-c", "--clobber", dest="clobber", default=False,
                       action="store_true", help="apply editing changes to file")
-    parser.add_option("-o", "--overwrite", dest="overwrite", default=False,
-                      action="store_true", help="write output to temporary file first")
-    parser.add_option("-g", "--group", dest="group", action="store", type="string",
-                      help="change attributes in this group; supports multiple numbers")
-    parser.add_option("-a", "--attribute", dest="attribute", action="store", type="string",
-                      help="attribute (wildcard) to view/edit") 
-    parser.add_option("-f", "--file", dest="filename", action="store", type="string",
-                      help="filename of BF HDF5 file")  
+    parser.add_option("-d", "--debug", dest="debug", default=False,
+                      action="store_true", help="turn on debug messages")
+    parser.add_option("-a", "--add", dest="add", default=False, action="store_true",
+                      help="add an attribute to a group")
     (options, args) = parser.parse_args()
   
-    print "args: ", args
-  
-    if options.filename==None:
-      filename=args[0]
-    else:
-      filename=options.filename
-    
-    #print "filename: ", filename         # DEBUG
+    #print "args: ", args  # DEBUG
+ 
+    filename=args[0]
+    if options.debug:
+      print "filename: ", filename         # DEBUG
     if options.clobber:
-      fh=DAL.BF_File(options.filename, DAL.File.READWRITE)  # open file read/write
+      fh=DAL.BF_File(filename, DAL.File.READWRITE)  # open file read/write
     elif options.overwrite:
-      # make copy first
+       # make copy first
       print "Copying", filename,"to "
     else:
-      fh=DAL.BF_File(options.filename, DAL.File.READ)  # open file readonly
-    args.remove(filename)                 # remove filename from args list
+      fh=DAL.BF_File(filename, DAL.File.READ)  # open file readonly
+    
+    if filename in args:
+      args.remove(filename)                 # remove filename from args list
 
-#    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, verbose=options.verbose)
-    bfheader=befheader.bfheader(fh)
-
+    header=bfheader.bfheader(fh=fh, args=args, options=options)
 
     for arg in args:
-      bfheader.analyzeArg(arg)
+      header.analyzeArgument(arg)
+
+    header.showPaths()   # DEBUG
 
 # Entry point on call
 #  

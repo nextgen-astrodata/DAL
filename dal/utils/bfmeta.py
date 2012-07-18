@@ -6,7 +6,7 @@
 # File:         bfmeta.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-02
-# Last change:  2012-06-17
+# Last change:  2012-07-18
 
 import sys
 import DAL
@@ -39,46 +39,52 @@ class bfmeta:
   #
   def displayFileInfo(self):
     #print "displayFileInfo()"       # DEBUG
-    if self.fh.telescope().exists():
-      print "Telescope              = ", self.fh.telescope().value
-    if self.fh.observer().exists():
-      print "Observer               = ", self.fh.observer().value
-    if self.fh.target().exists():
-      print "Target                 = ", self.fh.target().value
-    if self.fh.filterSelection().exists():
-      print "Backend                = ", self.fh.filterSelection().value
-    if self.fh.projectID().exists():
-      print "Project ID             = ", self.fh.projectID().value
-    if self.fh.projectTitle().exists():
-      print "Project title          = ", self.fh.projectTitle().value
-    if self.fh.projectPI().exists():
-      print "Project PI             = ", self.fh.projectPI().value
-    if self.fh.projectContact().exists():
-      print "Project contact        = ", self.fh.projectContact().value
-    if self.fh.observationStartUTC().exists():
-      print "UTC start time         = ", self.fh.observationStartUTC().value
-    if self.fh.observationEndUTC().exists():
-      print "UTC end time           = ", self.fh.observationEndUTC().value
-    if self.fh.observationStartMJD().exists():
-      print "MJD start time         = %(mjd)19.12f" %{'mjd':self.fh.observationStartMJD().value}
-    if self.fh.observationEndMJD().exists():
-      print "MJD end time           = %(mjd)19.12f" %{'mjd':self.fh.observationEndMJD().value}
-    if self.fh.observationStartTAI().exists():
-      print "TAI start time         = ", self.fh.observationStartTAI().value
-    if self.fh.observationEndTAI().exists():
-      print "TAI end time           = ", self.fh.observationEndTAI().value
-    if self.fh.totalIntegrationTime().exists():
-      print "Total integration time =  %(ti).2f %(tiu)s" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
-    if self.fh.observationDatatype().exists():
-      print "Observation datatype   = ", self.fh.observationDatatype().value
-    if self.fh.subArrayPointingDiameter().exists():
-      print "Subarray pointing diameter = %(sapd)7.2f %(sapdu)s" %{'sapd':self.fh.subArrayPointingDiameter().value, 'sapdu':self.fh.subArrayPointingDiameterUnit().value}
-    if self.fh.bandwidth().exists():
-      print "Bandwidth              =  %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}
-    if self.fh.beamDiameter().exists():
-      print "Beam diameter          =  %(bd).2f %(bdu)s" %{'bd':self.fh.beamDiameter().value, 'bdu':self.fh.beamDiameterUnit().value}
-    if self.fh.nofSubArrayPointings().exists():
-      print "No. of SAP             = ", self.fh.nofSubArrayPointings().value
+    print self.fh.groupType().name(), "\t\t=", self.fh.groupType().value
+    print self.fh.fileName().name(), "\t\t=", self.fh.fileName().value
+    print self.fh.fileDate().name(), "\t\t=", self.fh.fileDate().value
+    print self.fh.fileType().name(), "\t\t=", self.fh.fileType().value
+    print self.fh.telescope().name(), "\t\t=", self.fh.telescope().value
+    print self.fh.observer().name(), "\t\t=", self.fh.observer().value
+    print self.fh.projectID().name(), "\t\t=", self.fh.projectID().value
+    print self.fh.projectTitle().name(), "\t\t=", self.fh.projectTitle().value
+    print self.fh.projectPI().name(), "\t\t=", self.fh.projectPI().value
+    print self.fh.projectCOI().name(), "\t\t=", self.fh.projectCOI().value
+    print self.fh.projectContact().name(), "\t=", self.fh.projectContact().value
+    print self.fh.observationID().name(), "\t\t=", self.fh.observationID().value
+    print self.fh.observationStartUTC().name(), "\t=", self.fh.observationStartUTC().value
+    print self.fh.observationEndUTC().name(), "\t=", self.fh.observationEndUTC().value
+    print self.fh.observationStartMJD().name(), "\t=%(mjd)19.12f" %{'mjd':self.fh.observationStartMJD().value}
+    print self.fh.observationEndMJD().name(), "\t=%(mjd)19.12f" %{'mjd':self.fh.observationEndMJD().value}
+    print self.fh.observationStartTAI().name(), "\t=", self.fh.observationStartTAI().value
+    print self.fh.observationEndTAI().name(), "\t=", self.fh.observationEndTAI().value
+    print self.fh.observationNofStations().name(), "=", self.fh.observationNofStations().value
+    print self.fh.observationStationsList().name(), "=", self.fh.observationStationsList().value
+    print self.fh.observationFrequencyMin().name(), "\t=", self.fh.observationFrequencyMin().value, self.fh.observationFrequencyUnit().value
+    print self.fh.observationFrequencyCenter().name(), "\t=", self.fh.observationFrequencyCenter().value, self.fh.observationFrequencyUnit().value
+    print self.fh.observationFrequencyMax().name(), "\t=", self.fh.observationFrequencyMax().value, self.fh.observationFrequencyUnit().value
+    print self.fh.observationNofBitsPerSample().name(), "=", self.fh.observationNofBitsPerSample().value
+    print self.fh.clockFrequency().name(), "\t=", self.fh.clockFrequency().value, self.fh.clockFrequencyUnit().value
+    print self.fh.antennaSet().name(), "\t\t=", self.fh.antennaSet().value
+    print self.fh.filterSelection().name(), "\t=", self.fh.filterSelection().value
+    print self.fh.targets().name(), "\t\t=", self.fh.targets().value
+    print self.fh.systemVersion().name(), "\t\t=", self.fh.systemVersion().value
+    print self.fh.pipelineName().name(), "\t\t=", self.fh.pipelineName().value
+    print self.fh.pipelineVersion().name(), "\t=", self.fh.pipelineVersion().value
+    print self.fh.docName().name(), "\t\t=", self.fh.docName().value
+    print self.fh.docVersion().name(), "\t\t=", self.fh.docVersion().value
+    print self.fh.createOfflineOnline().name(), "\t=", self.fh.createOfflineOnline().value
+    print self.fh.BFFormat().name(), "\t\t=", self.fh.BFFormat().value
+    print self.fh.BFVersion().name(), "\t\t=", self.fh.BFVersion().value
+    print self.fh.totalIntegrationTime().name(), " = %(ti).2f %(tiu)s" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
+    print self.fh.observationDataType().name(), "\t=", self.fh.observationDataType().value
+    print self.fh.subArrayPointingDiameter().name(), " =", self.fh.subArrayPointingDiameter().value, self.fh.subArrayPointingDiameterUnit().value
+    print self.fh.bandwidth().name(), "\t\t= %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}
+    print self.fh.beamDiameter().name(), "\t=", self.fh.beamDiameter().value #, self.fh.beamDiameterUnit().value
+    print self.fh.weatherTemperature().name(), "\t=", self.fh.weatherTemperature().value, self.fh.weatherTemperatureUnit().value
+    print self.fh.weatherHumidity().name(), "\t=", self.fh.weatherHumidity().value, self.fh.weatherHumidityUnit().value
+    print self.fh.systemTemperature().name(), "\t=", self.fh.systemTemperature().value, self.fh.systemTemperatureUnit().value
+    print self.fh.observationNofSubArrayPointings().name(), "=", self.fh.observationNofSubArrayPointings().value
+    print self.fh.nofSubArrayPointings().name(), "=", self.fh.nofSubArrayPointings().value
     self.prefix=bcolors.ENDC      # reset printing options
   
   # Display Sub Array Pointing information for SAPs
@@ -114,17 +120,16 @@ class bfmeta:
       print "SubArrayPointing Nr", nr, "doesn't exist."
       return    
 
-    if sap.nofStations().exists():   
-      print self.prefix + "No. of stations        = ", sap.nofStations().value
-    if sap.stationsList().exists():
-      print self.prefix + "Stationlist            = ", sap.stationsList().value
+#    if sap.nofStations().exists():   
+#      print self.prefix + "No. of stations        = ", sap.nofStations().value
+#    if sap.stationsList().exists():
+#      print self.prefix + "Stationlist            = ", sap.stationsList().value
     if sap.pointRA().exists():
       print self.prefix + "pointing RA            =  %(pra)3.10f %(prau)s" %{ 'pra': sap.pointRA().value, 'prau': sap.pointRAUnit().value}
     if sap.pointDEC().exists():
       print self.prefix + "pointing DEC           =  %(decra)4.10f %(decrau)s" %{'decra': sap.pointDEC().value, 'decrau': sap.pointDECUnit().value}
-    if sap.clockRate().exists() and sap.clockRateUnit().exists()==False:
-      #sys.stdout.write(self.prefix + "Clock rate             = "+str(sap.clockRate().value))
-      print self.prefix + "Clock rate             = ", sap.clockRate().value
+#    if sap.clockRate().exists() and sap.clockRateUnit().exists()==False:
+#      print self.prefix + "Clock rate             = ", sap.clockRate().value
     if sap.clockRate().exists() and sap.clockRateUnit().exists():
       print self.prefix + "Clock rate             = ", sap.clockRate().value, sap.clockRateUnit().value
     if sap.nofSamples().exists():
