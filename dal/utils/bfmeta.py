@@ -200,7 +200,7 @@ class bfmeta:
       return
     
     print self.prefix + beam.groupType().name() + "\t\t= " + beam.groupType().value
-    print self.prefix + beam.targets().name() + "\t\t= " + beam.targets().value
+    print self.prefix + beam.targets().name() + "\t\t\t=", beam.targets().value
     print self.prefix + beam.nofStations().name() +"\t\t=", beam.nofStations().value
     print self.prefix + beam.stationsList().name() + "\t\t=", beam.stationsList().value
     print self.prefix + beam.nofSamples().name() + "\t\t=", beam.nofSamples().value
@@ -330,7 +330,7 @@ class bfmeta:
   # Time coordinate information
   #
   def displayTimeCoordinate(self, coord):
-    print "displayTimeCoordinate()"
+    print "displayTimeCoordinate()"     # DEBUG
 
   # Spectral coordinate information
   #
