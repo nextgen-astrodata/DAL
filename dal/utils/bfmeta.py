@@ -79,7 +79,7 @@ class bfmeta:
     print self.fh.observationDataType().name(), "\t=", self.fh.observationDataType().value
     print self.fh.subArrayPointingDiameter().name(), " =", self.fh.subArrayPointingDiameter().value, self.fh.subArrayPointingDiameterUnit().value
     print self.fh.bandwidth().name(), "\t\t= %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}
-    print self.fh.beamDiameter().name(), "\t=", self.fh.beamDiameter().value #, self.fh.beamDiameterUnit().value
+#    print self.fh.beamDiameter().name(), "\t\t=", self.fh.beamDiameter().value, self.fh.beamDiameterUnit().value
     print self.fh.weatherTemperature().name(), "\t=", self.fh.weatherTemperature().value, self.fh.weatherTemperatureUnit().value
     print self.fh.weatherHumidity().name(), "\t=", self.fh.weatherHumidity().value, self.fh.weatherHumidityUnit().value
     print self.fh.systemTemperature().name(), "\t=", self.fh.systemTemperature().value, self.fh.systemTemperatureUnit().value
@@ -112,7 +112,7 @@ class bfmeta:
       if str(nr) in self.sap or self.sap=="all":
         sap=self.fh.subArrayPointing(nr)
         print self.prefix + "------------------------------------"
-        print self.prefix + "SubArrayPointing Nr    = ", nr
+        print self.prefix + "SubArrayPointing Nr\t=", nr
       else:
         print "SubArrayPointing Nr", nr, "doesn't exist."        
         return
@@ -120,36 +120,39 @@ class bfmeta:
       print "SubArrayPointing Nr", nr, "doesn't exist."
       return    
 
-#    if sap.nofStations().exists():   
-#      print self.prefix + "No. of stations        = ", sap.nofStations().value
-#    if sap.stationsList().exists():
-#      print self.prefix + "Stationlist            = ", sap.stationsList().value
-    if sap.pointRA().exists():
-      print self.prefix + "pointing RA            =  %(pra)3.10f %(prau)s" %{ 'pra': sap.pointRA().value, 'prau': sap.pointRAUnit().value}
-    if sap.pointDEC().exists():
-      print self.prefix + "pointing DEC           =  %(decra)4.10f %(decrau)s" %{'decra': sap.pointDEC().value, 'decrau': sap.pointDECUnit().value}
-#    if sap.clockRate().exists() and sap.clockRateUnit().exists()==False:
-#      print self.prefix + "Clock rate             = ", sap.clockRate().value
-    if sap.clockRate().exists() and sap.clockRateUnit().exists():
-      print self.prefix + "Clock rate             = ", sap.clockRate().value, sap.clockRateUnit().value
-    if sap.nofSamples().exists():
-      print self.prefix + "No. of samples         = ", sap.nofSamples().value
-    if sap.samplingRate().exists() and sap.samplingRateUnit().exists()==False:
-      print self.prefix + "Sampling rate          = ", sap.samplingRate().value      
-    if sap.samplingRate().exists() and sap.samplingRateUnit().exists():
-      print self.prefix + "Sampling rate          = ", sap.samplingRate().value, sap.samplingRateUnit().value      
-    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
-      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().value
-    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
-      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().value, sap.subbandWidth().value
-    if sap.channelsPerSubband().exists() and sap.subbandWidthUnit().exists():
-      print self.prefix + "Subband width unit     = ", sap.subbandWidthUnit().value      
-    if sap.channelWidth().exists()  and sap.channelWidthUnit().exists()==False:
-      print self.prefix + "Channel width          = ", sap.channelWidth().value
-    if sap.channelWidth().exists() and sap.channelWidthUnit().exists():
-      print self.prefix + "Channel width          = ", sap.channelWidth().value, sap.channelWidthUnit().value
-    if sap.nofBeams().exists():
-      print self.prefix + "No. of beams           = ", sap.nofBeams().value      
+    print self.prefix + sap.groupType().name() +  "\t\t= " + sap.groupType().value
+    print self.prefix + sap.expTimeStartUTC().name() +  "\t= " + sap.expTimeStartUTC().value
+    print self.prefix + sap.expTimeEndUTC().name() +  "\t\t= " + sap.expTimeEndUTC().value
+    print self.prefix + sap.expTimeStartMJD().name() + "\t=%(mjd)19.12f" %{'mjd':sap.expTimeStartMJD().value}
+    print self.prefix + sap.expTimeEndMJD().name() + "\t\t=%(mjd)19.12f" %{'mjd':sap.expTimeEndMJD().value}
+    print self.prefix + sap.expTimeStartTAI().name() + "\t= %(tai)s" %{'tai':sap.expTimeStartTAI().value}
+    print self.prefix + sap.expTimeEndTAI().name() + "\t\t= %(tai)s" %{'tai':sap.expTimeEndTAI().value}
+    print self.prefix + sap.totalIntegrationTime().name(), " = %(ti).2f %(tiu)s" %{'ti':sap.totalIntegrationTime().value, 'tiu':sap.totalIntegrationTimeUnit().value}
+    print self.prefix + sap.pointRA().name() + "\t\t= %(pra)3.10f %(prau)s" %{ 'pra': sap.pointRA().value, 'prau': sap.pointRAUnit().value}
+    print self.prefix + sap.pointDEC().name() + "\t\t= %(decra)4.10f %(decrau)s" %{'decra': sap.pointDEC().value, 'decrau': sap.pointDECUnit().value}
+
+#    print self.prefix + sap.pointAltitude().name() + "\t\t="%(pal)3.10f %(palu)s" %{ 'pal': sap.pointAltitude().value, 'palu': sap.pointAltitutdeUnit().value}
+#    print self.prefix + sap.pointAltitude().name() + "\t\t="%(pal)3.10f %(palu)s" %{ 'pal': sap.pointAzimuth().value, 'palu': sap.pointAzimuthUnit().value}
+#    print self.prefix + self.fh.observationNofBeams().name() + "\t= " + self.fh.observationNofBeams().value
+    print self.prefix + sap.nofBeams().name() + "\t\t=", sap .nofBeams().value
+
+#    if sap.clockRate().exists() and sap.clockRateUnit().exists():
+#      print self.prefix + "Clock rate             = ", sap.clockRate().value, sap.clockRateUnit().value
+#    if sap.nofSamples().exists():
+#      print self.prefix + "No. of samples         = ", sap.nofSamples().value
+#    if sap.samplingRate().exists() and sap.samplingRateUnit().exists()==False:
+#      print self.prefix + "Sampling rate          = ", sap.samplingRate().value      
+#    if sap.samplingRate().exists() and sap.samplingRateUnit().exists():
+#      print self.prefix + "Sampling rate          = ", sap.samplingRate().value, sap.samplingRateUnit().value      
+#    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
+#    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
+#      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().value, sap.subbandWidth().value
+#    if sap.channelsPerSubband().exists() and sap.subbandWidthUnit().exists():
+#      print self.prefix + "Subband width unit     = ", sap.subbandWidthUnit().value      
+#    if sap.channelWidth().exists()  and sap.channelWidthUnit().exists()==False:
+#      print self.prefix + "Channel width          = ", sap.channelWidth().value
+#    if sap.channelWidth().exists() and sap.channelWidthUnit().exists():
+#      print self.prefix + "Channel width          = ", sap.channelWidth().value, sap.channelWidthUnit().value
 
     # Beams within this SAP
     self.displayBeam(sap)
@@ -160,7 +163,6 @@ class bfmeta:
   #  
   def displayBeam(self, sap):
     #print "displayBeam()"               # DEBUG
-  
     if self.beam=="all":
       for n in range(0, sap.nofBeams().value):   
           self.displayBeamInfo(sap, int(n))
@@ -174,7 +176,6 @@ class bfmeta:
   #  
   def displayBeamInfo(self, sap, nr):
     #print "displayBeamInfo()"
-
     if self.useTabs:
       self.prefix="\t"
     if self.useColor:
@@ -186,61 +187,45 @@ class bfmeta:
     else:
       print self.prefix + "Beam No. ", str(nr), " doesn't exist in file." 
       return
-
     # only display beam if it is in the list to be shown
-    #print "str(nr) = ", str(nr), " self.beam = ",self.beam    # DEBUG
-
     if str(nr) not in self.beam and self.beam!="all":    
       return
 
     print self.prefix + "------------------------------------"
-    print self.prefix + "Beam Nr                = ", nr
+    print self.prefix + "Beam Nr\t\t\t= ", nr
 
     # Only beams with selected Stokes components
     if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
       print self.prefix + "Stokes component " + str(self.stokes) + " doesn't exist in beam Nr. " + str(nr)
       return
-
-    if beam.nofStations().exists():
-      print self.prefix + "No of stations         = ", beam.nofStations().value
-    if beam.stationsList().exists():
-      print self.prefix + "Stations               = ", beam.stationsList().value
-    if beam.pointRA().exists():
-      print self.prefix + "pointing RA            = ", beam.pointRA().value
-    if beam.pointDEC().exists():
-      print self.prefix + "pointing DEC           = ", beam.pointDEC().value
-    if beam.pointOffsetRA().exists():
-      print self.prefix + "pointing offset RA     = ", beam.pointOffsetRA().value
-    if beam.pointOffsetDEC().exists():
-      print self.prefix + "pointing offset DEC    = ", beam.pointOffsetDEC().value
-    if beam.beamDiameterRA().exists():
-      print self.prefix + "beam diameter RA       = ", beam.beamDiameterRA().value
-    if beam.beamDiameterDEC().exists():
-      print self.prefix + "beam diameter DEC      = ", beam.beamDiameterDEC().value      
-    if beam.beamFrequencyCenter().exists() and beam.beamFrequencyCenterUnit().exists()==False:
-      print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().value
-    if beam.beamFrequencyCenter().exists() and beam.beamFrequencyCenterUnit().exists():
-      print self.prefix + "beam freq. barycenter  = ", beam.beamFrequencyCenter().value, beam.beamFrequencyCenterUnit().value
-    if beam.foldedData().exists():
-      print self.prefix + "folded data            = ", beam.foldedData().value
-    if beam.foldPeriod().exists() and beam.foldPeriodUnit().exists()==False:
-      sys.stdout.write(self.prefix + "folded period          = " + str(beam.foldPeriod().value))
-    if beam.foldPeriodUnit().exists():
-      print " ", beam.foldPeriodUnit().value
-    if beam.dedispersion().exists():
-      print self.prefix + "dedispersion           = ", beam.dedispersion().value
-    if beam.dedispersionMeasure().exists():
-      print self.prefix + "dedispersion Measure   =  %(dm) %(dmu)" %{'dm': beam.dedispersionMeasure().value, 'dmu': beam.dedispersionMeasureUnit().value}
-    if beam.barycentered().exists():
-      print self.prefix + "barycentered           = ", beam.barycentered().value
-    if beam.nofStokes().exists():
-      print self.prefix + "No of Stokes           = ", beam.nofStokes().value
-    if beam.stokesComponents().exists():
-      print self.prefix + "Stokes components      = ", beam.stokesComponents().value
-    if beam.complexVoltages().exists():
-      print self.prefix + "Complex voltages       = ", beam.complexVoltages().value
-    if beam.signalSum().exists():
-      print self.prefix + "Signal sum             = ", beam.signalSum().value
+    
+    print self.prefix + beam.groupType().name() + "\t\t= " + beam.groupType().value
+    print self.prefix + beam.targets().name() + "\t\t= " + beam.targets().value
+    print self.prefix + beam.nofStations().name() +"\t\t=", beam.nofStations().value
+    print self.prefix + beam.stationsList().name() + "\t\t=", beam.stationsList().value
+    print self.prefix + beam.nofSamples().name() + "\t\t=", beam.nofSamples().value
+    print self.prefix + beam.samplingRate().name() + "\t\t=", beam.samplingRate().value, beam.samplingRateUnit().value
+    print self.prefix + beam.samplingTime().name() + "\t\t=", beam.samplingTime().value, beam.samplingTimeUnit().value
+    print self.prefix + beam.channelsPerSubband().name() + "\t=", beam.channelsPerSubband().value
+    print self.prefix + beam.subbandWidth().name() + "\t\t=", beam.subbandWidth().value, beam.subbandWidthUnit().value
+    print self.prefix + beam.channelWidth().name() + "\t\t=", beam.channelWidth().value, beam.channelWidthUnit().value
+    print self.prefix + beam.tracking().name() + "\t\t=", beam.tracking().value
+    print self.prefix + beam.pointRA().name() + "\t\t=", beam.pointRA().value, beam.pointRAUnit().value
+    print self.prefix + beam.pointDEC().name() + "\t\t=", beam.pointDEC().value, beam.pointDECUnit().value
+    print self.prefix + beam.pointOffsetRA().name() + "\t\t=", beam.pointOffsetRA().value, beam.pointOffsetRAUnit().value
+    print self.prefix + beam.pointOffsetDEC().name() + "\t=", beam.pointOffsetDEC().value, beam.pointOffsetDECUnit().value
+    print self.prefix + beam.beamDiameterRA().name() + "\t=", beam.beamDiameterRA().value, beam.beamDiameterRAUnit().value
+    print self.prefix + beam.beamDiameterDEC().name() + "\t=", beam.beamDiameterDEC().value, beam.beamDiameterDECUnit().value
+    print self.prefix + beam.beamFrequencyCenter().name() + "\t=", beam.beamFrequencyCenter().value, beam.beamFrequencyCenterUnit().value
+    print self.prefix + beam.foldedData().name() + "\t\t=", beam.foldedData().value
+    print self.prefix + beam.foldPeriod().name() + "\t\t=", beam.foldPeriod().value, beam.foldPeriodUnit().value
+    print self.prefix + beam.dedispersion().name() + "\t\t=", beam.dedispersion().value
+#    print self.prefix + beam.dispersionMeasure().name() + "\t= %(dm) %(dmu)" %{'dm': beam.dispersionMeasure().value, 'dmu': beam.dispersionMeasureUnit().value}
+#    print self.prefix + beam.observationNofStokes().name() + "\t\t=", beam.observationNofStokes().value
+    print self.prefix + beam.nofStokes().name() + "\t\t=", beam.nofStokes().value
+    print self.prefix + beam.stokesComponents().name() + "\t= ", beam.stokesComponents().value
+    print self.prefix + beam.complexVoltage().name() + "\t\t=", beam.complexVoltage().value
+    print self.prefix + beam.signalSum().name() + "\t\t=", beam.signalSum().value
 
     # Display Stokes datasets
     for d in range(0, beam.nofStokes().value):
