@@ -130,29 +130,10 @@ class bfmeta:
     print self.prefix + sap.totalIntegrationTime().name(), " = %(ti).2f %(tiu)s" %{'ti':sap.totalIntegrationTime().value, 'tiu':sap.totalIntegrationTimeUnit().value}
     print self.prefix + sap.pointRA().name() + "\t\t= %(pra)3.10f %(prau)s" %{ 'pra': sap.pointRA().value, 'prau': sap.pointRAUnit().value}
     print self.prefix + sap.pointDEC().name() + "\t\t= %(decra)4.10f %(decrau)s" %{'decra': sap.pointDEC().value, 'decrau': sap.pointDECUnit().value}
-
-#    print self.prefix + sap.pointAltitude().name() + "\t\t="%(pal)3.10f %(palu)s" %{ 'pal': sap.pointAltitude().value, 'palu': sap.pointAltitutdeUnit().value}
-#    print self.prefix + sap.pointAltitude().name() + "\t\t="%(pal)3.10f %(palu)s" %{ 'pal': sap.pointAzimuth().value, 'palu': sap.pointAzimuthUnit().value}
-#    print self.prefix + self.fh.observationNofBeams().name() + "\t= " + self.fh.observationNofBeams().value
+    print self.prefix + sap.pointAltitude().name() + "\t\t=", sap.pointAltitude().value, sap.pointAltitudeUnit().value   # optional attribute
+    print self.prefix + sap.pointAltitude().name() + "\t\t=", sap.pointAzimuth().value, sap.pointAzimuthUnit().value      # optional attribute
+    print self.prefix + sap.observationNofBeams().name() + "\t=", sap.observationNofBeams().value
     print self.prefix + sap.nofBeams().name() + "\t\t=", sap .nofBeams().value
-
-#    if sap.clockRate().exists() and sap.clockRateUnit().exists():
-#      print self.prefix + "Clock rate             = ", sap.clockRate().value, sap.clockRateUnit().value
-#    if sap.nofSamples().exists():
-#      print self.prefix + "No. of samples         = ", sap.nofSamples().value
-#    if sap.samplingRate().exists() and sap.samplingRateUnit().exists()==False:
-#      print self.prefix + "Sampling rate          = ", sap.samplingRate().value      
-#    if sap.samplingRate().exists() and sap.samplingRateUnit().exists():
-#      print self.prefix + "Sampling rate          = ", sap.samplingRate().value, sap.samplingRateUnit().value      
-#    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
-#    if sap.channelsPerSubband().exists() and sap.subbandWidth().exists()==False:
-#      print self.prefix + "Channels per subband   = ", sap.channelsPerSubband().value, sap.subbandWidth().value
-#    if sap.channelsPerSubband().exists() and sap.subbandWidthUnit().exists():
-#      print self.prefix + "Subband width unit     = ", sap.subbandWidthUnit().value      
-#    if sap.channelWidth().exists()  and sap.channelWidthUnit().exists()==False:
-#      print self.prefix + "Channel width          = ", sap.channelWidth().value
-#    if sap.channelWidth().exists() and sap.channelWidthUnit().exists():
-#      print self.prefix + "Channel width          = ", sap.channelWidth().value, sap.channelWidthUnit().value
 
     # Beams within this SAP
     self.displayBeam(sap)
@@ -221,7 +202,9 @@ class bfmeta:
     print self.prefix + beam.foldPeriod().name() + "\t\t=", beam.foldPeriod().value, beam.foldPeriodUnit().value
     print self.prefix + beam.dedispersion().name() + "\t\t=", beam.dedispersion().value
 #    print self.prefix + beam.dispersionMeasure().name() + "\t= %(dm) %(dmu)" %{'dm': beam.dispersionMeasure().value, 'dmu': beam.dispersionMeasureUnit().value}
-#    print self.prefix + beam.observationNofStokes().name() + "\t\t=", beam.observationNofStokes().value
+    print self.prefix + beam.dispersionMeasure().name() + "\t=", beam.dispersionMeasure().value, beam.dispersionMeasureUnit().value
+    print self.prefix + beam.barycentered().name() + "\t\t=", beam.barycentered().value
+    print self.prefix + beam.observationNofStokes().name() + "\t=", beam.observationNofStokes().value
     print self.prefix + beam.nofStokes().name() + "\t\t=", beam.nofStokes().value
     print self.prefix + beam.stokesComponents().name() + "\t= ", beam.stokesComponents().value
     print self.prefix + beam.complexVoltage().name() + "\t\t=", beam.complexVoltage().value
@@ -296,6 +279,7 @@ class bfmeta:
       print self.prefix + coords.coordinateTypes().name() + "\t=", coords.coordinateTypes().value
       for c in range(0, coords.nofCoordinates().value):
         self.displayCoordinate(coords, c)
+        self.prefix="\t\t\t"
       self.prefix=bcolors.ENDC
       print self.prefix
 
@@ -305,27 +289,41 @@ class bfmeta:
     print self.prefix + "--------------------------------"
     print self.prefix + "COORDINATE_"+ str(nr)
     if coords.coordinate(nr).exists()==False:
-      print bcolors.FAIL + "Coordinate Nr ", str(nr), " does not exist."
+      print bcolors.FAIL + "COORDINATE_" + str(nr) + " does not exist."
       self.prefix=bcolors.ENDC
       return
     else:
       coord=coords.coordinate(nr)         # pick coordinate
+      # Common coordinate attributes
       print self.prefix + coord.groupType().name() + "\t\t=", coord.groupType().value
       print self.prefix + coord.coordinateType().name() + "\t\t=", coord.coordinateType().value
       print self.prefix + coord.storageType().name() + "\t\t=", coord.storageType().value
       print self.prefix + coord.nofAxes().name() + "\t\t=", coord.nofAxes().value
       print self.prefix + coord.axisNames().name() + "\t\t=", coord.axisNames().value
       print self.prefix + coord.axisUnits().name() + "\t\t=", coord.axisUnits().value
-      #print self.prefix + coord.referenceValue().name() + "\t\t= " + coord.referenceValue().value
-      #print self.prefix + coord.referencePixel().name() + "\t\t= " + coord.referencePixel().value
-      #print self.prefix + coord.increment().name() + "\t\t= " + coord.increment().value
 
-      #if coord.coordinateType().value == "Time":
-      #  print "coord.coordinateType().value = ", coord.coordinateType().value
-      #  self.displayTimeCoordinate(coord)
-      #elif coord.coordinateType().value == "Spectral":
-      #  print "coord.coordinateType().value", coord.coordinateType().value
-      #  self.displaySpectralCoordinate(coord)
+      # Now identify coordinate
+      if coord.groupType().value == "TimeCoord":
+        timeCoord=DAL.TimeCoordinate(coords, coord.name())   # create a TimeCoord from the generic coord
+        print self.prefix + timeCoord.referenceValue().name() + "\t\t=", timeCoord.referenceValue().value
+        print self.prefix + timeCoord.referencePixel().name() + "\t\t=", timeCoord.referencePixel().value
+        print self.prefix + timeCoord.increment().name() + "\t\t=", timeCoord.increment().value     
+        print self.prefix + timeCoord.pc().name() + "\t\t\t=", timeCoord.pc().value     
+        print self.prefix + timeCoord.axisValuesPixel().name() + "\t=", timeCoord.axisValuesPixel().value     
+        print self.prefix + timeCoord.axisValuesWorld().name() + "\t=", timeCoord.axisValuesWorld().value     
+      elif coord.groupType().value == "SpectralCoord":
+        spectralCoord=DAL.SpectralCoordinate(coords, coord.name())   # create a SpectralCoord from the generic coord
+        print self.prefix + spectralCoord.referenceValue().name() + "\t\t=", spectralCoord.referenceValue().value
+        print self.prefix + spectralCoord.referencePixel().name() + "\t\t=", spectralCoord.referencePixel().value
+        print self.prefix + spectralCoord.increment().name() + "\t\t=", spectralCoord.increment().value     
+        print self.prefix + spectralCoord.pc().name() + "\t\t\t=", spectralCoord.pc().value     
+        print self.prefix + spectralCoord.axisValuesPixel().name() + "\t=", spectralCoord.axisValuesPixel().value     
+        print self.prefix + spectralCoord.axisValuesWorld().name() + "\t=", spectralCoord.axisValuesWorld().value
+      else:
+        print coord.name() + " is of type " + coord.groupType()
+        self.prefix=bcolors.ENDC
+        return
+      self.prefix=bcolors.ENDC
           
   # Time coordinate information
   #
