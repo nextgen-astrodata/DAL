@@ -24,6 +24,7 @@ void BF_File::initNodes() {
   addNode( new Attribute<double>(*this, "BANDWIDTH") );
   addNode( new Attribute<string>(*this, "BANDWIDTH_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER") );
+  addNode( new Attribute<string>(*this, "BEAM_DIAMETER_UNIT") );
   addNode( new Attribute< vector<double> >(*this, "WEATHER_TEMPERATURE") );
   addNode( new Attribute<string>(*this, "WEATHER_TEMPERATURE_UNIT") );
   addNode( new Attribute< vector<double> >(*this, "WEATHER_HUMIDITY") );
@@ -196,6 +197,10 @@ void BF_SubArrayPointing::initNodes() {
   addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
   addNode( new Attribute<string>(*this, "POINT_DEC_UNIT") );
+  addNode( new Attribute< vector<double> >(*this, "POINT_ALTITUDE") );
+  addNode( new Attribute< vector<string> >(*this, "POINT_ALTITUDE_UNIT") );
+  addNode( new Attribute< vector<double> >(*this, "POINT_AZIMUTH") );
+  addNode( new Attribute< vector<string> >(*this, "POINT_AZIMUTH_UNIT") );
   addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_BEAMS") );
   addNode( new Attribute<unsigned>(*this, "NOF_BEAMS") );
 }
@@ -258,6 +263,26 @@ Attribute<double> BF_SubArrayPointing::pointDEC()
 Attribute<string> BF_SubArrayPointing::pointDECUnit()
 {
   return getNode("POINT_DEC_UNIT");
+}
+
+Attribute< vector<double> > BF_SubArrayPointing::pointAltitude()
+{
+  return getNode("POINT_ALTITUDE");
+}
+
+Attribute< vector<string> > BF_SubArrayPointing::pointAltitudeUnit()
+{
+  return getNode("POINT_ALTITUDE_UNIT");
+}
+
+Attribute< vector<double> > BF_SubArrayPointing::pointAzimuth()
+{
+  return getNode("POINT_AZIMUTH");
+}
+
+Attribute< vector<string> > BF_SubArrayPointing::pointAzimuthUnit()
+{
+  return getNode("POINT_AZIMUTH_UNIT");
 }
 
 Attribute<unsigned> BF_SubArrayPointing::observationNofBeams()
@@ -323,8 +348,8 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<double>(*this, "FOLD_PERIOD") );
   addNode( new Attribute<string>(*this, "FOLD_PERIOD_UNIT") );
   addNode( new Attribute<string>(*this, "DEDISPERSION") );
-  addNode( new Attribute<double>(*this, "DEDISPERSION_MEASURE") );
-  addNode( new Attribute<string>(*this, "DEDISPERSION_MEASURE_UNIT") );
+  addNode( new Attribute<double>(*this, "DISPERSION_MEASURE") );
+  addNode( new Attribute<string>(*this, "DISPERSION_MEASURE_UNIT") );
   addNode( new Attribute<bool>(*this, "BARYCENTERED") );
   addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_STOKES") );
   addNode( new Attribute<unsigned>(*this, "NOF_STOKES") );
@@ -493,14 +518,14 @@ Attribute<string> BF_BeamGroup::dedispersion()
   return getNode("DEDISPERSION");
 }
 
-Attribute<double> BF_BeamGroup::dedispersionMeasure()
+Attribute<double> BF_BeamGroup::dispersionMeasure()
 {
-  return getNode("DEDISPERSION_MEASURE");
+  return getNode("DISPERSION_MEASURE");
 }
 
-Attribute<string> BF_BeamGroup::dedispersionMeasureUnit()
+Attribute<string> BF_BeamGroup::dispersionMeasureUnit()
 {
-  return getNode("DEDISPERSION_MEASURE_UNIT");
+  return getNode("DISPERSION_MEASURE_UNIT");
 }
 
 Attribute<bool> BF_BeamGroup::barycentered()

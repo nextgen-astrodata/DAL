@@ -100,6 +100,11 @@ public:
   Attribute<double>       pointDEC();
   Attribute<std::string>  pointDECUnit();  
 
+  Attribute< std::vector<double> >       pointAltitude();
+  Attribute< std::vector<std::string> >  pointAltitudeUnit();  
+  Attribute< std::vector<double> >       pointAzimuth();
+  Attribute< std::vector<std::string> >  pointAzimuthUnit();  
+
   Attribute<unsigned>     observationNofBeams();
   Attribute<unsigned>     nofBeams();
   virtual BF_BeamGroup    beam( unsigned nr );
@@ -159,8 +164,8 @@ public:
   Attribute<std::string>  foldPeriodUnit();
 
   Attribute<std::string>  dedispersion();
-  Attribute<double>       dedispersionMeasure();
-  Attribute<std::string>  dedispersionMeasureUnit();
+  Attribute<double>       dispersionMeasure();
+  Attribute<std::string>  dispersionMeasureUnit();
 
   Attribute<bool>         barycentered();
 
