@@ -112,12 +112,12 @@ class bfmeta:
       if str(nr) in self.sap or self.sap=="all":
         sap=self.fh.subArrayPointing(nr)
         print self.prefix + "------------------------------------"
-        print self.prefix + "SubArrayPointing Nr\t=", nr
+        print self.prefix + "SUB_ARRAY_POINTING_%(nr)03d" %{'nr': nr}
       else:
-        print "SubArrayPointing Nr", nr, "doesn't exist."        
+        print "SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
         return
     else:
-      print "SubArrayPointing Nr", nr, "doesn't exist."
+      print "SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
       return    
 
     print self.prefix + sap.groupType().name() +  "\t\t= " + sap.groupType().value
@@ -192,11 +192,11 @@ class bfmeta:
       return
 
     print self.prefix + "------------------------------------"
-    print self.prefix + "Beam Nr\t\t\t= ", nr
+    print self.prefix + "BEAM_%(bnr)03d" %{'bnr': nr}
 
     # Only beams with selected Stokes components
     if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
-      print self.prefix + "Stokes component " + str(self.stokes) + " doesn't exist in beam Nr. " + str(nr)
+      print self.prefix + "STOKES_COMPONENT_%(stokes)s doesn't exist in BEAM_%(nr)03d" %{'stokes': self.stokes, 'nr': nr}
       return
     
     print self.prefix + beam.groupType().name() + "\t\t= " + beam.groupType().value
@@ -230,7 +230,6 @@ class bfmeta:
     # Display Stokes datasets
     for d in range(0, beam.nofStokes().value):
       self.displayStokesDatasetInfo(beam, d)
-   
     self.displayCoordinates(beam)
 
     self.prefix=bcolors.ENDC          # reset printing options
@@ -254,22 +253,17 @@ class bfmeta:
     if beam.stokes(nr).exists():
       stokes=beam.stokes(nr)
     else:
-      print bcolors.FAIL + "Stokes dataset ", nr, " doesn't exist."
+      print bcolors.FAIL + "STOKES_" + str(nr) + " doesn't exist."
       self.prefix=bcolors.ENDC
       print self.prefix
       return
     print self.prefix + "-----------------------------------"
-    if stokes.stokesComponent().exists():
-      print self.prefix + "Stokes             = ", stokes.stokesComponent().value    
-    if stokes.nofChannels().exists():
-      print self.prefix + "No. of channels    = ", stokes.nofChannels().value    
-    if stokes.nofSubbands().exists():
-      print self.prefix + "No. of subbands    = ", stokes.nofSubbands().value    
-    if stokes.nofSamples().exists():
-      print self.prefix + "No. of samples     = ", stokes.nofSamples().value    
-     
+    print self.prefix + stokes.stokesComponent().name() + "\t=", stokes.stokesComponent().value    
+    print self.prefix + stokes.dataType().name() + "\t\t=", stokes.dataType().value    
+    print self.prefix + stokes.nofSamples().name() + "\t\t=", stokes.nofSamples().value    
+    print self.prefix + stokes.nofSubbands().name() + "\t\t=", stokes.nofSubbands().value    
+    print self.prefix + stokes.nofChannels().name() + "\t\t=", stokes.nofChannels().value        
     self.prefix=bcolors.ENDC        # reset printing options     
-    print self.prefix
 
   # Display coordinategroup info (only in verbose mode)
   #
@@ -280,41 +274,28 @@ class bfmeta:
       self.prefix=self.prefix + bcolors.COORD
 
     # Show coordinate infos only in verbose mode
-    if not self.verbose:
-      self.prefix=bcolors.ENDC            # reset printing options
-      print self.prefix
-      return
+    #if not self.verbose:
+    #  self.prefix=bcolors.ENDC            # reset printing options
+    #  print self.prefix
+    #  return
 
     print self.prefix + "----------------------------------"
-    print self.prefix + "Coordinates"
+    #print self.prefix + "Coordinates"
     if beam.coordinates().exists()==False:
       return
     else:
       coords=beam.coordinates()
-
       # This is buggy in the Swig bindings
-      #if coords.refLocationValue().exists():
-      #  print "refLocationValue     = ", coords.refLocationValue().value
-      if coords.refLocationUnit().exists():
-        print self.prefix + "refLocationUnit    = ", coords.refLocationUnit().value
-      if coords.refLocationFrame().exists():
-        print self.prefix + "refLocationFrame   = ", coords.refLocationFrame().value
-      if coords.refTimeValue().exists():
-        print self.prefix + "refTimeValue       = ", coords.refTimeValue().value
-      if coords.refTimeUnit().exists():
-        print self.prefix + "refTimeUnit        = ", coords.refTimeUnit().value
-      if coords.refTimeFrame().exists():
-        print self.prefix + "refTimeFrame       = ", coords.refTimeFrame().value
-      if coords.nofCoordinates().exists():
-        print self.prefix + "No. of Coordinates = ", coords.nofCoordinates().value
-      if coords.nofAxes().exists():
-        print self.prefix + "No. of Axes        = ", coords.nofAxes().value
-      if coords.coordinateTypes().exists():
-        print self.prefix + "Coordinate types   = ", coords.coordinateTypes().value
-
+      print self.prefix + coords.groupType().name() + "\t\t=", coords.groupType().value
+      print self.prefix + coords.refLocationValue().name() + "\t=", coords.refLocationValue().value, coords.refLocationUnit().value
+      print self.prefix + coords.refLocationFrame().name() + "\t=", coords.refLocationFrame().value
+      print self.prefix + coords.refTimeValue().name() + "\t\t=", coords.refTimeValue().value, coords.refTimeUnit().value
+      print self.prefix + coords.refTimeFrame().name() + "\t\t=", coords.refTimeFrame().value
+      print self.prefix + coords.nofCoordinates().name() + "\t\t=", coords.nofCoordinates().value
+      print self.prefix + coords.nofAxes().name() + "\t\t=", coords.nofAxes().value
+      print self.prefix + coords.coordinateTypes().name() + "\t=", coords.coordinateTypes().value
       for c in range(0, coords.nofCoordinates().value):
         self.displayCoordinate(coords, c)
-
       self.prefix=bcolors.ENDC
       print self.prefix
 
@@ -322,56 +303,46 @@ class bfmeta:
   #
   def displayCoordinate(self, coords, nr):
     print self.prefix + "--------------------------------"
-    print self.prefix + "Coordinate Nr      = ", nr
+    print self.prefix + "COORDINATE_"+ str(nr)
     if coords.coordinate(nr).exists()==False:
       print bcolors.FAIL + "Coordinate Nr ", str(nr), " does not exist."
       self.prefix=bcolors.ENDC
       return
     else:
       coord=coords.coordinate(nr)         # pick coordinate
-      if coord.coordinateType().exists():
-        print self.prefix + "Coordinate type    = ", coord.coordinateType().value
-      if coord.storageType().exists():
-        print self.prefix + "Storage type       = ", coord.storageType().value
-      if coord.nofAxes().exists():
-        print self.prefix + "No. of axes        = ", coord.nofAxes().value
-      if coord.axisNames().exists():
-        print self.prefix + "Axis names         = ", coord.axisNames().value
-      if coord.axisUnits().exists():
-        print self.prefix + "Axis units         = ", coord.axisUnits().value
+      print self.prefix + coord.groupType().name() + "\t\t=", coord.groupType().value
+      print self.prefix + coord.coordinateType().name() + "\t\t=", coord.coordinateType().value
+      print self.prefix + coord.storageType().name() + "\t\t=", coord.storageType().value
+      print self.prefix + coord.nofAxes().name() + "\t\t=", coord.nofAxes().value
+      print self.prefix + coord.axisNames().name() + "\t\t=", coord.axisNames().value
+      print self.prefix + coord.axisUnits().name() + "\t\t=", coord.axisUnits().value
+      #print self.prefix + coord.referenceValue().name() + "\t\t= " + coord.referenceValue().value
+      #print self.prefix + coord.referencePixel().name() + "\t\t= " + coord.referencePixel().value
+      #print self.prefix + coord.increment().name() + "\t\t= " + coord.increment().value
 
-      #if coord.coordinateType().exists():
-      #  if coord.coordinateType().value == "Time":
-      #    print "coord.coordinateType().value = ", coord.coordinateType().value
-      #    #self.displayTimeCoordinate(coord)
-      #  else:
-      #    print "coord.coordinateType().value", coord.coordinateType().value
-      #    self.displaySpectralCoordinate(coord)
+      #if coord.coordinateType().value == "Time":
+      #  print "coord.coordinateType().value = ", coord.coordinateType().value
+      #  self.displayTimeCoordinate(coord)
+      #elif coord.coordinateType().value == "Spectral":
+      #  print "coord.coordinateType().value", coord.coordinateType().value
+      #  self.displaySpectralCoordinate(coord)
           
   # Time coordinate information
   #
   def displayTimeCoordinate(self, coord):
-    if coord.referenceFrame().exists():
-      print self.prefix + "Reference frame    = ", coord.referenceFrame().value
+    print "displayTimeCoordinate()"
 
   # Spectral coordinate information
   #
   def displaySpectralCoordinate(self, coord):
-    if coord.referenceFrame().exists():
-      print self.prefix + "Reference frame    = ", coord.referenceFrame().value
-    if coord.restFrequency().exists():
-      print self.prefix + "Rest frequency     = ", coord.restFrequency().value
-    if coord.restFrequencyUnit().exists():
-      print self.prefix + "Rest frequency unit = ", coord.restFrequencyUnit().value
-    if coord.restWavelength().exists():
-      print self.prefix + "Rest wavelength    = ", coord.restWavelength().value
-    if coord.restWavelengthUnit().exists():
-      print self.prefix + "Rest wavelength unit = ", coord.restWavelengthUnit().value
+    print self.prefix + "Reference frame    = ", coord.referenceFrame().value
+    print self.prefix + "Rest frequency     = ", coord.restFrequency().value
+    print self.prefix + "Rest frequency unit = ", coord.restFrequencyUnit().value
+    print self.prefix + "Rest wavelength    = ", coord.restWavelength().value
+    print self.prefix + "Rest wavelength unit = ", coord.restWavelengthUnit().value
 
-
-  def handleArg(self, arg):
+  def handleArg(self, arg):     # experimental to disect python arg
     print "handleArg()"
-
     if "[" in arg and "]" in arg:    
       handleList(arg)
     else:
@@ -379,7 +350,7 @@ class bfmeta:
 
   # Handle command line options supplied as list
   #
-  def handleList(self, list):
+  def handleList(self, list):  # experimental to disect python list
     print "handleList()"
     
     # strip off [ and ]
