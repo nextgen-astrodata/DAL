@@ -10,6 +10,11 @@ TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode )
 {
 }
 
+Attribute<string> TBB_File::operatingMode()
+{
+  return Attribute<string>(*this, "OPERATING_MODE");
+}
+
 Attribute<unsigned> TBB_File::nofStations()
 {
   return Attribute<unsigned>(*this, "NOF_STATIONS");
@@ -36,51 +41,65 @@ TBB_Station TBB_File::station( const std::string &stationName )
   return TBB_Station(*this, stationGroupName(stationName));
 }
 
-string TBB_File::stationGroupName( const std::string &stationName) {
+string TBB_File::stationGroupName( const string &stationName) {
   return "STATION_" + stationName;
 }
 
-Attribute<string> TBB_File::triggerType()
+TBB_Trigger TBB_File::trigger()
+{
+  return TBB_Trigger(*this, "TRIGGER");
+}
+
+
+Attribute<string> TBB_Trigger::triggerType()
 {
   return Attribute<string>(*this, "TRIGGER_TYPE");
 }
 
-TBB_Trigger TBB_File::triggerData()
+Attribute<int> TBB_Trigger::triggerVersion()
 {
-  char buf[128];
-  snprintf(buf, sizeof buf, "TRIGGER_DATA");
-
-  const string type =
-    triggerType().exists()
-        ? triggerType().get()
-        : "";
-
-  if (type == "Unknown") {
-    return TBB_UnknownTrigger(*this, string(buf));
-  }
-
-  // unknown type
-  return TBB_Trigger(*this, string(buf));
+  return Attribute<int>(*this, "TRIGGER_VERSION");
 }
 
-TBB_SysLog TBB_File::sysLog()
+Attribute<int> TBB_Trigger::paramCoincidenceChannels()
 {
-  return TBB_SysLog(*this, "SYS_LOG");
+  return Attribute<int>(*this, "PARAM_COINCIDENCE_CHANNELS");
 }
+
+Attribute<double> TBB_Trigger::paramCoincidenceTime()
+{
+  return Attribute<double>(*this, "PARAM_COINCIDENCE_TIME");
+}
+
+Attribute<string> TBB_Trigger::paramDirectionFit()
+{
+  return Attribute<string>(*this, "PARAM_DIRECTION_FIT");
+}
+
+Attribute<double> TBB_Trigger::paramElevationMin()
+{
+  return Attribute<double>(*this, "PARAM_ELEVATION_MIN");
+}
+
+Attribute<double> TBB_Trigger::paramFitVarianceMax()
+{
+  return Attribute<double>(*this, "PARAM_FIT_VARIANCE_MAX");
+}
+
 
 Attribute<string> TBB_Station::stationName()
 {
   return Attribute<string>(*this, "STATION_NAME");
 }
 
-Attribute< vector<double> > TBB_Station::stationPositionValue()
+Attribute< vector<double> > TBB_Station::stationPosition()
 {
-  return Attribute< vector<double> >(*this, "STATION_POSITION_VALUE");
+  return Attribute< vector<double> >(*this, "STATION_POSITION");
 }
 
-Attribute< vector<string> > TBB_Station::stationPositionUnit()
+Attribute<string> TBB_Station::stationPositionUnit()
 {
-  return Attribute< vector<string> >(*this, "STATION_POSITION_UNIT");
+  return Attribute<string>(*this, "STATION_POSITION_UNIT");
 }
 
 Attribute<string> TBB_Station::stationPositionFrame()
@@ -88,14 +107,14 @@ Attribute<string> TBB_Station::stationPositionFrame()
   return Attribute<string>(*this, "STATION_POSITION_FRAME");
 }
 
-Attribute< vector<double> > TBB_Station::beamDirectionValue()
+Attribute< vector<double> > TBB_Station::beamDirection()
 {
-  return Attribute< vector<double> >(*this, "BEAM_DIRECTION_VALUE");
+  return Attribute< vector<double> >(*this, "BEAM_DIRECTION");
 }
 
-Attribute< vector<string> > TBB_Station::beamDirectionUnit()
+Attribute<string> TBB_Station::beamDirectionUnit()
 {
-  return Attribute< vector<string> >(*this, "BEAM_DIRECTION_UNIT");
+  return Attribute<string>(*this, "BEAM_DIRECTION_UNIT");
 }
 
 Attribute<string> TBB_Station::beamDirectionFrame()
@@ -103,9 +122,9 @@ Attribute<string> TBB_Station::beamDirectionFrame()
   return Attribute<string>(*this, "BEAM_DIRECTION_FRAME");
 }
 
-Attribute<double> TBB_Station::clockOffsetValue()
+Attribute<double> TBB_Station::clockOffset()
 {
-  return Attribute<double>(*this, "CLOCK_OFFSET_VALUE");
+  return Attribute<double>(*this, "CLOCK_OFFSET");
 }
 
 Attribute<string> TBB_Station::clockOffsetUnit()
@@ -152,6 +171,7 @@ string TBB_Station::dipoleDatasetName( unsigned stationID, unsigned rspID, unsig
   return string(buf);
 }
 
+
 Attribute<unsigned> TBB_DipoleDataset::stationID()
 {
   return Attribute<unsigned>(*this, "STATION_ID");
@@ -167,9 +187,9 @@ Attribute<unsigned> TBB_DipoleDataset::rcuID()
   return Attribute<unsigned>(*this, "RCU_ID");
 }
 
-Attribute<double> TBB_DipoleDataset::sampleFrequencyValue()
+Attribute<double> TBB_DipoleDataset::sampleFrequency()
 {
-  return Attribute<double>(*this, "SAMPLE_FREQUENCY_VALUE");
+  return Attribute<double>(*this, "SAMPLE_FREQUENCY");
 }
 
 Attribute<string> TBB_DipoleDataset::sampleFrequencyUnit()
@@ -197,14 +217,14 @@ Attribute<unsigned> TBB_DipoleDataset::dataLength()
   return Attribute<unsigned>(*this, "DATA_LENGTH");
 }
 
+Attribute< vector<unsigned> > TBB_DipoleDataset::flagOffsets()
+{
+  return Attribute< vector<unsigned> >(*this, "FLAG_OFFSETS");
+}
+
 Attribute<unsigned> TBB_DipoleDataset::nyquistZone()
 {
   return Attribute<unsigned>(*this, "NYQUIST_ZONE");
-}
-
-Attribute<double> TBB_DipoleDataset::ADC2Voltage()
-{
-  return Attribute<double>(*this, "ADC2VOLTAGE");
 }
 
 Attribute<double> TBB_DipoleDataset::cableDelay()
@@ -217,14 +237,9 @@ Attribute<string> TBB_DipoleDataset::cableDelayUnit()
   return Attribute<string>(*this, "CABLE_DELAY_UNIT");
 }
 
-Attribute<string> TBB_DipoleDataset::feed()
+Attribute< vector<double> > TBB_DipoleDataset::antennaPosition()
 {
-  return Attribute<string>(*this, "FEED");
-}
-
-Attribute< vector<double> > TBB_DipoleDataset::antennaPositionValue()
-{
-  return Attribute< vector<double> >(*this, "ANTENNA_POSITION_VALUE");
+  return Attribute< vector<double> >(*this, "ANTENNA_POSITION");
 }
 
 Attribute<string> TBB_DipoleDataset::antennaPositionUnit()
@@ -237,24 +252,19 @@ Attribute<string> TBB_DipoleDataset::antennaPositionFrame()
   return Attribute<string>(*this, "ANTENNA_POSITION_FRAME");
 }
 
-Attribute< vector<double> > TBB_DipoleDataset::antennaOrientationValue()
+Attribute< vector<double> > TBB_DipoleDataset::antennaNormalVector()
 {
-  return Attribute< vector<double> >(*this, "ANTENNA_ORIENTATION_VALUE");
+  return Attribute< vector<double> >(*this, "ANTENNA_NORMAL_VECTOR");
 }
 
-Attribute<string> TBB_DipoleDataset::antennaOrientationUnit()
+Attribute< vector<double> > TBB_DipoleDataset::antennaRotationMatrix()
 {
-  return Attribute<string>(*this, "ANTENNA_ORIENTATION_UNIT");
+  return Attribute< vector<double> >(*this, "ANTENNA_ROTATION_MATRIX");
 }
 
-Attribute<string> TBB_DipoleDataset::antennaOrientationFrame()
+Attribute< vector<double> > TBB_DipoleDataset::tileBeam()
 {
-  return Attribute<string>(*this, "ANTENNA_ORIENTATION_FRAME");
-}
-
-Attribute< vector<double> > TBB_DipoleDataset::tileBeamValue()
-{
-  return Attribute< vector<double> >(*this, "TILE_BEAM_VALUE");
+  return Attribute< vector<double> >(*this, "TILE_BEAM");
 }
 
 Attribute<string> TBB_DipoleDataset::tileBeamUnit()
@@ -267,144 +277,14 @@ Attribute<string> TBB_DipoleDataset::tileBeamFrame()
   return Attribute<string>(*this, "TILE_BEAM_FRAME");
 }
 
-Attribute<string> TBB_DipoleDataset::tileCoefUnit()
+Attribute<double> TBB_DipoleDataset::dispersionMeasure()
 {
-  return Attribute<string>(*this, "TILE_COEF_UNIT");
+  return Attribute<double>(*this, "DISPERSION_MEASURE");
 }
 
-Attribute< vector<unsigned> > TBB_DipoleDataset::tileBeamCoefs()
+Attribute<string> TBB_DipoleDataset::dispersionMeasureUnit()
 {
-  return Attribute< vector<unsigned> >(*this, "TILE_BEAM_COEFS");
-}
-
-Attribute< vector<double> > TBB_DipoleDataset::tileDipolePositionValue()
-{
-  return Attribute< vector<double> >(*this, "TILE_DIPOLE_POSITION_VALUE");
-}
-
-Attribute<string> TBB_DipoleDataset::tileDipolePositionUnit()
-{
-  return Attribute<string>(*this, "TILE_DIPOLE_POSITION_UNIT");
-}
-
-Attribute<string> TBB_DipoleDataset::tileDipolePositionFrame()
-{
-  return Attribute<string>(*this, "TILE_DIPOLE_POSITION_FRAME");
-}
-
-Attribute<string> TBB_UnknownTrigger::metadata()
-{
-  return Attribute<string>(*this, "METADATA");
-}
-
-Attribute<string> TBB_VHECRTrigger::triggerSource()
-{
-  return Attribute<string>(*this, "TRIGGER_SOURCE");
-}
-
-Attribute<unsigned> TBB_VHECRTrigger::triggerTime()
-{
-  return Attribute<unsigned>(*this, "TRIGGER_TIME");
-}
-
-Attribute<unsigned> TBB_VHECRTrigger::triggerSampleNumber()
-{
-  return Attribute<unsigned>(*this, "TRIGGER_SAMPLE_NUMBER");
-}
-
-Attribute<unsigned> TBB_VHECRTrigger::paramCoincidenceChannels()
-{
-  return Attribute<unsigned>(*this, "PARAM_COINCIDENCE_CHANNELS");
-}
-
-Attribute<double> TBB_VHECRTrigger::paramCoincidenceTime()
-{
-  return Attribute<double>(*this, "PARAM_COINCIDENCE_TIME");
-}
-
-Attribute<string> TBB_VHECRTrigger::paramDirectionFit()
-{
-  return Attribute<string>(*this, "PARAM_DIRECTION_FIT");
-}
-
-Attribute<double> TBB_VHECRTrigger::paramElevationMin()
-{
-  return Attribute<double>(*this, "PARAM_ELEVATION_MIN");
-}
-
-Attribute<double> TBB_VHECRTrigger::paramFitVarianceMax()
-{
-  return Attribute<double>(*this, "PARAM_FIT_VARIANCE_MAX");
-}
-
-Attribute<unsigned> TBB_VHECRTrigger::coincidenceChannels()
-{
-  return Attribute<unsigned>(*this, "COINCIDENCE_CHANNELS");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::rcuID()
-{
-  return Attribute< vector<unsigned> >(*this, "RCU_ID");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::time()
-{
-  return Attribute< vector<unsigned> >(*this, "TIME");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::sampleNumber()
-{
-  return Attribute< vector<unsigned> >(*this, "SAMPLE_NUMBER");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::pulseSum()
-{
-  return Attribute< vector<unsigned> >(*this, "PULSE_SUM");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::pulseWidth()
-{
-  return Attribute< vector<unsigned> >(*this, "PULSE_WIDTH");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::pulsePeak()
-{
-  return Attribute< vector<unsigned> >(*this, "PULSE_PEAK");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::pulsePowerPre()
-{
-  return Attribute< vector<unsigned> >(*this, "PULSE_POWER_PRE");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::pulsePowerPost()
-{
-  return Attribute< vector<unsigned> >(*this, "PULSE_POWER_POST");
-}
-
-Attribute< vector<unsigned> > TBB_VHECRTrigger::nofMissedTriggers()
-{
-  return Attribute< vector<unsigned> >(*this, "NOF_MISSED_TRIGGERS");
-}
-
-Attribute<double> TBB_VHECRTrigger::fitDirectionAzimuth()
-{
-  return Attribute<double>(*this, "FIT_DIRECTION_AZIMUTH");
-}
-
-Attribute<double> TBB_VHECRTrigger::fitDirectionElevation()
-{
-  return Attribute<double>(*this, "FIT_DIRECTION_ELEVATION");
-}
-
-Attribute<double> TBB_VHECRTrigger::fitDirectionDistance()
-{
-  return Attribute<double>(*this, "FIT_DIRECTION_DISTANCE");
-}
-
-Attribute<double> TBB_VHECRTrigger::fitDirectionVariance()
-{
-  return Attribute<double>(*this, "FIT_DIRECTION_VARIANCE");
+  return Attribute<string>(*this, "DISPERSION_MEASURE_UNIT");
 }
 
 }

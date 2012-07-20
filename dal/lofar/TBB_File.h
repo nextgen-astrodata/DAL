@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <complex>
 #include <hdf5.h>
 #include "dal/hdf5/Attribute.h"
 #include "dal/hdf5/Group.h"
@@ -12,12 +13,9 @@
 namespace DAL {
 
 class TBB_File;
-class TBB_SysLog;
 class TBB_Station;
 class TBB_DipoleDataset;
 class TBB_Trigger;
-class TBB_UnknownTrigger;
-class TBB_VHECRTrigger;
 
 /*!
  * Interface for TBB Time-Series Data.
@@ -29,21 +27,30 @@ public:
    */
   TBB_File( const std::string &filename, enum fileMode mode = READ );
 
-  virtual TBB_SysLog     sysLog();
+  Attribute<std::string> operatingMode();
   Attribute<unsigned>    nofStations();
+
   virtual std::vector<TBB_Station> stations();
   virtual TBB_Station    station( const std::string &stationName );
 
-  Attribute<std::string> triggerType();
-  virtual TBB_Trigger    triggerData();
+  virtual TBB_Trigger    trigger();
 
 private:
   std::string            stationGroupName( const std::string &stationName );
 };
 
-class TBB_SysLog: public Group {
+class TBB_Trigger: public Group {
 public:
-  TBB_SysLog( Group &parent, const std::string &name ): Group(parent, name) {}
+  TBB_Trigger( Group &parent, const std::string &name ): Group(parent, name) {}
+
+  Attribute<std::string> triggerType();
+  Attribute<int>         triggerVersion();
+
+  Attribute<int>         paramCoincidenceChannels();
+  Attribute<double>      paramCoincidenceTime();
+  Attribute<std::string> paramDirectionFit();
+  Attribute<double>      paramElevationMin();
+  Attribute<double>      paramFitVarianceMax();
 };
 
 class TBB_Station: public Group {
@@ -53,20 +60,21 @@ public:
 
   Attribute<std::string>                stationName();
 
-  Attribute< std::vector<double> >      stationPositionValue();
-  Attribute< std::vector<std::string> > stationPositionUnit();
+  Attribute< std::vector<double> >      stationPosition();
+  Attribute<std::string>                stationPositionUnit();
   Attribute<std::string>                stationPositionFrame();
 
-  Attribute< std::vector<double> >      beamDirectionValue();
-  Attribute< std::vector<std::string> > beamDirectionUnit();
+  Attribute< std::vector<double> >      beamDirection();
+  Attribute<std::string>                beamDirectionUnit();
   Attribute<std::string>                beamDirectionFrame();
 
-  Attribute<double>                     clockOffsetValue();
+  Attribute<double>                     clockOffset();
   Attribute<std::string>                clockOffsetUnit();
 
   Attribute<double>                     triggerOffset();
 
   Attribute<unsigned>                   nofDipoles();
+
   virtual std::vector<TBB_DipoleDataset> dipoles();
   virtual TBB_DipoleDataset             dipole( unsigned stationID, unsigned rspID, unsigned rcuID );
 
@@ -83,7 +91,7 @@ public:
   Attribute<unsigned>                   rspID();
   Attribute<unsigned>                   rcuID();
 
-  Attribute<double>                     sampleFrequencyValue();
+  Attribute<double>                     sampleFrequency();
   Attribute<std::string>                sampleFrequencyUnit();
 
   Attribute<unsigned>                   time();
@@ -91,81 +99,29 @@ public:
 
   Attribute<unsigned>                   samplesPerFrame();
   Attribute<unsigned>                   dataLength();
+  Attribute< std::vector<unsigned> >    flagOffsets();
   Attribute<unsigned>                   nyquistZone();
-  Attribute<double>                     ADC2Voltage();
 
   Attribute<double>                     cableDelay();
   Attribute<std::string>                cableDelayUnit();
 
-  Attribute<std::string>                feed();
-  Attribute< std::vector<double> >      antennaPositionValue();
+  Attribute<double>                     dipoleCalibrationDelay();
+  Attribute<std::string>                dipoleCalibrationDelayUnit();
+  Attribute< std::vector<std::complex<double> > > dipoleCalibrationGainCurve();
+
+  Attribute< std::vector<double> >      antennaPosition();
   Attribute<std::string>                antennaPositionUnit();
   Attribute<std::string>                antennaPositionFrame();
+  Attribute< std::vector<double> >      antennaNormalVector();
+  Attribute< std::vector<double> >      antennaRotationMatrix(); // 3 x 3, row-minor
 
-  Attribute< std::vector<double> >      antennaOrientationValue();
-  Attribute<std::string>                antennaOrientationUnit();
-  Attribute<std::string>                antennaOrientationFrame();
-
-  Attribute< std::vector<double> >      tileBeamValue();
+  Attribute< std::vector<double> >      tileBeam();
   Attribute<std::string>                tileBeamUnit();
   Attribute<std::string>                tileBeamFrame();
 
-  Attribute<std::string>                tileCoefUnit();
-  Attribute< std::vector<unsigned> >    tileBeamCoefs();
-
-  Attribute< std::vector<double> >      tileDipolePositionValue(); // todo: make this a 3D vector
-  Attribute<std::string>                tileDipolePositionUnit();
-  Attribute<std::string>                tileDipolePositionFrame();
+  Attribute<double>                     dispersionMeasure();
+  Attribute<std::string>                dispersionMeasureUnit();
 };
-
-class TBB_Trigger: public Group {
-public:
-  TBB_Trigger( Group &parent, const std::string &name ): Group(parent, name) {}
-};
-
-class TBB_UnknownTrigger: public TBB_Trigger {
-public:
-  TBB_UnknownTrigger( Group &parent, const std::string &name ): TBB_Trigger(parent, name) {}
-
-  Attribute<std::string> metadata();
-};
-
-class TBB_VHECRTrigger: public TBB_Trigger {
-public:
-  TBB_VHECRTrigger( Group &parent, const std::string &name ): TBB_Trigger(parent, name) {}
-
-  Attribute<std::string> triggerSource();
-
-  Attribute<unsigned>    triggerTime();
-  Attribute<unsigned>    triggerSampleNumber();
-
-  Attribute<unsigned>    paramCoincidenceChannels();
-  Attribute<double>      paramCoincidenceTime();
-
-  Attribute<std::string> paramDirectionFit();
-  Attribute<double>      paramElevationMin();
-  Attribute<double>      paramFitVarianceMax();
-
-  Attribute<unsigned>    coincidenceChannels();
-
-  Attribute< std::vector<unsigned> > rcuID();
-  Attribute< std::vector<unsigned> > time();
-  Attribute< std::vector<unsigned> > sampleNumber();
-
-  Attribute< std::vector<unsigned> > pulseSum();
-  Attribute< std::vector<unsigned> > pulseWidth();
-  Attribute< std::vector<unsigned> > pulsePeak();
-  Attribute< std::vector<unsigned> > pulsePowerPre();
-  Attribute< std::vector<unsigned> > pulsePowerPost();
-
-  Attribute< std::vector<unsigned> > nofMissedTriggers();
-
-  Attribute<double>      fitDirectionAzimuth();
-  Attribute<double>      fitDirectionElevation();
-  Attribute<double>      fitDirectionDistance();
-  Attribute<double>      fitDirectionVariance();
-};
-
 
 }
 
