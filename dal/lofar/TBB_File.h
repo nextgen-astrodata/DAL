@@ -71,8 +71,6 @@ public:
   Attribute<double>                     clockOffset();
   Attribute<std::string>                clockOffsetUnit();
 
-  Attribute<double>                     triggerOffset();
-
   Attribute<unsigned>                   nofDipoles();
 
   virtual std::vector<TBB_DipoleDataset> dipoles();

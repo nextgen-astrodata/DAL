@@ -132,11 +132,6 @@ Attribute<string> TBB_Station::clockOffsetUnit()
   return Attribute<string>(*this, "CLOCK_OFFSET_UNIT");
 }
 
-Attribute<double> TBB_Station::triggerOffset()
-{
-  return Attribute<double>(*this, "TRIGGER_OFFSET");
-}
-
 Attribute<unsigned> TBB_Station::nofDipoles()
 {
   return Attribute<unsigned>(*this, "NOF_DIPOLES");
