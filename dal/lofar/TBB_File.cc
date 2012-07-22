@@ -41,7 +41,7 @@ TBB_Station TBB_File::station( const std::string &stationName )
   return TBB_Station(*this, stationGroupName(stationName));
 }
 
-string TBB_File::stationGroupName( const string &stationName) {
+string TBB_File::stationGroupName( const std::string &stationName) {
   return "STATION_" + stationName;
 }
 
