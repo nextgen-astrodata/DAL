@@ -232,6 +232,21 @@ Attribute<string> TBB_DipoleDataset::cableDelayUnit()
   return Attribute<string>(*this, "CABLE_DELAY_UNIT");
 }
 
+Attribute<double> TBB_DipoleDataset::dipoleCalibrationDelay()
+{
+  return Attribute<double>(*this, "DIPOLE_CALIBRATION_DELAY");
+}
+
+Attribute<string> TBB_DipoleDataset::dipoleCalibrationDelayUnit()
+{
+  return Attribute<string>(*this, "DIPOLE_CALIBRATION_DELAY_UNIT");
+}
+
+Attribute< vector<complex<double> > > TBB_DipoleDataset::dipoleCalibrationGainCurve()
+{
+  return Attribute< vector<complex<double> > >(*this, "DIPOLE_CALIBRATION_DELAY_GAIN_CURVE");
+}
+
 Attribute< vector<double> > TBB_DipoleDataset::antennaPosition()
 {
   return Attribute< vector<double> >(*this, "ANTENNA_POSITION");
