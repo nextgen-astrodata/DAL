@@ -1,6 +1,8 @@
 #ifndef DAL_ISDERIVEDFROM_H
 #define DAL_ISDERIVEDFROM_H
 
+#include "issame.h"
+
 namespace DAL {
 
 // Excerpted from the book More Exceptional C++ by Herb Sutter.
@@ -60,15 +62,21 @@ public:
   IsDerivedFrom() { void(*p)(D*) = Constraints; (void)p; }
 };
 
-// Force it to fail in the case where B is void
+// Force it to fail in the case where B is void (unless D is void as well)
 
 template<typename D>
 class IsDerivedFrom<D, void>
 {
 public:
-  enum { Is = 0 };
+  enum { Is = IsSame<D, void>::Is };
 
-  IsDerivedFrom() { char* p = (int*)0; /* error */ }
+  // Note: C++11 14.6.8 says the template specialisation
+  //       is ill-formed if it does not compile for any
+  //       value of D. This can cause a compiler to bail
+  //       even if this specialisation is never used.
+  //
+  //       clang is an example of such a compiler.
+  IsDerivedFrom() { D* p = (void*)0; (void)p; /* error if D != void */ }
 };
 
 }
