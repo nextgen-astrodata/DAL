@@ -29,7 +29,7 @@ def main():
   parser.add_option("-b", "--beam", dest="beam", default="all",
                     action="store", type="string", help="display this beam, one out of  [0->NBeam] or 'all'")
   parser.add_option("-s", "--stokes", dest="stokes", default="all",
-                    action="store", type="string", help="display these stokes one out of [IQUV], [XXYY], or 'all'")
+                    action="store", type="string", help="display these stokes one out of [IQUV], [Xr,Xi,Yr,Yi], or 'all'")
   #parser.add_option("-v", "--verbose", dest="verbose", default=False,
   #                  action="store_true", help="display verbose output")
   (options, args) = parser.parse_args()

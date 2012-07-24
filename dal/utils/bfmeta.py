@@ -118,10 +118,16 @@ class bfmeta:
         print self.prefix + "------------------------------------"
         print self.prefix + "SUB_ARRAY_POINTING_%(nr)03d" %{'nr': nr}
       else:
+        print self.prefix
         print "SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
+        self.prefix=bcolors.ENDC
+        print self.prefix
         return
     else:
+      print self.prefix
       print "SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
+      self.prefix=bcolors.ENDC
+      print self.prefix
       return    
 
     print self.prefix + sap.groupType().name() +  "\t\t= " + sap.groupType().value
@@ -156,7 +162,8 @@ class bfmeta:
   def displayBeam(self, sap):
     #print "displayBeam()"               # DEBUG
     if self.beam=="all":
-      for n in range(0, sap.nofBeams().value):   
+      #for n in range(0, sap.nofBeams().value):
+      for n in range(0, sap.observationNofBeams().value):   
           self.displayBeamInfo(sap, int(n))
     elif isinstance(self.beam, list):
       for b in self.beam:
@@ -177,7 +184,10 @@ class bfmeta:
     if sap.beam(nr).exists():
       beam=sap.beam(nr)
     else:
-      print self.prefix + "Beam No. ", str(nr), " doesn't exist in file." 
+      print self.prefix
+      print self.prefix + "BEAM_%(bnr)03d doesn't exist in file." %{'bnr': nr}  
+      self.prefix=bcolors.ENDC
+      print self.prefix
       return
     # only display beam if it is in the list to be shown
     if str(nr) not in self.beam and self.beam!="all":    
@@ -188,7 +198,11 @@ class bfmeta:
 
     # Only beams with selected Stokes components
     if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
+      #print self.prefix
+      self.prefix=self.prefix + bcolors.DATASET
       print self.prefix + "STOKES_COMPONENT_%(stokes)s doesn't exist in BEAM_%(nr)03d" %{'stokes': self.stokes, 'nr': nr}
+      self.prefix=bcolors.ENDC
+      print self.prefix
       return
     
     print self.prefix + beam.groupType().name() + "\t\t= " + beam.groupType().value
@@ -226,7 +240,6 @@ class bfmeta:
     for d in range(0, beam.nofStokes().value):
       self.displayStokesDatasetInfo(beam, d)
     self.displayCoordinates(beam)
-
     self.prefix=bcolors.ENDC          # reset printing options
     print self.prefix
     
@@ -234,7 +247,8 @@ class bfmeta:
   #
   def displayStokesDataset(self, beam, nr="all"):
     if nr=="all":
-      for n in range(0, beam.nofStokes().value):
+#      for n in range(0, beam.nofStokes().value):
+      for n in range(0, beam.observationNofStokes().value):
         self.displayStokesDatasetInfo(n)
     else:
       self.displayStokesDatasetInfo(nr)
@@ -291,7 +305,10 @@ class bfmeta:
       print self.prefix + coords.coordinateTypes().name() + "\t=", coords.coordinateTypes().value
       for c in range(0, coords.nofCoordinates().value):
         self.displayCoordinate(coords, c)
-        self.prefix="\t\t\t"
+        if self.useTabs==True:
+          self.prefix="\t\t\t"
+        else:
+          self.prefix=""
       self.prefix=bcolors.ENDC
       print self.prefix
 
@@ -384,8 +401,9 @@ class bcolors:
     BACKGROUND="dark"       # background scheme of terminal (dark or bright)
     HEADER = '\033[95m'
     SAP = '\033[94m'        # blue
-    BEAM = '\033[92m'       # green
-    #DATASET = '\033[93m'    # yellow
+#    BEAM = '\033[92m'       # green
+    BEAM = '\033[32m'       # dark green
+    #DATASET = '\033[93m'   # yellow
     DATASET= '\033[91m'     # red
     COORD = '\033[0m'       # fat white
     FAIL = '\033[91m'
@@ -396,7 +414,8 @@ class bcolors:
         BACKGROUND="bright"     # background scheme of terminal (dark or bright)
         HEADER = '\033[95m'
         SAP = '\033[94m'        # blue
-        BEAM = '\033[92m'       # green
+#        BEAM = '\033[92m'       # green
+        BEAM = '\033[32m'       # green
         DATASET = '\033[93m'    # yellow
         COORD = '\033[0m'       # fat white
         FAIL = '\033[91m'
@@ -405,7 +424,8 @@ class bcolors:
         BACKGROUND="dark"
         HEADER = '\033[95m'
         SAP = '\033[94m'        # blue
-        BEAM = '\033[92m'       # green
+#        BEAM = '\033[92m'       # green
+        BEAM = '\033[32m'       # green
         DATASET = '\033[93m'    # yellow
         COORD = '\033[0m'       # fat white
         FAIL = '\033[91m'
