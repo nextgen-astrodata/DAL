@@ -38,6 +38,7 @@ class bfheader:
       root="/"
   
     # Identify SAPs
+    SAPNr="all"
     match=re.search('SAP[0-9]{0,3}', arg, re.IGNORECASE)
     if match:
       if len(match.group())==3:
@@ -104,6 +105,7 @@ class bfheader:
     # If --add flag has been specified
     
     # Now create valid HDF5Path
+    print "SAPNr = ", SAPNr
     self.createHDF5Path(SAPNr, BeamNr, StokesNr, attribute)
     
   # Create a complete HDF5 path
@@ -141,7 +143,7 @@ class bfheader:
                 path=path.upper()             # convert path to upper case
                 self.paths.append(path)
         else:
-          for b in range(0, self.fh.nofBeams().value):      # use here then nofObservedBeams()
+          for b in range(0, self.fh.observationNofBeams().value):      # use here then nofObservedBeams()
             #print "b = ", b         # DEBUG           # check if BeamNr exists in this hdf5
             if fh.subArrayPointing(sap).beam(b).exists():
               path += "/BEAM_%(beam)03d" %{'beam': b}
