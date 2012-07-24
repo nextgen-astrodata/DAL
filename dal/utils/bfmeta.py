@@ -195,16 +195,7 @@ class bfmeta:
 
     print self.prefix + "------------------------------------"
     print self.prefix + "BEAM_%(bnr)03d" %{'bnr': nr}
-
-    # Only beams with selected Stokes components
-    if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
-      #print self.prefix
-      self.prefix=self.prefix + bcolors.DATASET
-      print self.prefix + "STOKES_COMPONENT_%(stokes)s doesn't exist in BEAM_%(nr)03d" %{'stokes': self.stokes, 'nr': nr}
-      self.prefix=bcolors.ENDC
-      print self.prefix
-      return
-    
+   
     print self.prefix + beam.groupType().name() + "\t\t= " + beam.groupType().value
     print self.prefix + beam.targets().name() + "\t\t\t=", beam.targets().value
     print self.prefix + beam.nofStations().name() +"\t\t=", beam.nofStations().value
@@ -235,6 +226,15 @@ class bfmeta:
     print self.prefix + beam.stokesComponents().name() + "\t= ", beam.stokesComponents().value
     print self.prefix + beam.complexVoltage().name() + "\t\t=", beam.complexVoltage().value
     print self.prefix + beam.signalSum().name() + "\t\t=", beam.signalSum().value
+
+    # Only beams with selected Stokes components
+    if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
+      #print self.prefix
+      self.prefix=self.prefix + bcolors.DATASET
+      print self.prefix + "STOKES_COMPONENT_%(stokes)s doesn't exist in BEAM_%(nr)03d" %{'stokes': self.stokes, 'nr': nr}
+      self.prefix=bcolors.ENDC
+      print self.prefix
+      return
 
     # Display Stokes datasets
     for d in range(0, beam.nofStokes().value):
