@@ -212,6 +212,7 @@ class bfmeta:
     print self.prefix + beam.foldedData().name() + "\t\t=", beam.foldedData().value
     print self.prefix + beam.foldPeriod().name() + "\t\t=", beam.foldPeriod().value, beam.foldPeriodUnit().value
     print self.prefix + beam.dedispersion().name() + "\t\t=", beam.dedispersion().value
+#   if beam.dispersionMeasure().value != None:
 #    print self.prefix + beam.dispersionMeasure().name() + "\t= %(dm) %(dmu)" %{'dm': beam.dispersionMeasure().value, 'dmu': beam.dispersionMeasureUnit().value}
     print self.prefix + beam.dispersionMeasure().name() + "\t=", beam.dispersionMeasure().value, beam.dispersionMeasureUnit().value
     print self.prefix + beam.barycentered().name() + "\t\t=", beam.barycentered().value
