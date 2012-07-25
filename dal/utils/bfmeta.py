@@ -44,7 +44,7 @@ class bfmeta:
     print self.fh.fileDate().name(), "\t\t=", self.fh.fileDate().value
     print self.fh.fileType().name(), "\t\t=", self.fh.fileType().value
     print self.fh.telescope().name(), "\t\t=", self.fh.telescope().value
-    print self.fh.observer().name(), "\t\t=", self.fh.observer().value
+#    print self.fh.observer().name(), "\t\t=", self.fh.observer().value
     print self.fh.projectID().name(), "\t\t=", self.fh.projectID().value
     print self.fh.projectTitle().name(), "\t\t=", self.fh.projectTitle().value
     print self.fh.projectPI().name(), "\t\t=", self.fh.projectPI().value
