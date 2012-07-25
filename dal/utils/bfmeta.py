@@ -237,7 +237,7 @@ class bfmeta:
       return
 
     # Display Stokes datasets
-    for d in range(0, beam.nofStokes().value):
+    for d in range(0, beam.observationNofStokes().value):
       self.displayStokesDatasetInfo(beam, d)
     self.displayCoordinates(beam)
     self.prefix=bcolors.ENDC          # reset printing options
@@ -247,7 +247,6 @@ class bfmeta:
   #
   def displayStokesDataset(self, beam, nr="all"):
     if nr=="all":
-#      for n in range(0, beam.nofStokes().value):
       for n in range(0, beam.observationNofStokes().value):
         self.displayStokesDatasetInfo(n)
     else:
@@ -262,7 +261,7 @@ class bfmeta:
     if beam.stokes(nr).exists():
       stokes=beam.stokes(nr)
     else:
-      print bcolors.FAIL + "STOKES_" + str(nr) + " doesn't exist."
+      print bcolors.FAIL + "STOKES_" + str(nr) + " doesn't exist in this file."
       self.prefix=bcolors.ENDC
       print self.prefix
       return
