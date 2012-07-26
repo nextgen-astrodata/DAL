@@ -12,7 +12,7 @@ import sys
 import DAL
 
 class bfmeta:
-  def __init__(self, fh=0, filename="", tabs=True, color=False, sap="all", beam="all", stokes="all", verbose=False):
+  def __init__(self, fh=0, filename="", tabs=True, color=False, sap="all", beam="all", stokes="all", level=6, verbose=False):
     if fh==0:                       # if no file handle given
       self.fh=DAL.BF_File(filename)      # open file    
     else:
@@ -24,27 +24,34 @@ class bfmeta:
     self.prefix=""
     # Selection of SAP, Beam and Stokes to show
     self.sap=sap  
+    self.level=level
     self.beam=beam
     self.stokes=stokes
     self.verbose=verbose
     self.displayInfo()
+
+    print bcolors.ENDC    # End all colourization
     
   # High-level function to display all info, calling display ftns for classes
   #  
   def displayInfo(self):
     self.displayFileInfo()
     self.displaySAP()
-  
+    
   # Display information about BF_File
   #
   def displayFileInfo(self):
     #print "displayFileInfo()"       # DEBUG
+
+    if self.level < 1:
+      print "ROOT"
+      return
     print self.fh.groupType().name(), "\t\t=", self.fh.groupType().value
     print self.fh.fileName().name(), "\t\t=", self.fh.fileName().value
     print self.fh.fileDate().name(), "\t\t=", self.fh.fileDate().value
     print self.fh.fileType().name(), "\t\t=", self.fh.fileType().value
     print self.fh.telescope().name(), "\t\t=", self.fh.telescope().value
-    print self.fh.observer().name(), "\t\t=", self.fh.observer().value
+#    print self.fh.observer().name(), "\t\t=", self.fh.observer().value
     print self.fh.projectID().name(), "\t\t=", self.fh.projectID().value
     print self.fh.projectTitle().name(), "\t\t=", self.fh.projectTitle().value
     print self.fh.projectPI().name(), "\t\t=", self.fh.projectPI().value
@@ -89,7 +96,12 @@ class bfmeta:
     print self.fh.systemTemperature().name(), "\t=", self.fh.systemTemperature().value, self.fh.systemTemperatureUnit().value
     print self.fh.observationNofSubArrayPointings().name(), "=", self.fh.observationNofSubArrayPointings().value
     print self.fh.nofSubArrayPointings().name(), "=", self.fh.nofSubArrayPointings().value
+    
+    if self.level==1:
+      print self.prefix + "--------------------------------------"
+  
     self.prefix=bcolors.ENDC      # reset printing options
+
   
   # Display Sub Array Pointing information for SAPs
   #
@@ -113,19 +125,31 @@ class bfmeta:
       self.prefix=self.prefix + bcolors.SAP
 
     if self.fh.subArrayPointing(nr).exists():
+      if self.level < 2:
+        if self.useColor:
+          print bcolors.SAP + "   |"
+          print bcolors.SAP + "   SAP_%(sap)03d" %{'sap': nr}
+        else:
+          print "   |"
+          print "   SAP_%(sap)03d" %{'sap': nr}
+
+        if self.fh.subArrayPointing(nr).exists():
+          sap=self.fh.subArrayPointing(nr)
+          self.displayBeam(sap)
+        return
       if str(nr) in self.sap or self.sap=="all":
         sap=self.fh.subArrayPointing(nr)
         print self.prefix + "------------------------------------"
         print self.prefix + "SUB_ARRAY_POINTING_%(nr)03d" %{'nr': nr}
       else:
-        print self.prefix
-        print "SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
+        print self.prefix + "    |"
+        print self.prefix + "    SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
         self.prefix=bcolors.ENDC
         print self.prefix
         return
     else:
-      print self.prefix
-      print "SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
+      print self.prefix + "   |"
+      print self.prefix + "   SUB_ARRAY_POINTING_%(nr)03d doesn't exist." %{'nr': nr}        
       self.prefix=bcolors.ENDC
       print self.prefix
       return    
@@ -151,6 +175,8 @@ class bfmeta:
     print self.prefix + sap.pointAltitude().name() + "\t\t=", sap.pointAzimuth().value, sap.pointAzimuthUnit().value      # optional attribute
     print self.prefix + sap.observationNofBeams().name() + "\t=", sap.observationNofBeams().value
     print self.prefix + sap.nofBeams().name() + "\t\t=", sap .nofBeams().value
+    if self.level==2:
+      print self.prefix + "--------------------------------------"
 
     # Beams within this SAP
     self.displayBeam(sap)
@@ -181,12 +207,28 @@ class bfmeta:
       self.prefix=self.prefix + bcolors.BEAM
 
     # Check if this beam exists in this SAP
-    if sap.beam(nr).exists():
+    if sap.beam(nr).exists() and (str(nr) == self.beam or self.beam=="all"):
       beam=sap.beam(nr)
+      if self.level < 3:            # display tree
+        if self.useColor:
+          print bcolors.BEAM + "         |"
+          print bcolors.BEAM + "         BEAM_%(beam)03d" %{'beam': nr}
+        else:
+          print "         |"
+          print "         BEAM_%(beam)03d" %{'beam': nr}
+
+        for d in range(0, beam.observationNofStokes().value):
+          self.displayStokesDatasetInfo(beam, d)
+        self.displayCoordinates(beam)
+        return
     else:
-      print self.prefix
-      print self.prefix + "BEAM_%(bnr)03d doesn't exist in file." %{'bnr': nr}  
-      self.prefix=bcolors.ENDC
+      if self.useTabs==False:
+        print self.prefix + "                  |"
+        print self.prefix + "                  BEAM_%(beam)03d doesn't exist in %(sap)s" %{'beam': self.beam, 'sap': sap.name()}
+      else:
+        print self.prefix + "         |"
+        print self.prefix + "         BEAM_%(beam)s doesn't exist in %(sap)s" %{'beam': self.beam, 'sap': sap.name()}
+        self.prefix=bcolors.ENDC
       print self.prefix
       return
     # only display beam if it is in the list to be shown
@@ -231,10 +273,17 @@ class bfmeta:
     if self.stokes not in beam.stokesComponents().value and self.stokes!="all":
       #print self.prefix
       self.prefix=self.prefix + bcolors.DATASET
-      print self.prefix + "STOKES_COMPONENT_%(stokes)s doesn't exist in BEAM_%(nr)03d" %{'stokes': self.stokes, 'nr': nr}
-      self.prefix=bcolors.ENDC
+      if self.level < 3:
+        print self.prefix + "                  |"
+        print self.prefix + "                  STOKES_COMPONENT_%(stokes)s doesn't exist in BEAM_%(nr)03d" %{'stokes': self.stokes, 'nr': nr}
+      else:
+        print self.prefix + "STOKES_COMPONENT_%(stokes)s doesn't exist in BEAM_%(nr)03d" %{'stokes': self.stokes, 'nr': nr}
+        self.prefix=bcolors.ENDC
       print self.prefix
       return
+
+    if self.level==3:
+      print self.prefix + "--------------------------------------"
 
     # Display Stokes datasets
     for d in range(0, beam.observationNofStokes().value):
@@ -254,25 +303,36 @@ class bfmeta:
 
   def displayStokesDatasetInfo(self, beam, nr):
     if self.useTabs==True:
-      self.prefix="\t\t\t"
+      self.prefix="\t\t"
     if self.useColor==True:
       self.prefix=self.prefix + bcolors.DATASET
 
     if beam.stokes(nr).exists():
       stokes=beam.stokes(nr)
+      if self.stokes == "all" or stokes.stokesComponent().value == self.stokes:
+        if self.level < 4:
+          if self.useTabs:
+            print self.prefix + "|"
+            print self.prefix + "STOKES_%(stokes)03d" %{'stokes': nr}
+          else:    
+            print self.prefix + "                |"
+            print self.prefix + "                STOKES_%(stokes)03d" %{'stokes': nr}
+          return
+        else:
+          stokes=beam.stokes(nr)
+          print self.prefix + "------------------------------------"
+          print self.prefix + stokes.stokesComponent().name() + "\t=", stokes.stokesComponent().value    
+          print self.prefix + stokes.dataType().name() + "\t\t=", stokes.dataType().value    
+          print self.prefix + stokes.nofSamples().name() + "\t\t=", stokes.nofSamples().value    
+          print self.prefix + stokes.nofSubbands().name() + "\t\t=", stokes.nofSubbands().value    
+          print self.prefix + stokes.nofChannels().name() + "\t\t=", stokes.nofChannels().value        
+          self.prefix=bcolors.ENDC        # reset printing options     
+          print self.prefix
+      if self.level==4:
+        print self.prefix + "--------------------------------------"
     else:
-      print bcolors.FAIL + "STOKES_" + str(nr) + " doesn't exist in this file."
-      self.prefix=bcolors.ENDC
-      print self.prefix
       return
-    print self.prefix + "-----------------------------------"
-    print self.prefix + stokes.stokesComponent().name() + "\t=", stokes.stokesComponent().value    
-    print self.prefix + stokes.dataType().name() + "\t\t=", stokes.dataType().value    
-    print self.prefix + stokes.nofSamples().name() + "\t\t=", stokes.nofSamples().value    
-    print self.prefix + stokes.nofSubbands().name() + "\t\t=", stokes.nofSubbands().value    
-    print self.prefix + stokes.nofChannels().name() + "\t\t=", stokes.nofChannels().value        
-    self.prefix=bcolors.ENDC        # reset printing options     
-
+    
   # Display coordinategroup info (only in verbose mode)
   #
   def displayCoordinates(self, beam):
@@ -281,12 +341,17 @@ class bfmeta:
     if self.useColor==True:
       self.prefix=self.prefix + bcolors.COORD
 
-    # Show coordinate infos only in verbose mode
-    #if not self.verbose:
-    #  self.prefix=bcolors.ENDC            # reset printing options
-    #  print self.prefix
-    #  return
-
+    if self.level < 5:
+      if self.useTabs:
+        print "\t\t|"
+        print "\t\tCOORDINATES"
+      else:    
+        print bcolors.COORD + "                |"
+        print bcolors.COORD + "                COORDINATES"
+      coords=beam.coordinates()
+      for c in range(0, coords.nofCoordinates().value):
+        self.displayCoordinate(coords, c)
+      return
     print self.prefix + "----------------------------------"
     #print self.prefix + "Coordinates"
     if beam.coordinates().exists()==False:
@@ -302,6 +367,10 @@ class bfmeta:
       print self.prefix + coords.nofCoordinates().name() + "\t\t=", coords.nofCoordinates().value
       print self.prefix + coords.nofAxes().name() + "\t\t=", coords.nofAxes().value
       print self.prefix + coords.coordinateTypes().name() + "\t=", coords.coordinateTypes().value
+
+      if self.level==5:
+        print self.prefix + "--------------------------------------"
+
       for c in range(0, coords.nofCoordinates().value):
         self.displayCoordinate(coords, c)
         if self.useTabs==True:
@@ -314,6 +383,14 @@ class bfmeta:
   # Display a particular coordinate
   #
   def displayCoordinate(self, coords, nr):
+    if self.level < 6:
+      if self.useTabs==True:
+        print "\t\t" + "          |"
+        print "\t\t" + "          COORDINATE_" + str(nr)
+      else:
+        print "                          |"
+        print "                          COORDINATE_" + str(nr)
+      return
     print self.prefix + "--------------------------------"
     print self.prefix + "COORDINATE_"+ str(nr)
     if coords.coordinate(nr).exists()==False:
