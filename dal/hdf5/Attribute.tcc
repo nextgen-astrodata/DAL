@@ -284,15 +284,7 @@ template<> inline std::string Attribute<std::string>::get() const
   // H5Aread will allocate memory for us (use free() to free)
 
   char *buf = 0;
-
-  // make sure any allocated memory is always freed
-  struct D {
-    char * &buf;
-
-    ~D() { std::free(buf); }
-
-  } destructor = { buf };
-  (void)destructor;
+  std::string value;
 
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open to get attribute " + _name);
   hid_gc_noref diskdatatype(H5Aget_type(attr), H5Tclose, "Could not get string datatype to get attribute " + _name);
@@ -300,11 +292,30 @@ template<> inline std::string Attribute<std::string>::get() const
   if (h5stringIsVariable(diskdatatype)) {
     // string type on disk is variable -- just read it (HDF5 will allocate)
     hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create variable length string datatype to get attribute " + _name);
+    hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not get dataspace of attribute " + _name);
 
     if (H5Aread(attr, datatype, &buf) < 0)
       throw HDF5Exception("Could not get attribute " + _name);
+
+    if (buf) {
+      value = buf;
+
+      // free the allocated memory
+      if (H5Dvlen_reclaim(datatype, dataspace, H5P_DEFAULT, &buf) < 0)
+        throw DALException("Could not reclaim memory for variable-length attribute " + _name);
+    } 
   } else {
     // string type on disk is fixed -- allocate memory and read it
+
+    // make sure any allocated memory is always freed
+    struct D {
+      char * &buf;
+
+      ~D() { std::free(buf); }
+
+    } destructor = { buf };
+    (void)destructor;
+
     size_t diskdatasize = H5Tget_size(diskdatatype);
     buf = static_cast<char*>(std::malloc(diskdatasize));
 
@@ -315,9 +326,9 @@ template<> inline std::string Attribute<std::string>::get() const
 
     if (H5Aread(attr, datatype, buf) < 0)
       throw HDF5Exception("Could not get attribute " + _name);
-  }
 
-  std::string value = buf;
+    value = buf;   
+  }
 
   return value;
 }
@@ -366,21 +377,9 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
   // H5Aread will allocate memory for us (use free() to free each element)
   std::vector<char *> c_strs(size(), 0);
 
-  // make sure any allocated memory is always freed
-  struct D {
-    std::vector<char *> &c_strs;
-
-    ~D() {
-       for (unsigned i = c_strs.size(); i > 0; )
-         std::free(c_strs[--i]);
-     }  
-
-  } destructor = { c_strs };
-  (void)destructor;
-
-
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype to get attribute " + _name);
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open to get attribute " + _name);
+  hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not get dataspace of attribute " + _name);
 
   if (H5Aread(attr, datatype, &c_strs[0]) < 0)
     throw HDF5Exception("Could not get attribute " + _name);
@@ -388,7 +387,12 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
   // convert from C-style strings
   std::vector<std::string> value(c_strs.size());
   for (unsigned i = 0; i < value.size(); i++)
-    value[i] = c_strs[i];
+    if (c_strs[i])
+      value[i] = c_strs[i];
+
+  // free the allocated memory
+  if (H5Dvlen_reclaim(datatype, dataspace, H5P_DEFAULT, &c_strs[0]) < 0)
+    throw DALException("Could not reclaim memory for variable-length attribute " + _name);
 
   return value;
 }
