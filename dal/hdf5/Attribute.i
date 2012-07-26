@@ -66,8 +66,7 @@ namespace DAL {
 
   // register it in our Attributes dict
   %pythoncode {
-    typeName = Attribute ## PythonName ._typeName();
-    Attributes[typeName] = Attribute ## PythonName;
+    _Attributes[Attribute ## PythonName ._typeName()] = Attribute ## PythonName;
   }
 %enddef
 
@@ -84,7 +83,7 @@ namespace DAL {
 
 %pythoncode {
   # DAL::Attribute templates can be registered here
-  Attributes = {}
+  _Attributes = {}
 }
 
 AddAttribute( Bool, bool );

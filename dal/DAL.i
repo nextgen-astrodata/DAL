@@ -61,11 +61,28 @@
 %include "dal/lofar/TBB_File.i"
 
 // -------------------------------
+// Clean up the DAL namespace
+// -------------------------------
+
+%pythoncode %{
+for obj in locals().keys():
+  if (obj.endswith(   ("__typeName", "__castNode", "_size", "_swigregister"))
+   or obj.startswith( ("_swig_", "_TupleBase"))
+   or obj in          ("_object", "_newclass")):
+    del locals()[obj]
+
+del locals()["obj"]
+%}
+
+// -------------------------------
 // Run doctest if module is executed
 // -------------------------------
 
 %pythoncode %{
-def _test():
+# doctest engine
+def _doctest():
+  """ Run all doctests. """
+
   import doctest
   import sys
 
@@ -77,6 +94,6 @@ def _test():
     sys.exit(1)
 
 if __name__ == "__main__":
-  _test()
+  _doctest()
 %}
 

@@ -40,7 +40,7 @@
    *
    * 1) AttributeXXXX._typeName()
    *      returns the internal C++ ABI type name of the wrapped Attribute<T> class.
-   * 2) Attributes
+   * 2) _Attributes
    *      is a dict resolving C++ ABI type names to AttributeXXXX classes.
    * 3) Group._getNodeTypeName(name)
    *      returns the internal C++ ABI type name of a node
@@ -71,7 +71,7 @@
       """
         Returns a registered node `name'.
         
-        If the attribute type is present in DAL.Attributes.values(),
+        If the attribute type is present in DAL._Attributes.values(),
         the returned object will have the correct type. Otherwise,
         a generic Node object is returned.
 
@@ -102,9 +102,9 @@
       """
       typename = self._getNodeTypeName(name)
 
-      if typename in Attributes:
+      if typename in _Attributes:
         # attribute type is registered, so cast to it
-        return Attributes[typename]._castNode(self, name)
+        return _Attributes[typename]._castNode(self, name)
       else:
         # cast to the lowest common denominator
         return self._getNode(name)
