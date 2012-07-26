@@ -40,6 +40,13 @@
 #include "dal/hdf5/exceptions/exceptions.h"
 %}
 
+// Tell SWIG about std::runtime_error and to ignore it
+namespace std {
+  class runtime_error {
+  };
+}
+%ignore runtime_error;
+
 %include "hdf5/exceptions/exceptions.h"
 
 %extend DAL::HDF5Exception {

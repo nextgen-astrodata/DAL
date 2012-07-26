@@ -66,33 +66,36 @@ namespace DAL {
 
   // register it in our Attributes dict
   %pythoncode {
-    typeName = Attribute ## PythonName ._typeName();
-    Attributes[typeName] = Attribute ## PythonName;
+    _Attributes[Attribute ## PythonName ._typeName()] = Attribute ## PythonName;
   }
 %enddef
 
-%define AddAttributeAndVector( PythonName, CPPName )
+%define AddSimpleAttributeAndVector( PythonName, CPPName )
   AddAttribute( PythonName, %arg(CPPName) );
 
-  AddVector( PythonName, CPPName );
   AddAttribute( V ## PythonName, %arg(std::vector< CPPName >) );
+%enddef
+
+%define AddAttributeAndVector( PythonName, CPPName )
+  vector_typemap( %arg(CPPName) );
+  AddSimpleAttributeAndVector( %arg(PythonName), %arg(CPPName) );
 %enddef
 
 %pythoncode {
   # DAL::Attribute templates can be registered here
-  Attributes = {}
+  _Attributes = {}
 }
 
 AddAttribute( Bool, bool );
-AddAttributeAndVector( Int,           int );
-AddAttributeAndVector( Long,          long );
-AddAttributeAndVector( Unsigned,      %arg(unsigned int) );
-AddAttributeAndVector( UnsignedLong,  %arg(unsigned long) );
-AddAttributeAndVector( Float,         float );
-AddAttributeAndVector( Double,        double );
-AddAttributeAndVector( ComplexFloat,  %arg(std::complex<float>) );
-AddAttributeAndVector( ComplexDouble, %arg(std::complex<double>) );
-AddAttributeAndVector( String,        std::string );
+AddSimpleAttributeAndVector( Int,           int );
+AddSimpleAttributeAndVector( Long,          long );
+AddSimpleAttributeAndVector( Unsigned,      %arg(unsigned int) );
+AddSimpleAttributeAndVector( UnsignedLong,  %arg(unsigned long) );
+AddSimpleAttributeAndVector( Float,         float );
+AddSimpleAttributeAndVector( Double,        double );
+AddSimpleAttributeAndVector( ComplexFloat,  %arg(std::complex<float>) );
+AddSimpleAttributeAndVector( ComplexDouble, %arg(std::complex<double>) );
+AddSimpleAttributeAndVector( String,        std::string );
 AddAttributeAndVector( Unsigned3,     %arg(Tuple<unsigned,3>) );
 AddAttributeAndVector( Double3,       %arg(Tuple<double,3>) );
 
