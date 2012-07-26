@@ -36,32 +36,50 @@
   SWIG_CATCH_STDEXCEPT
 }
 
-%{
-#include "dal/hdf5/exceptions/exceptions.h"
-%}
+
+/*
+ * Marshall and extend HDF5 error stack classes.
+ */
+vector_typemap( DAL::HDF5StackLine );
+
+%include "hdf5/exceptions/errorstack.h"
+
+%extend DAL::HDF5StackLine {
+  %pythoncode {
+    __repr__ = longDesc
+    __str__  = shortDesc  
+  }
+}
+
+/*
+ * Marshall our custom exceptions.
+ */
 
 // Tell SWIG about std::runtime_error and to ignore it
+%ignore std::runtime_error;
+
 namespace std {
   class runtime_error {
   };
 }
-%ignore runtime_error;
 
 %include "hdf5/exceptions/exceptions.h"
 
-%extend DAL::HDF5Exception {
-  %pythoncode {
-    __old_init = __init__
+/*
+ * Extend  HDF5Exception.__init__ to provide an error stack.
+ * We need to modify DAL._DAL.HDF5Exception, because that is what
+ * will be thrown(not DAL.HDF5Exception).
+ */
+%pythoncode {
+  _DAL.HDF5Exception.__old_init = _DAL.HDF5Exception.__init__
 
-    def __init__(self, *args, **kwargs):
-      self.__old_init(*args, **kwargs)
+  def newinit(self, *args, **kwargs):
+    self.__old_init(*args, **kwargs)
 
-      # Keep a reference to the HF5ErrorStack until we copied the stack,
-      # or SWIG will become confused.
+    self.stack = HDF5ErrorStack().stack()
 
-      stackobj = HDF5ErrorStack()
-      self.stack = list(stackobj.stack)
-  }
+  _DAL.HDF5Exception.__init__ = newinit
+  del newinit
 }
 
 /*
@@ -85,18 +103,4 @@ namespace std {
 }
 
 #endif  
-
-/*
- * Marshall and extend HDF5 error stack classes.
- */
-%include "hdf5/exceptions/errorstack.h"
-
-%template(VectorStackLine)        std::vector<DAL::HDF5StackLine>;
-
-%extend DAL::HDF5StackLine {
-  %pythoncode {
-    __repr__ = longDesc
-    __str__  = shortDesc  
-  }
-}
 

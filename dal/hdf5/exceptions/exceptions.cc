@@ -16,19 +16,21 @@ HDF5Exception::~HDF5Exception() throw() {
 }
 
 std::string HDF5Exception::stackSummary() const {
-  if (stack.stack.empty())
+  const vector<struct HDF5StackLine> errorstack = stack.stack();
+
+  if (errorstack.empty())
     return "";
 
   ostringstream oss(ostringstream::out);
 
-  const size_t n = stack.stack.size();
+  const size_t n = errorstack.size();
 
   // include a summary of the first and the last stack line
 
-  oss << stack.stack[0].shortDesc();
+  oss << errorstack[0].shortDesc();
 
   if (n > 1)
-    oss << " (" << stack.stack[n - 1].desc << ")";
+    oss << " (" << errorstack[n - 1].desc << ")";
 
   return oss.str();
 }

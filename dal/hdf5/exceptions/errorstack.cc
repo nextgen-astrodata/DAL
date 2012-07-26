@@ -94,6 +94,10 @@ HDF5ErrorStack::HDF5ErrorStack()
   H5Eset_current_stack(stackid);
 }
 
+std::vector<struct HDF5StackLine> HDF5ErrorStack::stack() const {
+  return _stack;
+}
+
 herr_t HDF5ErrorStack::walker(unsigned n, const H5E_error2_t *err_desc, void *clientdata)
 {
   HDF5ErrorStack *obj = static_cast<HDF5ErrorStack *>(clientdata);
@@ -133,7 +137,7 @@ herr_t HDF5ErrorStack::walker(unsigned n, const H5E_error2_t *err_desc, void *cl
   else
     stackline.min = "(unknown)";
 
-  obj->stack.push_back(stackline);
+  obj->_stack.push_back(stackline);
   return 0;
 }
 

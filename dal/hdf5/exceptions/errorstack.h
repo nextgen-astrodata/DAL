@@ -100,10 +100,12 @@ public:
   /*!
    * The HDF5 error stack as it was when this object was constructed.
    */
-  std::vector<struct HDF5StackLine> stack;
+  std::vector<struct HDF5StackLine> stack() const;
 
 private:  
   static herr_t walker(unsigned n, const H5E_error2_t *err_desc, void *clientdata);
+
+  std::vector<struct HDF5StackLine> _stack;
 };
 
 }
