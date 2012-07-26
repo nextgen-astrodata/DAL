@@ -78,7 +78,7 @@ if(PYTHON_BINDINGS)
 
   set(PYTHON_DEST ${PYTHON_SITE_PACKAGES} CACHE PATH "Target directory for python bindings")
 
-  list(APPEND CMAKE_SWIG_FLAGS -Wall)
+  list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
   set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(DAL.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
   swig_add_module(DAL python DAL.i ${dal_sources})

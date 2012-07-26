@@ -53,13 +53,6 @@
 %include "dal/hdf5/Dataset.i"
 %include dal/hdf5/File.h
 
-// Define Vector aliases for python for size_t and ssize_t
-%pythoncode %{
-  VectorSizeT    = Vectors[typeof_size_t];
-  VectorSSizeT   = Vectors[typeof_ssize_t];
-  VectorPtrDiffT = Vectors[typeof_ptrdiff_t];
-%}
-
 %include dal/lofar/Station.h
 %include "dal/lofar/CommonTuples.i"
 %include dal/lofar/CLA_File.h
