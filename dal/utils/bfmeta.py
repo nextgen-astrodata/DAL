@@ -96,7 +96,12 @@ class bfmeta:
     print self.fh.systemTemperature().name(), "\t=", self.fh.systemTemperature().value, self.fh.systemTemperatureUnit().value
     print self.fh.observationNofSubArrayPointings().name(), "=", self.fh.observationNofSubArrayPointings().value
     print self.fh.nofSubArrayPointings().name(), "=", self.fh.nofSubArrayPointings().value
+    
+    if self.level==1:
+      print self.prefix + "--------------------------------------"
+  
     self.prefix=bcolors.ENDC      # reset printing options
+
   
   # Display Sub Array Pointing information for SAPs
   #
@@ -170,6 +175,8 @@ class bfmeta:
     print self.prefix + sap.pointAltitude().name() + "\t\t=", sap.pointAzimuth().value, sap.pointAzimuthUnit().value      # optional attribute
     print self.prefix + sap.observationNofBeams().name() + "\t=", sap.observationNofBeams().value
     print self.prefix + sap.nofBeams().name() + "\t\t=", sap .nofBeams().value
+    if self.level==2:
+      print self.prefix + "--------------------------------------"
 
     # Beams within this SAP
     self.displayBeam(sap)
@@ -275,6 +282,9 @@ class bfmeta:
       print self.prefix
       return
 
+    if self.level==3:
+      print self.prefix + "--------------------------------------"
+
     # Display Stokes datasets
     for d in range(0, beam.observationNofStokes().value):
       self.displayStokesDatasetInfo(beam, d)
@@ -310,7 +320,7 @@ class bfmeta:
           return
         else:
           stokes=beam.stokes(nr)
-          print self.prefix + "-----------------------------------"
+          print self.prefix + "------------------------------------"
           print self.prefix + stokes.stokesComponent().name() + "\t=", stokes.stokesComponent().value    
           print self.prefix + stokes.dataType().name() + "\t\t=", stokes.dataType().value    
           print self.prefix + stokes.nofSamples().name() + "\t\t=", stokes.nofSamples().value    
@@ -318,25 +328,10 @@ class bfmeta:
           print self.prefix + stokes.nofChannels().name() + "\t\t=", stokes.nofChannels().value        
           self.prefix=bcolors.ENDC        # reset printing options     
           print self.prefix
+      if self.level==4:
+        print self.prefix + "--------------------------------------"
     else:
-#      if self.useTabs:
-#        print self.prefix + "STOKES_" + str(nr) + " doesn't exist in this file."
-#      else:
-#        if self.useColor:
-#          print bcolors.DATASET + "                STOKES_" + str(nr) + " doesn't exist in this file."
-#        else:
-#          print "                STOKES_" + str(nr) + " doesn't exist in this file."
-#      self.prefix=bcolors.ENDC
-#      print self.prefix
       return
-#    print self.prefix + "-----------------------------------"
-#    print self.prefix + stokes.stokesComponent().name() + "\t=", stokes.stokesComponent().value    
-#    print self.prefix + stokes.dataType().name() + "\t\t=", stokes.dataType().value    
-#    print self.prefix + stokes.nofSamples().name() + "\t\t=", stokes.nofSamples().value    
-#    print self.prefix + stokes.nofSubbands().name() + "\t\t=", stokes.nofSubbands().value    
-#    print self.prefix + stokes.nofChannels().name() + "\t\t=", stokes.nofChannels().value        
-#    self.prefix=bcolors.ENDC        # reset printing options     
-#    print self.prefix
     
   # Display coordinategroup info (only in verbose mode)
   #
@@ -372,6 +367,10 @@ class bfmeta:
       print self.prefix + coords.nofCoordinates().name() + "\t\t=", coords.nofCoordinates().value
       print self.prefix + coords.nofAxes().name() + "\t\t=", coords.nofAxes().value
       print self.prefix + coords.coordinateTypes().name() + "\t=", coords.coordinateTypes().value
+
+      if self.level==5:
+        print self.prefix + "--------------------------------------"
+
       for c in range(0, coords.nofCoordinates().value):
         self.displayCoordinate(coords, c)
         if self.useTabs==True:
