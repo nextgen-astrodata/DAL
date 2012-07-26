@@ -66,23 +66,6 @@ namespace std {
 %include "hdf5/exceptions/exceptions.h"
 
 /*
- * Extend  HDF5Exception.__init__ to provide an error stack.
- * We need to modify DAL._DAL.HDF5Exception, because that is what
- * will be thrown(not DAL.HDF5Exception).
- */
-%pythoncode {
-  _DAL.HDF5Exception.__old_init = _DAL.HDF5Exception.__init__
-
-  def newinit(self, *args, **kwargs):
-    self.__old_init(*args, **kwargs)
-
-    self.stack = HDF5ErrorStack().stack()
-
-  _DAL.HDF5Exception.__init__ = newinit
-  del newinit
-}
-
-/*
  * Create a custom HDF5Exception in Python.
  */
 #ifdef SWIGPYTHON
@@ -100,6 +83,21 @@ namespace std {
 %pythoncode {
   # marshall from shadow module
   HDF5Exception = _DAL.HDF5Exception
+}
+
+/*
+ * Extend  HDF5Exception.__init__ to provide an error stack.
+ */
+%pythoncode {
+  HDF5Exception.__old_init = HDF5Exception.__init__
+
+  def newinit(self, *args, **kwargs):
+    self.__old_init(*args, **kwargs)
+
+    self.stack = HDF5ErrorStack().stack()
+
+  HDF5Exception.__init__ = newinit
+  del newinit
 }
 
 #endif  
