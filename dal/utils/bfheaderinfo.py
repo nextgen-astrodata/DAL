@@ -6,7 +6,7 @@
 # File:         bfheaderinfo.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-01
-# Last change:  2012-03-05
+# Last change:  2012-07-26
 
 import sys
 import os
@@ -24,6 +24,8 @@ def main():
                     action="store_true", help="use tabs for display")
   parser.add_option("-c", "--color", dest="color", default=False,
                     action="store_true", help="use color for display")
+  parser.add_option("-l", "--level", dest="level", default="6",
+                    action="store", type="int", help="level of HDF5 structure to display l=0..6 (default=6)")
   parser.add_option("-p", "--sap", dest="sap", default="all",
                     action="store", type="string", help="display this sap, one out of [0->NSAP] or 'all'")
   parser.add_option("-b", "--beam", dest="beam", default="all",
@@ -41,7 +43,7 @@ def main():
     filename=args[0]
     fh=DAL.BF_File(filename)      # open file
 
-    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes) #verbose=options.verbose)
+    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, level=options.level) #verbose=options.verbose)
 
 # Entry point on call
 #  
