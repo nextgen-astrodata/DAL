@@ -34,6 +34,55 @@ set(dal_sources
   lofar/TBB_File.cc
 )
 
+set(dal_headers
+  dal_version.h
+
+  hdf5/Attribute.h
+  hdf5/Attribute.tcc
+  hdf5/exceptions/errorstack.h
+  hdf5/exceptions/exceptions.h
+  hdf5/File.h
+  hdf5/Dataset.h
+  hdf5/Dataset.tcc
+  hdf5/Group.h
+  hdf5/types/h5complex.h
+  hdf5/types/issame.h
+  hdf5/types/implicitdowncast.h
+  hdf5/types/h5typemap.h
+  hdf5/types/h5tuple.h
+  hdf5/types/isderivedfrom.h
+  hdf5/types/versiontype.h
+  hdf5/types/hid_gc.h
+  hdf5/Node.h
+
+  lofar/Station.h
+  lofar/Coordinates.h
+  lofar/TBB_File.h
+  lofar/CommonTuples.h
+  lofar/CLA_File.h
+  lofar/BF_File.h
+
+  casa/CasaTBBFileExtend.h
+  casa/CasaDatasetExtend.h
+)
+
+set(swig_sources
+  DAL.i
+  vectors.i
+  external/numpy.i
+
+  hdf5/Attribute.i
+  hdf5/Group.i
+  hdf5/exceptions/exceptions.i
+  hdf5/Node.i
+  hdf5/Dataset.i
+  hdf5/types/h5tuple.i
+  hdf5/types/versiontype.i
+
+  lofar/TBB_File.i
+  lofar/CommonTuples.i
+)  
+
 add_library (dal
   ${dal_sources}
 )
@@ -81,8 +130,8 @@ if(PYTHON_BINDINGS)
   list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
   set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(DAL.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
+  set(SWIG_MODULE_DAL_EXTRA_DEPS swig_docstrings dal ${swig_sources} ${dal_headers})
   swig_add_module(DAL python DAL.i ${dal_sources})
-  add_dependencies(${SWIG_MODULE_DAL_REAL_NAME} docstrings_i)
   swig_link_libraries(DAL ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
 
   install(TARGETS
