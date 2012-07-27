@@ -22,12 +22,14 @@ include_directories (
   ${CMAKE_CURRENT_BINARY_DIR} # to find generated headers
   )
 
-# Start processing the source tree
+## Start processing the source tree
 
 add_subdirectory(dal)
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif(BUILD_TESTING)
+
+add_subdirectory(package)
 
 if(GENERATE_DOCS)
   add_subdirectory(doc)
