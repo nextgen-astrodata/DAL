@@ -17,7 +17,9 @@ if(NOT CMAKE_CROSSCOMPILING)
     message(FATAL_ERROR
       "Version mismatch between HDF5 headers and HDF5 library: ${TEST_HDF5_RUN_OUTPUT}")
   else(TEST_HDF5 RESULT GREATER 0)
-    message(STATUS "HDF5 version ${TEST_HDF5_RUN_OUTPUT}")
+    set(HDF5_VERSION "${TEST_HDF5_RUN_OUTPUT}")
+
+    message(STATUS "HDF5 version ${HDF5_VERSION}")
   endif(TEST_HDF5_RESULT GREATER 0)
 else(NOT CMAKE_CROSSCOMPILING)
   message(STATUS "Cross compiling -> assuming HDF5 headers and library versions match")

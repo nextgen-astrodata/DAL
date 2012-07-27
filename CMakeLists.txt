@@ -22,6 +22,12 @@ include_directories (
   ${CMAKE_CURRENT_BINARY_DIR} # to find generated headers
   )
 
+## Mandatory: HDF5 support for core library
+find_package(HDF5_DAL)
+include_directories(${HDF5_INCLUDES})
+
+include(TestHDF5)
+
 ## Start processing the source tree
 
 add_subdirectory(dal)

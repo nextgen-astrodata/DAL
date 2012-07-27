@@ -1,8 +1,3 @@
-# Mandatory: HDF5 support for core library
-find_package(HDF5_DAL)
-include_directories(${HDF5_INCLUDES})
-
-include(TestHDF5)
 include(TestSizeT)
 
 configure_file (
