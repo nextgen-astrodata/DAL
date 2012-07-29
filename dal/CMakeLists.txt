@@ -121,12 +121,12 @@ if(PYTHON_BINDINGS)
 
   install(TARGETS
     ${SWIG_MODULE_DAL_REAL_NAME}
-    DESTINATION ${PYTHON_SITE_PACKAGES}
+    DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
   )
 
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/DAL.py
-    DESTINATION ${PYTHON_SITE_PACKAGES}
+    DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
   )
 endif(PYTHON_BINDINGS)
 
@@ -134,6 +134,7 @@ add_subdirectory(casa)
 add_subdirectory(doc)
 add_subdirectory(hdf5)
 add_subdirectory(lofar)
+add_subdirectory(python)
 add_subdirectory(utils)
 
 # Generate the configuration file at the end, once all options are known
