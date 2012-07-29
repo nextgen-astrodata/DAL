@@ -38,13 +38,14 @@ Additional CMake Variables
 
 The following custom flags can be added to the cmake command line:
 
-	-DCMAKE_INSTALL_PREFIX=$PWD	Install DAL into the indicated path (default: /usr/local).
-	-DPYTHON_DEST=$PWD/python	Install DAL's Python bindings into the indicated path (default: $PYTHON/dist-packages).
+	-DCMAKE_INSTALL_PREFIX=$PWD	        Install DAL into the indicated path (default: /usr/local).
+	-DPYTHON_SITE_PACKAGES=$PWD/python	Install DAL's Python bindings into the indicated path (default: derived from Python interpreter)
+	-DPYTHON_VERSION=X.Y	                Python version to compile the bindings against (default: derived from Python library)
 
-        -DGENERATE_DOCS=OFF             Do not generate documentation.
-        -DPYTHON_BINDINGS=OFF           Do not generate Python bindings.
-        -DQUIET_HDF5_ERRORS=OFF         Do not override the HDF5 error handler (exceptions will still be thrown, but
-                                        the default HDF5 handler will also print the full error stack on stderr).
+        -DGENERATE_DOCS=OFF                     Do not generate documentation.
+        -DPYTHON_BINDINGS=OFF                   Do not generate Python bindings.
+        -DQUIET_HDF5_ERRORS=OFF                 Do not override the HDF5 error handler (exceptions will still be thrown, but
+                                                the default HDF5 handler will also print the full error stack on stderr).
 
 
 Dependencies

@@ -112,16 +112,6 @@ if(PYTHON_BINDINGS)
 
   find_package(PythonInterp)
 
-  if(PYTHON_EXECUTABLE)
-    # Obtain location of 'site-packages' directory (doesn't work when cross-compiling)
-    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
-  else(PYTHON_EXECUTABLE)
-    # A default value -- X.X should be replaced with the target python version
-    set(PYTHON_SITE_PACKAGES ${CMAKE_INSTALL_PREFIX}/lib/pythonX.X/dist-packages)
-  endif(PYTHON_EXECUTABLE)
-
-  set(PYTHON_DEST ${PYTHON_SITE_PACKAGES} CACHE PATH "Target directory for python bindings")
-
   list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
   set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(DAL.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
@@ -131,12 +121,12 @@ if(PYTHON_BINDINGS)
 
   install(TARGETS
     ${SWIG_MODULE_DAL_REAL_NAME}
-    DESTINATION ${PYTHON_DEST}
+    DESTINATION ${PYTHON_SITE_PACKAGES}
   )
 
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/DAL.py
-    DESTINATION ${PYTHON_DEST}
+    DESTINATION ${PYTHON_SITE_PACKAGES}
   )
 endif(PYTHON_BINDINGS)
 

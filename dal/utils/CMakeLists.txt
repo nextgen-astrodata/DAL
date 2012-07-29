@@ -9,7 +9,7 @@ if(PYTHON_BINDINGS)
   install(FILES
     bfmeta.py
     bfheader.py
-    DESTINATION ${PYTHON_DEST}
+    DESTINATION ${PYTHON_SITE_PACKAGES}
   )
 endif(PYTHON_BINDINGS)
 

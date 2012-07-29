@@ -28,6 +28,47 @@ include_directories(${HDF5_INCLUDES})
 
 include(TestHDF5)
 
+## Python bindings
+option(PYTHON_BINDINGS "Generate python bindings" ON)
+
+if(PYTHON_BINDINGS)
+  find_package(SWIG REQUIRED)
+  include(${SWIG_USE_FILE})
+
+  find_package(PythonLibs REQUIRED)
+  include_directories(${PYTHON_INCLUDE_DIRS})
+
+  find_package(Numpy REQUIRED)
+  include_directories(${NUMPY_INCLUDE_DIRS})
+
+  if(NOT CMAKE_CROSSCOMPILING)
+    find_package(PythonInterp)
+  endif(NOT CMAKE_CROSSCOMPILING)
+
+  # Backwards compatibility
+  if(PYTHON_DEST)
+    set(PYTHON_SITE_PACKAGES ${PYTHON_DEST})
+  endif(PYTHON_DEST)  
+
+  # Obtain location of 'site-packages' directory (doesn't work when cross-compiling)
+  if(NOT PYTHON_SITE_PACKAGES)
+    if(PYTHON_EXECUTABLE)
+      execute_process(
+        COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
+        OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif(PYTHON_EXECUTABLE)
+  endif(NOT PYTHON_SITE_PACKAGES)
+
+  # Obtain version info
+  if(NOT PYTHON_VERSION)
+    include(PythonVersion)
+  endif(NOT PYTHON_VERSION)
+
+  set(PYTHON_SITE_PACKAGES ${PYTHON_SITE_PACKAGES} CACHE PATH "Target directory for python bindings")
+  set(PYTHON_VERSION       ${PYTHON_VERSION}       CACHE STRING "Python version to compile bindings against")
+endif(PYTHON_BINDINGS)
+
 ## Start processing the source tree
 
 add_subdirectory(dal)
