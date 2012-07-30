@@ -128,13 +128,14 @@ if(PYTHON_BINDINGS)
     ${CMAKE_CURRENT_BINARY_DIR}/DAL.py
     DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
   )
+
+  add_subdirectory(python)
 endif(PYTHON_BINDINGS)
 
 add_subdirectory(casa)
 add_subdirectory(doc)
 add_subdirectory(hdf5)
 add_subdirectory(lofar)
-add_subdirectory(python)
 add_subdirectory(utils)
 
 # Generate the configuration file at the end, once all options are known
