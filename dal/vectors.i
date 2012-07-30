@@ -109,7 +109,13 @@ vector_native_typemap( std::complex<double> );
 %wrapper %{
 
 int SWIG_AsVal_ssize_t(PyObject *o, ssize_t *v) {
-  return SWIG_AsVal_long(o, v);
+  long l;
+  int ret = SWIG_AsVal_long(o, &l);
+
+  if(SWIG_IsOK(ret))
+    *v = l;
+
+  return ret;
 }
 
 PyObject *SWIG_From_ssize_t(ssize_t v) {
