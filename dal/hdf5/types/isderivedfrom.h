@@ -70,7 +70,7 @@ class IsDerivedFrom<D, void>
 public:
   enum { Is = IsSame<D, void>::Is };
 
-  // Note: C++11 14.6.8 says the template specialisation
+  // Note: C++98 14.6.7 and C++11 14.6.8 say the template specialisation
   //       is ill-formed if it does not compile for any
   //       value of D. This can cause a compiler to bail
   //       even if this specialisation is never used.

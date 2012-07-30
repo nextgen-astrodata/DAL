@@ -7,5 +7,6 @@ install (FILES
   Station.h
 
   DESTINATION include/dal/lofar
+  COMPONENT headers
 )
 

@@ -5,5 +5,6 @@ install (FILES
   exceptions.h
 
   DESTINATION include/dal/hdf5/exceptions
+  COMPONENT headers
 )
 

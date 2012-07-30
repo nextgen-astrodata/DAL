@@ -9,5 +9,6 @@ install (FILES
   versiontype.h
 
   DESTINATION include/dal/hdf5/types
+  COMPONENT headers
 )
 

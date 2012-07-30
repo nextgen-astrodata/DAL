@@ -3,13 +3,17 @@ if(PYTHON_BINDINGS)
     bfheaderinfo.py
     bfheaderedit.py
     tbb-lostframes.py
+
     DESTINATION bin
+    COMPONENT python
   ) 
 
   install(FILES
     bfmeta.py
     bfheader.py
+
     DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
+    COMPONENT python
   )
 endif(PYTHON_BINDINGS)
 

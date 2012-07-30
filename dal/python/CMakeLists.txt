@@ -6,5 +6,7 @@ configure_file (
 install(FILES
   __init__.py
   ${CMAKE_CURRENT_BINARY_DIR}/setup.py
+
   DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
+  COMPONENT python
 )  

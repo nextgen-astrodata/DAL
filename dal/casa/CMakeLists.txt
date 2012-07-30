@@ -10,6 +10,7 @@ if(CASACORE_INTERFACE)
     CasaTBBFileExtend.h
 
     DESTINATION include/dal/casa
+    COMPONENT headers
   )
 endif(CASACORE_INTERFACE)  
 

@@ -8,6 +8,7 @@ install (FILES
   Node.h
 
   DESTINATION include/dal/hdf5
+  COMPONENT headers
 )
 
 add_subdirectory(types)

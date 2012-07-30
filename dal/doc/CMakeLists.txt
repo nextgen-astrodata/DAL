@@ -6,16 +6,22 @@ find_package(Doxygen)
 option(GENERATE_DOCS "Generate documentation and regenerate docstrings using Doxygen" ${DOXYGEN_FOUND})
 
 if(GENERATE_DOCS)
+  find_package(PythonInterp REQUIRED)
+
   configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/doxygen.conf.in"
     "${CMAKE_CURRENT_BINARY_DIR}/doxygen.conf"
     @ONLY
   )
 
-  # run "make doc" to generate doxygen documentation
-  add_custom_target(doc ALL
+  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/xml/index.xml
     COMMAND ${DOXYGEN_EXECUTABLE} doxygen.conf
     COMMENT "Generating doxygen documentation"
+  )
+
+  # run "make doc" to generate doxygen documentation
+  add_custom_target(doc ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/xml/index.xml
   )
 
   set_property(DIRECTORY
@@ -23,23 +29,33 @@ if(GENERATE_DOCS)
     ${CMAKE_CURRENT_BINARY_DIR}/html
   )
 
+  set_property(DIRECTORY
+    APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/xml
+  )
+
   install(DIRECTORY
     ${CMAKE_CURRENT_BINARY_DIR}/html
-    DESTINATION share/doc/dal
-  )  
 
-  add_custom_target(swig_docstrings
-    COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/external/doxy2swig.py xml/index.xml docstrings.i
+    DESTINATION share/doc/dal
+    COMPONENT documentation
+  )
+
+  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/docstrings.i
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/external/doxy2swig.py ${CMAKE_CURRENT_BINARY_DIR}/xml/index.xml ${CMAKE_CURRENT_BINARY_DIR}/docstrings.i
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/xml/index.xml
     COMMENT "Generating SWIG docstrings"
   )
-  
-  add_dependencies(swig_docstrings doc)
 
 else(GENERATE_DOCS)
   # generate an empty docstrings.i
-  add_custom_target(swig_docstrings
-    COMMAND ${CMAKE_COMMAND} -E touch docstrings.i
-    COMMENT "Creating empty SWIG docstrings.i file"
+  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/docstrings.i
+    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings.i
+    COMMENT "Generating empty docstrings"
   )
 endif(GENERATE_DOCS)
+
+add_custom_target(swig_docstrings
+  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/docstrings.i
+)
 

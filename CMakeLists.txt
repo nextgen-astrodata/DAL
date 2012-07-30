@@ -54,7 +54,7 @@ if(PYTHON_BINDINGS)
   if(NOT PYTHON_SITE_PACKAGES)
     if(PYTHON_EXECUTABLE)
       execute_process(
-        COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
+        COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix=''))"
         OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
         OUTPUT_STRIP_TRAILING_WHITESPACE)
     endif(PYTHON_EXECUTABLE)

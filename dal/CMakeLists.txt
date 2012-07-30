@@ -10,6 +10,7 @@ install (FILES
   dal_version.h
 
   DESTINATION include/dal
+  COMPONENT headers
 )
 
 set(dal_sources
@@ -93,47 +94,41 @@ install (TARGETS
   dal
 
   DESTINATION lib
+  COMPONENT libraries
 )
 
+add_subdirectory(doc)
+
 # Python bindings through SWIG
-
-# Optional: Python bindings through SWIG
-option(PYTHON_BINDINGS "Generate python bindings" ON)
-
 if(PYTHON_BINDINGS)
-  find_package(SWIG REQUIRED)
-  include(${SWIG_USE_FILE})
-
-  find_package(PythonLibs REQUIRED)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-
-  find_package(Numpy REQUIRED)
-  include_directories(${NUMPY_INCLUDE_DIRS})
-
-  find_package(PythonInterp)
-
   list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
   set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(DAL.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
-  set(SWIG_MODULE_DAL_EXTRA_DEPS swig_docstrings dal ${swig_sources} ${dal_headers})
+  set(SWIG_MODULE_DAL_EXTRA_DEPS dal ${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i ${swig_sources} ${dal_headers})
+  set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i PROPERTIES GENERATED ON)
   swig_add_module(DAL python DAL.i ${dal_sources})
   swig_link_libraries(DAL ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
 
+  add_dependencies(${SWIG_MODULE_DAL_REAL_NAME} swig_docstrings)
+
   install(TARGETS
     ${SWIG_MODULE_DAL_REAL_NAME}
+
     DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
+    COMPONENT python
   )
 
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/DAL.py
+
     DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
+    COMPONENT python
   )
 
   add_subdirectory(python)
 endif(PYTHON_BINDINGS)
 
 add_subdirectory(casa)
-add_subdirectory(doc)
 add_subdirectory(hdf5)
 add_subdirectory(lofar)
 add_subdirectory(utils)
