@@ -41,10 +41,17 @@ DAL_module = Extension('_DAL',
 			)
 
 dist = setup (name	= 'DAL',
-	version		= '2.0.0',
+	version		= '@DAL_VERSION@',
 	author		= "dr. Jan David Mol, ASTRON, the Netherlands",
-	author_email	= "nextgen-astrodata@astron.nl",
+	author_email	= "mol@astron.nl",
 	description	= """Bindings of DAL""",
+        license         = "LGPL",
+        keywords        = "LOFAR HDF5 DAL",
+        url             = "https://github.com/nextgen-astrodata/DAL",
+
+        install_requires = ['numpy'],
+
+        scripts         = ['__init__.py','DAL.py'],
 	ext_modules	= [DAL_module],
 	py_modules	= ["DAL"],
 	)
