@@ -93,7 +93,7 @@ public:
   void del() const;
 
 private:
-  // Do'not allow copying, as attr of the copy might get out of scope
+  // Do not allow copying, as attr of the copy might get out of scope
   AttributeValue( const AttributeValue& );
 
   AttributeValue( Attribute<T> &attr ): attr(attr) {}
