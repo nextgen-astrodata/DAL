@@ -6,7 +6,25 @@ using namespace std;
 
 namespace DAL {
 
-// Names from LOFAR/MAC/Deployment/data/StaticMetaData/StationInfo.dat
+// from the LOFAR repos in MAC/Deployment/data/StaticMetaData/StationInfo.dat
+const char stationNames[][6] = {
+"CS001", "CS002", "CS003", "CS004", "CS005", "CS006", "CS007", "CS008",
+"CS009", "CS010", "CS011", "CS012", "CS013", "CS014", "CS015", "CS016",
+"CS017", "CS018", "CS019", "CS020", "CS021", "CS022", "CS023", "CS024",
+"CS025", "CS026", "CS027", "CS028", "CS029", "CS030", "CS031", "CS032",
+
+"CS101", "CS102", "CS103", "RS104", "RS105", "RS106", "RS107", "RS108",
+"RS109", "CS201", "RS202", "RS203", "RS204", "RS205", "RS206", "RS207",
+"RS208", "RS209", "RS210", "CS301", "CS302", "RS303", "RS304", "RS305",
+"RS306", "RS307", "RS308", "RS309", "RS310", "CS401", "RS402", "RS403",
+"RS404", "RS405", "RS406", "RS407", "RS408", "RS409", "RS410", "RS411",
+"RS412", "RS413", "CS501", "RS502", "RS503", "RS504", "RS505", "RS506",
+"RS507", "RS508", "RS509",
+
+"DE601", "DE602", "DE603", "DE604", "DE605", "FR606", "SE607", "UK608",
+"FI609"
+};
+
 string stationIDToName(unsigned stationID) {
 	string name;
 
