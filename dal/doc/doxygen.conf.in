@@ -1,3 +1,5 @@
+PROJECT_NAME = "Data Access Library (DAL)"
+
 # The files and directories to parse
 INPUT = @CMAKE_SOURCE_DIR@/dal @CMAKE_SOURCE_DIR@/dal/hdf5 @CMAKE_SOURCE_DIR@/dal/hdf5/types @CMAKE_SOURCE_DIR@/dal/hdf5/exceptions @CMAKE_SOURCE_DIR@/dal/lofar 
 INCLUDE_PATH = @CMAKE_INCLUDE_PATH@
