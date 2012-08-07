@@ -1,11 +1,12 @@
 #ifndef DAL_ATTRIBUTE_H
 #define DAL_ATTRIBUTE_H
 
+#include <cstdlib>
 #include <string>
 #include <vector>
 #include <ostream>
-#include "types/hid_gc.h"
-#include "Node.h"
+#include <hdf5.h>
+#include "types/h5typemap.h"
 #include "Group.h"
 
 /*

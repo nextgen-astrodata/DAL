@@ -1,8 +1,3 @@
-#include "Attribute.h"
-#include "types/h5typemap.h"
-#include <cstdlib>
-#include <hdf5.h>
-
 namespace DAL {
 
 inline bool AttributeBase::exists() const

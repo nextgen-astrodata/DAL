@@ -1,10 +1,18 @@
 #ifndef DAL_DATASET_H
 #define DAL_DATASET_H
 
+#include <cstdlib>
+#include <cstring>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <libgen.h>	// dirname()
+
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "types/hid_gc.h"
+#include "types/h5typemap.h"
 #include "exceptions/exceptions.h"
 #include "Group.h"
 
@@ -69,8 +77,10 @@ public:
    *
    * If a `filename' is given, that file will be used to store the data. The file can be provided by
    * the user, or will be created upon the first write. Note that the filename cannot be changed
-   * after the dataset has been created (HDF5 1.8.7), so providing absolute paths will make the
-   * dataset difficult to copy or move across systems.
+   * after the dataset has been created (HDF5 1.8), so providing an absolute path will make the
+   * dataset difficult to copy or move across systems. We strongly advice against absolute paths (and "../") here!
+   * Note that HDF5 1.8 has a problem accessing external files outside the current working directory.
+   * DAL works around this, but see Known Issue 1 for more detail.
    *
    * If no `filename' is given, dims == maxdims is required due to limitations of HDF5.
    *

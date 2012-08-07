@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "types/hid_gc.h"
 #include "Node.h"
 
 namespace DAL {
