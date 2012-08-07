@@ -4,10 +4,22 @@ using namespace std;
 
 namespace DAL {
 
-BF_File::BF_File( const std::string &filename, enum File::fileMode mode )
+BF_File::BF_File( const std::string &filename, enum File::fileMode mode, bool enforceVersioning )
 :
-  CLA_File(filename, mode)
+  CLA_File(filename, mode, enforceVersioning)
 {
+  if (mode == CREATE) {
+    fileType().create().set("bf");
+  } else {
+    bool isBfFileType = false;
+    try {
+      isBfFileType = fileType().get() == "bf";
+    } catch (DALException& ) {
+    }
+    if (!isBfFileType) {
+      throw DALException("Failed to open BF file: A BF file must have /FILETYPE=\"bf\".");
+    }
+  }
 }
 
 void BF_File::initNodes() {

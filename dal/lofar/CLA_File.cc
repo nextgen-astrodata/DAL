@@ -1,13 +1,36 @@
+#define _BSD_SOURCE	// gmtime_r()
 #include "CLA_File.h"
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <cstdio>
+#include <ctime>
 
 using namespace std;
 
 namespace DAL {
 
-CLA_File::CLA_File( const std::string &filename, enum File::fileMode mode )
+CLA_File::CLA_File( const std::string &filename, enum File::fileMode mode, bool enforceVersioning )
 :
   File(filename, mode, "DOC_VERSION")
 {
+  if (mode == CREATE) {
+    fileName().create().set(filename);
+    fileDate().create().set(getFileModDate(filename)); // UTC
+    telescope().create().set("LOFAR");
+  } else {
+    bool isCompatibleFileType = false;
+    try {
+      isCompatibleFileType = telescope().get() == "LOFAR" && enforceVersioning && getStoredFileVersion() >= VersionType(2, 0, 0);
+    } catch (DALException& ) {
+    }
+    if (!isCompatibleFileType) {
+      throw DALException("Failed to open file: A LOFAR data product must have /TELESCOPE=\"LOFAR\" and /VERSION>=\"2.0.0\".\n"
+                         "Older data products can be upgraded or the version check can be circumvented on opening.");
+    }
+    // TODO: enable the right (versions of) attributes based on file type and file version here and in sub-classes; allow circumvention and unversioned fields
+  }
 }
 
 void CLA_File::initNodes()
@@ -49,6 +72,57 @@ void CLA_File::initNodes()
   addNode( new Attribute<string>(*this, "DOC_NAME") );
   addNode( new Attribute<string>(*this, "DOC_VERSION") );
   addNode( new Attribute<string>(*this, "NOTES") );
+}
+
+/*
+ * Returns last mod date/time of filename, or current time of day if stat()ing fails,
+ * in "YYYY-MM-DDThh:mm:ss.s" UTC format.
+ * For FILEDATE attribute.
+ */
+string CLA_File::getFileModDate(const string& filename) const {
+	struct timeval tv;
+	struct stat st;
+
+	if (stat(filename.c_str(), &st) != 0) {
+		gettimeofday(&tv, NULL); // If stat() fails, this is close enough to file mod date.
+	} else {
+		tv.tv_sec = st.st_mtime;
+		tv.tv_usec = st.st_mtim.tv_nsec / 1000;
+	}
+
+	const char output_format[] = "%Y-%m-%dT%H:%M:";
+	const char output_format_secs[] = "%04.1f"; // _total_ width of 4 of "ss.s"
+	const char output_format_example[] = "YYYY-MM-DDThh:mm:ss.s";
+	return formatFilenameTimestamp(tv, output_format, output_format_secs, sizeof(output_format_example));
+}
+
+/*
+ * The output_format is without seconds. The output_size is including the '\0'.
+ * Helper for in filenames and for the FILEDATE attribute.
+ */
+string CLA_File::formatFilenameTimestamp(const struct timeval& tv, const char* output_format,
+                                         const char* output_format_secs, size_t output_size) const {
+	struct tm tm;
+	gmtime_r(&tv.tv_sec, &tm);
+	double secs = tm.tm_sec + tv.tv_usec / 1000000.0;
+
+	struct Date {
+		char* date;
+		Date(size_t size) : date(new char[size]) {
+		}
+		~Date() {
+			delete[] date;
+		}
+	} d(output_size); // ensure C string for strftime() is always deleted
+
+	size_t nwritten = strftime(d.date, output_size, output_format, &tm);
+	if (nwritten == 0) {
+		d.date[0] = '\0';
+	}
+	/*int nprinted = */snprintf(d.date + nwritten, output_size - nwritten, output_format_secs, secs);
+
+	string dateStr(d.date);
+	return dateStr;
 }
 
 Attribute<string> CLA_File::fileName()

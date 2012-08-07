@@ -4,10 +4,22 @@ using namespace std;
 
 namespace DAL {
 
-TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode )
+TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode, bool enforceVersioning )
 :
-  CLA_File(filename, mode)
+  CLA_File(filename, mode, enforceVersioning)
 {
+  if (mode == CREATE) {
+    fileType().create().set("tbb");
+  } else {
+    bool isTbbFileType = false;
+    try {
+      isTbbFileType = fileType().get() == "tbb";
+    } catch (DALException& ) {
+    }
+    if (!isTbbFileType) {
+      throw DALException("Failed to open TBB file: A TBB file must have /FILETYPE=\"tbb\".");
+    }
+  }
 }
 
 Attribute<string> TBB_File::operatingMode()

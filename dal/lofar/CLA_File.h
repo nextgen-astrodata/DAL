@@ -1,6 +1,9 @@
 #ifndef DAL_CLA_FILE_H
 #define DAL_CLA_FILE_H
 
+#include <cstddef>
+#include <sys/time.h>
+
 #include <string>
 #include <vector>
 #include <hdf5.h>
@@ -14,7 +17,7 @@ namespace DAL {
  */
 class CLA_File: public File {
 public:
-  CLA_File( const std::string &filename, enum fileMode mode = READ );
+  CLA_File( const std::string &filename, enum fileMode mode = READ, bool enforceVersioning = true );
 
   Attribute<std::string> fileName();
   Attribute<std::string> fileDate();
@@ -63,6 +66,10 @@ public:
 
 protected:
   virtual void            initNodes();
+
+  std::string             getFileModDate(const std::string& filename) const;
+  std::string             formatFilenameTimestamp(const struct timeval& tv, const char* output_format,
+                                                  const char* output_format_secs, size_t output_size) const;
 };
 
 }

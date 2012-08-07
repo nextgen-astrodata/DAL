@@ -26,7 +26,7 @@ public:
   /*!
    * Open `filename` for reading/writing/creation.
    */
-  BF_File( const std::string &filename, enum fileMode mode = READ );
+  BF_File( const std::string &filename, enum fileMode mode = READ, bool enforceVersioning = true );
 
   Attribute<std::string>  createOfflineOnline();
   Attribute<std::string>  BFFormat();
