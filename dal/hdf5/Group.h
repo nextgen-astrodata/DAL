@@ -14,7 +14,7 @@ template<typename T> class Attribute;
 /*!
  * Wraps an HDF5 group, providing core functionality.
  *
- * An Group maintains a set of registered Nodes that it
+ * A Group maintains a set of registered Nodes that it
  * expects to be present.
  */
 class Group: public Node {
