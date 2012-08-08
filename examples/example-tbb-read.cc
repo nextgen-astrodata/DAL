@@ -5,6 +5,7 @@
  *              from a HDF5 file using the DAL library.
  * Build command: c++ -o example-tbb-read example-tbb-read.cc -ldal -lhdf5
  */
+#include <cstddef>	// NULL
 #include <iostream>
 
 #include "dal/lofar/TBB_File.h"
@@ -13,12 +14,23 @@
 
 using namespace std;
 
+// Minimal data pointer wrapping to guarantee delete[].
+template <typename T>
+struct Data {
+	T* data;
+	size_t len;
+
+	Data() : data(NULL), len(0) { }
+	~Data() {
+		delete[] data;
+	}
+};
+
 static void readTBBFile(const string& filename) {
 	DAL::TBB_File tf(filename);
 
-	const vector<size_t> pos(1, 0); // = {0}: always read starting at idx 0
-	int16_t* data = NULL;
-	size_t dataLen = 0;
+	Data<int16_t> d;
+	const vector<size_t> pos(1, 0); // always read starting at idx 0
 
 	vector<DAL::TBB_Station> stations = tf.stations();
 	for (size_t i = 0; i < stations.size(); i++) {
@@ -29,24 +41,23 @@ static void readTBBFile(const string& filename) {
 			cout << "\tDipole " << dipoles[j].rspID().get() << " " << dipoles[j].rcuID().get() << ":" << endl;
 
 			size_t dpDataLen = dipoles[j].dims()[0];
-			if (dataLen < dpDataLen) {
-				delete[] data;
-				dataLen = dpDataLen;
-				data = new int16_t[dataLen];
+			if (d.len < dpDataLen) {
+				delete[] d.data;
+				d.data = NULL; // safe delete[] in ~Data() in case new[] fails
+				d.len = dpDataLen;
+				d.data = new int16_t[d.len];
 			}
 
-			dipoles[j].get1D(pos, dataLen, data);
+			dipoles[j].get1D(pos, d.len, d.data);
 
-			size_t printedLen = dataLen < MAX_PRINTED ? dataLen : MAX_PRINTED;
+			size_t printedLen = d.len < MAX_PRINTED ? d.len : MAX_PRINTED;
 			for (size_t k = 0; k < printedLen; k++) {
-				cout << data[k] << " ";
+				cout << d.data[k] << " ";
 			}
 			cout << endl;
 		}
 
 	}
-
-	delete[] data; // not reached if exc thrown
 }
 
 static void printUsage(const char* progname) {
