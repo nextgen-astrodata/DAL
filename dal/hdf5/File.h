@@ -11,7 +11,7 @@ namespace DAL {
 
 class File: public Group {
 public:
-  enum fileMode { READ = 1, READWRITE = 2, CREATE = 3 };
+  enum fileMode { READ = 1, READWRITE = 2, CREATE = 3, CREATE_EXCL = 4 };
 
   /*!
    * Open or create an HDF5 file called `filename`.

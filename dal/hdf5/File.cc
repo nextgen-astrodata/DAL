@@ -19,6 +19,7 @@ File::File( const std::string &filename, enum File::fileMode mode, const std::st
 
   switch (mode) {
     case CREATE:
+    case CREATE_EXCL:
     case READWRITE:
       data.canWrite = true;
       break;
@@ -37,6 +38,7 @@ hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
 
   switch (mode) {
     case CREATE:
+    case CREATE_EXCL:
       {
         hid_gc_noref fapl(H5Pcreate(H5P_FILE_ACCESS), H5Pclose, "Could not create file access property list to create file " + filename);
 
@@ -53,7 +55,13 @@ hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
 #endif
           return -1; // TODO: throw exception
 
-        return hid_gc(H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl), H5Fclose, "Could not create file " + filename);
+        unsigned flags;
+        if (mode == CREATE)
+          flags = H5F_ACC_TRUNC;
+        else // mode == CREATE_EXCL
+          flags = H5F_ACC_EXCL;
+
+        return hid_gc(H5Fcreate(filename.c_str(), flags, H5P_DEFAULT, fapl), H5Fclose, "Could not create file " + filename);
       }  
 
     case READ:  
