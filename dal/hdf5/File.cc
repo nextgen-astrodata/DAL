@@ -53,7 +53,7 @@ hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
 #else // >= 1.10
         if (H5Pset_libver_bounds(fapl, H5F_LIBVER_18, H5F_LIBVER_18) < 0)
 #endif
-          return -1; // TODO: throw exception
+          throw DALException("Could not set HDF5 version bounds to create forward compatible file for HDF5 1.8 features");
 
         unsigned flags;
         if (mode == CREATE)
@@ -71,7 +71,7 @@ hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
       return hid_gc(H5Fopen(filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT), H5Fclose, "Could not open file for read-write access; file " + filename);
 
     default:
-      return 0;
+      throw DALValueError("Could not open file: unknown mode argument");
   }
 }
 
