@@ -27,6 +27,11 @@ public:
   AttributeBase( Group &parent, const std::string &name ): Node(parent, name) {}
 
   /*!
+   * Destruct a generic Attribute object.
+   */
+  virtual ~AttributeBase() {}
+
+  /*!
    * Returns whether this attribute exists in the HDF5 file.
    */
   virtual bool exists() const;
@@ -176,6 +181,11 @@ public:
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
   /*!
+   * Destruct an Attribute object.
+   */
+  virtual ~Attribute() {}
+
+  /*!
    * Creates this attribute.
    */
   Attribute<T>& create();
@@ -248,6 +258,11 @@ public:
   Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
+
+  /*!
+   * Destruct an Attribute object.
+   */
+  virtual ~Attribute() {}
 
   /*!
    * Creates this attribute, reserving a certain length. Note that HDF5 does not support

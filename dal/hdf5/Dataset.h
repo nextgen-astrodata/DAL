@@ -72,6 +72,11 @@ public:
   Dataset( Group &parent, const std::string &name ): Group(parent, name) {}
 
   /*!
+   * Destruct a Dataset object.
+   */
+  virtual ~Dataset() {}
+
+  /*!
    * Creates a new dataset with dimensions sized `dims'. If `maxdims' is set, the dataset can be scaled up to `maxdims'.
    * The rank of the dataset is dims.size() == maxdims.size(). A maximum of -1 represents an unbounded dimension.
    *
