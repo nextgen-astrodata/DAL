@@ -86,6 +86,19 @@ template<> struct h5typemap<unsigned short> {
   static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_U16BE : H5T_STD_U16LE; }
 };
 
+// Not sure what's up with the little/big endian for char.
+template<> struct h5typemap<signed char> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_SCHAR; }
+  static inline hid_t attributeType()            { return H5T_STD_I8LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_I8BE : H5T_STD_I8LE; }
+};
+
+template<> struct h5typemap<unsigned char> {
+  static inline hid_t memoryType()               { return H5T_NATIVE_UCHAR; }
+  static inline hid_t attributeType()            { return H5T_STD_U8LE;   }
+  static inline hid_t dataType( bool bigEndian ) { return bigEndian ? H5T_STD_U8BE : H5T_STD_U8LE; }
+};
+
 template<> struct h5typemap<bool> {
   static inline hid_t memoryType()               { return sizeof (bool) == 1 ? H5T_NATIVE_CHAR : H5T_NATIVE_INT; } // assumes bool is either a char or an int
   static inline hid_t attributeType()            { return H5T_STD_I32LE;   } // emulate a bool as a 32-bit signed integer
