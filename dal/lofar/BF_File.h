@@ -2,10 +2,11 @@
 #define DAL_BF_FILE_H
 
 #include <string>
+#include <vector>
 #include <hdf5.h>
-#include "dal/hdf5/Attribute.h"
-#include "dal/hdf5/Group.h"
 #include "dal/hdf5/Dataset.h"
+#include "dal/hdf5/Group.h"
+#include "dal/hdf5/Attribute.h"
 #include "dal/lofar/CLA_File.h"
 #include "dal/lofar/Coordinates.h"
 

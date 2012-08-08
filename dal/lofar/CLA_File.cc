@@ -1,4 +1,3 @@
-#define _BSD_SOURCE	// gmtime_r()
 #include "CLA_File.h"
 
 #include <sys/types.h>
@@ -6,6 +5,7 @@
 #include <unistd.h>
 #include <cstdio>
 #include <ctime>
+#include <dal/dal_version.h>
 
 using namespace std;
 
@@ -16,9 +16,13 @@ CLA_File::CLA_File( const std::string &filename, enum File::fileMode mode, bool 
   File(filename, mode, "DOC_VERSION")
 {
   if (mode == CREATE) {
+    telescope().create().set("LOFAR");
+    // TODO: creating/setting the version field should like any other, even though changing the version must trigger some additional fluff.
+    Attribute<string> versionAttr(*this, versionAttrName);    
+    versionAttr.create();
+    setFileVersion(get_lib_version());
     fileName().create().set(filename);
     fileDate().create().set(getFileModDate(filename)); // UTC
-    telescope().create().set("LOFAR");
   } else {
     bool isCompatibleFileType = false;
     try {

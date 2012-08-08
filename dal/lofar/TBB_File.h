@@ -7,9 +7,9 @@
 #include <vector>
 #include <complex>
 #include <hdf5.h>
-#include "dal/hdf5/Attribute.h"
-#include "dal/hdf5/Group.h"
 #include "dal/hdf5/Dataset.h"
+#include "dal/hdf5/Group.h"
+#include "dal/hdf5/Attribute.h"
 #include "dal/lofar/CLA_File.h"
 
 namespace DAL {
