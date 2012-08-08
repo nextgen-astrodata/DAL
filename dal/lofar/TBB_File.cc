@@ -219,9 +219,9 @@ Attribute<unsigned> TBB_DipoleDataset::samplesPerFrame()
   return Attribute<unsigned>(*this, "SAMPLES_PER_FRAME");
 }
 
-Attribute<uint64_t> TBB_DipoleDataset::dataLength()
+Attribute<unsigned long long> TBB_DipoleDataset::dataLength()
 {
-  return Attribute<uint64_t>(*this, "DATA_LENGTH");
+  return Attribute<unsigned long long>(*this, "DATA_LENGTH");
 }
 
 Attribute< vector<unsigned> > TBB_DipoleDataset::flagOffsets()

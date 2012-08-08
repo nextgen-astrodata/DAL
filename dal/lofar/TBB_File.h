@@ -1,8 +1,6 @@
 #ifndef DAL_TBB_FILE_H
 #define DAL_TBB_FILE_H
 
-#include <stdint.h>
-
 #include <string>
 #include <vector>
 #include <complex>
@@ -98,7 +96,7 @@ public:
   Attribute<unsigned>                   sampleNumber();
 
   Attribute<unsigned>                   samplesPerFrame();
-  Attribute<uint64_t>                   dataLength();
+  Attribute<unsigned long long>         dataLength();
   Attribute< std::vector<unsigned> >    flagOffsets();
   Attribute<unsigned>                   nyquistZone();
 
