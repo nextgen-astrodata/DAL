@@ -4,11 +4,16 @@ using namespace std;
 
 namespace DAL {
 
+/*!
+ * Open filename with mode and treat versionAttrName as the version attribute name.
+ *
+ * Note on reopening: HDF5 cannot reopen the same file (same or different mode) until
+ * it has closed the previous open. HDF5 can only close once all opened subgroups etc
+ * have been closed. As long as this is not the case, these references remain valid
+ * and HDF5 keeps the file open. See the HDF5 manual on H5Fclose() for more detail.
+ */
 File::File( const std::string &filename, enum File::fileMode mode, const std::string &versionAttrName )
 :
-  // see docs on H5Fclose for caveats when closing the file while having subgroups open
-  // (in normal circumstances, HDF5 will only close the file if all access to it has been
-  // completed: any open group identifiers (etc) will remain functioning)
   Group(open(filename, mode)),
   filename(filename),
   mode(mode),

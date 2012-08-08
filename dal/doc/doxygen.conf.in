@@ -10,7 +10,7 @@ OUTPUT_DIRECTORY = @CMAKE_CURRENT_BINARY_DIR@
 # Generate XML to use as docstrings in SWIG
 GENERATE_XML = YES
 
-# Skip code marked as such
+# Skip code marked as such ( use #ifndef DOXYGEN_SHOULD_SKIP_THIS )
 PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS
 
 # Don't flood us with warnings
