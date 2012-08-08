@@ -12,13 +12,18 @@ A manual is available at http://nextgen-astrodata.github.com/DAL
 DAL Project Contents
 --------------------
 
-INSTALL.txt		How to retrieve and build DAL, list of dependencies.
-CONTRIBUTING.txt	How to contact us and/or submit contributions.
-LICENSE.txt		The license text
+INSTALL			How to retrieve and build DAL, list of dependencies.
+COPYING.LESSER		The license text.
+Contributing		How to contact us and/or submit contributions.
+KnownIssues		Known issues in this release.
+ChangeLog		Added features and fixed bugs per release.
+README			This file.
 
-src/			DAL sources
-CMakeLists.txt		Build configuration script
-cmake/			Build configuration helper scripts
-setup.py		Python bindings setup script invoked by build
-examples/		Small example programs
+CMakeLists.txt		Build configuration script.
+cmake/			Build configuration helper scripts.
+dal/			DAL sources.
+doc/			DAL documentation sources.
+examples/		Small example programs.
+package/		Package creation script(s).
+test/			Test programs, in addition to example and utility tests.
 
