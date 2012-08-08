@@ -91,8 +91,8 @@ string CLA_File::getFileModDate(const string& filename) const {
 		gettimeofday(&tv, NULL); // If stat() fails, this is close enough to file mod date.
 	} else {
 		tv.tv_sec = st.st_mtime;
-#ifdef _APPLE_
-		tv.tv_usec = st.st_mtimensec / 1000; // OS X has the nsec entry named like this
+#ifdef __APPLE__
+		tv.tv_usec = st.st_mtimespec.tv_nsec / 1000;
 #else
 		tv.tv_usec = st.st_mtim.tv_nsec / 1000;
 #endif
