@@ -1,6 +1,3 @@
-#include "types/h5typemap.h"
-#include "Dataset.h"
-
 namespace DAL {
 
 template<typename T> void Dataset<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
@@ -74,10 +71,10 @@ template<typename T> std::vector<ssize_t> Dataset<T>::maxdims()
   std::vector<hsize_t> maxdims(rank);
   std::vector<ssize_t> result(rank);
 
-  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not get dataspace to get maximum number of dimensions of dataset " + _name);
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not get dataspace to get maximum dimensions of dataset " + _name);
 
-  if (H5Sget_simple_extent_dims(dataspace, &maxdims[0], NULL) < 0)
-    throw HDF5Exception("Could not get maximum number of dimensions of dataset " + _name);
+  if (H5Sget_simple_extent_dims(dataspace, NULL, &maxdims[0]) < 0)
+    throw HDF5Exception("Could not get maximum dimensions of dataset " + _name);
 
   for (size_t i = 0; i < rank; i++) {
     result[i] = maxdims[i];

@@ -1,4 +1,4 @@
-// SWIG customisations for HDF5Datasets
+// SWIG customisations for class Dataset
 
 // -------------------------------
 // Type marshalling
