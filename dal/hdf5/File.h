@@ -31,7 +31,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  File( const std::string &filename, enum fileMode mode = READ, const std::string &versionAttrName = "DOC_VERSION" );
+  File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName );
 
   /*!
    * Commit any changes to disk.
@@ -51,7 +51,7 @@ public:
   const fileMode mode;
 
   /*!
-   * The name of the attribute containing the file version.
+   * The name of the attribute containing the file version. Cannot be "".
    */
   const std::string versionAttrName;
 
