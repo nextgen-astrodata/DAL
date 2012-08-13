@@ -37,10 +37,14 @@ inline size_t AttributeBase::size() const
 
   hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not retrieve dataspace to retrieve size of attribute " + _name);
 
-  if (!H5Sis_simple(dataspace)) {
-    // attribute is a scalar
-    return 1;
-  }  
+  H5S_class_t classType(H5Sget_simple_extent_type(dataspace));
+  if (classType == H5S_NO_CLASS)
+    throw HDF5Exception("Could not obtain class type of dataspace to retrieve size of attribute " + _name);
+  else if (classType == H5S_SCALAR)
+    return 1; // scalar attribute
+  else if (classType == H5S_NULL)
+    return 0; // empty attribute
+  // else classType is H5S_SIMPLE; determine size 
 
   const int rank = H5Sget_simple_extent_ndims(dataspace);
   if (rank < 0)
@@ -104,7 +108,10 @@ static inline hid_t h5scalar()
 
 static inline hid_t h5array( hsize_t count )
 {
-  return H5Screate_simple(1, &count, NULL);
+  if (count == 0)
+    return H5Screate(H5S_NULL);
+  else
+    return H5Screate_simple(1, &count, NULL);
 }
 
 static inline hid_t h5stringType()
@@ -183,9 +190,6 @@ template<typename T> inline bool Attribute<T>::valid() const
 
 template<typename T> inline Attribute< std::vector<T> >& Attribute< std::vector<T> >::create( size_t length )
 {
-  if (length == 0)
-    throw DALValueError("Cannot store zero length dataspace to create attribute " + _name);
-
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace to create attribute " + _name);
 
   hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), h5typemap<T>::attributeType(), dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute " + _name);
@@ -195,15 +199,15 @@ template<typename T> inline Attribute< std::vector<T> >& Attribute< std::vector<
 
 template<typename T> inline void Attribute< std::vector<T> >::set( const std::vector<T> &value )
 {
-  if (value.empty())
-    throw DALValueError("Cannot store zero length dataspace to set attribute " + _name);
-
   if (size() != value.size()) {
     // recreate the attribute to change the vector length on disk
     remove();
     create(value.size());
   }
     
+  if (value.empty())
+    return; // cannot write to a NULL dataspace
+
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open to set attribute " + _name);
 
   if (H5Awrite(attr, h5typemap<T>::memoryType(), &value[0]) < 0)
@@ -215,6 +219,8 @@ template<typename T> inline std::vector<T> Attribute< std::vector<T> >::get() co
   hid_gc_noref attr(H5Aopen_name(parent, _name.c_str()), H5Aclose, "Could not open to get attribute " + _name);
 
   std::vector<T> value(size());
+  if (value.empty())
+    return value;
 
   if (H5Aread(attr, h5typemap<T>::memoryType(), &value[0]) < 0)
     throw HDF5Exception("Could not get attribute " + _name);
@@ -348,9 +354,6 @@ template<> inline std::string Attribute<std::string>::get() const
 
 template<> inline Attribute< std::vector<std::string> >& Attribute< std::vector<std::string> >::create( size_t length )
 {
-  if (length == 0)
-    throw DALValueError("Cannot store zero length dataspace to create attribute " + _name);
-
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace to create attribute " + _name);
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype to create attribute " + _name);
 
@@ -361,14 +364,14 @@ template<> inline Attribute< std::vector<std::string> >& Attribute< std::vector<
 
 template<> inline void Attribute< std::vector<std::string> >::set( const std::vector<std::string> &value )
 {
-  if (value.empty())
-    throw DALValueError("Cannot store zero length dataspace to set attribute " + _name);
-
   if (size() != value.size()) {
     // recreate the attribute to change the vector length on disk
     remove();
     create(value.size());
   }
+
+  if (value.empty())
+    return; // cannot write to a NULL dataspace
 
   // convert to C-style strings
   std::vector<const char *> c_strs(value.size());
@@ -387,6 +390,8 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
 {
   // H5Aread will allocate memory for us (use free() to free each element)
   std::vector<char *> c_strs(size(), 0);
+  if (c_strs.empty())
+    return std::vector<std::string>();
 
   hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype to get attribute " + _name);
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open to get attribute " + _name);

@@ -281,10 +281,10 @@ public:
   virtual ~Attribute() {}
 
   /*!
-   * Creates this attribute, reserving a certain length. Note that HDF5 does not support
-   * arrays of size 0, so length >= 1.
+   * Creates this attribute, reserving a certain length.
+   * If a different length is needed later, the attribute will be automatically recreated.
    */
-  Attribute< std::vector<T> > &create( size_t length = 1 );
+  Attribute< std::vector<T> > &create( size_t length = 0 );
 
   /*!
    * Returns the value of this attribute, retrieved from the HDF5 file. An exception
