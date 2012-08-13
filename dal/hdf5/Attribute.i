@@ -50,8 +50,8 @@ namespace DAL {
 
       try:
         self.set(val)
-      except TypeError:
-        raise TypeError("'%s' cannot be assigned values of type '%s'" % (self.__class__.__name__, type(val).__name__,))
+      except TypeError as tpe:
+        raise TypeError("'%s' cannot be assigned values of passed type '%s': %s" % (self.__class__.__name__, type(val).__name__, tpe.message,))
 
     @value.deleter
     def value(self):
