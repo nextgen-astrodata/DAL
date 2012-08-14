@@ -6,7 +6,7 @@
 # File:         tbb-lostframes.py
 # Author:       Alexander S. van Amesfoort (amesfoort_at_astron.nl)
 # Date:         2012-06-11
-# Last change:  2012-06-18
+# Last change:  2012-08-14
 
 import sys
 import numpy
@@ -42,11 +42,11 @@ def print_lost_frame_nrs(filename):
 		dipole_datasets = st.dipoles();
 		for dp in dipole_datasets:
 			datasets_found = True
-			data_len = len(dp) # actual data len; should be equal to dp.dataLength().get()
+			data_len = dp.dims() # actual data len; should be equal to dp.dataLength().get()
 			data = numpy.zeros((data_len, ), dtype=dp.dtype)
 			#data = numpy.array(dp, dtype=dp.dtype) # only works if Python binding of TBB_DipoleDataset exposes the array interface, __array__ returns an array or any (nested) sequence.
-			pos = (0, ) # must be a tuple, even for 1D
-			dp.get1D(pos, data)
+			pos = 0 # but can be a scalar for Dataset1D
+			dp.get(pos, data)
 
 			block_len = dp.samplesPerFrame().value
 			# Not always there when this program was written, but will be always there. Use .get() instead of .value to have an exc raised instead of None returned.

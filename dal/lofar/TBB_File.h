@@ -21,8 +21,7 @@
 #include <vector>
 #include <complex>
 #include <hdf5.h>
-#include "dal/hdf5/Dataset.h"
-#include "dal/hdf5/Group.h"
+#include "dal/hdf5/Dataset1D.h"
 #include "dal/hdf5/Attribute.h"
 #include "dal/lofar/CLA_File.h"
 
@@ -95,9 +94,9 @@ private:
   std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
 };
 
-class TBB_DipoleDataset: public Dataset<int16_t> {
+class TBB_DipoleDataset: public Dataset1D<int16_t> {
 public:
-  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<int16_t>(parent, name) {}
+  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset1D<int16_t>(parent, name) {}
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();

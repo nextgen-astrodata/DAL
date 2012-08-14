@@ -26,21 +26,19 @@ struct Data {
 	}
 };
 
-static void readTBBFile(const string& filename) {
+static void readTBB_File(const string& filename) {
 	DAL::TBB_File tf(filename);
 
 	Data<int16_t> d;
-	const vector<size_t> pos(1, 0); // always read starting at idx 0
-
 	vector<DAL::TBB_Station> stations = tf.stations();
 	for (size_t i = 0; i < stations.size(); i++) {
 		cout << "Station " << stations[i].stationName().get() << ":" << endl;
 
-		vector<DAL::TBB_DipoleDataset> dipoles = stations[i].dipoles();
+		vector<DAL::TBB_DipoleDataset> dipoles(stations[i].dipoles());
 		for (size_t j = 0; j < dipoles.size(); j++) {
 			cout << "\tDipole " << dipoles[j].rspID().get() << " " << dipoles[j].rcuID().get() << ":" << endl;
 
-			size_t dpDataLen = dipoles[j].dims()[0];
+			size_t dpDataLen = dipoles[j].dims();
 			if (d.len < dpDataLen) {
 				delete[] d.data;
 				d.data = NULL; // safe delete[] in ~Data() in case new[] fails
@@ -48,7 +46,8 @@ static void readTBBFile(const string& filename) {
 				d.data = new int16_t[d.len];
 			}
 
-			dipoles[j].get1D(pos, d.len, d.data);
+			size_t pos = 0;
+			dipoles[j].get(pos, d.len, d.data);
 
 			size_t printedLen = d.len < MAX_PRINTED ? d.len : MAX_PRINTED;
 			for (size_t k = 0; k < printedLen; k++) {
@@ -73,7 +72,7 @@ int main(int argc, char* argv[]) {
 	int exit_status = 1;
 	try {
 		const string filename = argv[1];
-		readTBBFile(filename);
+		readTBB_File(filename);
 		exit_status = 0;
 	} catch (DAL::HDF5Exception& exc) {
 		cerr << "Error: DAL HDF5 exception: " << exc.what() << endl;

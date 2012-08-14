@@ -3,6 +3,8 @@ install (FILES
   Attribute.tcc
   Dataset.h
   Dataset.tcc
+  Dataset1D.h
+  Dataset1D.tcc
   File.h
   Group.h
   Node.h

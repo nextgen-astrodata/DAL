@@ -23,6 +23,12 @@
 
 %include "std_complex.i"
 %include "std_string.i"
+
+// Roll our own STL vector binding to have the vector container also as a Python type.
+// With Python proxy objects of C++ containers, ref counting is done incorrectly
+// when a vector is returned and indexed in the same expression (e.g. getStations()[0]).
+// This implies an extra copy, but that is preferable to a crash.
+// This copy only happens for metadata vectors. Dataset data is not passed in STL vectors.
 %include "dal/vectors.i"
 
 // -------------------------------
@@ -36,8 +42,8 @@
 // -------------------------------
 
 %{
-  #include "dal/lofar/Station.h"
   #include "dal/lofar/CommonTuples.h"
+  #include "dal/lofar/Station.h"
   #include "dal/lofar/BF_File.h"
   #include "dal/lofar/TBB_File.h"
 
@@ -51,6 +57,7 @@
 %include "dal/hdf5/Attribute.i"
 %include "dal/hdf5/Group.i"
 %include "dal/hdf5/Dataset.i"
+%include "dal/hdf5/Dataset1D.i"
 %include dal/hdf5/File.h
 
 %include dal/lofar/Station.h

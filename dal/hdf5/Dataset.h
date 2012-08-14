@@ -251,9 +251,6 @@ protected:
   virtual void create() {
     throw HDF5Exception("create() without parameters not supported on a dataset " + _name);
   }
-
-  // constructor default initialized sub-class obj; undesirable
-  Dataset( const hid_gc &fileId ) : Group(fileId) { }
 };
 
 }

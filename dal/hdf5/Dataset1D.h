@@ -29,7 +29,7 @@ namespace DAL {
  *
  * See class Dataset for documentation.
  */
-template <typename T> class Dataset1D: Dataset {
+template <typename T> class Dataset1D: public Dataset<T> {
 public:
 
   /*!
@@ -46,12 +46,7 @@ public:
    * See Dataset::create(...).
    */
   void create( ssize_t len, ssize_t maxlen = 0,
-               const std::string &filename = "", enum Endianness endianness = NATIVE );
-
-  /*!
-   * Returns 1 (by definition).
-   */
-  size_t ndims();
+               const std::string &filename = "", enum Dataset<T>::Endianness endianness = Dataset<T>::NATIVE );
 
   /*!
    * Returns the length of the dataset.
@@ -62,7 +57,7 @@ public:
    * Returns the maximum length to which thus dataset can grow;
    * -1 represent unbounded length.
    */
-  ssize_t> maxdims();
+  ssize_t maxdims();
 
   /*!
    * See Dataset::resize().
@@ -106,6 +101,8 @@ public:
    */
   void set( size_t pos, T value );
 };
+
+}
 
 #include "Dataset1D.tcc"
 
