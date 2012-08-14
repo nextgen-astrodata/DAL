@@ -16,6 +16,12 @@ enable_testing()
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(BUILD_SHARED_LIBS ON)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+      FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
 include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR} # to find regular headers
   ${CMAKE_CURRENT_BINARY_DIR} # to find generated headers
@@ -101,3 +107,4 @@ if(GENERATE_DOCS)
   MESSAGE("SPHINX_EXECUTABLE    = ${SPHINX_EXECUTABLE}")
 endif(GENERATE_DOCS)
 MESSAGE("------------------------------------------------------")
+
