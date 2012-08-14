@@ -34,6 +34,8 @@ template<typename T> class Attribute;
  */
 class Group: public Node {
 public:
+  Group();
+
   Group( Group &parent, const std::string &name );
 
   Group( const Group &other );
@@ -138,7 +140,7 @@ protected:
 
   std::vector<std::string> memberNames();
 
-  // constructor for root group (and default initialized sub-class obj; undesirable)
+  // constructor for root group only
   Group( const hid_gc &fileId );
 
 private:

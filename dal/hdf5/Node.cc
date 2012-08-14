@@ -23,6 +23,14 @@ using namespace std;
 
 namespace DAL {
 
+Node::Node()
+:
+  minVersion(0),
+  parent(hid_gc()),
+  _name("")
+{
+}
+
 Node::Node( Group &parent, const std::string &name )
 :
   minVersion(parent.minVersion),

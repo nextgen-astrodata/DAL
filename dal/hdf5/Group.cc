@@ -20,6 +20,12 @@ using namespace std;
 
 namespace DAL {
 
+Group::Group()
+:
+  mapInitialised(false)
+{
+}
+
 Group::Group( const Group &other )
 :
   Node(other.parent, other._name),
@@ -37,7 +43,7 @@ Group::Group( Group &parent, const std::string &name )
 
 Group::Group( const hid_gc &fileId )
 :
-  Node(fileId, ""),
+  Node(fileId, "/"),
   _group(fileId),
   mapInitialised(false)
 {

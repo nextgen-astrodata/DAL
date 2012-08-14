@@ -35,6 +35,8 @@ class Group;
  */
 class Node {
 public:
+  Node();
+
   Node( Group &parent, const std::string &name );
 
   virtual ~Node() {}

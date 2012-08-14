@@ -30,7 +30,7 @@ namespace DAL {
  */
 File::File( const std::string &filename, enum File::fileMode mode, const std::string &versionAttrName )
 :
-  Group(open(filename, mode)),
+  Group(open(filename, mode)), // store the file hid in the group (node) hid
   filename(filename),
   mode(mode),
   versionAttrName(versionAttrName)
