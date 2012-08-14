@@ -24,7 +24,7 @@ Build Instructions
 	make
 	sudo make install
 
-If cmake does not find (the right) HDF5 libs, provide a hint to the Find module by setting the HDF5_ROOT_DIR environment variable.
+If cmake does not find the (preferred) HDF5 includes and libraries, provide a hint to the Find module by setting the HDF5_ROOT_DIR environment variable.
 
 To run the test cases:
 	make test
@@ -38,41 +38,47 @@ Additional CMake Variables
 
 The following custom flags can be added to the cmake command line:
 
+	-DCMAKE_BUILD_TYPE=RelWithDebInfo       Select build flags. RelWithDebInfo: '-O2 -g' (default), Debug: '-g', Release: '-O3 -DNDEBUG'
 	-DCMAKE_INSTALL_PREFIX=$PWD	        Install DAL into the indicated path (default: /usr/local).
 	-DPYTHON_SITE_PACKAGES=$PWD/python	Install DAL's Python bindings into the indicated path (default: derived from Python interpreter)
-	-DPYTHON_VERSION=X.Y	                Python version to compile the bindings against (default: derived from Python library)
+	-DPYTHON_VERSION=2.Y	                Python version to compile the bindings against (default: derived from Python library)
 
-        -DGENERATE_DOCS=OFF                     Do not generate documentation.
-        -DPYTHON_BINDINGS=OFF                   Do not generate Python bindings.
-        -DQUIET_HDF5_ERRORS=OFF                 Do not override the HDF5 error handler (exceptions will still be thrown, but
+	-DGENERATE_DOCS=OFF                     Do not generate documentation.
+	-DPYTHON_BINDINGS=OFF                   Do not generate Python bindings.
+	-DQUIET_HDF5_ERRORS=OFF                 Do not override the HDF5 error handler (exceptions will still be thrown, but
                                                 the default HDF5 handler will also print the full error stack on stderr).
 
 
 Dependencies
 ------------
 
-To use a pre-compiled DAL: (package not available atm)
-	- libhdf5-1.8 or later
-	- python	(version 2.3+ or 3; if running Python applications)
-	- python-numpy	(idem)
-
-	- casacore	(optional, for some higher level functionality)
-
-To build, additionally:
+To build DAL (default config), you need the following packages:
 	- cmake 2.8+
 	- make
-	- g++ or llvm with clang
+	- g++ or llvm/clang
+
+	- libhdf5-1.8 or later
 	- libhdf5-dev-1.8+
-	- python-dev
+
+	- python	(version 2.3+; for the Python bindings)
+	- python-numpy	(idem)
+	- python-dev	(idem)
+	- swig 1.3+	(regenerate Python bindings, idem)
+
+	- python-sphinx	(regenerate user manual)
+	- doxygen 1.6+	(regenerate API documentation and python docstring support)
+
+	- casacore	(to exchange datasets with casacore, off by default)
 
 Maintainer and developer builds, additionally:
 	- git		(source version control)
-	- swig 1.3+	(regenerate Python bindings)
-
-	- doxygen 1.6+	(regenerate API documentation and python docstring support)
-	- python-sphinx	(regenerate user manual)
-
-	- cmake-curses-gui (ccmake) (graphical list to configure all DAL CMake config variables)
-	- texlive (pdflatex) (regenerate design documentation (default: off))
+	- cmake-curses-gui (ccmake) (graphical list to configure all CMake config variables)
 	- valgrind	(run test suite tracking memory related bugs)
+	- texlive (pdflatex) (regenerate design documentation (default: off))
+
+
+For Linux Debian/Ubuntu/Mint users:
+	sudo apt-get install libhdf5-serial-1.8.4 libhdf5-serial-dev        # the hdf5 mpi variants are fine too
+	sudo apt-get install make g++ python python-numpy python-dev swig python-sphinx doxygen 
+	sudo apt-get install git cmake-curses-gui valgrind	            # optional
 

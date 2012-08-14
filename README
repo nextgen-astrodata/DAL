@@ -1,12 +1,18 @@
 The Data Access Library (DAL) - README
 ======================================
 
-The DAL provides data access to radio astronomy data in HDF5 format produced by the LOFAR telescope.
-It ships with the specifications describing the data formats and provides a reference implementation to access all data fields with long-term version compatibility in mind. DAL is written in C++ and offers Python bindings to all functionality.
+The DAL provides data access to radio astronomy data produced by the LOFAR
+telescope. It is a reference implementation to access all HDF5 data fields
+with long-term version compatibility in mind. DAL is written in C++ and offers
+Python bindings for all its functionality. It also comes with API documentation,
+a user manual, and a test suite.
 
-Source code is available from https://github.com/nextgen-astrodata/DAL
+Source code is available at https://github.com/nextgen-astrodata/DAL
 
-A manual is available at http://nextgen-astrodata.github.com/DAL
+Documentation is available at http://nextgen-astrodata.github.com/DAL
+
+Documents that specify supported data formats are available at
+http://lus.lofar.org/wiki/doku.php?id=documents:lofar_data_products
 
 
 DAL Project Contents
