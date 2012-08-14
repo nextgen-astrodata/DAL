@@ -1,4 +1,3 @@
-
 ## Name of the project
 project (DAL)
 
@@ -83,7 +82,7 @@ if(GENERATE_DOCS)
 endif(GENERATE_DOCS)
 
 MESSAGE("------------------------------------------------------")
-MESSAGE("[${CMAKE_PROJECT_NAME} ${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}.${DAL_VERSION_PATCH}] configuration summary")
+MESSAGE("[${CMAKE_PROJECT_NAME} ${DAL_VERSION}] configuration summary")
 MESSAGE("------------------------------------------------------")
 MESSAGE("CMAKE_VERSION        = ${CMAKE_VERSION}")
 MESSAGE("HDF5_VERSION         = ${HDF5_VERSION}")
