@@ -1,11 +1,11 @@
-// h5-test-create.c
-// Build: cc -Wall -o h5-test-create h5-test-create.c -lhdf5
+// h5-test-create.cpp
+// Build: cc -Wall -o h5-test-create h5-test-create.cpp -lhdf5
 
 #include <stdio.h>
 #include <hdf5.h>
 
 int main() {
-	char filename[] = "h5tmp/h5-test-create.h5";
+	char filename[] = "test-h5-test-create.h5";
 
 	hid_t prop_hid = H5Pcreate(H5P_FILE_ACCESS);
 	if (prop_hid < 0) {
