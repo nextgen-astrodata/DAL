@@ -19,7 +19,8 @@
 // tell numpy which combinations of data types and index types we use
 %numpy_typemaps(datatype, numpytype, indextype)
 
-// tell SWIG how we call our dimension and array parameters
+// Tell SWIG how we call our dimension and array parameters.
+// The C++ arg order *and* identifiers in {(...)} must match exactly, but may be a sub-set of the args in the C++ code.
 %apply (indextype DIM1, datatype* INPLACE_ARRAY1) {(indextype dim1, datatype *outbuffer1)}
 %apply (indextype DIM1, indextype DIM2, datatype* INPLACE_ARRAY2) {(indextype dim1, indextype dim2, datatype *outbuffer2)}
 
