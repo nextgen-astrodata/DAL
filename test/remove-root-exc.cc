@@ -1,7 +1,7 @@
-// remove-root-exc.cpp
+// remove-root-exc.cc
 // See that we properly throw on removing the file as a group
 // that we don't crash on a thrown HDF5Exception.
-// Build: c++ -Wall remove-root-exc.cpp -ldal -lhdf5
+// Build: c++ -Wall remove-root-exc.cc -ldal -lhdf5
 #include <iostream>
 
 #include <dal/lofar/CLA_File.h>

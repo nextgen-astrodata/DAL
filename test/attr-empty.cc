@@ -1,7 +1,7 @@
 /*
  * Try attribute string/vector of size 0.
  * It should store/retrieve and indicate sizes are equal to 0.
- * Build: c++ -Wall attr-empty.cpp -ldal -lhdf5
+ * Build: c++ -Wall attr-empty.cc -ldal -lhdf5
  */
 
 #include <string>

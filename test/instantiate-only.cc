@@ -1,5 +1,5 @@
-// instantiate-only.cpp
-// Build: c++ -Wall -o instantiate-only instantiate-only.cpp -ldal -lhdf5
+// instantiate-only.cc
+// Build: c++ -Wall -o instantiate-only instantiate-only.cc -ldal -lhdf5
 
 #include <dal/lofar/BF_File.h>
 #include <dal/lofar/TBB_File.h>

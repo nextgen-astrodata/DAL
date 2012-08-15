@@ -1,5 +1,5 @@
-// h5-test-create.cpp
-// Build: cc -Wall -o h5-test-create h5-test-create.cpp -lhdf5
+// h5-test-create.cc
+// Build: cc -Wall -o h5-test-create h5-test-create.cc -lhdf5
 
 #include <stdio.h>
 #include <hdf5.h>
