@@ -203,6 +203,7 @@ public:
 
   /*!
    * Creates this attribute.
+   * Returns a reference to the attribute, so you can create and set in one expression: attr.create().set(val).
    */
   Attribute<T>& create();
 
@@ -283,6 +284,7 @@ public:
   /*!
    * Creates this attribute, reserving a certain length.
    * If a different length is needed later, the attribute will be automatically recreated.
+   * Returns a reference to the attribute, so you can create and set in one expression: attr.create(val.size()).set(val).
    */
   Attribute< std::vector<T> > &create( size_t length = 0 );
 
