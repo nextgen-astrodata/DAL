@@ -39,7 +39,7 @@ public:
 
   Node( Group &parent, const std::string &name );
 
-  virtual ~Node() {}
+  virtual ~Node();
 
   /*!
    * Returns the HDF5 name of this node.

@@ -61,6 +61,8 @@ Node::Node( const hid_gc &parent, const std::string &name )
 {
 }
 
+Node::~Node() {}
+
 VersionType Node::fileVersion()
 {
   return data.fileVersion;
