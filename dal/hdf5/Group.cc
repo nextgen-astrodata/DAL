@@ -100,6 +100,7 @@ hid_gc Group::open( hid_t parent, const std::string &name ) const
 void Group::initNodes()
 {
   addNode(new Attribute<string>(*this, "GROUPTYPE"));
+  mapInitialised = true;
 }
 
 Attribute<string> Group::groupType()
@@ -131,10 +132,8 @@ void Group::ensureNodesExist()
   if (!exists())
     throw DALException("Could not access nodes in a non-existing group " + _name);
 
-  if (!mapInitialised) {
+  if (!mapInitialised)
     initNodes();
-    mapInitialised = true;
-  }
 }
 
 ImplicitDowncast<Node> Group::getNode( const std::string &name )
@@ -162,6 +161,8 @@ vector<string> Group::nodeNames() {
 
 void Group::freeNodeMap()
 {
+  mapInitialised = false;
+
   for( map<string, Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
     delete i->second;
   }
