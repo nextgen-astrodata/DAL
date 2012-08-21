@@ -3,9 +3,9 @@ Data Access Library (DAL) - INSTALL
 
 For most users, obtaining and building the DAL sources requires installing a few packages easily available for most Linux and MacOS installations.
 Building documentation and Python bindings (both default: on) requires some additional packages, also easily available.
-Both can turned off (see below); documentation can also be browsed online (see README).
+Both can be turned off (see below). Documentation can also be browsed online (see README).
 
-If the latest DAL sources do not build cleanly on your system, please let us know (see the file 'Contributing').
+If the latest DAL sources do not build cleanly on your system with all dependencies, please let us know (see the file 'Contributing').
 
 
 Retrieving DAL
