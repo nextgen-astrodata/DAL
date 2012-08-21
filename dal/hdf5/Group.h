@@ -42,6 +42,10 @@ public:
 
   virtual ~Group();
 
+  Group& operator=(Group rhs);
+
+  friend void swap(Group& first, Group& second);
+
   /*!
    * Add this group to the HDF5 file.
    *
@@ -50,7 +54,7 @@ public:
   virtual void create();
 
   /*!
-   * Returns whether this group exists in the HDF5 file.
+   * Returns whether this group exists as a group (not an attribute or dataset) in the HDF5 file.
    */
   virtual bool exists() const;
 
@@ -148,7 +152,7 @@ private:
   std::map<std::string, Node*> nodeMap;
 
   //! Whether nodeMap is initialised through initNodes()
-  bool mapInitialised;
+  bool mapInitialised; // TODO: use !nodeMap.empty()
 
   //! Makes sure that nodeMap can be accessed
   void ensureNodesExist();

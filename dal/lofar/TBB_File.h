@@ -40,7 +40,9 @@ public:
   /*!
    * Open `filename` for reading/writing/creation.
    */
-  TBB_File( const std::string &filename, enum fileMode mode = READ, bool enforceVersioning = true );
+  TBB_File( const std::string &filename, enum fileMode mode = READ );
+
+  virtual ~TBB_File();
 
   Attribute<std::string> operatingMode();
   Attribute<unsigned>    nofStations();

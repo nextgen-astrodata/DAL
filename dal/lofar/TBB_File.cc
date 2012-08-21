@@ -20,9 +20,9 @@ using namespace std;
 
 namespace DAL {
 
-TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode, bool enforceVersioning )
+TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
 :
-  CLA_File(filename, mode, enforceVersioning)
+  CLA_File(filename, mode)
 {
   if (mode == CREATE) {
     fileType().create().set("tbb");
@@ -37,6 +37,8 @@ TBB_File::TBB_File( const std::string &filename, enum File::fileMode mode, bool 
     }
   }
 }
+
+TBB_File::~TBB_File() {}
 
 Attribute<string> TBB_File::operatingMode()
 {

@@ -43,7 +43,9 @@ public:
   /*!
    * Open `filename` for reading/writing/creation.
    */
-  BF_File( const std::string &filename, enum fileMode mode = READ, bool enforceVersioning = true );
+  BF_File( const std::string &filename, enum fileMode mode = READ );
+
+  virtual ~BF_File();
 
   Attribute<std::string>  createOfflineOnline();
   Attribute<std::string>  BFFormat();

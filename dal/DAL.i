@@ -31,6 +31,9 @@
 // This copy only happens for metadata vectors. Dataset data is not passed in STL vectors.
 %include "dal/vectors.i"
 
+// ignore DAL-global functions that need renaming but are not needed for Python users
+%ignore DAL::swap;
+
 // -------------------------------
 // Exception handling
 // -------------------------------

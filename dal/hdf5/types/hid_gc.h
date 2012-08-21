@@ -50,10 +50,14 @@ public:
   }
 
   hid_gc &operator=( hid_gc other ) {
-    std::swap(hid, other.hid);
-    std::swap(closefunc, other.closefunc);
-
+    swap(*this, other);
     return *this;
+  }
+
+  friend void swap( hid_gc& first, hid_gc& second ) {
+    using namespace std;
+    swap(first.hid,       second.hid);
+    swap(first.closefunc, second.closefunc);
   }
 
   operator hid_t() const { return hid; }
@@ -94,8 +98,10 @@ public:
   bool isset() const { return hid > 0; }
 
 private:
+  // do not use
   hid_gc_noref( const hid_gc &other );
   hid_gc_noref &operator=( const hid_gc & );
+  void swap( hid_gc& first, hid_gc& second );
 
   const hid_t hid;
   hid_t (*const closefunc)(hid_t);

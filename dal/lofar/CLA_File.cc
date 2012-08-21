@@ -27,7 +27,7 @@ using namespace std;
 
 namespace DAL {
 
-CLA_File::CLA_File( const std::string &filename, enum File::fileMode mode, bool enforceVersioning )
+CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
 :
   File(filename, mode, "DOC_VERSION")
 {
@@ -42,7 +42,7 @@ CLA_File::CLA_File( const std::string &filename, enum File::fileMode mode, bool 
   } else {
     bool isCompatibleFileType = false;
     try {
-      isCompatibleFileType = telescope().get() == "LOFAR" && enforceVersioning && getStoredFileVersion() >= VersionType(2, 0, 0);
+      isCompatibleFileType = telescope().get() == "LOFAR"/* && enforceVersioning && getStoredFileVersion() >= VersionType(2, 0, 0)*/;
     } catch (DALException& ) {
     }
     if (!isCompatibleFileType) {
@@ -52,6 +52,8 @@ CLA_File::CLA_File( const std::string &filename, enum File::fileMode mode, bool 
     // TODO: enable the right (versions of) attributes based on file type and file version here and in sub-classes; allow circumvention and unversioned fields
   }
 }
+
+CLA_File::~CLA_File() {}
 
 void CLA_File::initNodes()
 {

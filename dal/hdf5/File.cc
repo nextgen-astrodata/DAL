@@ -20,15 +20,9 @@ using namespace std;
 
 namespace DAL {
 
-/*!
- * Open filename with mode and treat versionAttrName as the version attribute name.
- *
- * Note on reopening: HDF5 cannot reopen the same file (same or different mode) until
- * it has closed the previous open. HDF5 can only close once all opened subgroups etc
- * have been closed. As long as this is not the case, these references remain valid
- * and HDF5 keeps the file open. See the HDF5 manual on H5Fclose() for more detail.
- */
-File::File( const std::string &filename, enum File::fileMode mode, const std::string &versionAttrName )
+File::File() {}
+
+File::File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )
 :
   Group(open(filename, mode)), // store the file hid in the group (node) hid
   filename(filename),
@@ -54,9 +48,10 @@ File::File( const std::string &filename, enum File::fileMode mode, const std::st
   data.parentNodePath = "";
 }
 
-hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
-{
+File::~File() {}
 
+hid_gc File::open( const std::string &filename, enum fileMode mode ) const
+{
   switch (mode) {
     case CREATE:
     case CREATE_EXCL:
@@ -96,9 +91,20 @@ hid_gc File::open( const std::string &filename, enum File::fileMode mode ) const
   }
 }
 
+void File::close()
+{
+  this->~File();
+  _group = hid_gc(); // for safe (re)destruction
+}
+
 void File::flush()
 {
   H5Fflush(group(), H5F_SCOPE_LOCAL);
+}
+
+bool File::exists() const
+{
+  return true;
 }
 
 VersionType File::getStoredFileVersion()

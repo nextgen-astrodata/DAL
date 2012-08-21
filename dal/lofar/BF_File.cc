@@ -20,9 +20,9 @@ using namespace std;
 
 namespace DAL {
 
-BF_File::BF_File( const std::string &filename, enum File::fileMode mode, bool enforceVersioning )
+BF_File::BF_File( const std::string &filename, enum fileMode mode )
 :
-  CLA_File(filename, mode, enforceVersioning)
+  CLA_File(filename, mode)
 {
   if (mode == CREATE) {
     fileType().create().set("bf");
@@ -37,6 +37,8 @@ BF_File::BF_File( const std::string &filename, enum File::fileMode mode, bool en
     }
   }
 }
+
+BF_File::~BF_File() {}
 
 void BF_File::initNodes() {
   CLA_File::initNodes();

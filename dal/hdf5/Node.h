@@ -41,6 +41,10 @@ public:
 
   virtual ~Node();
 
+  Node& operator=(Node rhs);
+
+  friend void swap(Node& first, Node& second);
+
   /*!
    * Returns the HDF5 name of this node.
    */
@@ -76,7 +80,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  virtual bool exists() const { return false; }
+  virtual bool exists() const { return false; } // TODO: reconsider, see Group::exists().
 
   /*!
    * The minimal version required for this node to be supported. Version numbers

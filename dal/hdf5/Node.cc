@@ -63,6 +63,20 @@ Node::Node( const hid_gc &parent, const std::string &name )
 
 Node::~Node() {}
 
+Node& Node::operator=(Node rhs)
+{
+  swap(*this, rhs);
+  return *this;
+}
+
+void swap(Node& first, Node& second)
+{
+  std::swap(first.minVersion, second.minVersion);
+  swap(first.parent, second.parent);
+  first._name.swap(second._name);
+  std::swap(first.data, second.data); // TODO: call specialization, but don't bother: struct PropagatedData will be reworked
+}
+
 VersionType Node::fileVersion()
 {
   return data.fileVersion;

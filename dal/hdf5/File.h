@@ -25,12 +25,35 @@
 
 namespace DAL {
 
+/*!
+ * A File object encapsulates the data and provides the functions to operate on a HDF5 file.
+ *
+ * Note on reopening files and destructing File objects:
+ * Best practise is to destruct all references to a file's contents (groups, datasets, attributes, etc)
+ * before destructing or close()ing the File object itself. And not to reopen a file while HDF5 still has it open.
+ *
+ * HDF5 can only close a file once all references to its contents have been closed. As long as HDF5 references
+ * remain open, HDF5 leaves the file open (usually possible). You could reopen the file with the same mode;
+ * HDF5 will try to keep both accesses to the file consistent (may fail on distributed file systems).
+ * If you want to reopen a read-write file as read-only, drop all references, close() it, then open() it.
+ *
+ * For more detail, see the HDF5 Reference/API Manual on H5Fopen() and H5Fclose().
+ */
 class File: public Group {
 public:
   enum fileMode { READ = 1, READWRITE = 2, CREATE = 3, CREATE_EXCL = 4 };
 
   /*!
-   * Open or create an HDF5 file called `filename`.
+   * Create default File object.
+   * This is intended to be able to define a struct/class that contains a File object before the filename is known.
+   * Once the filename is known, use open() to initialize further.
+   */
+  File();
+
+  /*!
+   * Open or create `filename` with open mode `mode` and treat `versionAttrName` as the version attribute name.
+   *
+   * See the class description for more info on reopening and closing files.
    *
    * Python example:
    * \code
@@ -50,26 +73,51 @@ public:
   File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName );
 
   /*!
+   * Destruct File object.
+   */
+  virtual ~File();
+
+  /*!
+   * Open or create `filename` with open mode `mode` and treat `versionAttrName` as the version attribute name.
+   * Upon return, the previously opened file reference (if any) has been closed.
+   * If an exception is thrown, the previously opened file reference (if any) is unaltered.
+   *
+   * See the class description for more info on reopening and closing files.
+   */
+//  virtual void open( const std::string &filename, enum fileMode mode, const std::string &versionAttrName );
+
+  /*!
+   * Indicate that this File object will not be used to access a HDF5 file, possibly until a subsequent call to open().
+   *
+   * See the class description for more info on reopening and closing files.
+   */
+  virtual void close();
+
+  /*!
    * Commit any changes to disk.
    */
   void flush();
 
-  virtual bool exists() const { return true; }
+  /*!
+   * Returns whether this file exists (i.e. true).
+   */
+  virtual bool exists() const;
+
 
   /*!
    * The name of the file.
    */
-  const std::string filename;
+  std::string filename;
 
   /*!
    * The mode in which the file is opened.
    */
-  const fileMode mode;
+  fileMode mode;
 
   /*!
    * The name of the attribute containing the file version. Cannot be "".
    */
-  const std::string versionAttrName;
+  std::string versionAttrName;
 
   /*!
    * Stores the given version in the HDF5 file.

@@ -53,6 +53,20 @@ Group::~Group() {
   freeNodeMap();
 }
 
+Group& Group::operator=(Group rhs)
+{
+  swap(*this, rhs);
+  return *this;
+}
+
+void swap(Group& first, Group& second)
+{
+  swap(static_cast<Node&>(first), static_cast<Node&>(second));
+  swap(first._group, second._group);
+  first.nodeMap.swap(second.nodeMap);
+  std::swap(first.mapInitialised, second.mapInitialised);
+}
+
 void Group::create() {
   hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list to create group " + _name);
 

@@ -115,6 +115,8 @@
 // because it returns a fancy ImplicitDowncast<Node>.
 %ignore DAL::Group::getNode;
 
+// do not bother renaming operator=: Python users do not need it
+%ignore DAL::Group::operator=;
 
 %include hdf5/Group.h
 
