@@ -1,5 +1,5 @@
-The Data Access Library (DAL) - README
-======================================
+Data Access Library (DAL) - README
+==================================
 
 The DAL provides data access to radio astronomy data produced by the LOFAR
 telescope. It is a reference implementation to access all HDF5 data fields

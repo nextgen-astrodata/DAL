@@ -1,5 +1,5 @@
-The Data Access Library (DAL) - KNOWN ISSUES
-============================================
+Data Access Library (DAL) - KnownIssues
+=======================================
 
 KI 1: No support for Python 3
 Description: The build system does not support Python 3, whether 2 and 3 are installed or only 3.

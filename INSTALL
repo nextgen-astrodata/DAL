@@ -1,10 +1,11 @@
-The Data Access Library (DAL) - Installation Instructions
-=========================================================
+Data Access Library (DAL) - INSTALL
+===================================
 
-For most users, obtaining and building the DAL sources requires few dependencies and little effort.
-Building documentation (default: on) requires more packages, but can be turned off (see below) and browsed online (see README.txt).
+For most users, obtaining and building the DAL sources requires installing a few packages easily available for most Linux and MacOS installations.
+Building documentation and Python bindings (both default: on) requires some additional packages, also easily available.
+Both can turned off (see below); documentation can also be browsed online (see README).
 
-If the latest DAL sources do not build cleanly on your system, please let us know (see CONTRIBUTING.txt).
+If the latest DAL sources do not build cleanly on your system, please let us know (see the file 'Contributing').
 
 
 Retrieving DAL
@@ -22,15 +23,21 @@ Build Instructions
 	cd build
 	cmake ..
 	make
-	sudo make install
+	make install                            # with sufficient privileges
 
 If cmake does not find the (preferred) HDF5 includes and libraries, provide a hint to the Find module by setting the HDF5_ROOT_DIR environment variable.
 
-To run the test cases:
+To do a parallel build, set the MAKEFLAGS environment variable to -j<NCPUS> before running 'make'. On Linux, you can run:
+	export MAKEFLAGS=-j`cat /proc/cpuinfo | grep processor | wc -l`
+
+To run the test suite:
 	make test
 
-To regenerate the doc strings and doxygen documentation, you need to install doxygen, and run:
+To regenerate the doc strings and doxygen documentation, run:
 	make doc
+
+There is no uninstaller, but cmake creates a list of files in install_manifest.txt. To remove those files (leaves empty directories), run:
+	xargs rm < install_manifest.txt         # with sufficient privileges
 
 
 Additional CMake Variables
@@ -39,9 +46,9 @@ Additional CMake Variables
 The following custom flags can be added to the cmake command line:
 
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo       Select build flags. RelWithDebInfo: '-O2 -g' (default), Debug: '-g', Release: '-O3 -DNDEBUG'
-	-DCMAKE_INSTALL_PREFIX=$PWD	        Install DAL into the indicated path (default: /usr/local).
-	-DPYTHON_SITE_PACKAGES=$PWD/python	Install DAL's Python bindings into the indicated path (default: derived from Python interpreter)
-	-DPYTHON_VERSION=2.Y	                Python version to compile the bindings against (default: derived from Python library)
+	-DCMAKE_INSTALL_PREFIX=$PWD             Install DAL into the indicated path (default: /usr/local).
+	-DPYTHON_SITE_PACKAGES=$PWD/python      Install DAL Python bindings into the indicated path (default: derived from Python interpreter)
+	-DPYTHON_VERSION=2.x                    Python version 2.x to compile the bindings against (default: derived from Python library)
 
 	-DGENERATE_DOCS=OFF                     Do not generate documentation.
 	-DPYTHON_BINDINGS=OFF                   Do not generate Python bindings.
@@ -60,25 +67,25 @@ To build DAL (default config), you need the following packages:
 	- libhdf5-1.8 or later
 	- libhdf5-dev-1.8+
 
-	- python	(version 2.3+; for the Python bindings)
-	- python-numpy	(idem)
-	- python-dev	(idem)
-	- swig 1.3+	(regenerate Python bindings, idem)
+	- python        (version 2.3+; for the Python bindings)
+	- python-numpy  (idem)
+	- python-dev    (idem)
+	- swig 1.3+     (generate Python bindings, idem)
 
-	- python-sphinx	(regenerate user manual)
-	- doxygen 1.6+	(regenerate API documentation and python docstring support)
+	- python-sphinx (generate user manual)
+	- doxygen 1.6+  (generate API documentation and python docstring support)
 
-	- casacore	(to exchange datasets with casacore, off by default)
+	- casacore      (to exchange datasets with casacore (default: off))
 
 Maintainer and developer builds, additionally:
-	- git		(source version control)
+	- git           (source version control)
 	- cmake-curses-gui (ccmake) (graphical list to configure all CMake config variables)
-	- valgrind	(run test suite tracking memory related bugs)
+	- valgrind      (run test suite tracking memory related bugs)
 	- texlive (pdflatex) (regenerate design documentation (default: off))
 
 
-For Linux Debian/Ubuntu/Mint users:
-	sudo apt-get install libhdf5-serial-1.8.4 libhdf5-serial-dev        # the hdf5 mpi variants are fine too
-	sudo apt-get install make g++ python python-numpy python-dev swig python-sphinx doxygen 
-	sudo apt-get install git cmake-curses-gui valgrind	            # optional
+For Linux Debian/Ubuntu/Mint users, install dependencies using (with sufficient privileges):
+	apt-get install libhdf5-serial-1.8.4 libhdf5-serial-dev        # the hdf5 mpi variants are fine too
+	apt-get install make g++ python python-numpy python-dev swig python-sphinx doxygen 
+	apt-get install git cmake-curses-gui valgrind                  # optional
 

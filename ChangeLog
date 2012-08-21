@@ -1,5 +1,5 @@
-The Data Access Library (DAL) - CHANGELOG
-=========================================
+Data Access Library (DAL) - ChangeLog
+=====================================
 
 2.0.0 (initial release, after DAL 1 and LDA)
 - Improved support for beamforming (bf) and transient buffer boards (tbb) data formats
