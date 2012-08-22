@@ -24,12 +24,14 @@ File::File() {}
 
 File::File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )
 :
-  Group(open(filename, mode)), // store the file hid in the group (node) hid
+  Group(openFile(filename, mode)), // store the file hid in the group (node) hid (TODO: leaks if another member init throws)
   filename(filename),
   mode(mode),
   versionAttrName(versionAttrName)
 {
-  // Fill the data that will be propagated to other Nodes
+  // File.h states certain restrictions on versionAttrName, but don't bother enforcing here (yet).
+
+  // Fill the data that will be propagated to other Nodes.
   data.fileVersion = getStoredFileVersion();
 
   switch (mode) {
@@ -50,7 +52,37 @@ File::File( const std::string &filename, enum fileMode mode, const std::string &
 
 File::~File() {}
 
-hid_gc File::open( const std::string &filename, enum fileMode mode ) const
+File& File::operator=(File rhs)
+{
+  swap(*this, rhs);
+  return *this;
+}
+
+void swap(File& first, File& second)
+{
+  swap(static_cast<Group&>(first), static_cast<Group&>(second));
+  first.filename.swap(second.filename);
+  std::swap(first.mode, second.mode);
+  first.versionAttrName.swap(second.versionAttrName);
+}
+
+void File::open( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )
+{
+  File ftmp(filename, mode, versionAttrName);
+  swap(*this, ftmp);
+}
+
+void File::close()
+{
+  this->~File();
+  _group = hid_gc(); // for safe (re)destruction
+
+  // more elegant:
+  //File ftmp;
+  //swap(*this, ftmp);
+}
+
+hid_gc File::openFile( const std::string &filename, enum fileMode mode ) const
 {
   switch (mode) {
     case CREATE:
@@ -89,12 +121,6 @@ hid_gc File::open( const std::string &filename, enum fileMode mode ) const
     default:
       throw DALValueError("Could not open file: unknown mode argument");
   }
-}
-
-void File::close()
-{
-  this->~File();
-  _group = hid_gc(); // for safe (re)destruction
 }
 
 void File::flush()

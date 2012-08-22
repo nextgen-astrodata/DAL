@@ -51,7 +51,9 @@ public:
   File();
 
   /*!
-   * Open or create `filename` with open mode `mode` and treat `versionAttrName` as the version attribute name.
+   * Try to open or create `filename` with open mode `mode` and treat `versionAttrName` as the version attribute name.
+   * For an existing file, the specified version attribute must exist.
+   * For a new file, it must be possible to create it (cannot be "").
    *
    * See the class description for more info on reopening and closing files.
    *
@@ -78,16 +80,31 @@ public:
   virtual ~File();
 
   /*!
+   * Assign the rhs object to this object and return a reference to this object.
+   * If the operation succeeds, the previous state of this object (if any) is destructed.
+   * If the operation fails, an exception is thrown.
+   */
+  File& operator=(File rhs);
+
+  /*!
+   * Store the pair of File objects (first, second) into (second, first).
+   * Specialization of std::swap(). Always succeeds.
+   */
+  friend void swap(File& first, File& second);
+
+  /*!
    * Open or create `filename` with open mode `mode` and treat `versionAttrName` as the version attribute name.
+   * See the File(filename, mode, versionAttrName) constructor for more info.
    * Upon return, the previously opened file reference (if any) has been closed.
    * If an exception is thrown, the previously opened file reference (if any) is unaltered.
    *
    * See the class description for more info on reopening and closing files.
    */
-//  virtual void open( const std::string &filename, enum fileMode mode, const std::string &versionAttrName );
+  virtual void open( const std::string &filename, enum fileMode mode, const std::string &versionAttrName );
 
   /*!
-   * Indicate that this File object will not be used to access a HDF5 file, possibly until a subsequent call to open().
+   * Indicate that this File object will not be used anymore to access the underlying HDF5 file (if any),
+   * possibly until a subsequent call to open().
    *
    * See the class description for more info on reopening and closing files.
    */
@@ -115,7 +132,7 @@ public:
   fileMode mode;
 
   /*!
-   * The name of the attribute containing the file version. Cannot be "".
+   * The name of the attribute containing the file version.
    */
   std::string versionAttrName;
 
@@ -168,7 +185,7 @@ protected:
   VersionType getStoredFileVersion();
 
 private:
-  hid_gc open( const std::string &filename, enum fileMode mode ) const;
+  hid_gc openFile( const std::string &filename, enum fileMode mode ) const;
 };
 
 }
