@@ -106,9 +106,9 @@ public:
    * If no `filename' is given, dims == maxdims is required due to limitations of HDF5.
    *
    * `endianness` toggles whether the data is in big-endian format. Typically:
-   *  NATIVE: use the endianness of the current machine
-   *  LITTLE: use little-endian: x86, x86_64, ARM
-   *  BIG:    use big-endian:    MIPS, POWER/PowerPC, SPARC, IA-64
+   *  - NATIVE: use the endianness of the current machine
+   *  - LITTLE: use little-endian: x86, x86_64, ARM
+   *  - BIG:    use big-endian:    MIPS, POWER/PowerPC, SPARC, IA-64
    */
   void create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims = std::vector<ssize_t>(0),
                const std::string &filename = "", enum Endianness endianness = NATIVE );
@@ -164,28 +164,34 @@ public:
    * Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
    *
-   * pos:                       position of the first sample
-   * dim1, dim2, outbuffer2:    2D array, the size of which determines the amount of data to retrieve
-   * dim1index, dim2index:      indices of the dimensions to query
+   * \param[in] pos               position of the first sample
+   * \param[in] dim1              size of first dimension of outbuffer2; determines the number of data values to retrieve
+   * \param[in] dim2              size of second dimension of outbuffer2; determines the number of data values to retrieve
+   * \param[out] outbuffer2       2D destination array
+   * \param[in] dim1index         index of the first dimension to query
+   * \param[in] dim2index         index of the second dimension to query
    *
    * Requires:
-   *    ndims() >= 2
-   *    pos.size() == ndims()
-   *    dim1index < dim2index < ndims()
+   *    - ndims() >= 2
+   *    - pos.size() == ndims()
+   *    - dim1index < dim2index < ndims()
    */
   void get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
    * Stores a 2D matrix of data from a 2D dataset at position `pos`.
    *
-   * pos:                       position of the first sample
-   * dim1, dim2, outbuffer2:    2D array, the size of which determines the amount of data to write
-   * dim1index, dim2index:      indices of the dimensions to query
+   * \param[in] pos               position of the first sample
+   * \param[in] dim1              size of first dimension of inbuffer2; determines the number of data values to store
+   * \param[in] dim2              size of second dimension of inbuffer2; determines the number of data values to store
+   * \param[in] inbuffer2         2D source array
+   * \param[in] dim1index         index of the first dimension to query
+   * \param[in] dim2index         index of the second dimension to query
    *
    * Requires:
-   *    ndims() >= 2
-   *    pos.size() == ndims()
-   *    dim1index < dim2index < ndims()
+   *    - ndims() >= 2
+   *    - pos.size() == ndims()
+   *    - dim1index < dim2index < ndims()
    */
   void set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
@@ -193,28 +199,30 @@ public:
    * Retrieves a 1D matrix of data from a 1D dataset from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
    *
-   * pos:                       position of the first sample
-   * dim1, outbuffer1:          1D array, the size of which determines the amount of data to write
-   * dim1index:                 index of the dimension to query
+   * \param[in] pos               position of the first sample
+   * \param[in] dim1              size of outbuffer1; determines the number of data values to retrieve
+   * \param[out] outbuffer1       1D destination array
+   * \param[in] dim1index         index of the first dimension to query
    *
    * Requires:
-   *    ndims() >= 1
-   *    pos.size() == ndims()
-   *    dim1index < ndims()
+   *    - ndims() >= 1
+   *    - pos.size() == ndims()
+   *    - dim1index < ndims()
    */
   void get1D( const std::vector<size_t> &pos, size_t dim1, T *outbuffer1, unsigned dim1index = 0 );
 
   /*!
    * Stores a 1D matrix of data from a 1D dataset at position `pos`.
    *
-   * pos:                       position of the first sample
-   * dim1, outbuffer1:          1D array, the size of which determines the amount of data to write
-   * dim1index:                 index of the dimension to query
+   * \param[in] pos               position of the first sample
+   * \param[in] dim1              size of outbuffer1; determines the number of data values to store
+   * \param[in] inbuffer1         1D source array
+   * \param[in] dim1index         index of the first dimension to query
    *
    * Requires:
-   *    ndims() >= 1
-   *    pos.size() == ndims()
-   *    dim1index < ndims()
+   *    - ndims() >= 1
+   *    - pos.size() == ndims()
+   *    - dim1index < ndims()
    */
   void set1D( const std::vector<size_t> &pos, size_t dim1, const T *inbuffer1, unsigned dim1index = 0 );
 

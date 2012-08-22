@@ -69,12 +69,13 @@ public:
    * `outbuffer` must point to a memory block large enough to hold the data values.
    * See also Dataset::get1D(...).
    *
-   * pos:                       index of the first data value
-   * len, outbuffer:            raw 1D array, the len of which determines the number of data values to retrieve
+   * \param[in] pos               index of the first data value
+   * \param[in] len               number of data values to retrieve
+   * \param[out] outbuffer        1D destination array
    *
    * Requires:
-   *    pos + len <= dims()
-   *    len <= size of outbuffer
+   *    - pos + len <= dims()
+   *    - len <= size of outbuffer
    */
   void get( size_t pos, size_t len, T *outbuffer );
 
@@ -82,12 +83,13 @@ public:
    * Stores a number of data values from a 1D dataset starting at position `pos`.
    * See also Dataset::set1D(...).
    *
-   * pos:                       index of the first data value
-   * dim, inbuffer:             raw 1D array, the len of which determines the number of data values to store
+   * \param[in] pos               index of the first data value
+   * \param[in] len               number of data values to store
+   * \param[in] inbuffer          1D source array
    *
    * Requires:
-   *    pos + len <= dims()
-   *    len <= size of inbuffer
+   *    - pos + len <= dims()
+   *    - len <= size of inbuffer
    */
   void set( size_t pos, size_t len, const T *inbuffer );
 
