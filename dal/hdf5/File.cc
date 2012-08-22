@@ -23,8 +23,8 @@ namespace DAL {
 File::File() {}
 
 File::File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )
-:
-  Group(openFile(filename, mode)), // store the file hid in the group (node) hid (TODO: leaks if another member init throws)
+try :
+  Group(openFile(filename, mode)), // store the file hid in the group (node) hid
   filename(filename),
   mode(mode),
   versionAttrName(versionAttrName)
@@ -48,6 +48,11 @@ File::File( const std::string &filename, enum fileMode mode, const std::string &
 
   data.fileName = filename;
   data.parentNodePath = "";
+}
+catch (...)
+{
+  close();
+  // will rethrow
 }
 
 File::~File() {}
