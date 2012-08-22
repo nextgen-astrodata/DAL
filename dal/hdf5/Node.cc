@@ -73,7 +73,7 @@ void swap(Node& first, Node& second)
 {
   std::swap(first.minVersion, second.minVersion);
   swap(first.parent, second.parent);
-  first._name.swap(second._name);
+  swap(first._name, second._name);
   std::swap(first.data, second.data); // TODO: call specialization, but don't bother: struct PropagatedData will be reworked
 }
 

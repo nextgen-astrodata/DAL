@@ -66,9 +66,9 @@ File& File::operator=(File rhs)
 void swap(File& first, File& second)
 {
   swap(static_cast<Group&>(first), static_cast<Group&>(second));
-  first.filename.swap(second.filename);
+  swap(first.filename, second.filename);
   std::swap(first.mode, second.mode);
-  first.versionAttrName.swap(second.versionAttrName);
+  swap(first.versionAttrName, second.versionAttrName);
 }
 
 void File::open( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )

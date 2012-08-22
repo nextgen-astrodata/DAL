@@ -63,7 +63,7 @@ void swap(Group& first, Group& second)
 {
   swap(static_cast<Node&>(first), static_cast<Node&>(second));
   swap(first._group, second._group);
-  first.nodeMap.swap(second.nodeMap);
+  swap(first.nodeMap, second.nodeMap);
   std::swap(first.mapInitialised, second.mapInitialised);
 }
 
