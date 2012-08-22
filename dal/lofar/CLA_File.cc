@@ -30,7 +30,7 @@ namespace DAL {
 CLA_File::CLA_File() {}
 
 CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
-:
+try :
   File(filename, mode, "DOC_VERSION")
 {
   if (mode == CREATE) {
@@ -53,6 +53,10 @@ CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
     }
     // TODO: enable the right (versions of) attributes based on file type and file version here and in sub-classes; allow circumvention and unversioned fields
   }
+} catch (...)
+{
+  close();
+  // will rethrow
 }
 
 CLA_File::~CLA_File() {}

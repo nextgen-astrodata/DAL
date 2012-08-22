@@ -23,7 +23,7 @@ namespace DAL {
 BF_File::BF_File() {}
 
 BF_File::BF_File( const std::string &filename, enum fileMode mode )
-:
+try :
   CLA_File(filename, mode)
 {
   if (mode == CREATE) {
@@ -38,6 +38,10 @@ BF_File::BF_File( const std::string &filename, enum fileMode mode )
       throw DALException("Failed to open BF file: A BF file must have /FILETYPE=\"bf\".");
     }
   }
+} catch (...)
+{
+  close();
+  // will rethrow
 }
 
 BF_File::~BF_File() {}
