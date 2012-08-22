@@ -114,7 +114,7 @@ static inline hid_t h5array( hsize_t count )
     return H5Screate_simple(1, &count, NULL);
 }
 
-static inline hid_t h5stringType()
+static inline hid_t h5variableStringType()
 {
   const hid_t datatype = H5Tcopy(H5T_C_S1);
 
@@ -249,7 +249,7 @@ template<typename T> inline bool Attribute< std::vector<T> >::valid() const
 template<> inline Attribute<std::string>& Attribute<std::string>::create()
 {
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace to create attribute " + _name);
-  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype to create attribute " + _name);
+  hid_gc_noref datatype(h5variableStringType(), H5Tclose, "Could not create string datatype to create attribute " + _name);
 
   hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute " + _name);
 
@@ -265,7 +265,7 @@ template<> inline void Attribute<std::string>::set( const std::string &value )
 
   if (h5stringIsVariable(diskdatatype)) {
     // string type on disk is variable -- just set it
-    hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create variable length string datatype to set attribute " + _name);
+    hid_gc_noref datatype(h5variableStringType(), H5Tclose, "Could not create variable length string datatype to set attribute " + _name);
 
     // write the attribute
     if (H5Awrite(attr, datatype, &cstr) < 0)
@@ -308,7 +308,7 @@ template<> inline std::string Attribute<std::string>::get() const
 
   if (h5stringIsVariable(diskdatatype)) {
     // string type on disk is variable -- just read it (HDF5 will allocate)
-    hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create variable length string datatype to get attribute " + _name);
+    hid_gc_noref datatype(h5variableStringType(), H5Tclose, "Could not create variable length string datatype to get attribute " + _name);
     hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not get dataspace of attribute " + _name);
 
     if (H5Aread(attr, datatype, &buf) < 0)
@@ -355,7 +355,7 @@ template<> inline std::string Attribute<std::string>::get() const
 template<> inline Attribute< std::vector<std::string> >& Attribute< std::vector<std::string> >::create( size_t length )
 {
   hid_gc_noref dataspace(h5array(length), H5Sclose, "Could not create simple dataspace to create attribute " + _name);
-  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype to create attribute " + _name);
+  hid_gc_noref datatype(h5variableStringType(), H5Tclose, "Could not create string datatype to create attribute " + _name);
 
   hid_gc_noref attr(H5Acreate2(parent, _name.c_str(), datatype, dataspace, H5P_DEFAULT, H5P_DEFAULT), H5Aclose, "Could not create attribute " + _name);
 
@@ -380,7 +380,7 @@ template<> inline void Attribute< std::vector<std::string> >::set( const std::ve
   }
 
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open to set attribute " + _name);
-  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype to set attribute " + _name);
+  hid_gc_noref datatype(h5variableStringType(), H5Tclose, "Could not create string datatype to set attribute " + _name);
 
   if (H5Awrite(attr, datatype, &c_strs[0]) < 0)
     throw HDF5Exception("Could not set attribute " + _name);
@@ -393,7 +393,7 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
   if (c_strs.empty())
     return std::vector<std::string>();
 
-  hid_gc_noref datatype(h5stringType(), H5Tclose, "Could not create string datatype to get attribute " + _name);
+  hid_gc_noref datatype(h5variableStringType(), H5Tclose, "Could not create string datatype to get attribute " + _name);
   hid_gc_noref attr(H5Aopen(parent, _name.c_str(), H5P_DEFAULT), H5Aclose, "Could not open to get attribute " + _name);
   hid_gc_noref dataspace(H5Aget_space(attr), H5Sclose, "Could not get dataspace of attribute " + _name);
 
