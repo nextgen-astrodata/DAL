@@ -40,12 +40,17 @@ class BF_StokesDataset;
  */
 class BF_File: public CLA_File {
 public:
+  BF_File();
+
   /*!
    * Open `filename` for reading/writing/creation.
    */
   BF_File( const std::string &filename, enum fileMode mode = READ );
 
   virtual ~BF_File();
+
+  virtual void open( const std::string &filename, enum fileMode mode = READ );
+  virtual void close();
 
   Attribute<std::string>  createOfflineOnline();
   Attribute<std::string>  BFFormat();

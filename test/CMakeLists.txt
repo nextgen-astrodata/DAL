@@ -9,10 +9,11 @@ endmacro(add_c_test)
 
 add_c_test(h5-test-create) # Doesn't use DAL. If this fails, HDF5 (or the test system) is not working.
 add_c_test(instantiate-only)
+add_c_test(reopen-rw)
+add_c_test(constructors)
 add_c_test(attr-empty)
 add_c_test(get-tbb-station-ref)
 add_c_test(remove-root-exc)
-add_c_test(reopen-rw)
 
 if(PYTHON_BINDINGS AND PYTHON_EXECUTABLE)
   add_test(py-import-only ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/import-only.py)

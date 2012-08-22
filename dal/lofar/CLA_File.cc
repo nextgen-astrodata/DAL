@@ -27,6 +27,8 @@ using namespace std;
 
 namespace DAL {
 
+CLA_File::CLA_File() {}
+
 CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
 :
   File(filename, mode, "DOC_VERSION")
@@ -54,6 +56,17 @@ CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
 }
 
 CLA_File::~CLA_File() {}
+
+void CLA_File::open( const std::string &filename, enum fileMode mode )
+{
+  // As long as we have no member vars, keep open() and close() simple. See File::open().
+  File::open(filename, mode, "DOC_VERSION");
+}
+
+void CLA_File::close()
+{
+  File::close();
+}
 
 void CLA_File::initNodes()
 {

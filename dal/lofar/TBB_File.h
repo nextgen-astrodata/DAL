@@ -37,12 +37,17 @@ class TBB_Trigger;
  */
 class TBB_File: public CLA_File {
 public:
+  TBB_File();
+
   /*!
    * Open `filename` for reading/writing/creation.
    */
   TBB_File( const std::string &filename, enum fileMode mode = READ );
 
   virtual ~TBB_File();
+
+  virtual void open( const std::string &filename, enum fileMode mode = READ );
+  virtual void close();
 
   Attribute<std::string> operatingMode();
   Attribute<unsigned>    nofStations();

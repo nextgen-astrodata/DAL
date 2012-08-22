@@ -20,6 +20,8 @@ using namespace std;
 
 namespace DAL {
 
+TBB_File::TBB_File() {}
+
 TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
 :
   CLA_File(filename, mode)
@@ -39,6 +41,17 @@ TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
 }
 
 TBB_File::~TBB_File() {}
+
+void TBB_File::open( const std::string &filename, enum fileMode mode )
+{
+  // As long as we have no member vars, keep open() and close() simple. See CLA_File::open().
+  CLA_File::open(filename, mode);
+}
+
+void TBB_File::close()
+{
+  CLA_File::close();
+}
 
 Attribute<string> TBB_File::operatingMode()
 {

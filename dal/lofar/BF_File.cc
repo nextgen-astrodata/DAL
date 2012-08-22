@@ -20,6 +20,8 @@ using namespace std;
 
 namespace DAL {
 
+BF_File::BF_File() {}
+
 BF_File::BF_File( const std::string &filename, enum fileMode mode )
 :
   CLA_File(filename, mode)
@@ -39,6 +41,17 @@ BF_File::BF_File( const std::string &filename, enum fileMode mode )
 }
 
 BF_File::~BF_File() {}
+
+void BF_File::open( const std::string &filename, enum fileMode mode )
+{
+  // As long as we have no member vars, keep open() and close() simple. See CLA_File::open().
+  CLA_File::open(filename, mode);
+}
+
+void BF_File::close()
+{
+  CLA_File::close();
+}
 
 void BF_File::initNodes() {
   CLA_File::initNodes();

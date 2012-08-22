@@ -79,12 +79,8 @@ void File::open( const std::string &filename, enum fileMode mode, const std::str
 
 void File::close()
 {
-  this->~File();
-  _group = hid_gc(); // for safe (re)destruction
-
-  // more elegant:
-  //File ftmp;
-  //swap(*this, ftmp);
+  File ftmp;
+  swap(*this, ftmp);
 }
 
 hid_gc File::openFile( const std::string &filename, enum fileMode mode ) const

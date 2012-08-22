@@ -33,11 +33,13 @@ namespace DAL {
  */
 class CLA_File: public File {
 public:
+  CLA_File();
   CLA_File( const std::string &filename, enum fileMode mode = READ );
 
   virtual ~CLA_File();
 
-//  virtual void open( const std::string &filename, enum fileMode mode = READ );
+  virtual void open( const std::string &filename, enum fileMode mode = READ );
+  virtual void close();
 
   Attribute<std::string> fileName();
   Attribute<std::string> fileDate();
