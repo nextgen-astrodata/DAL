@@ -9,19 +9,19 @@
 
 %enddef
 
-DATASET1DTYPE(int16_t, NPY_SHORT, size_t);
+DATASET1DTYPE(short, NPY_SHORT, size_t);
 
 
 %include hdf5/Dataset1D.h
 
 namespace DAL {
-  %template(Dataset1DInt16)        Dataset1D<int16_t>;
+  %template(Dataset1DShort)        Dataset1D<short>;
 }
 
 %pythoncode %{
   import numpy
 
-  Dataset1DInt16.dtype = numpy.int16
+  Dataset1DShort.dtype = numpy.short
 
   del numpy
 %}

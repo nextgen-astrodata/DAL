@@ -101,9 +101,9 @@ private:
   std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
 };
 
-class TBB_DipoleDataset: public Dataset1D<int16_t> {
+class TBB_DipoleDataset: public Dataset1D<short> {
 public:
-  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset1D<int16_t>(parent, name) {}
+  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset1D<short>(parent, name) {}
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();

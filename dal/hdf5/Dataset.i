@@ -30,7 +30,7 @@
 %enddef
 
 // enumerate all the dataset types that we refer to (we use native types, so do not fix their size)
-DATASETTYPE(int16_t, NPY_SHORT, size_t);
+DATASETTYPE(short, NPY_SHORT, size_t);
 DATASETTYPE(float, NPY_FLOAT, size_t);
 DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 
@@ -46,7 +46,7 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 %include hdf5/Dataset.h
 
 namespace DAL {
-  %template(DatasetInt16)        Dataset<int16_t>;
+  %template(DatasetShort)        Dataset<short>;
   %template(DatasetFloat)        Dataset<float>;
   %template(DatasetComplexFloat) Dataset< std::complex<float> >;
 }
@@ -59,7 +59,7 @@ namespace DAL {
   import numpy
 
   # record the numpy datatypes used in the various datasets
-  DatasetInt16.dtype = numpy.int16
+  DatasetShort.dtype = numpy.short
   DatasetFloat.dtype = numpy.single
   DatasetComplexFloat.dtype = numpy.csingle
 
