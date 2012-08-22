@@ -27,17 +27,14 @@ Build Instructions
 
 If cmake does not find the (preferred) HDF5 includes and libraries, provide a hint to the Find module by setting the HDF5_ROOT_DIR environment variable.
 
-To do a parallel build, set the MAKEFLAGS environment variable to -j<NCPUS> before running 'make'. On Linux, you can run:
+To do a multi-threaded build, set the MAKEFLAGS environment variable to -j<NCPUS> before running 'make'. On Linux, you can run:
 	export MAKEFLAGS=-j`cat /proc/cpuinfo | grep processor | wc -l`
 
 To run the test suite:
 	make test
 
-To regenerate the doc strings and doxygen documentation, run:
-	make doc
-
-There is no uninstaller, but cmake creates a list of files in install_manifest.txt. To remove those files (leaves empty directories), run:
-	xargs rm < install_manifest.txt         # with sufficient privileges
+To uninstall, run: (only works after 'make install'; still leaves empty installation directories behind)
+	make uninstall				# with sufficient privileges
 
 
 Additional CMake Variables

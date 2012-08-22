@@ -8,7 +8,15 @@ Description: The build system does not support Python 3, whether 2 and 3 are ins
 Workaround: Use Python 2.6 or 2.7.
 Status: Low. This will not be worked on for 2.0.0.
 
-KI 2: No support for Windows
+KI 2: 'make uninstall' leaves empty installation directories behind
+Description: The uninstall script removes all installed files. It also removes runtime generated .pyc files.
+  It does not remove created directories, even if empty.
+  These are: $PREFIX/share/doc/dal $PREFIX/include/dal $PYTHON_PREFIX/dist-packages/DAL and subdirectories.
+  Parent directories may also have been created and not removed.
+Workaround: Remove them by hand.
+Status: Low. Already spent time to remove .pyc files. This will not be worked on further for 2.0.0.
+
+KI 3: No support for Windows
 Description: We do not build/run under Windows.
 Workaround: None (use Linux or MacOS).
 Status: Won't fix. Radio astronomers don't use Windows.

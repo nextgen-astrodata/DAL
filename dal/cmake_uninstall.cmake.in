@@ -1,0 +1,51 @@
+# Adapted from http://www.cmake.org/Wiki/CMake_FAQ#Can_I_do_.22make_uninstall.22_with_CMake.3F
+
+# Note: This does not remove created, now empty directories
+
+# Shut up about empty elements in lists on list(REVERSE files) below. See: cmake --help-policy CMP0007
+if(POLICY CMP0007)
+    cmake_policy(SET CMP0007 NEW)
+endif(POLICY CMP0007)
+
+if (NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/../install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/../install_manifest.txt\"")
+endif(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/../install_manifest.txt")
+
+file(READ "@CMAKE_CURRENT_BINARY_DIR@/../install_manifest.txt" files)
+string(REGEX REPLACE "\n" ";" files "${files}")
+list(REVERSE files)
+foreach (file ${files})
+    message(STATUS "Uninstalling \"$ENV{DESTDIR}${file}\"")
+    if (EXISTS "$ENV{DESTDIR}${file}")
+        execute_process(
+            COMMAND @CMAKE_COMMAND@ -E remove "$ENV{DESTDIR}${file}"
+            OUTPUT_VARIABLE rm_out
+            RESULT_VARIABLE rm_retval
+        )
+        if(NOT ${rm_retval} EQUAL 0)
+            message(FATAL_ERROR "Problem when removing \"$ENV{DESTDIR}${file}\"")
+        endif (NOT ${rm_retval} EQUAL 0)
+    else (EXISTS "$ENV{DESTDIR}${file}")
+        message(STATUS "File \"$ENV{DESTDIR}${file}\" does not exist.")
+    endif (EXISTS "$ENV{DESTDIR}${file}")
+
+    # also remove .pyc file if present
+    string(LENGTH "$ENV{DESTDIR}${file}" filename_len)
+    math(EXPR file_ext_idx ${filename_len}-3)
+    if (file_ext_idx GREATER 0)
+        string(SUBSTRING "$ENV{DESTDIR}${file}" "${file_ext_idx}" 3 file_ext)
+        if (file_ext STREQUAL ".py" AND EXISTS "$ENV{DESTDIR}${file}c")
+            message(STATUS "Uninstalling \"$ENV{DESTDIR}${file}c\"")
+            execute_process(
+                COMMAND @CMAKE_COMMAND@ -E remove "$ENV{DESTDIR}${file}c"
+                OUTPUT_VARIABLE rm_out
+                RESULT_VARIABLE rm_retval
+            )
+            if(NOT ${rm_retval} EQUAL 0)
+                message(FATAL_ERROR "Problem when removing \"$ENV{DESTDIR}${file}c\"")
+            endif (NOT ${rm_retval} EQUAL 0)
+        endif (file_ext STREQUAL ".py" AND EXISTS "$ENV{DESTDIR}${file}c")
+    endif (file_ext_idx GREATER 0)
+
+endforeach(file)
+
