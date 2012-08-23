@@ -24,7 +24,7 @@ File::File() {}
 
 File::File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )
 :
-  Group(openFile(filename, mode)), // store the file hid in the group (node) hid (TODO: leaks if another member init throws)
+  Group(openFile(filename, mode)), // store the file hid in the group (node) hid
   filename(filename),
   mode(mode),
   versionAttrName(versionAttrName)
@@ -142,7 +142,7 @@ void File::setFileVersion( const VersionType &version )
 {
   Attribute<string> versionAttr(*this, versionAttrName);
   if (versionAttr.exists())
-    versionAttr.set(version.toString());
+    versionAttr.set(version.to_string());
 
   // update propagation data as well
   data.fileVersion = version;

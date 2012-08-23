@@ -62,7 +62,7 @@ VersionType::VersionType(const std::string &str)
   iss >> release;
 }
 
-std::string VersionType::toString() const {
+std::string VersionType::to_string() const {
   std::ostringstream oss(std::ostringstream::out);
 
   oss << major << "." << minor << "." << release;
