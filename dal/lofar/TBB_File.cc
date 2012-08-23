@@ -23,7 +23,7 @@ namespace DAL {
 TBB_File::TBB_File() {}
 
 TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
-try :
+:
   CLA_File(filename, mode)
 {
   if (mode == CREATE) {
@@ -38,10 +38,6 @@ try :
       throw DALException("Failed to open TBB file: A TBB file must have /FILETYPE=\"tbb\".");
     }
   }
-} catch (...)
-{
-  close();
-  // will rethrow
 }
 
 TBB_File::~TBB_File() {}
