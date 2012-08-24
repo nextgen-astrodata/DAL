@@ -35,10 +35,6 @@ CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
 {
   if (mode == CREATE) {
     telescope().create().set("LOFAR");
-    // TODO: creating/setting the version field should like any other, even though changing the version must trigger some additional fluff.
-    Attribute<string> versionAttr(*this, versionAttrName);    
-    versionAttr.create();
-    setFileVersion(get_lib_version());
     fileName().create().set(filename);
     fileDate().create().set(getFileModDate(filename)); // UTC
   } else {

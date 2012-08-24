@@ -23,17 +23,22 @@
 
 namespace DAL {
 
-/*
+/*!
  * Return the version of this DAL library.
  */
 std::string get_lib_version();
 
-/*
+/*!
+ * Return the version of the first release of this DAL library (DAL 2).
+ */
+std::string get_first_release_lib_version();
+
+/*!
  * Return the version of HDF5 headers used to compile the DAL
  */
 std::string get_dal_hdf5_version();
 
-/*
+/*!
  * Return the version of HDF5 headers currently in use.
  */
 static std::string get_current_hdf5_header_version() {
@@ -54,12 +59,12 @@ static std::string get_current_hdf5_header_version() {
 
 }
 
-/*
+/*!
  * Return the version of HDF5 library currently in use.
  */
 std::string get_current_hdf5_lib_version();
 
-/*
+/*!
  * Returns true if the hdf5 versions used to compile
  * the DAL and to compile the client code are the same.
  */

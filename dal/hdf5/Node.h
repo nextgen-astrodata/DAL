@@ -124,8 +124,9 @@ public:
    *    # Create a new HDF5 file called "example.h5"
    *    >>> f = File("example.h5", File.CREATE)
    *
-   *    # Set the file's version number to 2.0.0
-   *    >>> f.setFileVersion(VersionType("2.0.0"))
+   *    # Set the file's version number to 2.6.0.
+   *    # Pass three integers or pass a string.
+   *    >>> f.setFileVersion(VersionType("2.6.0"))
    *
    *    # Create some attribute to play with
    *    >>> a = AttributeString(f, "EXAMPLE_ATTR")
@@ -133,20 +134,20 @@ public:
    *
    *    # Request the file version (any node in the file will do)
    *    >>> f.fileVersion()
-   *    VersionType('2.0.0')
+   *    VersionType('2.6.0')
    *    >>> a.fileVersion()
-   *    VersionType('2.0.0')
+   *    VersionType('2.6.0')
    *
    *    # If an attribute is older than the file,
    *    # it is supported and should be present.
-   *    >>> a.minVersion = VersionType('1.0.0')
+   *    >>> a.minVersion = VersionType('2.5.0')
    *    >>> a.supported()
    *    True
    *
    *    # If an attribute is newer than the file,
    *    # it is possibly not present and therefor
    *    # not supported.
-   *    >>> a.minVersion = VersionType('2.1.0')
+   *    >>> a.minVersion = VersionType('2.7.0')
    *    >>> a.supported()
    *    False
    *

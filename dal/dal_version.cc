@@ -27,6 +27,14 @@ string get_lib_version() {
   return DAL_VERSION;
 }
 
+string get_first_release_lib_version() {
+  /*
+   * The first DAL 2.x release version was 2.5.0, because the 
+   * bf draft spec was 2.04.xx at the time (tbb was at 2.02.xx).
+   */
+  return "2.5.0";
+}
+
 string get_dal_hdf5_version() {
   return get_current_hdf5_header_version();
 }

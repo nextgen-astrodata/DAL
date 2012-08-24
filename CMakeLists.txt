@@ -3,9 +3,9 @@ project (DAL)
 
 ## Project release version
 set (DAL_VERSION_MAJOR 2)
-set (DAL_VERSION_MINOR 0)
-set (DAL_VERSION_PATCH 0)
-set (DAL_VERSION "${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}.${DAL_VERSION_PATCH}")
+set (DAL_VERSION_MINOR 5)
+set (DAL_VERSION_RELEASE 0)
+set (DAL_VERSION "${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}.${DAL_VERSION_RELEASE}")
 
 ## Minimum required version of CMake to configure the project
 cmake_minimum_required (VERSION 2.8)
