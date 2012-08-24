@@ -255,9 +255,9 @@ Attribute<unsigned long long> TBB_DipoleDataset::dataLength()
   return Attribute<unsigned long long>(*this, "DATA_LENGTH");
 }
 
-Attribute< vector<unsigned> > TBB_DipoleDataset::flagOffsets()
+Attribute< vector<Range> > TBB_DipoleDataset::flagOffsets()
 {
-  return Attribute< vector<unsigned> >(*this, "FLAG_OFFSETS");
+  return Attribute< vector<Range> >(*this, "FLAG_OFFSETS");
 }
 
 Attribute<unsigned> TBB_DipoleDataset::nyquistZone()

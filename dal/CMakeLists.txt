@@ -64,6 +64,7 @@ set(dal_headers
   hdf5/Node.h
 
   lofar/Station.h
+  lofar/Flagging.h
   lofar/Coordinates.h
   lofar/TBB_File.h
   lofar/CommonTuples.h

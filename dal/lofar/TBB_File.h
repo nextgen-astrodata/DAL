@@ -24,6 +24,7 @@
 #include "dal/hdf5/Dataset1D.h"
 #include "dal/hdf5/Attribute.h"
 #include "dal/lofar/CLA_File.h"
+#include "dal/lofar/Flagging.h"
 
 namespace DAL {
 
@@ -117,7 +118,7 @@ public:
 
   Attribute<unsigned>                   samplesPerFrame();
   Attribute<unsigned long long>         dataLength();
-  Attribute< std::vector<unsigned> >    flagOffsets();
+  Attribute< std::vector<Range> >       flagOffsets();
   Attribute<unsigned>                   nyquistZone();
 
   Attribute<double>                     cableDelay();
