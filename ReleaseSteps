@@ -1,7 +1,6 @@
-Data Access Library (DAL) - Release-steps
-=========================================
+Data Access Library (DAL) - ReleaseSteps
+========================================
 
-Assuming the changes work at least on your day-to-day work machine, do:
 - check/bump version numbers of updated LOFAR file formats in DAL/dal/lofar/*_File.cc
 - bump version number in DAL/CMakeLists.txt and push to github
 - push final user manual and doxygen to github webpage (remote branch 'gh-pages')
