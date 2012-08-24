@@ -16,7 +16,7 @@
  */
 namespace DAL {
 
-template<typename T> void Dataset<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
+template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
 
   const size_t rank = dims.size();
 
@@ -45,6 +45,8 @@ template<typename T> void Dataset<T>::create( const std::vector<ssize_t> &dims, 
 
   // create the dataset
   _group = hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)), filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset " + _name);
+
+  return *this;
 }
 
 template<typename T> size_t Dataset<T>::ndims()

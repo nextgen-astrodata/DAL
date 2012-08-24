@@ -67,10 +67,12 @@ void swap(Group& first, Group& second)
   std::swap(first.mapInitialised, second.mapInitialised);
 }
 
-void Group::create() {
+Group& Group::create() {
   hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list to create group " + _name);
 
   _group = hid_gc(H5Gcreate2(parent, _name.c_str(), H5P_DEFAULT, gcpl, H5P_DEFAULT), H5Gclose, "Could not create group " + _name);
+
+  return *this;
 }
 
 bool Group::exists() const {

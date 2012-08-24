@@ -45,7 +45,7 @@ public:
   /*!
    * See Dataset::create(...).
    */
-  void create( ssize_t len, ssize_t maxlen = 0,
+  Dataset1D<T>& create( ssize_t len, ssize_t maxlen = 0,
                const std::string &filename = "", enum Dataset<T>::Endianness endianness = Dataset<T>::NATIVE );
 
   /*!

@@ -22,11 +22,12 @@ namespace DAL {
  */ 
 
 
-template<typename T> void Dataset1D<T>::create( ssize_t len, ssize_t maxlen,
+template<typename T> Dataset1D<T>& Dataset1D<T>::create( ssize_t len, ssize_t maxlen,
                const std::string &filename, enum Dataset<T>::Endianness endianness ) {
   std::vector<ssize_t> vdims(1, len);
   std::vector<ssize_t> vmaxdims(1, maxlen);
   Dataset<T>::create(vdims, vmaxdims, filename, endianness);
+  return *this;
 }
 
 template<typename T> ssize_t Dataset1D<T>::dims()

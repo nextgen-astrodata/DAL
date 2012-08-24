@@ -51,7 +51,7 @@ public:
    *
    * Note: any attributes and subgroups must be added separately.
    */
-  virtual void create();
+  virtual Group& create();
 
   /*!
    * Returns whether this group exists as a group (not an attribute or dataset) in the HDF5 file.
