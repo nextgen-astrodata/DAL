@@ -31,7 +31,7 @@ TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
     docName() .create().set("ICD 1: TBB Time-Series Data");
     Attribute<string> versionAttr(*this, versionAttrName);
     versionAttr.create();
-    setFileVersion(VersionType(2, 5)); // patch number is always 0 for the doc version
+    setFileVersion(VersionType(2, 5)); // release number is always 0 for the doc version
   } else {
     bool isTbbFileType = false;
     try {

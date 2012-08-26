@@ -111,7 +111,13 @@ public:
    *  - BIG:    use big-endian:    MIPS, POWER/PowerPC, SPARC, IA-64
    */
   Dataset<T>& create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims = std::vector<ssize_t>(0),
-               const std::string &filename = "", enum Endianness endianness = NATIVE );
+                const std::string &filename = "", enum Endianness endianness = NATIVE );
+
+  /*!
+   * Create a new 1D dataset. See Dataset::create(...).
+   */
+  Dataset<T>& create1D( ssize_t len, ssize_t maxlen = 0, const std::string &filename = "",
+                enum Endianness endianness = NATIVE );
 
   /*!
    * Returns the rank of the dataset.
@@ -124,10 +130,21 @@ public:
   std::vector<ssize_t> dims();
 
   /*!
+   * Returns the length of the 1D dataset.
+   */
+  ssize_t dims1D();
+
+  /*!
    * Returns the maximum dimension sizes to which this dataset can grow;
    * elements of -1 represent unbounded dimensions.
    */
   std::vector<ssize_t> maxdims();
+
+  /*!
+   * Returns the maximum length to which thus dataset can grow;
+   * -1 represents unbounded length.
+   */
+  ssize_t maxdims1D();
 
   /*!
    * Changes the dimensionality of the dataset. Elements of -1 represent unbounded dimensions.
@@ -137,6 +154,11 @@ public:
    * For now, resizing is only supported if external files are used.
    */
   void resize( const std::vector<ssize_t> &newdims );
+
+  /*!
+   * See Dataset::resize().
+   */
+  void resize1D( ssize_t newlen );
 
   /*!
    * Returns a list of the external files containing data for this dataset.
@@ -196,43 +218,51 @@ public:
   void set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
-   * Retrieves a 1D matrix of data from a 1D dataset from position `pos`.
-   * `buffer` must point to a memory block large enough to hold the result.
+   * Retrieves `len` data values from a dataset starting at index `pos`.
+   * `outbuffer` must point to a memory block large enough to hold `len` data values.
+   * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to retrieve from.
    *
-   * \param[in] pos               position of the first sample
-   * \param[in] dim1              size of outbuffer1; determines the number of data values to retrieve
-   * \param[out] outbuffer1       1D destination array
-   * \param[in] dim1index         index of the first dimension to query
-   *
-   * Requires:
-   *    - ndims() >= 1
-   *    - pos.size() == ndims()
-   *    - dim1index < ndims()
-   */
-  void get1D( const std::vector<size_t> &pos, size_t dim1, T *outbuffer1, unsigned dim1index = 0 );
-
-  /*!
-   * Stores a 1D matrix of data from a 1D dataset at position `pos`.
-   *
-   * \param[in] pos               position of the first sample
-   * \param[in] dim1              size of outbuffer1; determines the number of data values to store
-   * \param[in] inbuffer1         1D source array
-   * \param[in] dim1index         index of the first dimension to query
+   * \param[in] pos               index of the first data value
+   * \param[in] len               number of data values to retrieve
+   * \param[out] outbuffer        1D destination array
+   * \param[in] dimIndex          index of the dimension to query
    *
    * Requires:
-   *    - ndims() >= 1
-   *    - pos.size() == ndims()
-   *    - dim1index < ndims()
+   *    - pos + len <= dims()
+   *    - len <= size of outbuffer
+   *    - dimIndex < ndims()
    */
-  void set1D( const std::vector<size_t> &pos, size_t dim1, const T *inbuffer1, unsigned dim1index = 0 );
+  void get1D( size_t pos, size_t len, T *outbuffer, unsigned dimIndex = 0 );
 
   /*!
-   * Retrieves a single value from the dataset from position `pos`.
+   * Stores `len` data values from a dataset starting at index `pos`.
+   * `inbuffer` must contain at least `len` data values.
+   * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to store to.
+   *
+   * \param[in] pos               index of the first data value
+   * \param[in] len               number of data values to store
+   * \param[in] inbuffer          1D source array
+   * \param[in] dimIndex          index of the dimension to query
+   *
+   * Requires:
+   *    - pos + len <= dims()
+   *    - len <= size of inbuffer
+   *    - dimIndex < ndims()
+   */
+  void set1D( size_t pos, size_t len, const T *inbuffer, unsigned dimIndex = 0 );
+
+  /*!
+   * Retrieves a single value from the dataset at position `pos`.
    *
    * Requires:
    *    pos.size() == ndims()
    */
   T getScalar( const std::vector<size_t> &pos );
+
+  /*!
+   * See Dataset::getScalar().
+   */
+  T getScalar1D( size_t pos );
 
   /*!
    * Stores a single value into the dataset at position `pos`.
@@ -242,6 +272,11 @@ public:
    */
   void setScalar( const std::vector<size_t> &pos, const T &value );
 
+  /*!
+   * See Dataset::setScalar().
+   */
+  void setScalar1D( size_t pos, T value );
+
 protected:
   virtual hid_gc open( hid_t parent, const std::string &name ) const {
     return hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset " + _name);
@@ -249,13 +284,14 @@ protected:
 
   bool bigEndian( enum Endianness endianness ) const;
 
-  // if the strides vector is empty, a continuous array is assumed
+  //! If the strides vector is empty, a continuous array is assumed.
   void matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read );
 
 
   /*!
-   * Do not use this create function (without arguments) on a Dataset.
-   * Use the other create function with arguments instead.
+   * Do not use this create function on a Dataset.
+   * It always throws to catch incorrect calls to create() in Group.
+   * To create a Dataset, use the other create function with arguments instead.
    */
   virtual Dataset<T>& create() {
     throw HDF5Exception("create() without parameters not supported on a dataset " + _name);

@@ -38,7 +38,7 @@ static void readTBB_File(const string& filename) {
 		for (size_t j = 0; j < dipoles.size(); j++) {
 			cout << "\tDipole " << dipoles[j].rspID().get() << " " << dipoles[j].rcuID().get() << ":" << endl;
 
-			size_t dpDataLen = dipoles[j].dims();
+			size_t dpDataLen = dipoles[j].dims1D();
 			if (d.len < dpDataLen) {
 				delete[] d.data;
 				d.data = NULL; // safe delete[] in ~Data() in case new[] fails
@@ -47,7 +47,7 @@ static void readTBB_File(const string& filename) {
 			}
 
 			size_t pos = 0;
-			dipoles[j].get(pos, d.len, d.data);
+			dipoles[j].get1D(pos, d.len, d.data);
 
 			size_t printedLen = d.len < MAX_PRINTED ? d.len : MAX_PRINTED;
 			for (size_t k = 0; k < printedLen; k++) {

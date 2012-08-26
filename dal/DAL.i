@@ -60,7 +60,6 @@
 %include "dal/hdf5/Attribute.i"
 %include "dal/hdf5/Group.i"
 %include "dal/hdf5/Dataset.i"
-%include "dal/hdf5/Dataset1D.i"
 %include dal/hdf5/File.h
 
 %include dal/lofar/Station.h

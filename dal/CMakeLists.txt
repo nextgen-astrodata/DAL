@@ -50,8 +50,6 @@ set(dal_headers
   hdf5/File.h
   hdf5/Dataset.h
   hdf5/Dataset.tcc
-  hdf5/Dataset1D.h
-  hdf5/Dataset1D.tcc
   hdf5/Group.h
   hdf5/types/h5complex.h
   hdf5/types/issame.h
@@ -85,7 +83,6 @@ set(swig_sources
   hdf5/exceptions/exceptions.i
   hdf5/Node.i
   hdf5/Dataset.i
-  hdf5/Dataset1D.i
   hdf5/types/h5tuple.i
   hdf5/types/versiontype.i
 

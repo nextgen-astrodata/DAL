@@ -67,6 +67,10 @@ void swap(Group& first, Group& second)
   std::swap(first.mapInitialised, second.mapInitialised);
 }
 
+/*
+ * Do not call this function from Group or Node. It is meaningless for a Dataset.
+ * If it is a Dataset, Dataset<T>::create() throws.
+ */
 Group& Group::create() {
   hid_gc_noref gcpl(H5Pcreate(H5P_GROUP_CREATE), H5Pclose, "Could not create group creation property list to create group " + _name);
 

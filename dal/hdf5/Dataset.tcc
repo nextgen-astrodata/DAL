@@ -16,7 +16,8 @@
  */
 namespace DAL {
 
-template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
+template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> &dims,
+        const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {
 
   const size_t rank = dims.size();
 
@@ -44,8 +45,17 @@ template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> 
   }
 
   // create the dataset
-  _group = hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)), filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset " + _name);
+  _group = hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)),
+                  filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset " + _name);
 
+  return *this;
+}
+
+template<typename T> Dataset<T>& Dataset<T>::create1D( ssize_t len, ssize_t maxlen,
+        const std::string &filename, enum Dataset<T>::Endianness endianness ) {
+  std::vector<ssize_t> vdims(1, len);
+  std::vector<ssize_t> vmaxdims(1, maxlen);
+  Dataset<T>::create(vdims, vmaxdims, filename, endianness);
   return *this;
 }
 
@@ -83,6 +93,11 @@ template<typename T> std::vector<ssize_t> Dataset<T>::dims()
   return result;
 }
 
+template<typename T> ssize_t Dataset<T>::dims1D()
+{
+  return Dataset<T>::dims()[0];
+}
+
 template<typename T> std::vector<ssize_t> Dataset<T>::maxdims()
 {
   const size_t rank = ndims();
@@ -101,6 +116,11 @@ template<typename T> std::vector<ssize_t> Dataset<T>::maxdims()
   return result;
 }
 
+template<typename T> ssize_t Dataset<T>::maxdims1D()
+{
+  return Dataset<T>::maxdims()[0];
+}
+
 template<typename T> void Dataset<T>::resize( const std::vector<ssize_t> &newdims )
 {
   const size_t rank = ndims();
@@ -115,6 +135,12 @@ template<typename T> void Dataset<T>::resize( const std::vector<ssize_t> &newdim
 
   if (H5Dset_extent(group(), &newdims_hsize_t[0]) < 0)
     throw HDF5Exception("Could not resize dataset " + _name);
+}
+
+template<typename T> void Dataset<T>::resize1D( ssize_t newlen )
+{
+  std::vector<ssize_t> newdims(1, newlen);
+  Dataset<T>::resize(newdims);
 }
 
 template<typename T> std::vector<std::string> Dataset<T>::externalFiles()
@@ -142,23 +168,26 @@ template<typename T> std::vector<std::string> Dataset<T>::externalFiles()
   return files;
 }
 
-template<typename T> void Dataset<T>::getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer )
+template<typename T> void Dataset<T>::getMatrix( const std::vector<size_t> &pos,
+        const std::vector<size_t> &size, T *buffer )
 {
   const std::vector<size_t> strides(0);
 
   matrixIO(pos, size, strides, buffer, true);
 }
 
-template<typename T> void Dataset<T>::setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer )
+template<typename T> void Dataset<T>::setMatrix( const std::vector<size_t> &pos,
+        const std::vector<size_t> &size, const T *buffer )
 {
   const std::vector<size_t> strides(0);
 
   matrixIO(pos, size, strides, const_cast<T *>(buffer), false);
 }
 
-template<typename T> void Dataset<T>::get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
+template<typename T> void Dataset<T>::get2D( const std::vector<size_t> &pos,
+        size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
 {
-  std::vector<size_t> size(ndims(),1);
+  std::vector<size_t> size(ndims(), 1);
 
   if (size.size() < 2)
     throw DALValueError("Cannot get2D on fewer than 2 dimensional dataset " + _name);
@@ -179,9 +208,10 @@ template<typename T> void Dataset<T>::get2D( const std::vector<size_t> &pos, siz
   getMatrix(pos, size, outbuffer2);
 }
 
-template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
+template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos,
+        size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
 {
-  std::vector<size_t> size(ndims(),1);
+  std::vector<size_t> size(ndims(), 1);
 
   if (size.size() < 2)
     throw DALValueError("Cannot set2D on fewer than 2 dimensional dataset " + _name);
@@ -202,48 +232,65 @@ template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos, siz
   setMatrix(pos, size, inbuffer2);
 }
 
-template<typename T> void Dataset<T>::get1D( const std::vector<size_t> &pos, size_t dim1, T *outbuffer1, unsigned dim1index )
+template<typename T> void Dataset<T>::get1D( size_t pos, size_t len, T *outbuffer,
+        unsigned dimIndex )
 {
-  std::vector<size_t> size(ndims(),1);
+  std::vector<size_t> size(ndims(), 1);
 
-  if (dim1index >= size.size())
-    throw DALIndexError("Cannot get1D if index exceeds rank of dataset " + _name);
+  if (dimIndex >= size.size())
+    throw DALIndexError("Cannot get1D if dimIndex exceeds rank of dataset " + _name);
 
-  size[dim1index] = dim1;
+  size[dimIndex] = len;
+  std::vector<size_t> vpos(1, pos);
 
-  getMatrix(pos, size, outbuffer1);
+  getMatrix(vpos, size, outbuffer);
 }
 
-template<typename T> void Dataset<T>::set1D( const std::vector<size_t> &pos, size_t dim1, const T *inbuffer1, unsigned dim1index )
+template<typename T> void Dataset<T>::set1D( size_t pos, size_t len, const T *inbuffer,
+        unsigned dimIndex )
 {
-  std::vector<size_t> size(ndims(),1);
+  std::vector<size_t> size(ndims(), 1);
 
-  if (dim1index >= size.size())
-    throw DALIndexError("Cannot set1D if index exceeds rank of dataset " + _name);
+  if (dimIndex >= size.size())
+    throw DALIndexError("Cannot set1D if dimIndex exceeds rank of dataset " + _name);
 
-  size[dim1index] = dim1;
+  size[dimIndex] = len;
+  std::vector<size_t> vpos(1, pos);
 
-  setMatrix(pos, size, inbuffer1);
+  setMatrix(vpos, size, inbuffer);
 }
 
 template<typename T> T Dataset<T>::getScalar( const std::vector<size_t> &pos )
 {
   T value;
-  std::vector<size_t> size(ndims(),1);
+  std::vector<size_t> size(ndims(), 1);
 
   getMatrix(pos, size, &value);
 
   return value;
 }
 
-template<typename T> void Dataset<T>::setScalar( const std::vector<size_t> &pos, const T &value )
+template<typename T> T Dataset<T>::getScalar1D( size_t pos )
 {
-  std::vector<size_t> size(ndims(),1);
+  std::vector<size_t> vpos(1, pos);
+  return Dataset<T>::getScalar(vpos);
+}
+
+template<typename T> void Dataset<T>::setScalar( const std::vector<size_t> &pos,
+        const T &value )
+{
+  std::vector<size_t> size(ndims(), 1);
 
   setMatrix(pos, size, &value);
 }
 
-template<typename T>  bool Dataset<T>::bigEndian( enum Endianness endianness ) const
+template<typename T> void Dataset<T>::setScalar1D( size_t pos, T value )
+{
+  std::vector<size_t> vpos(1, pos);
+  Dataset<T>::setScalar(vpos, value);
+}
+
+template<typename T> bool Dataset<T>::bigEndian( enum Endianness endianness ) const
 {
   switch (endianness) {
     union {
@@ -264,7 +311,8 @@ template<typename T>  bool Dataset<T>::bigEndian( enum Endianness endianness ) c
   };
 }
 
-template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read )
+template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos,
+        const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read )
 {
   const size_t rank = ndims();
   const bool use_strides = strides.size() == rank;
