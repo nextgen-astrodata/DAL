@@ -172,7 +172,7 @@ public:
    * Requires:
    *    pos.size() == size.size() == ndims()
    */
-  void getMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, T *buffer );
+  void getMatrix( const std::vector<size_t> &pos, T *buffer, const std::vector<size_t> &size );
 
   /*!
    * Stores any matrix of data of sizes `size` at position `pos`.
@@ -180,16 +180,16 @@ public:
    * Requires:
    *    pos.size() == size.size() == ndims()
    */
-  void setMatrix( const std::vector<size_t> &pos, const std::vector<size_t> &size, const T *buffer );
+  void setMatrix( const std::vector<size_t> &pos, const T *buffer, const std::vector<size_t> &size );
 
   /*!
    * Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
    *
    * \param[in] pos               position of the first sample
+   * \param[out] outbuffer2       2D destination array
    * \param[in] dim1              size of first dimension of outbuffer2; determines the number of data values to retrieve
    * \param[in] dim2              size of second dimension of outbuffer2; determines the number of data values to retrieve
-   * \param[out] outbuffer2       2D destination array
    * \param[in] dim1index         index of the first dimension to query
    * \param[in] dim2index         index of the second dimension to query
    *
@@ -198,15 +198,15 @@ public:
    *    - pos.size() == ndims()
    *    - dim1index < dim2index < ndims()
    */
-  void get2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
+  void get2D( const std::vector<size_t> &pos, T *outbuffer2, size_t dim1, size_t dim2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
    * Stores a 2D matrix of data from a 2D dataset at position `pos`.
    *
    * \param[in] pos               position of the first sample
+   * \param[in] inbuffer2         2D source array
    * \param[in] dim1              size of first dimension of inbuffer2; determines the number of data values to store
    * \param[in] dim2              size of second dimension of inbuffer2; determines the number of data values to store
-   * \param[in] inbuffer2         2D source array
    * \param[in] dim1index         index of the first dimension to query
    * \param[in] dim2index         index of the second dimension to query
    *
@@ -215,7 +215,7 @@ public:
    *    - pos.size() == ndims()
    *    - dim1index < dim2index < ndims()
    */
-  void set2D( const std::vector<size_t> &pos, size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index = 0, unsigned dim2index = 1 );
+  void set2D( const std::vector<size_t> &pos, const T *inbuffer2, size_t dim1, size_t dim2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
    * Retrieves `len` data values from a dataset starting at index `pos`.
@@ -223,8 +223,8 @@ public:
    * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to retrieve from.
    *
    * \param[in] pos               index of the first data value
-   * \param[in] len               number of data values to retrieve
    * \param[out] outbuffer        1D destination array
+   * \param[in] len               number of data values to retrieve
    * \param[in] dimIndex          index of the dimension to query
    *
    * Requires:
@@ -232,7 +232,7 @@ public:
    *    - len <= size of outbuffer
    *    - dimIndex < ndims()
    */
-  void get1D( size_t pos, size_t len, T *outbuffer, unsigned dimIndex = 0 );
+  void get1D( size_t pos, T *outbuffer, size_t len, unsigned dimIndex = 0 );
 
   /*!
    * Stores `len` data values from a dataset starting at index `pos`.
@@ -240,8 +240,8 @@ public:
    * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to store to.
    *
    * \param[in] pos               index of the first data value
-   * \param[in] len               number of data values to store
    * \param[in] inbuffer          1D source array
+   * \param[in] len               number of data values to store
    * \param[in] dimIndex          index of the dimension to query
    *
    * Requires:
@@ -249,7 +249,7 @@ public:
    *    - len <= size of inbuffer
    *    - dimIndex < ndims()
    */
-  void set1D( size_t pos, size_t len, const T *inbuffer, unsigned dimIndex = 0 );
+  void set1D( size_t pos, const T *inbuffer, size_t len, unsigned dimIndex = 0 );
 
   /*!
    * Retrieves a single value from the dataset at position `pos`.
@@ -285,13 +285,13 @@ protected:
   bool bigEndian( enum Endianness endianness ) const;
 
   //! If the strides vector is empty, a continuous array is assumed.
-  void matrixIO( const std::vector<size_t> &pos, const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read );
+  void matrixIO( const std::vector<size_t> &pos, T *buffer, const std::vector<size_t> &size, const std::vector<size_t> &strides, bool read );
 
 
   /*!
-   * Do not use this create function on a Dataset.
+   * Do not use this create function.
    * It always throws to catch incorrect calls to create() in Group.
-   * To create a Dataset, use the other create function with arguments instead.
+   * To create a Dataset, use the create function with arguments instead.
    */
   virtual Dataset<T>& create() {
     throw HDF5Exception("create() without parameters not supported on a dataset " + _name);

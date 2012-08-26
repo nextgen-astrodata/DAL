@@ -47,7 +47,7 @@ static void readTBB_File(const string& filename) {
 			}
 
 			size_t pos = 0;
-			dipoles[j].get1D(pos, d.len, d.data);
+			dipoles[j].get1D(pos, d.data, d.len);
 
 			size_t printedLen = d.len < MAX_PRINTED ? d.len : MAX_PRINTED;
 			for (size_t k = 0; k < printedLen; k++) {

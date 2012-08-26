@@ -52,7 +52,7 @@ template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> 
 }
 
 template<typename T> Dataset<T>& Dataset<T>::create1D( ssize_t len, ssize_t maxlen,
-        const std::string &filename, enum Dataset<T>::Endianness endianness ) {
+        const std::string &filename, enum Endianness endianness ) {
   std::vector<ssize_t> vdims(1, len);
   std::vector<ssize_t> vmaxdims(1, maxlen);
   Dataset<T>::create(vdims, vmaxdims, filename, endianness);
@@ -169,23 +169,23 @@ template<typename T> std::vector<std::string> Dataset<T>::externalFiles()
 }
 
 template<typename T> void Dataset<T>::getMatrix( const std::vector<size_t> &pos,
-        const std::vector<size_t> &size, T *buffer )
+        T *buffer, const std::vector<size_t> &size )
 {
   const std::vector<size_t> strides(0);
 
-  matrixIO(pos, size, strides, buffer, true);
+  matrixIO(pos, buffer, size, strides, true);
 }
 
 template<typename T> void Dataset<T>::setMatrix( const std::vector<size_t> &pos,
-        const std::vector<size_t> &size, const T *buffer )
+        const T *buffer, const std::vector<size_t> &size )
 {
   const std::vector<size_t> strides(0);
 
-  matrixIO(pos, size, strides, const_cast<T *>(buffer), false);
+  matrixIO(pos, const_cast<T *>(buffer), size, strides, false);
 }
 
 template<typename T> void Dataset<T>::get2D( const std::vector<size_t> &pos,
-        size_t dim1, size_t dim2, T *outbuffer2, unsigned dim1index, unsigned dim2index )
+        T *outbuffer2, size_t dim1, size_t dim2, unsigned dim1index, unsigned dim2index )
 {
   std::vector<size_t> size(ndims(), 1);
 
@@ -205,11 +205,11 @@ template<typename T> void Dataset<T>::get2D( const std::vector<size_t> &pos,
   size[dim1index] = dim1;
   size[dim2index] = dim2;
 
-  getMatrix(pos, size, outbuffer2);
+  getMatrix(pos, outbuffer2, size);
 }
 
 template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos,
-        size_t dim1, size_t dim2, const T *inbuffer2, unsigned dim1index, unsigned dim2index )
+        const T *inbuffer2, size_t dim1, size_t dim2, unsigned dim1index, unsigned dim2index )
 {
   std::vector<size_t> size(ndims(), 1);
 
@@ -229,10 +229,10 @@ template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos,
   size[dim1index] = dim1;
   size[dim2index] = dim2;
 
-  setMatrix(pos, size, inbuffer2);
+  setMatrix(pos, inbuffer2, size);
 }
 
-template<typename T> void Dataset<T>::get1D( size_t pos, size_t len, T *outbuffer,
+template<typename T> void Dataset<T>::get1D( size_t pos, T *outbuffer, size_t len,
         unsigned dimIndex )
 {
   std::vector<size_t> size(ndims(), 1);
@@ -243,10 +243,10 @@ template<typename T> void Dataset<T>::get1D( size_t pos, size_t len, T *outbuffe
   size[dimIndex] = len;
   std::vector<size_t> vpos(1, pos);
 
-  getMatrix(vpos, size, outbuffer);
+  getMatrix(vpos, outbuffer, size);
 }
 
-template<typename T> void Dataset<T>::set1D( size_t pos, size_t len, const T *inbuffer,
+template<typename T> void Dataset<T>::set1D( size_t pos, const T *inbuffer, size_t len,
         unsigned dimIndex )
 {
   std::vector<size_t> size(ndims(), 1);
@@ -257,7 +257,7 @@ template<typename T> void Dataset<T>::set1D( size_t pos, size_t len, const T *in
   size[dimIndex] = len;
   std::vector<size_t> vpos(1, pos);
 
-  setMatrix(vpos, size, inbuffer);
+  setMatrix(vpos, inbuffer, size);
 }
 
 template<typename T> T Dataset<T>::getScalar( const std::vector<size_t> &pos )
@@ -265,7 +265,7 @@ template<typename T> T Dataset<T>::getScalar( const std::vector<size_t> &pos )
   T value;
   std::vector<size_t> size(ndims(), 1);
 
-  getMatrix(pos, size, &value);
+  getMatrix(pos, &value, size);
 
   return value;
 }
@@ -281,7 +281,7 @@ template<typename T> void Dataset<T>::setScalar( const std::vector<size_t> &pos,
 {
   std::vector<size_t> size(ndims(), 1);
 
-  setMatrix(pos, size, &value);
+  setMatrix(pos, &value, size);
 }
 
 template<typename T> void Dataset<T>::setScalar1D( size_t pos, T value )
@@ -312,7 +312,7 @@ template<typename T> bool Dataset<T>::bigEndian( enum Endianness endianness ) co
 }
 
 template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos,
-        const std::vector<size_t> &size, const std::vector<size_t> &strides, T *buffer, bool read )
+        T *buffer, const std::vector<size_t> &size, const std::vector<size_t> &strides, bool read )
 {
   const size_t rank = ndims();
   const bool use_strides = strides.size() == rank;

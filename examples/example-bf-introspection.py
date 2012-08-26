@@ -2,7 +2,7 @@ import DAL
 
 f = DAL.BF_File("test.h5")
 
-print "file %s reports to be version %s" % (f.filename, f.fileVersion())
+print "file %s reports to be version %s" % (f.filename, f.docVersion())
 print
 
 print "supp   = whether this attribute is supported by the version as reported by the file"

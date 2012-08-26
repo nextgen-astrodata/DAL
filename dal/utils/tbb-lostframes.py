@@ -46,7 +46,7 @@ def print_lost_frame_nrs(filename):
 			data = numpy.zeros((data_len, ), dtype=dp.dtype)
 			#data = numpy.array(dp, dtype=dp.dtype) # only works if Python binding of TBB_DipoleDataset exposes the array interface, __array__ returns an array or any (nested) sequence.
 			start_idx = 0
-			dp.get(start_idx, data)
+			dp.get(data, start_idx)
 
 			# Not always available when this program was written, but will be always there.
 			# Use .get() instead of .value to have an exc raised instead of None returned.

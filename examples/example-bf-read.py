@@ -62,7 +62,7 @@ for sapnr in count():
       x = numpy.array([[0,0],[0,0]], dtype=stokes.dtype)
 
       # get2D(pos,array) reads `array` at position `pos`.
-      stokes.get2D([0,0],x);
+      stokes.get2D(x, [0,0]);
 
       print "            First two samples of the first two channels are:\n%s" % (x,)
 
