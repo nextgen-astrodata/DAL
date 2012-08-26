@@ -1,4 +1,4 @@
-// c++ -Wall get-tbb-station-ref.cc -ldal -lhdf
+// c++ -Wall get-tbb-station-ref.cc -ldal -lhdf5
 #include <iostream>
 #include <dal/lofar/TBB_File.h>
 
