@@ -1,4 +1,7 @@
-#cmakedefine DAL_VERSION "@DAL_VERSION@"
+#define DAL_VERSION_MAJOR @DAL_VERSION_MAJOR@
+#define DAL_VERSION_MINOR @DAL_VERSION_MINOR@
+#define DAL_VERSION_RELEASE @DAL_VERSION_RELEASE@
+#define DAL_VERSION_STRING "@DAL_VERSION_STRING@"
 
 /*
  * Define if HDF5 should be silenced by default when an
@@ -6,5 +9,5 @@
  * throw exceptions, but HDF5 will not print the stack
  * trace as well.
  */
-#cmakedefine QUIET_HDF5_ERRORS "@QUIET_HDF5_ERRORS@"
+#define QUIET_HDF5_ERRORS "@QUIET_HDF5_ERRORS@"
 

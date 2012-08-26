@@ -11,6 +11,7 @@ add_c_test(h5-test-create) # Doesn't use DAL. If this fails, HDF5 (or the test s
 add_c_test(instantiate-only)
 add_c_test(reopen-rw)
 add_c_test(constructors)
+add_c_test(version-check)
 add_c_test(attr-empty)
 add_c_test(get-tbb-station-ref)
 add_c_test(remove-root-exc)

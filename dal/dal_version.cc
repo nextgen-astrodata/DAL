@@ -24,7 +24,7 @@ namespace DAL {
 using namespace std;
 
 string get_lib_version() {
-  return DAL_VERSION;
+  return DAL_VERSION_STRING;
 }
 
 string get_first_release_lib_version() {

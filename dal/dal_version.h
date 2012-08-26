@@ -49,13 +49,13 @@ static std::string get_current_hdf5_header_version() {
   // include sub-release information that messes up our
   // version check systems (i.e. "1.8.4-patch1").
 
-#define _QUOTE(x) #x
-#define QUOTE(x) _QUOTE(x)
+#define LOFARDAL_QUOTE_(x) #x
+#define LOFARDAL_QUOTE(x) LOFARDAL_QUOTE_(x)
 
-  return std::string(QUOTE(H5_VERS_MAJOR) "." QUOTE(H5_VERS_MINOR) "." QUOTE(H5_VERS_RELEASE));
+  return std::string(LOFARDAL_QUOTE(H5_VERS_MAJOR) "." LOFARDAL_QUOTE(H5_VERS_MINOR) "." LOFARDAL_QUOTE(H5_VERS_RELEASE));
 
-#undef QUOTE
-#undef _QUOTE
+#undef LOFARDAL_QUOTE
+#undef LOFARDAL_QUOTE_
 
 }
 

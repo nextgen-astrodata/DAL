@@ -5,7 +5,7 @@ project (DAL)
 set (DAL_VERSION_MAJOR 2)
 set (DAL_VERSION_MINOR 5)
 set (DAL_VERSION_RELEASE 0)
-set (DAL_VERSION "${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}.${DAL_VERSION_RELEASE}")
+set (DAL_VERSION_STRING "${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}.${DAL_VERSION_RELEASE}")
 
 ## Minimum required version of CMake to configure the project
 cmake_minimum_required (VERSION 2.8)
@@ -90,7 +90,7 @@ if(GENERATE_DOCS)
 endif(GENERATE_DOCS)
 
 MESSAGE("------------------------------------------------------")
-MESSAGE("[${CMAKE_PROJECT_NAME} ${DAL_VERSION}] configuration summary")
+MESSAGE("[${CMAKE_PROJECT_NAME} ${DAL_VERSION_STRING}] configuration summary")
 MESSAGE("------------------------------------------------------")
 MESSAGE("CMAKE_VERSION        = ${CMAKE_VERSION}")
 MESSAGE("HDF5_VERSION         = ${HDF5_VERSION}")
