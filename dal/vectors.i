@@ -135,3 +135,4 @@ int SWIG_AsVal_std_string(PyObject* o, std::string *s) {
 
 vector_native_typemap( ssize_t );
 vector_native_typemap( std::string );
+

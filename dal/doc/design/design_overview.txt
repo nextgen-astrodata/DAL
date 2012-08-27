@@ -110,7 +110,7 @@ The above class structure allows the developer to represent a simple HDF5 struct
         --------------------------------------------------------------------------------------------------------------
         foo.h5                                  File                            File
         |- NAME                                 Attribute<string>                       AttributeString
-        |- AGE                                  Attribute<unsigned>                     AttributeUnsigned
+        |- AGE                                  Attribute<unsigned>                     AttributeUInt
         \- MY_DATASET                           Dataset<float>                  HDF5DataseBaseFloat
            \- DESCRIPTION                       Attribute<string>                       AttributeString
 

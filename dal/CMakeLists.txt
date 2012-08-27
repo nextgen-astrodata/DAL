@@ -33,6 +33,7 @@ set(dal_sources
   hdf5/exceptions/errorstack.cc
   hdf5/types/versiontype.cc
 
+  lofar/Flagging.cc
   lofar/Station.cc
   lofar/BF_File.cc
   lofar/CLA_File.cc
@@ -88,6 +89,7 @@ set(swig_sources
 
   lofar/TBB_File.i
   lofar/CommonTuples.i
+  lofar/Flagging.i
 )  
 
 add_library (dal

@@ -116,8 +116,8 @@ public:
  *
  * Python example:
  * \code
- *    # TupleUnsigned3() is a Tuple<unsigned int, 3>
- *    >>> t = TupleUnsigned3()
+ *    # TupleUInt3() is a Tuple<unsigned int, 3>
+ *    >>> t = TupleUInt3()
  *
  *    # Values can be modified in various ways:
  *    >>> t.set([0,0,3])

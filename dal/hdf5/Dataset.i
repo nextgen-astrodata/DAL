@@ -84,6 +84,10 @@ namespace DAL {
     def create1D(self):
       self._create1D()
       return self
+
+    def __len__(self):
+      import operator
+      return reduce(operator.mul, self.dims())
   }    
 }
 

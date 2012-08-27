@@ -75,9 +75,12 @@
 
 namespace DAL {
   // TupleBases need to be instantiated to force that they will be %extended
-  %template(_TupleBaseUnsigned2)     TupleBase<unsigned,2>;
-  %template(_TupleBaseUnsigned3)     TupleBase<unsigned,3>;
-  %template(_TupleBaseUnsigned4)     TupleBase<unsigned,4>;
+  %template(_TupleBaseUInt2)         TupleBase<unsigned int,2>;
+  %template(_TupleBaseUInt3)         TupleBase<unsigned int,3>;
+  %template(_TupleBaseUInt4)         TupleBase<unsigned int,4>;
+  %template(_TupleBaseULongLong2)    TupleBase<unsigned long long,2>;
+  %template(_TupleBaseULongLong3)    TupleBase<unsigned long long,3>;
+  %template(_TupleBaseULongLong4)    TupleBase<unsigned long long,4>;
   %template(_TupleBaseFloat2)        TupleBase<float,2>;
   %template(_TupleBaseFloat3)        TupleBase<float,3>;
   %template(_TupleBaseFloat4)        TupleBase<float,4>;
@@ -86,9 +89,12 @@ namespace DAL {
   %template(_TupleBaseDouble4)       TupleBase<double,4>;
 }
 
-AddTuple( TupleUnsigned2, %arg(DAL::Tuple<unsigned,2>) )
-AddTuple( TupleUnsigned3, %arg(DAL::Tuple<unsigned,3>) )
-AddTuple( TupleUnsigned4, %arg(DAL::Tuple<unsigned,4>) )
+AddTuple( TupleUInt2, %arg(DAL::Tuple<unsigned int,2>) )
+AddTuple( TupleUInt3, %arg(DAL::Tuple<unsigned int,3>) )
+AddTuple( TupleUInt4, %arg(DAL::Tuple<unsigned int,4>) )
+AddTuple( TupleULongLong2, %arg(DAL::Tuple<unsigned long long,2>) )
+AddTuple( TupleULongLong3, %arg(DAL::Tuple<unsigned long long,3>) )
+AddTuple( TupleULongLong4, %arg(DAL::Tuple<unsigned long long,4>) )
 AddTuple( TupleFloat2, %arg(DAL::Tuple<float,2>) )
 AddTuple( TupleFloat3, %arg(DAL::Tuple<float,3>) )
 AddTuple( TupleFloat4, %arg(DAL::Tuple<float,4>) )
