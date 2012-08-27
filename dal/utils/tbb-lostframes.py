@@ -53,11 +53,11 @@ def print_lost_frame_nrs(filename):
 			block_len = dp.samplesPerFrame().value
 			if block_len is None:
 				block_len = 1024 # the TBBs always send 1024 samples/frame for transient data
-			total_frames += (data_len + block_len-1) / block_len # rounded up division
+			total_frames += (data_len + block_len-1) // block_len # add rounded up #frames
 			dp_lost_frame_nrs = get_lost_frame_nrs(data, block_len)
 			if dp_lost_frame_nrs: # Does not account for missing frames at the end. We'd have to max(<len(any dipole datasets)>) and even then we could miss the true max.
 				total_lost += len(dp_lost_frame_nrs)
-				print 'Station', st.stationName().value, 'rsp', str(dp.rspID().value), 'rcu', str(dp.rcuID().value) + ':', 'zeroed frame numbers of size', str(block_len) + ':'
+				print 'Station', st.stationName().value, 'rsp', str(dp.rspID().value), 'rcu', str(dp.rcuID().value) + ':', 'numbers of zeroed frames of', str(block_len), 'values each:'
 				for frame_nr in dp_lost_frame_nrs:
 					print frame_nr,
 				print
