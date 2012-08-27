@@ -91,11 +91,14 @@ AddSimpleAttributeAndVector( Int,           int );
 AddSimpleAttributeAndVector( Long,          long );
 AddSimpleAttributeAndVector( Unsigned,      %arg(unsigned int) );
 AddSimpleAttributeAndVector( UnsignedLong,  %arg(unsigned long) );
+AddSimpleAttributeAndVector( LongLong,      %arg(long long) );
+AddSimpleAttributeAndVector( UnsignedLongLong, %arg(unsigned long long) );
 AddSimpleAttributeAndVector( Float,         float );
 AddSimpleAttributeAndVector( Double,        double );
 AddSimpleAttributeAndVector( ComplexFloat,  %arg(std::complex<float>) );
 AddSimpleAttributeAndVector( ComplexDouble, %arg(std::complex<double>) );
 AddSimpleAttributeAndVector( String,        std::string );
+AddAttributeAndVector( UnsignedLongLong2, %arg(Tuple<unsigned long long,2>) );
 AddAttributeAndVector( Unsigned3,     %arg(Tuple<unsigned,3>) );
 AddAttributeAndVector( Double3,       %arg(Tuple<double,3>) );
 
