@@ -34,7 +34,7 @@ set(dal_sources
   hdf5/types/versiontype.cc
 
   lofar/Flagging.cc
-  lofar/Station.cc
+  lofar/StationNames.cc
   lofar/BF_File.cc
   lofar/CLA_File.cc
   lofar/Coordinates.cc
@@ -62,7 +62,7 @@ set(dal_headers
   hdf5/types/hid_gc.h
   hdf5/Node.h
 
-  lofar/Station.h
+  lofar/StationNames.h
   lofar/Flagging.h
   lofar/Coordinates.h
   lofar/TBB_File.h
