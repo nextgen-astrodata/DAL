@@ -19,6 +19,6 @@
 
 %header %{
 #undef SWIG_SetErrorMsg
-#define SWIG_SetErrorMsg(code, msg)        SWIG_Python_SetErrorMsg(PyExc_TypeError, "wrong number of arguments, or wrong type of arguments")
+#define SWIG_SetErrorMsg(code, msg)        { if(code == PyExc_NotImplementedError) { SWIG_Python_SetErrorMsg(PyExc_TypeError, "wrong number of arguments, or wrong type of arguments"); } else { SWIG_Python_SetErrorMsg(code, msg); } }
 %}
 
