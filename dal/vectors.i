@@ -9,7 +9,7 @@ namespace std {
 */
 %define vector_native_typemap( T )
 
-%typemap(in) const std::vector< T > & ( std::vector< T > result ), std::vector< T > ( std::vector< T > result )
+%typemap(in) const std::vector< T > & (std::vector< T > result), std::vector< T > (std::vector< T > result)
 {
   if (!PySequence_Check($input))
     SWIG_exception(SWIG_TypeError, "input is not a sequence (list, tuple, etc)");
@@ -57,7 +57,7 @@ namespace std {
 */
 %define vector_typemap( T )
 
-%typemap(in) const std::vector< T > & (std::vector< T > result)
+%typemap(in) const std::vector< T > & (std::vector< T > result), std::vector< T > (std::vector< T > result)
 {
   if (!PySequence_Check($input))
     SWIG_exception(SWIG_TypeError, "input is not a sequence (list, tuple, etc)");
@@ -78,6 +78,11 @@ namespace std {
   }
 
   $1 = &result;
+}
+
+%typemap(typecheck) const std::vector< T > &, std::vector< T >
+{
+  $1 = PySequence_Check($input) ? 1 : 0;
 }
 
 %typemap(out) std::vector< T >, std::vector< T > const {
