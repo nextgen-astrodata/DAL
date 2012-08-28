@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 import DAL
 
 print("---- Vectors")
 
 # initialise a vector of unsigned numbers
-v = DAL.VectorUnsigned([1,2,3])
+v = DAL.VectorUInt([1,2,3])
 
 # A Vector behaves like a list
 print("type(v) = %s" % (type(v),))
@@ -28,7 +29,7 @@ print("v = %s" % (v,))
 print("---- Tuples")
 
 # Create a tuple of unsigned numbers (1,2,3)
-t = DAL.TupleUnsigned3()
+t = DAL.TupleUInt3()
 t.set([1,2,3])
 
 # A Tuple behaves like a tuple, but
@@ -46,7 +47,7 @@ for x in t:
   print("t contains %s"% (x,))
 
 # Create another tuple
-t2 = DAL.TupleUnsigned3()
+t2 = DAL.TupleUInt3()
 t2.first  = 4
 t2.second = 5
 t2.third  = 6
@@ -56,7 +57,7 @@ print("t2 = %s" % (t2,))
 print("---- Vectors of tuples")
 
 # Put two tuples in a vector
-v = DAL.VectorTupleUnsigned3([t, t2])
+v = DAL.VectorTupleUInt3([t, t2])
 
 # Vectors again act like lists
 print("type(v) = %s" % (type(v),))

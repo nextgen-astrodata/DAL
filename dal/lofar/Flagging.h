@@ -14,34 +14,33 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef DAL_STATION_H
-#define DAL_STATION_H
+#ifndef DAL_FLAGGING_H
+#define DAL_FLAGGING_H
 
+#include <cstddef>
 #include <string>
-#include "dal/hdf5/exceptions/exceptions.h"
+#include "dal/hdf5/types/h5tuple.h"
 
 namespace DAL {
 
 /*!
- * Array of C strings with all LOFAR station names.
+ * class Range is typically used in a vector for flagging data.
+ * In a range, `begin` is inclusive and `end` is exclusive.
  *
- * The number of station names is:
- *   ( sizeof(DAL::stationNames) / sizeof(DAL::stationNames[0]) )
+ * Note: size() (inherited) always returns 2 (number of tuple elements)
  */
-extern const char stationNames[][6];
+struct Range : public TupleBase<unsigned long long, 2> {
+  unsigned long long begin; // inclusive
+  unsigned long long end;   // exclusive
 
-/*!
- * Returns the LOFAR station name (e.g. "CS011") corresponding to stationID.
- * Returns "ST<stationID>" (always 5 characters) if stationID is unknown.
- */
-std::string stationIDToName(unsigned stationID);
+  Range();
 
-/*!
- * Returns LOFAR station ID corresponding to stationName (e.g. "CS011").
- * May throw DAL::DALValueError if stationName is not in the stationNames array above.
- * Does not throw on a valid stationName with a suffix (e.g. a field name like "CS011HBA0").
- */
-unsigned stationNameToID(const std::string& stationName);
+  Range(unsigned long long begin, unsigned long long end);
+
+
+  //! Returns a string representation of this Range, e.g. "[0,10)".
+  std::string to_string();
+};
 
 }
 

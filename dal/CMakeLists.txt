@@ -33,7 +33,8 @@ set(dal_sources
   hdf5/exceptions/errorstack.cc
   hdf5/types/versiontype.cc
 
-  lofar/Station.cc
+  lofar/Flagging.cc
+  lofar/StationNames.cc
   lofar/BF_File.cc
   lofar/CLA_File.cc
   lofar/Coordinates.cc
@@ -50,8 +51,6 @@ set(dal_headers
   hdf5/File.h
   hdf5/Dataset.h
   hdf5/Dataset.tcc
-  hdf5/Dataset1D.h
-  hdf5/Dataset1D.tcc
   hdf5/Group.h
   hdf5/types/h5complex.h
   hdf5/types/issame.h
@@ -63,7 +62,8 @@ set(dal_headers
   hdf5/types/hid_gc.h
   hdf5/Node.h
 
-  lofar/Station.h
+  lofar/StationNames.h
+  lofar/Flagging.h
   lofar/Coordinates.h
   lofar/TBB_File.h
   lofar/CommonTuples.h
@@ -84,12 +84,12 @@ set(swig_sources
   hdf5/exceptions/exceptions.i
   hdf5/Node.i
   hdf5/Dataset.i
-  hdf5/Dataset1D.i
   hdf5/types/h5tuple.i
   hdf5/types/versiontype.i
 
   lofar/TBB_File.i
   lofar/CommonTuples.i
+  lofar/Flagging.i
 )  
 
 add_library (dal
@@ -98,7 +98,7 @@ add_library (dal
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-g3 -Wall -Wextra -Wno-unused-function -Wno-long-long -ansi -pedantic")
+  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wno-unused-function -Wno-long-long -ansi -pedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 target_link_libraries(dal ${HDF5_LIBRARIES})

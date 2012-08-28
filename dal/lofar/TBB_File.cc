@@ -28,6 +28,10 @@ TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
 {
   if (mode == CREATE) {
     fileType().create().set("tbb");
+    docName() .create().set("ICD 1: TBB Time-Series Data");
+    Attribute<string> versionAttr(*this, versionAttrName);
+    versionAttr.create();
+    setFileVersion(VersionType(2, 5)); // release number is always 0 for the doc version
   } else {
     bool isTbbFileType = false;
     try {
@@ -255,9 +259,9 @@ Attribute<unsigned long long> TBB_DipoleDataset::dataLength()
   return Attribute<unsigned long long>(*this, "DATA_LENGTH");
 }
 
-Attribute< vector<unsigned> > TBB_DipoleDataset::flagOffsets()
+Attribute< vector<Range> > TBB_DipoleDataset::flagOffsets()
 {
-  return Attribute< vector<unsigned> >(*this, "FLAG_OFFSETS");
+  return Attribute< vector<Range> >(*this, "FLAG_OFFSETS");
 }
 
 Attribute<unsigned> TBB_DipoleDataset::nyquistZone()

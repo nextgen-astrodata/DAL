@@ -42,22 +42,22 @@ def print_lost_frame_nrs(filename):
 		dipole_datasets = st.dipoles();
 		for dp in dipole_datasets:
 			datasets_found = True
-			data_len = dp.dims() # actual data len; should be equal to dp.dataLength().get()
+			data_len = dp.dims1D() # actual data len; should be equal to dp.dataLength().get()
 			data = numpy.zeros((data_len, ), dtype=dp.dtype)
 			#data = numpy.array(dp, dtype=dp.dtype) # only works if Python binding of TBB_DipoleDataset exposes the array interface, __array__ returns an array or any (nested) sequence.
 			start_idx = 0
-			dp.get(start_idx, data)
+			dp.get1D(start_idx, data)
 
 			# Not always available when this program was written, but will be always there.
 			# Use .get() instead of .value to have an exc raised instead of None returned.
 			block_len = dp.samplesPerFrame().value
 			if block_len is None:
 				block_len = 1024 # the TBBs always send 1024 samples/frame for transient data
-			total_frames += (data_len + block_len-1) / block_len # rounded up division
+			total_frames += (data_len + block_len-1) // block_len # add rounded up #frames
 			dp_lost_frame_nrs = get_lost_frame_nrs(data, block_len)
 			if dp_lost_frame_nrs: # Does not account for missing frames at the end. We'd have to max(<len(any dipole datasets)>) and even then we could miss the true max.
 				total_lost += len(dp_lost_frame_nrs)
-				print 'Station', st.stationName().value, 'rsp', str(dp.rspID().value), 'rcu', str(dp.rcuID().value) + ':', 'zeroed frame numbers of size', str(block_len) + ':'
+				print 'Station', st.stationName().value, 'rsp', str(dp.rspID().value), 'rcu', str(dp.rcuID().value) + ':', 'numbers of zeroed frames of', str(block_len), 'values each:'
 				for frame_nr in dp_lost_frame_nrs:
 					print frame_nr,
 				print

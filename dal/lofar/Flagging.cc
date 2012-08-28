@@ -14,40 +14,24 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "dal/dal_config.h"
-#include "dal/dal_version.h"
-#include <cstdio>
-#include <hdf5.h>
+#include "Flagging.h"
 
-namespace DAL {
+#include <sstream>
 
 using namespace std;
 
-string get_lib_version() {
-  return DAL_VERSION_STRING;
-}
+namespace DAL {
 
-string get_first_release_lib_version() {
-  /*
-   * The first DAL 2.x release version was 2.5.0, because the 
-   * bf draft spec was 2.04.xx at the time (tbb was at 2.02.xx).
-   */
-  return "2.5.0";
-}
+Range::Range() : begin(0), end(0) {}
 
-string get_dal_hdf5_version() {
-  return get_current_hdf5_header_version();
-}
+Range::Range(unsigned long long begin, unsigned long long end) : begin(begin), end(end) {}
 
-string get_current_hdf5_lib_version() {
-  char buf[128];
-  unsigned maj, min, rel;
+string Range::to_string() {
+  ostringstream oss;
 
-  H5get_libversion(&maj, &min, &rel);
+  oss << '[' << this->begin << ',' << this->end << ')';
 
-  snprintf(buf, sizeof buf, "%u.%u.%u", maj, min, rel);
-
-  return string(buf);
+  return oss.str();
 }
 
 }

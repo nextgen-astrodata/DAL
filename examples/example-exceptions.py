@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import DAL
 
 # DAL throws an DAL.HDF5Exception if an error is raised by the HDF5 library.
@@ -17,7 +18,7 @@ except DAL.HDF5Exception, e:
 
 # Common parameter errors trigger regular Python exceptions
 try:
-  t = DAL.TupleUnsigned3()
+  t = DAL.TupleUInt3()
   t[4] = 0
 except IndexError, e:
   print("Caught exception: %s" % (e,))
@@ -25,7 +26,7 @@ except IndexError, e:
 # Errors raised by the C++ -> Python translation layer can unfortunately
 # be a bit cryptic.
 try:
-  t = DAL.TupleUnsigned3()
+  t = DAL.TupleUInt3()
   t[0] = "must be an integer"
 except TypeError, e:
   print("Caught exception: %s" % (e,))

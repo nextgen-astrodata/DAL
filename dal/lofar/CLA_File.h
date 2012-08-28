@@ -89,6 +89,7 @@ public:
 protected:
   virtual void            initNodes();
 
+  std::string             getBasename(const std::string& filename) const;
   std::string             getFileModDate(const std::string& filename) const;
   std::string             formatFilenameTimestamp(const struct timeval& tv, const char* output_format,
                                                   const char* output_format_secs, size_t output_size) const;

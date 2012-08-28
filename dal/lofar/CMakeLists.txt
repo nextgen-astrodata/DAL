@@ -4,7 +4,8 @@ install (FILES
   CLA_File.h
   CommonTuples.h
   TBB_File.h
-  Station.h
+  StationNames.h
+  Flagging.h
 
   DESTINATION include/dal/lofar
   COMPONENT headers

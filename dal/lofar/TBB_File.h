@@ -21,9 +21,10 @@
 #include <vector>
 #include <complex>
 #include <hdf5.h>
-#include "dal/hdf5/Dataset1D.h"
+#include "dal/hdf5/Dataset.h"
 #include "dal/hdf5/Attribute.h"
 #include "dal/lofar/CLA_File.h"
+#include "dal/lofar/Flagging.h"
 
 namespace DAL {
 
@@ -101,9 +102,9 @@ private:
   std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
 };
 
-class TBB_DipoleDataset: public Dataset1D<short> {
+class TBB_DipoleDataset: public Dataset<short> {
 public:
-  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset1D<short>(parent, name) {}
+  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<short>(parent, name) {}
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();
@@ -117,7 +118,7 @@ public:
 
   Attribute<unsigned>                   samplesPerFrame();
   Attribute<unsigned long long>         dataLength();
-  Attribute< std::vector<unsigned> >    flagOffsets();
+  Attribute< std::vector<Range> >       flagOffsets();
   Attribute<unsigned>                   nyquistZone();
 
   Attribute<double>                     cableDelay();

@@ -246,7 +246,7 @@ public:
    *     True
    *
    *     # Read the same value as an integer
-   *     >>> b = AttributeUnsigned(f, "EXAMPLE_STRING")
+   *     >>> b = AttributeUInt(f, "EXAMPLE_STRING")
    *     >>> b.valid()
    *     False
    *

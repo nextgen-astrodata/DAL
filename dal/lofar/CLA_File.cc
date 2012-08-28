@@ -16,11 +16,15 @@
  */
 #include "CLA_File.h"
 
+#include <cstdlib>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <cstdio>
 #include <ctime>
+#include <libgen.h>
+
 #include <dal/dal_version.h>
 
 using namespace std;
@@ -35,11 +39,7 @@ CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
 {
   if (mode == CREATE) {
     telescope().create().set("LOFAR");
-    // TODO: creating/setting the version field should like any other, even though changing the version must trigger some additional fluff.
-    Attribute<string> versionAttr(*this, versionAttrName);    
-    versionAttr.create();
-    setFileVersion(get_lib_version());
-    fileName().create().set(filename);
+    fileName().create().set(getBasename(filename));
     fileDate().create().set(getFileModDate(filename)); // UTC
   } else {
     bool isCompatibleFileType = false;
@@ -107,6 +107,16 @@ void CLA_File::initNodes()
   addNode( new Attribute<string>(*this, "DOC_NAME") );
   addNode( new Attribute<string>(*this, "DOC_VERSION") );
   addNode( new Attribute<string>(*this, "NOTES") );
+}
+
+string CLA_File::getBasename(const std::string& filename) const {
+  char* fn = strndup(filename.c_str(), filename.size());
+  if (fn == NULL)
+    throw DALException("Failed to open file: out of memory.");
+  char* bn = basename(fn); // don't use ::basename(), as basename is sometimes a macro
+  string bnStr(bn); // bn may point into fn, so copy before free()
+  std::free(fn);
+  return bnStr;
 }
 
 /*

@@ -46,7 +46,8 @@
 
 %{
   #include "dal/lofar/CommonTuples.h"
-  #include "dal/lofar/Station.h"
+  #include "dal/lofar/StationNames.h"
+  #include "dal/lofar/Flagging.h"
   #include "dal/lofar/BF_File.h"
   #include "dal/lofar/TBB_File.h"
 
@@ -60,10 +61,10 @@
 %include "dal/hdf5/Attribute.i"
 %include "dal/hdf5/Group.i"
 %include "dal/hdf5/Dataset.i"
-%include "dal/hdf5/Dataset1D.i"
 %include dal/hdf5/File.h
 
-%include dal/lofar/Station.h
+%include dal/lofar/StationNames.h
+%include "dal/lofar/Flagging.i"
 %include "dal/lofar/CommonTuples.i"
 %include dal/lofar/CLA_File.h
 %include dal/lofar/Coordinates.h

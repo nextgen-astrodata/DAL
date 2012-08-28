@@ -77,7 +77,7 @@ struct VersionType {
    * Convert a string of format major.minor.release. Any fields that could
    * not be converted are set to 0. For example:
    *
-   * VersionType("2.1").to_string() == "2.1.0"
+   * VersionType("2.5").to_string() == "2.5.0"
    */
   VersionType(const std::string &str);
 

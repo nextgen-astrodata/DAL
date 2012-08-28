@@ -1,5 +1,12 @@
 // SWIG customisations for class Dataset
 
+// member functions that return *this are problematic,
+// because SWIG generates a new wrapper object and does not
+// know how to do the memory management right between
+// both wrapper objects. So we write our own further below.
+%rename(_create)   DAL::Dataset::create;
+%rename(_create1D) DAL::Dataset::create1D;
+
 // -------------------------------
 // Type marshalling
 // -------------------------------
@@ -21,11 +28,13 @@
 
 // Tell SWIG how we call our dimension and array parameters.
 // The C++ arg order *and* identifiers in {(...)} must match exactly, but may be a sub-set of the args in the C++ code.
-%apply (indextype DIM1, datatype* INPLACE_ARRAY1) {(indextype dim1, datatype *outbuffer1)}
-%apply (indextype DIM1, indextype DIM2, datatype* INPLACE_ARRAY2) {(indextype dim1, indextype dim2, datatype *outbuffer2)}
+// get1D/set1D
+%apply (datatype* INPLACE_ARRAY1, indextype DIM1) {(datatype *outbuffer,      indextype len)}
+%apply (datatype* IN_ARRAY1,      indextype DIM1) {(const datatype *inbuffer, indextype len)}
 
-%apply (indextype DIM1, datatype* IN_ARRAY1) {(indextype dim1, const datatype *inbuffer1)}
-%apply (indextype DIM1, indextype DIM2, datatype* IN_ARRAY2) {(indextype dim1, indextype dim2, const datatype *inbuffer2)}
+// get2D/set2D
+%apply (datatype* INPLACE_ARRAY2, indextype DIM1, indextype DIM2) {(datatype *outbuffer2,      indextype dim1, indextype dim2)}
+%apply (datatype* IN_ARRAY2,      indextype DIM1, indextype DIM2) {(const datatype *inbuffer2, indextype dim1, indextype dim2)}
 
 %enddef
 
@@ -65,4 +74,20 @@ namespace DAL {
 
   del numpy
 %}
+
+%extend DAL::Dataset {
+  %pythoncode {
+    def create(self):
+      self._create()
+      return self
+
+    def create1D(self):
+      self._create1D()
+      return self
+
+    def __len__(self):
+      import operator
+      return reduce(operator.mul, self.dims())
+  }    
+}
 

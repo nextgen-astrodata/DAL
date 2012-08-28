@@ -454,27 +454,31 @@ to (create and) set attribute ``a``. To read it, simply do::
 
 The previous examples only addressed attributes of type ``string``/``str``. The following basic value types are supported by the DAL, along with their C++ and Python class name:
 
-+---------------------+----------------------------------+------------------+----------------------------+
-| C++ data type       | C++ Attribute class              | Python data type | Python Attribute class     |
-+=====================+==================================+==================+============================+
-| ``int``             | ``Attribute<int>``               | ``int``          | ``AttributeInt``           |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``unsigned``        | ``Attribute<unsigned>``          | ``int``          | ``AttributeUnsigned``      |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``long``            | ``Attribute<long>``              | ``int``          | ``AttributeLong``          |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``unsigned long``   | ``Attribute<unsigned long>``     | ``int``          | ``AttributeUnsignedLong``  |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``float``           | ``Attribute<float>``             | ``float``        | ``AttributeFloat``         |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``double``          | ``Attribute<double>``            | ``float``        | ``AttributeDouble``        |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``complex<float>``  | ``Attribute< complex<float> >``  | ``complex``      | ``AttributeComplexFloat``  |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``complex<double>`` | ``Attribute< complex<double> >`` | ``complex``      | ``AttributeComplexDouble`` |
-+---------------------+----------------------------------+------------------+----------------------------+
-| ``string``          | ``Attribute<string>``            | ``str``          | ``AttributeString``        |
-+---------------------+----------------------------------+------------------+----------------------------+
++------------------------+-----------------------------------+------------------+----------------------------+
+| C++ data type          | C++ Attribute class               | Python data type | Python Attribute class     |
++========================+===================================+==================+============================+
+| ``int``                | ``Attribute<int>``                | ``int``          | ``AttributeInt``           |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``unsigned``           | ``Attribute<unsigned>``           | ``int``          | ``AttributeUInt``          |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``long``               | ``Attribute<long>``               | ``int``          | ``AttributeLong``          |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``unsigned long``      | ``Attribute<unsigned long>``      | ``int``          | ``AttributeULong``         |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``long long``          | ``Attribute<long long>``          | ``int``          | ``AttributeLongLong``      |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``unsigned long long`` | ``Attribute<unsigned long long>`` | ``int``          | ``AttributeULongLong``     |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``float``              | ``Attribute<float>``              | ``float``        | ``AttributeFloat``         |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``double``             | ``Attribute<double>``             | ``float``        | ``AttributeDouble``        |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``complex<float>``     | ``Attribute< complex<float> >``   | ``complex``      | ``AttributeComplexFloat``  |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``complex<double>``    | ``Attribute< complex<double> >``  | ``complex``      | ``AttributeComplexDouble`` |
++------------------------+-----------------------------------+------------------+----------------------------+
+| ``string``             | ``Attribute<string>``             | ``str``          | ``AttributeString``        |
++------------------------+-----------------------------------+------------------+----------------------------+
 
 An attribute can also encode a list of values of one of the data types in the previous table. Even though the corresponding Python type is always ``list``, the DAL will require and supply only lists with values that can be converted to the corresponding C++ data type:
 
