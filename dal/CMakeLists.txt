@@ -76,7 +76,6 @@ set(dal_headers
 
 set(swig_sources
   DAL.i
-  pyfragments.swg
   vectors.i
   external/numpy.i
 
@@ -91,6 +90,9 @@ set(swig_sources
   lofar/TBB_File.i
   lofar/CommonTuples.i
   lofar/Flagging.i
+
+  # *.swg files need to be present in the binary dir, as they are not included but simply checked for presence by SWIG
+  ${CMAKE_CURRENT_BINARY_DIR}/pyfragments.swg
 )  
 
 add_library (dal
@@ -115,6 +117,13 @@ add_subdirectory(doc)
 
 # Python bindings through SWIG
 if(PYTHON_BINDINGS)
+  # .swg files are not included, and need to be present in the target directory to be used
+  add_custom_command(
+   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pyfragments.swg
+   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/pyfragments.swg ${CMAKE_CURRENT_BINARY_DIR}/pyfragments.swg
+   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pyfragments.swg
+  )
+
   list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
   set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(DAL.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
