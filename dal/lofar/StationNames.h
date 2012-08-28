@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef DAL_STATION_H
-#define DAL_STATION_H
+#ifndef DAL_STATION_NAMES_H
+#define DAL_STATION_NAMES_H
 
 #include <string>
 #include "dal/hdf5/exceptions/exceptions.h"
