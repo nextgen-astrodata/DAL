@@ -77,12 +77,12 @@ namespace DAL {
 
 %extend DAL::Dataset {
   %pythoncode {
-    def create(self):
-      self._create()
+    def create(self, *args, **kwargs):
+      self._create(*args, **kwargs)
       return self
 
-    def create1D(self):
-      self._create1D()
+    def create1D(self, *args, **kwargs):
+      self._create1D(*args, **kwargs)
       return self
 
     def __len__(self):
