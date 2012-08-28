@@ -3,7 +3,7 @@ import numpy
 from itertools import count
 
 # open the file for reading
-f = DAL.BF_File("test.h5")
+f = DAL.BF_File("L30042_SAP000_B000_S0_P000_bf.h5")
 
 # functions like f.observationID() return attribute objects, which has a `value' property
 # that can be get, set, or deleted:
@@ -62,7 +62,7 @@ for sapnr in count():
       x = numpy.array([[0,0],[0,0]], dtype=stokes.dtype)
 
       # get2D(pos,array) reads `array` at position `pos`.
-      stokes.get2D(x, [0,0]);
+      stokes.get2D([0,0], x);
 
       print "            First two samples of the first two channels are:\n%s" % (x,)
 

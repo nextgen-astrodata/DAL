@@ -1,6 +1,6 @@
 import DAL
 
-f = DAL.BF_File("test.h5")
+f = DAL.BF_File("L30042_SAP000_B000_S0_P000_bf.h5")
 
 print "file %s reports to be version %s" % (f.filename, f.docVersion())
 print
