@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import DAL
 import numpy
 from itertools import count

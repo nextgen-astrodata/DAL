@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import DAL
 
 f = DAL.BF_File("L30042_SAP000_B000_S0_P000_bf.h5")

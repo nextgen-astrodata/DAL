@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import DAL
 
 # DAL throws an DAL.HDF5Exception if an error is raised by the HDF5 library.

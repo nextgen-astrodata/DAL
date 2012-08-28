@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 import DAL
 
 # create the file
-f = DAL.File("foo.h5", DAL.File.CREATE)
+f = DAL.File("example-custom-write_file.h5", DAL.File.CREATE)
 
 # create an attribute
 a = DAL.AttributeString(f, "MY_ATTRIBUTE")
