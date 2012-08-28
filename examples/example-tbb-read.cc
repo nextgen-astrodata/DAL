@@ -64,15 +64,30 @@ static void printUsage(const char* progname) {
 }
 
 int main(int argc, char* argv[]) {
+	string filepath;
+	string filename1;
+	string filename2;
+
 	if (argc != 2) {
 		printUsage(argv[0]);
-		return 2;
+
+		// Give default filenames and run anyway.
+		// Normally a bad idea, but this is for regression testing: we don't have test program args atm.
+		filepath = "data/";
+		filename1 = "L59640_CS011_D20110719T110541.036Z_tbb.h5";
+		filename2 = "L59640_RS106_D20111121T130145.049Z_tbb.h5";
+	} else {
+		filename1 = argv[1];
 	}
 
 	int exit_status = 1;
 	try {
-		const string filename = argv[1];
-		readTBB_File(filename);
+		readTBB_File(filepath + filename1);
+
+		if (!filename2.empty()) {
+			readTBB_File(filepath + filename2);
+		}
+
 		exit_status = 0;
 	} catch (DAL::HDF5Exception& exc) {
 		cerr << "Error: DAL HDF5 exception: " << exc.what() << endl;

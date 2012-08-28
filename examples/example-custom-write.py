@@ -2,7 +2,7 @@
 import DAL
 
 # create the file
-f = DAL.File("example-custom-write_file.h5", DAL.File.CREATE)
+f = DAL.File("example-custom-write_file.h5", DAL.File.CREATE, "DOC_VERSION")
 
 # create an attribute
 a = DAL.AttributeString(f, "MY_ATTRIBUTE")

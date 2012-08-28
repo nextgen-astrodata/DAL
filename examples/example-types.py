@@ -1,31 +1,6 @@
 #!/usr/bin/env python
 import DAL
 
-print("---- Vectors")
-
-# initialise a vector of unsigned numbers
-v = DAL.VectorUInt([1,2,3])
-
-# A Vector behaves like a list
-print("type(v) = %s" % (type(v),))
-print("len(v) = %u" % (len(v),))
-print("v = %s" % (v,))
-print("v = (%u, %u, %u)" % (v[0], v[1], v[2]))
-print("v = (%u, %u, %u)" % (v[-3], v[-2], v[-1]))
-print("v = %s" % (tuple(v),))
-print("v = %s" % (list(v),))
-for x in v:
-  print("v contains %s"% (x,))
-
-# Vectors can also be sliced, copied, and extended
-v2 = v[:]
-for x in [4,5,6]:
-  v2 += x
-
-print("type(v2) = %s" % (type(v2),))
-print("v2 = %s" % (v2,))
-print("v = %s" % (v,))
-
 print("---- Tuples")
 
 # Create a tuple of unsigned numbers (1,2,3)
@@ -54,14 +29,27 @@ t2.third  = 6
 
 print("t2 = %s" % (t2,))
 
-print("---- Vectors of tuples")
 
-# Put two tuples in a vector
-v = DAL.VectorTupleUInt3([t, t2])
+print("---- Ranges")
 
-# Vectors again act like lists
-print("type(v) = %s" % (type(v),))
-print("len(v) = %u" % (len(v),))
-print("v = %s" % (v,))
-for x in v:
-  print("v contains %s"% (x,))
+r = DAL.Range() # sets begin=0, end=0
+print "r =", r
+
+r.begin = 1
+r.end = 5
+print "r =", r
+# note that a Range's size is always 2, because it is a tuple with 2 members
+print "Range size =", r.size(), "(2 by definition)"
+# to determine its span, use
+print "span size =", r.end - r.begin
+
+r2 = DAL.Range(10, 100)
+print("begin = %lu, end = %lu" % (r2.begin, r2.end))
+
+# For flagging, a list of DAL.Range objects is received / must be passed
+flags = [ ] # valid
+print "flags =", flags
+flags.append(r)
+flags.append(r2)
+print "flags =", flags
+

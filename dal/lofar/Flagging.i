@@ -5,6 +5,7 @@ AddAttributeAndVector( Range, %arg(DAL::Range) );
 %extend DAL::Range {
   %pythoncode {
     __repr__ = to_string
+    __str__ = __repr__
   }
 }
 

@@ -6,7 +6,7 @@ import DAL
 # within HDF5.
 
 try:
-  f = DAL.File("does_not_exist.h5", DAL.File.READ)
+  f = DAL.File("example-exceptions_file.h5", DAL.File.READ, "DOC_VERSION")
 except DAL.HDF5Exception, e:
   print("Caught exception: %s" % (e,))
 
@@ -30,4 +30,7 @@ try:
   t[0] = "must be an integer"
 except TypeError, e:
   print("Caught exception: %s" % (e,))
+
+print
+print "Exception test succeeded"
 

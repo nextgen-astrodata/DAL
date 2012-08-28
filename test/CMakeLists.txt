@@ -22,5 +22,6 @@ if(PYTHON_BINDINGS AND PYTHON_EXECUTABLE)
   add_test(py-auto-create-bf-fields ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/auto-create-bf-fields.py)
   add_test(py-get-tbb-station-ref ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/get-tbb-station-ref.py)
   add_test(py-reopen-rw ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/reopen-rw.py)
+  add_test(py-dataset-create1D ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/dataset-create1D.py)
 endif(PYTHON_BINDINGS AND PYTHON_EXECUTABLE)
 
