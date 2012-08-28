@@ -122,8 +122,8 @@
 
 %extend DAL::Group {
   %pythoncode {
-    def create(self):
-      self._create()
+    def create(self, *args, **kwargs):
+      self._create(*args, **kwargs)
       return self
   }    
 }

@@ -32,8 +32,8 @@ namespace DAL {
 
 %extend DAL::Attribute {
   %pythoncode {
-    def create(self):
-      self._create()
+    def create(self, *args, **kwargs):
+      self._create(*args, **kwargs)
       return self
 
     @property
