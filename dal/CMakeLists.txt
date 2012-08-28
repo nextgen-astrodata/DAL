@@ -76,6 +76,7 @@ set(dal_headers
 
 set(swig_sources
   DAL.i
+  pyfragments.swg
   vectors.i
   external/numpy.i
 
