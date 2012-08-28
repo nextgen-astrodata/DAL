@@ -183,6 +183,40 @@ public:
   void setMatrix( const std::vector<size_t> &pos, const T *buffer, const std::vector<size_t> &size );
 
   /*!
+   * Retrieves `len` data values from a dataset starting at index `pos`.
+   * `outbuffer` must point to a memory block large enough to hold `len` data values.
+   * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to retrieve from.
+   *
+   * \param[in] pos               index of the first data value
+   * \param[out] outbuffer        1D destination array
+   * \param[in] len               number of data values to retrieve
+   * \param[in] dimIndex          index of the dimension to query
+   *
+   * Requires:
+   *    - pos + len <= dims()
+   *    - len <= size of outbuffer
+   *    - dimIndex < ndims()
+   */
+  void get1D( size_t pos, T *outbuffer, size_t len, unsigned dimIndex = 0 );
+
+  /*!
+   * Stores `len` data values from a dataset starting at index `pos`.
+   * `inbuffer` must contain at least `len` data values.
+   * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to store to.
+   *
+   * \param[in] pos               index of the first data value
+   * \param[in] inbuffer          1D source array
+   * \param[in] len               number of data values to store
+   * \param[in] dimIndex          index of the dimension to query
+   *
+   * Requires:
+   *    - pos + len <= dims()
+   *    - len <= size of inbuffer
+   *    - dimIndex < ndims()
+   */
+  void set1D( size_t pos, const T *inbuffer, size_t len, unsigned dimIndex = 0 );
+
+  /*!
    * Retrieves a 2D matrix of data from a 2D dataset from position `pos`.
    * `buffer` must point to a memory block large enough to hold the result.
    *
@@ -218,38 +252,43 @@ public:
   void set2D( const std::vector<size_t> &pos, const T *inbuffer2, size_t dim1, size_t dim2, unsigned dim1index = 0, unsigned dim2index = 1 );
 
   /*!
-   * Retrieves `len` data values from a dataset starting at index `pos`.
-   * `outbuffer` must point to a memory block large enough to hold `len` data values.
-   * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to retrieve from.
+   * Retrieves a 3D matrix of data from a 3D dataset from position `pos`.
+   * `buffer` must point to a memory block large enough to hold the result.
    *
-   * \param[in] pos               index of the first data value
-   * \param[out] outbuffer        1D destination array
-   * \param[in] len               number of data values to retrieve
-   * \param[in] dimIndex          index of the dimension to query
+   * \param[in] pos               position of the first sample
+   * \param[out] outbuffer3       3D destination array
+   * \param[in] dim1              size of first dimension of outbuffer3; determines the number of data values to retrieve
+   * \param[in] dim2              size of second dimension of outbuffer3; determines the number of data values to retrieve
+   * \param[in] dim3              size of third dimension of outbuffer3; determines the number of data values to retrieve
+   * \param[in] dim1index         index of the first dimension to query
+   * \param[in] dim2index         index of the second dimension to query
+   * \param[in] dim3index         index of the third dimension to query
    *
    * Requires:
-   *    - pos + len <= dims()
-   *    - len <= size of outbuffer
-   *    - dimIndex < ndims()
+   *    - ndims() >= 3
+   *    - pos.size() == ndims()
+   *    - dim1index < dim2index < dim3index < ndims()
    */
-  void get1D( size_t pos, T *outbuffer, size_t len, unsigned dimIndex = 0 );
+  void get3D( const std::vector<size_t> &pos, T *outbuffer3, size_t dim1, size_t dim2, size_t dim3, unsigned dim1index = 0, unsigned dim2index = 1, unsigned dim3index = 2 );
 
   /*!
-   * Stores `len` data values from a dataset starting at index `pos`.
-   * `inbuffer` must contain at least `len` data values.
-   * If the underlying dataset is multi-dimensional, use `dimIndex` to indicate the dimension to store to.
+   * Stores a 3D matrix of data from a 3D dataset at position `pos`.
    *
-   * \param[in] pos               index of the first data value
-   * \param[in] inbuffer          1D source array
-   * \param[in] len               number of data values to store
-   * \param[in] dimIndex          index of the dimension to query
+   * \param[in] pos               position of the first sample
+   * \param[in] inbuffer3         3D source array
+   * \param[in] dim1              size of first dimension of inbuffer3; determines the number of data values to store
+   * \param[in] dim2              size of second dimension of inbuffer3; determines the number of data values to store
+   * \param[in] dim3              size of third dimension of inbuffer3; determines the number of data values to store
+   * \param[in] dim1index         index of the first dimension to query
+   * \param[in] dim2index         index of the second dimension to query
+   * \param[in] dim3index         index of the third dimension to query
    *
    * Requires:
-   *    - pos + len <= dims()
-   *    - len <= size of inbuffer
-   *    - dimIndex < ndims()
+   *    - ndims() >= 2
+   *    - pos.size() == ndims()
+   *    - dim1index < dim2index < ndims()
    */
-  void set1D( size_t pos, const T *inbuffer, size_t len, unsigned dimIndex = 0 );
+  void set3D( const std::vector<size_t> &pos, const T *inbuffer3, size_t dim1, size_t dim2, size_t dim3, unsigned dim1index = 0, unsigned dim2index = 1, unsigned dim3index = 2 );
 
   /*!
    * Retrieves a single value from the dataset at position `pos`.

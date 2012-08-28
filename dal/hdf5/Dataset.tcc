@@ -232,6 +232,62 @@ template<typename T> void Dataset<T>::set2D( const std::vector<size_t> &pos,
   setMatrix(pos, inbuffer2, size);
 }
 
+template<typename T> void Dataset<T>::get3D( const std::vector<size_t> &pos,
+        T *outbuffer3, size_t dim1, size_t dim2, size_t dim3, unsigned dim1index, unsigned dim2index, unsigned dim3index )
+{
+  std::vector<size_t> size(ndims(), 1);
+
+  if (size.size() < 3)
+    throw DALValueError("Cannot get3D on fewer than 3 dimensional dataset " + _name);
+
+  if (dim1index >= size.size())
+    throw DALIndexError("Cannot get3D if first dimension index exceeds rank for dataset " + _name);
+
+  if (dim2index >= size.size())
+    throw DALIndexError("Cannot get3D if second dimension index exceeds rank for dataset " + _name);
+
+  if (dim3index >= size.size())
+    throw DALIndexError("Cannot get3D if third dimension index exceeds rank for dataset " + _name);
+
+  // we don't do transposes
+  if (dim1index >= dim2index || dim2index >= dim3index)
+    throw DALValueError("Cannot get3D if dimensions are not addressed in-order for dataset " + _name);
+
+  size[dim1index] = dim1;
+  size[dim2index] = dim2;
+  size[dim3index] = dim3;
+
+  getMatrix(pos, outbuffer3, size);
+}
+
+template<typename T> void Dataset<T>::set3D( const std::vector<size_t> &pos,
+        const T *inbuffer3, size_t dim1, size_t dim2, size_t dim3, unsigned dim1index, unsigned dim2index, unsigned dim3index )
+{
+  std::vector<size_t> size(ndims(), 1);
+
+  if (size.size() < 3)
+    throw DALValueError("Cannot set3D on fewer than 3 dimensional dataset " + _name);
+
+  if (dim1index >= size.size())
+    throw DALIndexError("Cannot set3D if first dimension index exceeds rank for dataset " + _name);
+
+  if (dim2index >= size.size())
+    throw DALIndexError("Cannot set3D if second dimension index exceeds rank for dataset " + _name);
+
+  if (dim3index >= size.size())
+    throw DALIndexError("Cannot set3D if third dimension index exceeds rank for dataset " + _name);
+
+  // we don't do transposes
+  if (dim1index >= dim2index || dim2index >= dim3index)
+    throw DALValueError("Cannot set3D if dimensions are not addressed in-order for dataset " + _name);
+
+  size[dim1index] = dim1;
+  size[dim2index] = dim2;
+  size[dim3index] = dim3;
+
+  setMatrix(pos, inbuffer3, size);
+}
+
 template<typename T> void Dataset<T>::get1D( size_t pos, T *outbuffer, size_t len,
         unsigned dimIndex )
 {

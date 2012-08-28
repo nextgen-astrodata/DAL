@@ -36,6 +36,10 @@
 %apply (datatype* INPLACE_ARRAY2, indextype DIM1, indextype DIM2) {(datatype *outbuffer2,      indextype dim1, indextype dim2)}
 %apply (datatype* IN_ARRAY2,      indextype DIM1, indextype DIM2) {(const datatype *inbuffer2, indextype dim1, indextype dim2)}
 
+// get3D/set3D
+%apply (datatype* INPLACE_ARRAY3, indextype DIM1, indextype DIM2, indextype DIM3) {(datatype *outbuffer3,      indextype dim1, indextype dim2, indextype dim3)}
+%apply (datatype* IN_ARRAY3,      indextype DIM1, indextype DIM2, indextype DIM3) {(const datatype *inbuffer3, indextype dim1, indextype dim2, indextype dim3)}
+
 %enddef
 
 // enumerate all the dataset types that we refer to (we use native types, so do not fix their size)
