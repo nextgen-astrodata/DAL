@@ -113,8 +113,8 @@ string CLA_File::getBasename(const std::string& filename) const {
   char* fn;
 #ifdef __APPLE__
   // strndup is a GNU extension and not available on Darwin
-  if (fn = malloc(filename.size()))
-    memncpy(fn, filename.c_str(), filename.size());
+  if ((fn = static_cast<char*>(malloc(filename.size()+1))) != NULL)
+    memcpy(fn, filename.c_str(), filename.size()+1);
 #else
   fn = strndup(filename.c_str(), filename.size());
 #endif
