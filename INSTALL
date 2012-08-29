@@ -72,17 +72,17 @@ To build DAL (default config), you need the following packages:
 	- python-sphinx (generate user manual)
 	- doxygen 1.6+  (generate API documentation and python docstring support)
 
-	- casacore      (to exchange datasets with casacore (default: off))
+	- casacore      (to exchange datasets with casacore (incomplete, ask us) (default: off))
 
 Maintainer and developer builds, additionally:
 	- git           (source version control)
 	- cmake-curses-gui (ccmake) (graphical list to configure all CMake config variables)
-	- valgrind      (run test suite tracking memory related bugs)
-	- texlive (pdflatex) (regenerate design documentation (default: off))
+	- valgrind      (run C++ tests again under valgrind to track memory related bugs)
+	- texlive (pdflatex) (regenerate design documentation (default: off, Makefile provided))
 
 
 For Linux Debian/Ubuntu/Mint users, install dependencies using (with sufficient privileges):
 	apt-get install libhdf5-serial-1.8.4 libhdf5-serial-dev        # the hdf5 mpi variants are fine too
-	apt-get install make g++ python python-numpy python-dev swig python-sphinx doxygen 
+	apt-get install cmake make g++ python python-numpy python-dev swig python-sphinx doxygen 
 	apt-get install git cmake-curses-gui valgrind                  # optional
 
