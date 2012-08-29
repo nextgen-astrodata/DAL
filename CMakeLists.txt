@@ -37,7 +37,7 @@ include(TestHDF5)
 option(PYTHON_BINDINGS "Generate python bindings" ON)
 
 if(PYTHON_BINDINGS)
-  find_package(SWIG REQUIRED)
+  find_package(SWIG 2 REQUIRED)
   include(${SWIG_USE_FILE})
 
   find_package(PythonLibs REQUIRED)
