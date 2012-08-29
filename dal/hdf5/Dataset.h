@@ -24,6 +24,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <libgen.h>	// dirname()
+#include <endian.h>
+#if __BYTE_ORDER != __BIG_ENDIAN && __BYTE_ORDER != __LITTLE_ENDIAN
+#error Byte order is neither big endian nor little endian: not supported
+#endif
 
 #include <string>
 #include <vector>
@@ -322,6 +326,10 @@ protected:
     return hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset " + _name);
   }
 
+  /*!
+   * Returns true if endianness is BIG or if it is NATIVE and the current machine architecture is big endian.
+   * Returns false if endianness is LITTLE or if it is NATIVE and the current machine architecture is little endian.
+   */
   bool bigEndian( enum Endianness endianness ) const;
 
   //! If the strides vector is empty, a continuous array is assumed.

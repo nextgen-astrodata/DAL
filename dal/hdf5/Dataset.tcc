@@ -351,23 +351,12 @@ template<typename T> void Dataset<T>::setScalar1D( size_t pos, T value )
 
 template<typename T> bool Dataset<T>::bigEndian( enum Endianness endianness ) const
 {
-  switch (endianness) {
-    union {
-      char c[sizeof (unsigned)];
-      unsigned i;
-    } checker;
-
-    case LITTLE:
-      return false;
-
-    case BIG:
-      return true;
-
-    default:
-      // we don't actually know sizeof unsigned, so check for little-endianness
-      checker.i = 1;
-      return checker.c[0] != 1;
-  };
+  if (endianness == LITTLE)
+    return false;
+  else if (endianness == BIG)
+    return true;
+  else // NATIVE
+    return __BYTE_ORDER == __BIG_ENDIAN;
 }
 
 template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos,
