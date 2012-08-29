@@ -99,6 +99,16 @@ add_library (lofardal
   ${dal_sources}
 )
 
+# Build version.
+set_target_properties(lofardal PROPERTIES VERSION ${DAL_VERSION_STRING})
+
+# API version.
+# Our API version is actually major.minor, but most users should link specific to major only,
+# because only when that goes up, we break compat. A new major.minor means API ext with backwards-compat.
+# To link to .major, pass '-Wl,-soname,liblofardal.so.2' to GCC, or '-soname liblofardal.so.2' to its linker,
+# although trying with just -llofardal -lhdf5 seems to work already (better).
+# In the end it matters little, because all users of DAL .tcc (C++ template) files (about everyone) must recompile.
+set_target_properties(lofardal PROPERTIES SOVERSION "${DAL_VERSION_MAJOR}")
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_target_properties(lofardal PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wno-unused-function -Wno-long-long -ansi -pedantic")
