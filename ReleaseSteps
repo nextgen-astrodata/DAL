@@ -1,12 +1,13 @@
 Data Access Library (DAL) - ReleaseSteps
 ========================================
 
+- check/update ChangeLog
 - check/bump version numbers of updated LOFAR file formats in DAL/dal/lofar/*_File.cc
 - bump version number in DAL/CMakeLists.txt and push to github
 - push final user manual and doxygen to github webpage (remote branch 'gh-pages')
 - git pull, build and run test suite on the LOFAR cluster head node
 - create git tag 2.x.y and push to github
-- ask Arno to install new version on the LOFAR cluster
+- (ask admin to) install new version on the LOFAR cluster
 - notify users with release message:
     - mailing lists: nextgen-astrodata@astron.nl, lofar-cep@astron.nl, lofarusers@astron.nl, lofarsoftware@astron.nl
     - LUS forum: http://lus.lofar.org/forum/
