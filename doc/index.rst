@@ -60,7 +60,7 @@ And the following code reads it back out::
 Installation
 ============
 
-For now, please read INSTALL.txt.
+For now, please read the file INSTALL.
 
 =====
 Usage
@@ -617,17 +617,17 @@ Exceptions
 
 Almost all of the DAL functions can throw an exception in case of an error. The following exceptions can be thrown:
 
-+-------------------+----------------------+-------------------------+
-| C++ exception     | Python exception     | Meaning                 |
-+===================+======================+=========================+
-| ``DALException``  | ``RuntimeError``     | Something went wrong    |
-+-------------------+----------------------+-------------------------+
-| ``HDF5Exception`` | ``DAL.HDF5Exception``| HDF5 threw an error     |
-+-------------------+----------------------+-------------------------+
-| ``DALValueError`` | ``ValueError``       | Invalid parameter value |
-+-------------------+----------------------+-------------------------+
-| ``DALIndexError`` | ``IndexError``       | Out-of-bounds access    |
-+-------------------+----------------------+-------------------------+
++-------------------+-----------------------+-------------------------+
+| C++ exception     | Python exception      | Meaning                 |
++===================+=======================+=========================+
+| ``DALException``  | ``RuntimeError``      | Something went wrong    |
++-------------------+-----------------------+-------------------------+
+| ``HDF5Exception`` | ``DAL.HDF5Exception`` | HDF5 threw an error     |
++-------------------+-----------------------+-------------------------+
+| ``DALValueError`` | ``ValueError``        | Invalid parameter value |
++-------------------+-----------------------+-------------------------+
+| ``DALIndexError`` | ``IndexError``        | Out-of-bounds access    |
++-------------------+--------------------- -+-------------------------+
 
 The above classes adhere to the following class hierarchy in C++::
 
@@ -830,7 +830,7 @@ Classes that wrap predefined file formats can be written such that each group ma
 Supporting your own file format
 ===============================
 
-TODO for now, but do look at ``lofar/BF_File.h`` for an example implementation.
+TODO for now, but do look at ``lofar/BF_File.h`` and ``lofar/TBB_File.h`` for example implementations.
 
 Indices and tables
 ==================
