@@ -627,7 +627,7 @@ Almost all of the DAL functions can throw an exception in case of an error. The 
 | ``DALValueError`` | ``ValueError``        | Invalid parameter value |
 +-------------------+-----------------------+-------------------------+
 | ``DALIndexError`` | ``IndexError``        | Out-of-bounds access    |
-+-------------------+--------------------- -+-------------------------+
++-------------------+-----------------------+-------------------------+
 
 The above classes adhere to the following class hierarchy in C++::
 
