@@ -95,19 +95,19 @@ set(swig_sources
   ${CMAKE_CURRENT_BINARY_DIR}/pyfragments.swg
 )  
 
-add_library (dal
+add_library (lofardal
   ${dal_sources}
 )
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set_target_properties(dal PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wno-unused-function -Wno-long-long -ansi -pedantic")
+  set_target_properties(lofardal PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wno-unused-function -Wno-long-long -ansi -pedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-target_link_libraries(dal ${HDF5_LIBRARIES})
+target_link_libraries(lofardal ${HDF5_LIBRARIES})
 
 install (TARGETS
-  dal
+  lofardal
 
   DESTINATION lib
   COMPONENT libraries
@@ -127,7 +127,7 @@ if(PYTHON_BINDINGS)
   list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
   set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(DAL.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
-  set(SWIG_MODULE_DAL_EXTRA_DEPS dal ${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i ${swig_sources} ${dal_headers})
+  set(SWIG_MODULE_DAL_EXTRA_DEPS lofardal ${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i ${swig_sources} ${dal_headers})
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i PROPERTIES GENERATED ON)
   swig_add_module(DAL python DAL.i ${dal_sources})
   swig_link_libraries(DAL ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})

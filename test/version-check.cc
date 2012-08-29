@@ -1,4 +1,4 @@
-// c++ -Wall version-check.cc -ldal -lhdf5
+// c++ -Wall version-check.cc -llofardal -lhdf5
 #include <iostream>
 #include <dal/dal_config.h>
 #include <dal/dal_version.h>

@@ -1,4 +1,4 @@
-// c++ -Wall -o reopen-rw reopen-rw.cc -ldal -lhdf5
+// c++ -Wall -o reopen-rw reopen-rw.cc -llofardal -lhdf5
 #include <dal/lofar/CLA_File.h>
 #include <iostream>
 

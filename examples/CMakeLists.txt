@@ -3,7 +3,7 @@
 # Build the C++ examples, so we can use them as tests.
 macro(add_c_test _name)
   add_executable(${_name} ${_name}.cc ${ARGN})
-  target_link_libraries(${_name} dal)
+  target_link_libraries(${_name} lofardal)
   add_test(${_name} ${CMAKE_CURRENT_BINARY_DIR}/${_name})
 endmacro(add_c_test)
 

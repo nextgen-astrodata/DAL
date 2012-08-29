@@ -1,5 +1,5 @@
 // constructors.cc
-// Build: c++ -Wall -o constructors constructors.cc -ldal -lhdf5
+// Build: c++ -Wall -o constructors constructors.cc -llofardal -lhdf5
 
 #include <dal/lofar/BF_File.h>
 #include <dal/lofar/TBB_File.h>

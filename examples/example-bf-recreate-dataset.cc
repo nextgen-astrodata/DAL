@@ -1,6 +1,6 @@
 /*
  * example-bf-recreate-dataset.cc
- * Build: c++ -Wall example-bf-recreate-dataset.cc -ldal -lhdf5
+ * Build: c++ -Wall example-bf-recreate-dataset.cc -llofardal -lhdf5
  */
 #include <cstddef>
 #include <iostream>

@@ -3,7 +3,7 @@
  * Date: June 12th, 2012
  * Description: Example program showing how to read LOFAR TBB data
  *              from a HDF5 file using the DAL library.
- * Build command: c++ -o example-tbb-read example-tbb-read.cc -ldal -lhdf5
+ * Build command: c++ -o example-tbb-read example-tbb-read.cc -llofardal -lhdf5
  */
 #include <cstddef>	// NULL
 #include <iostream>
