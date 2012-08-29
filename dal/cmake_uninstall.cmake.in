@@ -35,7 +35,7 @@ foreach (file ${files})
     if (file_ext_idx GREATER 0)
         string(SUBSTRING "$ENV{DESTDIR}${file}" "${file_ext_idx}" 3 file_ext)
         if (file_ext STREQUAL ".py" AND EXISTS "$ENV{DESTDIR}${file}c")
-            message(STATUS "Uninstalling \"$ENV{DESTDIR}${file}c\"")
+            message(STATUS "Removing DAL bytecode file \"$ENV{DESTDIR}${file}c\"")
             execute_process(
                 COMMAND @CMAKE_COMMAND@ -E remove "$ENV{DESTDIR}${file}c"
                 OUTPUT_VARIABLE rm_out

@@ -38,7 +38,10 @@ template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> 
   hid_gc_noref filespace(H5Screate_simple(rank, &hdims[0], &hmaxdims[0]), H5Sclose, "Could not create simple dataspace " + _name);
 
   hid_gc_noref dcpl(H5Pcreate(H5P_DATASET_CREATE), H5Pclose, "Could not create dataset creation property list to create dataset " + _name);
+
+  // avoid HDF5 chunked storage: not faster for our dense data sets and riskier integrity-wise
   H5Pset_layout(dcpl, H5D_CONTIGUOUS);
+
   if (filename != "") {
     if (H5Pset_external(dcpl, filename.c_str(), 0, H5F_UNLIMITED) < 0)
       throw HDF5Exception("Could not add external file to create dataset " + _name);

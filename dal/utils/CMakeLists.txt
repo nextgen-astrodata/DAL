@@ -1,5 +1,9 @@
 if(PYTHON_BINDINGS)
 
+  # Create symlink from the current bin dir to examples/data so we can find input files. See examples/CMakeLists.txt
+  add_custom_target(utils_symlink ALL COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../../examples/data data
+                    COMMENT "Creating symlink to data sets for utils programs")
+
   if(PYTHON_EXECUTABLE)
     add_test(py-util-lofar-bf-headerinfo       ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/lofar-bf-headerinfo.py data/L63876_SAP000_B000_S0_P000_bf.h5 )
 #    add_test(py-util-lofar-bf-headeredit       ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/lofar-bf-headeredit.py data/L00000_bf.h5 )

@@ -6,6 +6,9 @@ macro(add_c_test _name)
   add_test(${_name} ${CMAKE_CURRENT_BINARY_DIR}/${_name})
 endmacro(add_c_test)
 
+# Create symlink from the current bin dir to examples/data so we can find input files. See examples/CMakeLists.txt
+add_custom_target(test_symlink ALL COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../examples/data data
+                  COMMENT "Creating symlink to data sets for test programs")
 
 add_c_test(h5-test-create) # Doesn't use DAL. If this fails, HDF5 (or the test system) is not working.
 add_c_test(instantiate-only)

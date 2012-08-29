@@ -228,3 +228,4 @@ class bfheader:
 #    indx=findAttributeIndex(node, substring)
 #    name=enumerate(node.nodeNames()[indx]
 #    node.getNode(name)
+

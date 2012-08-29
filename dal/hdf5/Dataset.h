@@ -103,12 +103,13 @@ public:
    * Note that HDF5 1.8 has a problem accessing external files outside the current working directory.
    * DAL works around this, but see Known Issue 1 for more detail.
    *
-   * If no `filename' is given, dims == maxdims is required due to limitations of HDF5.
+   * If `filename' equals "", then dims == maxdims is required due to limitations of HDF5.
    *
-   * `endianness` toggles whether the data is in big-endian format. Typically:
+   * `endianness` toggles the byte order of each stored data value. Typically:
    *  - NATIVE: use the endianness of the current machine
    *  - LITTLE: use little-endian: x86, x86_64, ARM
    *  - BIG:    use big-endian:    MIPS, POWER/PowerPC, SPARC, IA-64
+   * Retrieving data stored in a non-native byte order will be automatically converted by HDF5.
    */
   Dataset<T>& create( const std::vector<ssize_t> &dims, const std::vector<ssize_t> &maxdims = std::vector<ssize_t>(0),
                 const std::string &filename = "", enum Endianness endianness = NATIVE );
@@ -116,7 +117,7 @@ public:
   /*!
    * Create a new 1D dataset. See Dataset::create(...).
    */
-  Dataset<T>& create1D( ssize_t len, ssize_t maxlen = 0, const std::string &filename = "",
+  Dataset<T>& create1D( ssize_t len, ssize_t maxlen, const std::string &filename = "",
                 enum Endianness endianness = NATIVE );
 
   /*!
