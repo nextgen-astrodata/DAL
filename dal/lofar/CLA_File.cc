@@ -110,7 +110,12 @@ void CLA_File::initNodes()
 }
 
 string CLA_File::getBasename(const std::string& filename) const {
-  char* fn = strndup(filename.c_str(), filename.size());
+  char* fn=NULL;
+  #ifdef _APPLE_
+  fn = strdup(filename.c_str());  // strndup is a GNU extension and not available on Darwin
+  #elseif
+  fn = strndup(filename.c_str(), filename.size());
+  #endif
   if (fn == NULL)
     throw DALException("Failed to open file: out of memory.");
   char* bn = basename(fn); // don't use ::basename(), as basename is sometimes a macro
