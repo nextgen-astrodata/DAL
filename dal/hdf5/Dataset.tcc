@@ -356,7 +356,7 @@ template<typename T> bool Dataset<T>::bigEndian( enum Endianness endianness ) co
   else if (endianness == BIG)
     return true;
   else // NATIVE
-    return __BYTE_ORDER == __BIG_ENDIAN;
+    return BYTE_ORDER == BIG_ENDIAN;
 }
 
 template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos,

@@ -24,8 +24,12 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <libgen.h>	// dirname()
+#ifdef __APPLE__
+#include <machine/endian.h>
+#else
 #include <endian.h>
-#if __BYTE_ORDER != __BIG_ENDIAN && __BYTE_ORDER != __LITTLE_ENDIAN
+#endif
+#if BYTE_ORDER != BIG_ENDIAN && BYTE_ORDER != LITTLE_ENDIAN
 #error Byte order is neither big endian nor little endian: not supported
 #endif
 
