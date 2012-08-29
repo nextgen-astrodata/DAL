@@ -1,4 +1,5 @@
 install (FILES
+  FileInfo.h
   h5complex.h
   h5tuple.h
   h5typemap.h
