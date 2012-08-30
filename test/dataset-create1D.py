@@ -6,7 +6,7 @@ f = DAL.TBB_File('test-dataset-create_tbb.h5', DAL.TBB_File.CREATE)
 st = f.station('CS001')
 st.create()
 dp0 = st.dipole(1, 5, 7)
-dp0.create(100, 100)
+dp0.create1D(100, 100)
 # for now, resizing is only supported if external data sets are used
 #dp0.resize1D(50)
 #excSeen0 = False
@@ -21,7 +21,7 @@ dp0.create(100, 100)
 
 dp1 = st.dipole(2, 7, 9)
 # if maxdim > dim (and for now, to do any resize), you must provide an external filename
-dp1.create(100, 120, 'test-dataset-create_tbb.raw') #, DAL.TBB_DipoleDataset.LITTLE)
+dp1.create1D(100, 120, 'test-dataset-create_tbb.raw') #, DAL.TBB_DipoleDataset.LITTLE)
 dp1.resize1D(120)
 dp1.resize1D(50)
 

@@ -58,26 +58,9 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 
 %include hdf5/Dataset.h
 
-namespace DAL {
-  %template(DatasetShort)        Dataset<short>;
-  %template(DatasetFloat)        Dataset<float>;
-  %template(DatasetComplexFloat) Dataset< std::complex<float> >;
-}
-
 // -------------------------------
 // Class extensions for bindings
 // -------------------------------
-
-%pythoncode %{
-  import numpy
-
-  # record the numpy datatypes used in the various datasets
-  DatasetShort.dtype = numpy.short
-  DatasetFloat.dtype = numpy.single
-  DatasetComplexFloat.dtype = numpy.csingle
-
-  del numpy
-%}
 
 %extend DAL::Dataset {
   %pythoncode {
@@ -94,4 +77,21 @@ namespace DAL {
       return reduce(operator.mul, self.dims())
   }    
 }
+
+namespace DAL {
+  %template(DatasetShort)        Dataset<short>;
+  %template(DatasetFloat)        Dataset<float>;
+  %template(DatasetComplexFloat) Dataset< std::complex<float> >;
+}
+
+%pythoncode %{
+  import numpy
+
+  # record the numpy datatypes used in the various datasets
+  DatasetShort.dtype = numpy.short
+  DatasetFloat.dtype = numpy.single
+  DatasetComplexFloat.dtype = numpy.csingle
+
+  del numpy
+%}
 
