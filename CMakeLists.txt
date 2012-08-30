@@ -28,7 +28,7 @@ include_directories (
   )
 
 ## Mandatory: HDF5 support for core library
-find_package(HDF5_DAL)
+find_package(HDF5_DAL REQUIRED)
 include_directories(${HDF5_INCLUDES})
 
 include(TestHDF5)
@@ -74,8 +74,9 @@ if(PYTHON_BINDINGS)
   set(PYTHON_VERSION       ${PYTHON_VERSION}       CACHE STRING "Python version to compile bindings against")
 endif(PYTHON_BINDINGS)
 
-## Start processing the source tree
+find_package(Valgrind)
 
+## Start processing the source tree
 add_subdirectory(dal)
 if(BUILD_TESTING)
   add_subdirectory(test)
@@ -93,6 +94,7 @@ MESSAGE("------------------------------------------------------")
 MESSAGE("[${CMAKE_PROJECT_NAME} ${DAL_VERSION_STRING}] configuration summary")
 MESSAGE("------------------------------------------------------")
 MESSAGE("CMAKE_VERSION        = ${CMAKE_VERSION}")
+MESSAGE("CMAKE_BUILD_TYPE     = ${CMAKE_BUILD_TYPE}")
 MESSAGE("HDF5_VERSION         = ${HDF5_VERSION}")
 MESSAGE("HDF5_INCLUDES        = ${HDF5_INCLUDES}")
 MESSAGE("HDF5_LIBRARIES       = ${HDF5_LIBRARIES}")
