@@ -109,7 +109,7 @@ void CLA_File::initNodes()
   addNode( new Attribute<string>(*this, "NOTES") );
 }
 
-string CLA_File::getBasename(const std::string& filename) const {
+std::string CLA_File::getBasename(const std::string& filename) const {
   char* fn = strdup(filename.c_str());
   if (fn == NULL)
     throw DALException("Failed to open file: out of memory.");
@@ -124,7 +124,7 @@ string CLA_File::getBasename(const std::string& filename) const {
  * in "YYYY-MM-DDThh:mm:ss.s" UTC format.
  * For FILEDATE attribute.
  */
-string CLA_File::getFileModDate(const string& filename) const {
+std::string CLA_File::getFileModDate(const std::string& filename) const {
 	struct timeval tv;
 	struct stat st;
 
@@ -149,7 +149,7 @@ string CLA_File::getFileModDate(const string& filename) const {
  * The output_format is without seconds. The output_size is including the '\0'.
  * Helper for in filenames and for the FILEDATE attribute.
  */
-string CLA_File::formatFilenameTimestamp(const struct timeval& tv, const char* output_format,
+std::string CLA_File::formatFilenameTimestamp(const struct timeval& tv, const char* output_format,
                                          const char* output_format_secs, size_t output_size) const {
 	struct tm tm;
 	gmtime_r(&tv.tv_sec, &tm);

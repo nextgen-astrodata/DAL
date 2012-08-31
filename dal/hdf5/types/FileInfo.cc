@@ -57,7 +57,7 @@ void swap(FileInfoRef& fi0, FileInfoRef& fi1) {
   std::swap(fi0.ptr, fi1.ptr);
 }
 
-const string& FileInfoRef::fileDirName() {
+const std::string& FileInfoRef::fileDirName() {
   return ptr->fileDirName;
 }
 
