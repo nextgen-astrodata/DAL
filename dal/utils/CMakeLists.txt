@@ -6,11 +6,10 @@ if(PYTHON_BINDINGS)
   add_custom_target(utils_symlink ALL COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/examples/data data
                     COMMENT "Creating symlink to data sets for utils programs")
 
-  if(PYTHON_EXECUTABLE)
-    add_py_test(py-util-lofar-bf-headerinfo       ${CMAKE_CURRENT_SOURCE_DIR}/lofar-bf-headerinfo.py data/L63876_SAP000_B000_S0_P000_bf.h5 )
-#    add_py_test(py-util-lofar-bf-headeredit       ${CMAKE_CURRENT_SOURCE_DIR}/lofar-bf-headeredit.py data/L00000_bf.h5 )
-    add_py_test(py-util-lofar-tbb-flaggeddata     ${CMAKE_CURRENT_SOURCE_DIR}/lofar-tbb-flaggeddata.py data/L59640_RS106_D20111121T130145.049Z_tbb.h5 )
-  endif(PYTHON_EXECUTABLE)
+  # Python tests
+  add_py_test(py-util-lofar-bf-headerinfo       ${CMAKE_CURRENT_SOURCE_DIR}/lofar-bf-headerinfo.py data/L63876_SAP000_B000_S0_P000_bf.h5 )
+#  add_py_test(py-util-lofar-bf-headeredit       ${CMAKE_CURRENT_SOURCE_DIR}/lofar-bf-headeredit.py data/L00000_bf.h5 )
+  add_py_test(py-util-lofar-tbb-flaggeddata     ${CMAKE_CURRENT_SOURCE_DIR}/lofar-tbb-flaggeddata.py data/L59640_RS106_D20111121T130145.049Z_tbb.h5 )
 
   install (PROGRAMS
     lofar-bf-headerinfo.py

@@ -74,15 +74,15 @@ if(PYTHON_BINDINGS)
   set(PYTHON_VERSION       ${PYTHON_VERSION}       CACHE STRING "Python version to compile bindings against")
 endif(PYTHON_BINDINGS)
 
-find_package(Valgrind)
-
 ## Start processing the source tree
-add_subdirectory(dal)
 if(BUILD_TESTING)
+  find_package(Valgrind)
+
   add_subdirectory(test)
+  add_subdirectory(examples)
 endif(BUILD_TESTING)
 
-add_subdirectory(examples)
+add_subdirectory(dal)
 
 add_subdirectory(package)
 
@@ -100,16 +100,19 @@ MESSAGE("HDF5_INCLUDES        = ${HDF5_INCLUDES}")
 MESSAGE("HDF5_LIBRARIES       = ${HDF5_LIBRARIES}")
 MESSAGE("PYTHON_BINDINGS      = ${PYTHON_BINDINGS}")
 if(PYTHON_BINDINGS)
-  MESSAGE("PYTHON_VERSION       = ${PYTHON_VERSION}")
-  MESSAGE("PYTHON_EXECUTABLE    = ${PYTHON_EXECUTABLE}")
+  MESSAGE("PYTHON_EXECUTABLE    = ${PYTHON_EXECUTABLE} ${PYTHON_VERSION}")
   MESSAGE("PYTHON_INCLUDE_DIRS  = ${PYTHON_INCLUDE_DIRS}")
   MESSAGE("PYTHON_SITE_PACKAGES = ${PYTHON_SITE_PACKAGES}")
   MESSAGE("NUMPY_INCLUDE_DIRS   = ${NUMPY_INCLUDE_DIRS}")
-  MESSAGE("SWIG_VERSION         = ${SWIG_VERSION}")
+  MESSAGE("SWIG_EXECUTABLE      = ${SWIG_EXECUTABLE} ${SWIG_VERSION}")
 endif(PYTHON_BINDINGS)
 MESSAGE("GENERATE_DOCS        = ${GENERATE_DOCS}")
 if(GENERATE_DOCS)
   MESSAGE("SPHINX_EXECUTABLE    = ${SPHINX_EXECUTABLE}")
 endif(GENERATE_DOCS)
+MESSAGE("BUILD_TESTING        = ${BUILD_TESTING}")
+if(VALGRIND_FOUND)
+  MESSAGE("VALGRIND_PROGRAM     = ${VALGRIND_PROGRAM}")
+endif(VALGRIND_FOUND)
 MESSAGE("------------------------------------------------------")
 
