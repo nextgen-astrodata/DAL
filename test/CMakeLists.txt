@@ -1,14 +1,5 @@
 # DAL test cases: unit tests, a python doc test, utilities, and example programs.
-
-macro(add_c_test _name)
-  add_executable(${_name} ${_name}.cc ${ARGN})
-  target_link_libraries(${_name} lofardal)
-  add_test(${_name} ${CMAKE_CURRENT_BINARY_DIR}/${_name})
-
-  if(VALGRIND_FOUND)
-    add_test("vg-${_name}" ${VALGRIND_PROGRAM} ${CMAKE_CURRENT_BINARY_DIR}/${_name})
-  endif(VALGRIND_FOUND)
-endmacro(add_c_test)
+include(TestMacros)
 
 # Create symlink from the current bin dir to examples/data so we can find input files. See examples/CMakeLists.txt
 add_custom_target(test_symlink ALL COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../examples/data data
@@ -24,13 +15,8 @@ add_c_test(get-tbb-station-ref)
 add_c_test(remove-root-exc)
 
 if(PYTHON_BINDINGS AND PYTHON_EXECUTABLE)
-  macro(add_py_test _name _pyfile)
-    add_test(${_name} ${PYTHON_EXECUTABLE} ${_pyfile})
-    set_tests_properties(${_name} PROPERTIES ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/../dal")
-  endmacro(add_py_test)
-
   add_py_test(py-import-only ${CMAKE_CURRENT_SOURCE_DIR}/import-only.py)
-  add_py_test(py-doctest ${CMAKE_CURRENT_BINARY_DIR}/../dal/DAL.py)
+  add_py_test(py-doctest ${CMAKE_BINARY_DIR}/dal/DAL.py)
   add_py_test(py-auto-create-bf-fields ${CMAKE_CURRENT_SOURCE_DIR}/auto-create-bf-fields.py)
   add_py_test(py-get-tbb-station-ref ${CMAKE_CURRENT_SOURCE_DIR}/get-tbb-station-ref.py)
   add_py_test(py-reopen-rw ${CMAKE_CURRENT_SOURCE_DIR}/reopen-rw.py)
