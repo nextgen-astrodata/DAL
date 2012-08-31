@@ -5,6 +5,10 @@ macro(add_c_test _name)
   add_executable(${_name} ${_name}.cc ${ARGN})
   target_link_libraries(${_name} lofardal)
   add_test(${_name} ${CMAKE_CURRENT_BINARY_DIR}/${_name})
+
+  if(VALGRIND_FOUND)
+    add_test("vg-${_name}" ${VALGRIND_PROGRAM} ${CMAKE_CURRENT_BINARY_DIR}/${_name})
+  endif(VALGRIND_FOUND)
 endmacro(add_c_test)
 
 # Create symlink from the current bin dir to examples/data so we can find input files. The create_symlink cmd only works on UNIX systems.
