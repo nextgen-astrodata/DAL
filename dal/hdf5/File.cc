@@ -15,6 +15,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "File.h"
+#include "Attribute.h"
 
 using namespace std;
 
@@ -22,32 +23,25 @@ namespace DAL {
 
 File::File() {}
 
-File::File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )
+File::File( const std::string &filename, FileMode mode, const std::string &versionAttrName )
 :
-  Group(openFile(filename, mode)), // store the file hid in the group (node) hid
-  filename(filename),
-  mode(mode),
-  versionAttrName(versionAttrName)
+  // Store the file hid as the group hid; pass file info.
+  Group(openFile(filename, mode), FileInfo(filename, mode, versionAttrName))
 {
-  // File.h states certain restrictions on versionAttrName, but don't bother enforcing here (yet).
+  if (!versionAttrName.empty()) {
+    // Also set in-memory version of FileInfo. Do not use version().get() as it calls fileInfoVersion().
+    // Not passed in initializer, because eval order of openFile(), FileInfo() is unspecified.
+    Attribute<string> h5StoredVersionAttr(*this, versionAttrName);
+    if (mode == CREATE || mode == CREATE_EXCL) {
+      string defaultVersion(VersionType().to_string());
+      h5StoredVersionAttr.create().set(defaultVersion);
+      setFileInfoVersion(defaultVersion);
+    } else {
+      setFileInfoVersion(h5StoredVersionAttr.get());
+    }
 
-  // Fill the data that will be propagated to other Nodes.
-  data.fileVersion = getStoredFileVersion();
-
-  switch (mode) {
-    case CREATE:
-    case CREATE_EXCL:
-    case READWRITE:
-      data.canWrite = true;
-      break;
-
-    case READ:
-    default:
-      data.canWrite = false;
+    initNodes();
   }
-
-  data.fileName = filename;
-  data.parentNodePath = "";
 }
 
 File::~File() {}
@@ -61,12 +55,9 @@ File& File::operator=(File rhs)
 void swap(File& first, File& second)
 {
   swap(static_cast<Group&>(first), static_cast<Group&>(second));
-  swap(first.filename, second.filename);
-  std::swap(first.mode, second.mode);
-  swap(first.versionAttrName, second.versionAttrName);
 }
 
-void File::open( const std::string &filename, enum fileMode mode, const std::string &versionAttrName )
+void File::open( const std::string &filename, FileMode mode, const std::string &versionAttrName )
 {
   File ftmp(filename, mode, versionAttrName);
   swap(*this, ftmp);
@@ -78,7 +69,7 @@ void File::close()
   swap(*this, ftmp);
 }
 
-hid_gc File::openFile( const std::string &filename, enum fileMode mode ) const
+hid_gc File::openFile( const string &filename, FileMode mode ) const
 {
   switch (mode) {
     case CREATE:
@@ -121,7 +112,7 @@ hid_gc File::openFile( const std::string &filename, enum fileMode mode ) const
 
 void File::flush()
 {
-  H5Fflush(group(), H5F_SCOPE_LOCAL);
+  H5Fflush(group(), H5F_SCOPE_GLOBAL);
 }
 
 bool File::exists() const
@@ -129,24 +120,16 @@ bool File::exists() const
   return true;
 }
 
-VersionType File::getStoredFileVersion()
+Attribute<VersionType> File::version()
 {
-  Attribute<string> versionAttr(*this, versionAttrName);
-  if (!versionAttr.exists())
-    return VersionType();
-
-  return VersionType(versionAttr.get());  
+  return getNode(versionAttrName());
 }
 
-void File::setFileVersion( const VersionType &version )
+void File::initNodes()
 {
-  Attribute<string> versionAttr(*this, versionAttrName);
-  if (versionAttr.exists())
-    versionAttr.set(version.to_string());
-
-  // update propagation data as well
-  data.fileVersion = version;
+  addNode( new Attribute<VersionType>(*this, versionAttrName()) );
 }
+
 
 }
 

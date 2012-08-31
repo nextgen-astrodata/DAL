@@ -21,32 +21,33 @@ using namespace std;
 namespace DAL {
 
 Group::Group()
-:
-  mapInitialised(false)
 {
+  //no need to populate nodeMap, because File::open() creates a new File obj and swaps.
 }
 
 Group::Group( const Group &other )
 :
-  Node(other.parent, other._name),
+  Node(other.parent, other._name, other.fileInfo),
   _group(other._group),
-  mapInitialised(false)
+  nodeMap(other.nodeMap)
 {
 }
 
 Group::Group( Group &parent, const std::string &name )
 :
   Node(parent, name),
-  mapInitialised(false)
+  // _group is set once this Group obj is opened, which cannot be done now, because it may not exist
+  nodeMap(parent.nodeMap)
 {
 }
 
-Group::Group( const hid_gc &fileId )
+//! Constructor for root group (in File) only.
+Group::Group( const hid_gc &fileId, FileInfo fileInfo )
 :
-  Node(fileId, "/"),
-  _group(fileId),
-  mapInitialised(false)
+  Node(fileId, "/", fileInfo),
+  _group(fileId)
 {
+  initNodes();
 }
 
 Group::~Group() {
@@ -64,7 +65,6 @@ void swap(Group& first, Group& second)
   swap(static_cast<Node&>(first), static_cast<Node&>(second));
   swap(first._group, second._group);
   swap(first.nodeMap, second.nodeMap);
-  std::swap(first.mapInitialised, second.mapInitialised);
 }
 
 /*
@@ -84,7 +84,9 @@ bool Group::exists() const {
   if (_name == "/")
     return true;
 
-  return H5Lexists(parent, _name.c_str(), H5P_DEFAULT) > 0; // TODO: Does this check whether the link is a group?
+  // Tests whether this link is a HDF5 group or dataset.
+  // An attributes with the same name is rejected, though it can coexist.
+  return H5Lexists(parent, _name.c_str(), H5P_DEFAULT) > 0;
 }
 
 void Group::remove() const {
@@ -112,15 +114,17 @@ void Group::set( const Group &other, bool deepcopy ) {
     throw HDF5Exception("Could not copy object to set group " + _name);
 }
 
+const hid_gc &Group::group() {
+  // deferred opening of group, as it may need to be created first
+  if (!_group.isset())
+    _group = open(parent, _name);
+
+  return _group;
+}
+
 hid_gc Group::open( hid_t parent, const std::string &name ) const
 {
   return hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group " + _name);
-}
-
-void Group::initNodes()
-{
-  addNode(new Attribute<string>(*this, "GROUPTYPE"));
-  mapInitialised = true;
 }
 
 Attribute<string> Group::groupType()
@@ -128,12 +132,9 @@ Attribute<string> Group::groupType()
   return getNode("GROUPTYPE");
 }
 
-const hid_gc &Group::group() {
-  // deferred opening of group, as it may need to be created first
-  if (!_group.isset())
-    _group = open(parent, _name);
-
-  return _group;
+void Group::initNodes()
+{
+  addNode(new Attribute<string>(*this, "GROUPTYPE"));
 }
 
 void Group::addNode( Node *attr )
@@ -147,19 +148,8 @@ void Group::addNode( Node *attr )
   nodeMap[attr->name()] = attr;
 }
 
-void Group::ensureNodesExist()
-{
-  if (!exists())
-    throw DALException("Could not access nodes in a non-existing group " + _name);
-
-  if (!mapInitialised)
-    initNodes();
-}
-
 ImplicitDowncast<Node> Group::getNode( const std::string &name )
 {
-  ensureNodesExist();
- 
   if (nodeMap.find(name) == nodeMap.end())
     throw DALValueError("Could not get (find) node " + name);
 
@@ -167,10 +157,7 @@ ImplicitDowncast<Node> Group::getNode( const std::string &name )
 }
 
 vector<string> Group::nodeNames() {
-  ensureNodesExist();
-
-  vector<string> names;
-  names.reserve(nodeMap.size());
+  vector<string> names(nodeMap.size());
 
   for( map<string, Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
     names.push_back(i->first);
@@ -181,8 +168,6 @@ vector<string> Group::nodeNames() {
 
 void Group::freeNodeMap()
 {
-  mapInitialised = false;
-
   for( map<string, Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
     delete i->second;
   }

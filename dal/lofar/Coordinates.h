@@ -19,8 +19,8 @@
 
 #include <string>
 #include <hdf5.h>
-#include "dal/hdf5/Attribute.h"
-#include "dal/hdf5/Group.h"
+#include "../hdf5/Attribute.h"
+#include "../hdf5/Group.h"
 
 /*
  * The coordinate system is described in ICD002, to closely match the FITS WCS (World Coordinate System) specification.

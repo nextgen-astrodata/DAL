@@ -1,5 +1,3 @@
-# DAL test cases: unit tests, a python doc test, utilities, and example programs.
-
 macro(add_c_test _name)
   add_executable(${_name} ${_name}.cc ${ARGN})
   target_link_libraries(${_name} lofardal)

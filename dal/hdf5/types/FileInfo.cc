@@ -15,60 +15,101 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstddef>
+#include <cstring>
+#include <libgen.h>
+#include <vector>
 #include "FileInfo.h"
 
 using namespace std;
 
 namespace DAL {
 
-FileInfo::FileInfo() : refCount(1), canWrite(false) { }
+FileInfo::FileInfo() : ptr(new FileInfoType) { }
 
-FileInfo::FileInfo(const string& fileDirName, bool canWrite, const VersionType& fileVersion)
-: refCount(1)
-, fileDirName(fileDirName)
-, canWrite(canWrite)
-, fileVersion(fileVersion)
-{ }
+FileInfo::FileInfo(const std::string& fullFileName, FileMode fileMode,
+                   const std::string& versionAttrName)
+: ptr(new FileInfoType(getBasename(fullFileName), getDirname(fullFileName),
+                       fileMode, versionAttrName)) { }
 
-////////////////////////////////////////////////////////////////////////////////
-
-FileInfoRef::FileInfoRef() : ptr(new FileInfo) { }
-
-FileInfoRef::FileInfoRef(const string& fileDirName, bool canWrite, const VersionType& fileVersion)
-: ptr(new FileInfo(fileDirName, canWrite, fileVersion)) { }
-
-FileInfoRef::FileInfoRef(const FileInfoRef& other) : ptr(other.ptr) {
+FileInfo::FileInfo(const FileInfo& other) : ptr(other.ptr) {
   ptr->refCount += 1;
 }
 
-FileInfoRef::~FileInfoRef() {
+FileInfo::~FileInfo() {
   if (ptr->refCount == 1) {
     delete ptr;
   }
 }
 
-FileInfoRef& FileInfoRef::operator=(FileInfoRef rhs) {
+FileInfo& FileInfo::operator=(FileInfo rhs) {
   swap(*this, rhs);
   return *this;
 }
 
-void swap(FileInfoRef& fi0, FileInfoRef& fi1) {
+void swap(FileInfo& fi0, FileInfo& fi1) {
   // no need to fiddle with the refCount
   std::swap(fi0.ptr, fi1.ptr);
 }
 
-const std::string& FileInfoRef::fileDirName() {
+const string& FileInfo::fileName() const {
+  return ptr->fileName;
+}
+
+const std::string& FileInfo::fileDirName() const {
   return ptr->fileDirName;
 }
 
-bool FileInfoRef::canWrite() {
-  return ptr->canWrite;
+FileInfo::FileMode FileInfo::fileMode() const {
+  return ptr->fileMode;
 }
 
-//TODO: how to update the version if it is changed through Attribute<VersionType> xxx ?
-VersionType FileInfoRef::fileVersion() {
+const std::string& FileInfo::versionAttrName() const {
+  return ptr->versionAttrName;
+}
+
+VersionType& FileInfo::fileVersion() const {
   return ptr->fileVersion;
 }
+
+void FileInfo::setFileVersion(const VersionType& newVersion) {
+  ptr->fileVersion = newVersion;
+}
+
+
+// static functions
+//! C++ interface to basename(3). Returns filename without path.
+string FileInfo::getBasename(const string& filename) {
+  vector<char> fn(filename.size() + 1);
+  memcpy(&fn[0], filename.c_str(), filename.size() + 1);
+
+  char* bn = basename(&fn[0]); // may overlap or point to static storage
+
+  return string(bn);
+}
+
+//! C++ interface to dirname(3). Returns path of filename.
+string FileInfo::getDirname(const string& filename) {
+  vector<char> fn(filename.size() + 1);
+  memcpy(&fn[0], filename.c_str(), filename.size() + 1);
+
+  char* dn = dirname(&fn[0]); // may overlap or point to static storage
+
+  return string(dn);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+FileInfoType::FileInfoType() : refCount(1), fileMode(0) { }
+
+FileInfoType::FileInfoType(const std::string& fileName, const std::string& fileDirName,
+                           FileInfo::FileMode fileMode, const std::string& versionAttrName)
+: refCount(1)
+, fileName(fileName)
+, fileDirName(fileDirName)
+, fileMode(fileMode)
+, versionAttrName(versionAttrName)
+{ }
 
 
 }

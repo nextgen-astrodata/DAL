@@ -18,7 +18,7 @@
 #define DAL_STATION_NAMES_H
 
 #include <string>
-#include "dal/hdf5/exceptions/exceptions.h"
+#include "../hdf5/exceptions/exceptions.h"
 
 namespace DAL {
 

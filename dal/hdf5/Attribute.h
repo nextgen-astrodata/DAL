@@ -23,14 +23,12 @@
 #include <ostream>
 #include <hdf5.h>
 #include "types/h5typemap.h"
-#include "Group.h"
-
-/*
- * NOTE: Setting attributes is not thread-safe if the same attribute is modified by multiple
- * threads in parallel!
- */
+#include "types/versiontype.h"
+#include "Node.h"
 
 namespace DAL {
+
+class Group;
 
 /*!
  * Represents core functionality for an attribute inside a group.
@@ -68,9 +66,6 @@ public:
    * using the type defined by this object.
    */
   virtual bool valid() const;
-
-protected:
-  AttributeBase( const hid_gc &parent, const std::string &name ): Node(parent, name) {}
 };
 
 #ifndef SWIG
@@ -192,8 +187,6 @@ public:
    */
   Attribute( Group &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
-  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
-
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 
   /*!
@@ -271,8 +264,6 @@ public:
    * Represent an attribute called `name' within group `parent'.
    */
   Attribute( Group &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
-
-  Attribute( const hid_gc &parent, const std::string &name ): AttributeBase(parent, name), value(*this) {}
 
   Attribute( const Attribute &other ): AttributeBase(other), value(*this) {}
 

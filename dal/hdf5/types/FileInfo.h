@@ -14,31 +14,71 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FILE_INFO_H
-#define FILE_INFO_H
+#ifndef DAL_FILE_INFO_H
+#define DAL_FILE_INFO_H
 
 #include <string>
-
 #include "versiontype.h"
 
 namespace DAL {
 
+class FileInfoType;
+
 /*!
- * A FileInfo object stores file-scope info that becomes known when a file is opened
+ * A FileInfo object is a reference to a reference counted FileInfoType object.
+ * All FileInfoType members are read-only, except fileVersion.
+ * For more detail, see class FileInfoType, which stores the actual data.
+ */
+class FileInfo {
+  FileInfoType* ptr;
+
+public:
+  typedef int FileMode; // see class Node for possible values
+
+  FileInfo();
+  FileInfo(const std::string& fullFileName, FileMode fileMode,
+           const std::string& versionAttrName);
+  FileInfo(const FileInfo& other);
+  ~FileInfo();
+  FileInfo& operator=(FileInfo rhs);
+
+  friend void swap(FileInfo& fi0, FileInfo& fi1);
+
+  const std::string& fileName() const;
+  const std::string& fileDirName() const;
+  FileMode fileMode() const;
+  const std::string& versionAttrName() const;
+  VersionType& fileVersion() const;
+
+  void setFileVersion(const VersionType& newVersion);
+
+
+  static std::string getBasename(const std::string& filename);
+  static std::string getDirname(const std::string& filename);
+};
+
+/*!
+ * A FileInfoType object stores file-scope info that becomes known when a file is opened
  * and may be needed by any object in the HDF5 hierarchy.
  * Once set, this info cannot be changed.
  * An exception is fileVersion which is needed everywhere, but is also stored
  * as an attribute and thus may be changed.
  *
- * FileInfo objects are reference counted using FileInfoRef to remain open until all
+ * FileInfoType objects are reference counted using FileInfo to remain open until all
  * file objects have been closed (i.e. the moment HDF5 can close the file).
  *
- * This class is intended to be used through FileInfoRef only. Do not use directly.
+ * This class is intended to be used through FileInfo only. Do not use directly.
  */
-class FileInfo {
-  friend class FileInfoRef;
+class FileInfoType {
+  friend class FileInfo;
+
 
   mutable unsigned refCount;
+
+  /*!
+   * Name of the opened file without path.
+   */
+  const std::string fileName;
 
   /*!
    * Directory name of the file opened (no trailing '/'). If no dir was specified, it is ".".
@@ -46,38 +86,23 @@ class FileInfo {
    */
   const std::string fileDirName;
 
-  //! True if the file was opened for writing (CREATE, CREATE_EXCL, or READWRITE).
-  const bool canWrite;
+  //! The mode the file was opened with (READWRITE, CREATE, ...).
+  const FileInfo::FileMode fileMode;
 
-  //! The file version as stored. In general, caching attributes is undesirable.
-  const VersionType fileVersion;
+  //! The name of the version attribute.
+  const std::string versionAttrName;
 
 
-  FileInfo();
-  FileInfo(const std::string& fileDirName, bool canWrite, const VersionType& fileVersion);
+  // The (cached) file version as stored by HDF5 in the attribute named versionAttrName.
+  // Not initialized by the constructor, because we don't know for sure if the file is already open.
+  VersionType fileVersion;
+
+
+  FileInfoType();
+  FileInfoType(const std::string& fileName, const std::string& fileDirName,
+               FileInfo::FileMode fileMode, const std::string& versionAttrName);
 };
 
-/*!
- * A FileInfoRef refers a FileInfo object, possible along with other FileInfoRef objects.
- * All FileInfo members are accessed read-only only, except fileVersion.
- * For more detail, see class FileInfo.
- */
-class FileInfoRef {
-  FileInfo* ptr;
-
-public:
-  FileInfoRef();
-  FileInfoRef(const std::string& fileDirName, bool canWrite, const VersionType& fileVersion);
-  FileInfoRef(const FileInfoRef& other);
-  ~FileInfoRef();
-  FileInfoRef& operator=(FileInfoRef rhs);
-
-  friend void swap(FileInfoRef& fi0, FileInfoRef& fi1);
-
-  const std::string& fileDirName();
-  bool canWrite();
-  VersionType fileVersion();
-};
 
 }
 

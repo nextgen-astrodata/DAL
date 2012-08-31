@@ -22,34 +22,21 @@ namespace DAL {
 
 BF_File::BF_File() {}
 
-BF_File::BF_File( const std::string &filename, enum fileMode mode )
+BF_File::BF_File( const std::string &filename, FileMode mode )
 :
   CLA_File(filename, mode)
 {
-  if (mode == CREATE) {
-    fileType().create().set("bf");
-    docName() .create().set("ICD 3: Beam-Formed Data");
-    Attribute<string> versionAttr(*this, versionAttrName);
-    versionAttr.create();
-    setFileVersion(VersionType(2, 5)); // release number is always 0 for the doc version
-  } else {
-    bool isBfFileType = false;
-    try {
-      isBfFileType = fileType().get() == "bf";
-    } catch (DALException& ) {
-    }
-    if (!isBfFileType) {
-      throw DALException("Failed to open BF file: A BF file must have /FILETYPE=\"bf\".");
-    }
-  }
+  openFile(mode);
 }
 
 BF_File::~BF_File() {}
 
-void BF_File::open( const std::string &filename, enum fileMode mode )
+void BF_File::open( const std::string &filename, FileMode mode )
 {
   // As long as we have no member vars, keep open() and close() simple. See CLA_File::open().
   CLA_File::open(filename, mode);
+
+  openFile(mode);
 }
 
 void BF_File::close()
@@ -57,9 +44,27 @@ void BF_File::close()
   CLA_File::close();
 }
 
-void BF_File::initNodes() {
-  CLA_File::initNodes();
+void BF_File::openFile( FileMode mode )
+{
+  initNodes();
 
+  if (mode == CREATE || mode == CREATE_EXCL) {
+    fileType().create().set("bf");
+    docName() .create().set("ICD 3: Beam-Formed Data");
+    docVersion()       .set(VersionType(2, 5)); // already created by File
+  } else {
+    bool isBfFileType = false;
+    try {
+      isBfFileType = fileType().get() == "bf" || fileType().get() == "dynspec"; // dynspec is very similar
+    } catch (DALException& ) {
+    }
+    if (!isBfFileType) {
+      throw DALException("Failed to open BF file: A BF file must have FILETYPE=\"bf\".");
+    }
+  }
+}
+
+void BF_File::initNodes() {
   addNode( new Attribute<string>(*this, "CREATE_OFFLINE_ONLINE") );
   addNode( new Attribute<string>(*this, "BF_FORMAT") );
   addNode( new Attribute<string>(*this, "BF_VERSION") );
@@ -72,12 +77,6 @@ void BF_File::initNodes() {
   addNode( new Attribute<string>(*this, "BANDWIDTH_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER") );
   addNode( new Attribute<string>(*this, "BEAM_DIAMETER_UNIT") );
-  addNode( new Attribute< vector<double> >(*this, "WEATHER_TEMPERATURE") );
-  addNode( new Attribute<string>(*this, "WEATHER_TEMPERATURE_UNIT") );
-  addNode( new Attribute< vector<double> >(*this, "WEATHER_HUMIDITY") );
-  addNode( new Attribute<string>(*this, "WEATHER_HUMIDITY_UNIT") );
-  addNode( new Attribute< vector<double> >(*this, "SYSTEM_TEMPERATURE") );
-  addNode( new Attribute<string>(*this, "SYSTEM_TEMPERATURE_UNIT") );
   addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_SUB_ARRAY_POINTINGS") );
   addNode( new Attribute<unsigned>(*this, "NOF_SUB_ARRAY_POINTINGS") );
 }
@@ -107,7 +106,7 @@ Attribute<string> BF_File::totalIntegrationTimeUnit()
   return getNode("TOTAL_INTEGRATION_TIME_UNIT");
 }  
   
-Attribute<string> BF_File::observationDataType()
+Attribute<string> BF_File::observationDatatype()
 {
   return getNode("OBSERVATION_DATATYPE");
 }
@@ -142,36 +141,6 @@ Attribute<string> BF_File::beamDiameterUnit()
   return getNode("BEAM_DIAMETER_UNIT");
 }
   
-Attribute< vector<double> > BF_File::weatherTemperature()
-{
-  return getNode("WEATHER_TEMPERATURE");
-}
-
-Attribute<string> BF_File::weatherTemperatureUnit()
-{
-  return getNode("WEATHER_TEMPERATURE_UNIT");
-}
-  
-Attribute< vector<double> > BF_File::weatherHumidity()
-{
-  return getNode("WEATHER_HUMIDITY");
-}
-
-Attribute<string> BF_File::weatherHumidityUnit()
-{
-  return getNode("WEATHER_HUMIDITY_UNIT");
-}  
-  
-Attribute< vector<double> > BF_File::systemTemperature()
-{
-  return getNode("SYSTEM_TEMPERATURE");
-}
-
-Attribute<string> BF_File::systemTemperatureUnit()
-{
-  return getNode("SYSTEM_TEMPERATURE_UNIT");
-}
-
 Attribute<unsigned> BF_File::observationNofSubArrayPointings()
 {
   return getNode("OBSERVATION_NOF_SUB_ARRAY_POINTINGS");
@@ -195,49 +164,25 @@ BF_SubArrayPointing BF_File::subArrayPointing( unsigned nr )
   return BF_SubArrayPointing(*this, subArrayPointingName(nr));
 }
 
+
 BF_SysLog BF_File::sysLog()
 {
   return BF_SysLog(*this, "SYS_LOG");
 }
 
-void BF_ProcessingHistory::initNodes() {
-  Group::initNodes();
 
-  addNode( new Attribute<string>(*this, "OBSERVATION_PARSET") );
-  addNode( new Attribute<string>(*this, "OBSERVATION_LOG") );
-  addNode( new Attribute<string>(*this, "PRESTO_PARSET") );
-  addNode( new Attribute<string>(*this, "PRESTO_LOG") );
-}
-
-Attribute<string> BF_ProcessingHistory::observationParset()
+BF_SubArrayPointing::BF_SubArrayPointing( Group &parent, const std::string &name )
+:
+  Group(parent, name)
 {
-  return getNode("OBSERVATION_PARSET");
-}
-
-Attribute<string> BF_ProcessingHistory::observationLog()
-{
-  return getNode("OBSERVATION_LOG");
-}
-
-Attribute<string> BF_ProcessingHistory::prestoParset()
-{
-  return getNode("PRESTO_PARSET");
-}
-
-Attribute<string> BF_ProcessingHistory::prestoLog()
-{
-  return getNode("PRESTO_LOG");
+  initNodes();
 }
 
 void BF_SubArrayPointing::initNodes() {
-  Group::initNodes();
-
   addNode( new Attribute<string>(*this, "EXPTIME_START_UTC") );
-  addNode( new Attribute<double>(*this, "EXPTIME_START_MJD") );
-  addNode( new Attribute<string>(*this, "EXPTIME_START_TAI") );
   addNode( new Attribute<string>(*this, "EXPTIME_END_UTC") );
+  addNode( new Attribute<double>(*this, "EXPTIME_START_MJD") );
   addNode( new Attribute<double>(*this, "EXPTIME_END_MJD") );
-  addNode( new Attribute<string>(*this, "EXPTIME_END_TAI") );
   addNode( new Attribute<double>(*this, "TOTAL_INTEGRATION_TIME") );
   addNode( new Attribute<string>(*this, "TOTAL_INTEGRATION_TIME_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
@@ -257,29 +202,19 @@ Attribute<string> BF_SubArrayPointing::expTimeStartUTC()
   return getNode("EXPTIME_START_UTC");
 }
 
-Attribute<double> BF_SubArrayPointing::expTimeStartMJD()
-{
-  return getNode("EXPTIME_START_MJD");
-}
-
-Attribute<string> BF_SubArrayPointing::expTimeStartTAI()
-{
-  return getNode("EXPTIME_START_TAI");
-}
-
 Attribute<string> BF_SubArrayPointing::expTimeEndUTC()
 {
   return getNode("EXPTIME_END_UTC");
 }
 
+Attribute<double> BF_SubArrayPointing::expTimeStartMJD()
+{
+  return getNode("EXPTIME_START_MJD");
+}
+
 Attribute<double> BF_SubArrayPointing::expTimeEndMJD()
 {
   return getNode("EXPTIME_END_MJD");
-}
-
-Attribute<string> BF_SubArrayPointing::expTimeEndTAI()
-{
-  return getNode("EXPTIME_END_TAI");
 }
 
 Attribute<double> BF_SubArrayPointing::totalIntegrationTime()
@@ -350,31 +285,39 @@ string BF_SubArrayPointing::beamName( unsigned nr )
   return string(buf);
 }
 
-BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
-{
-  return BF_BeamGroup(*this, beamName(nr));
-}
-
 BF_ProcessingHistory BF_SubArrayPointing::processHistory()
 {
   return BF_ProcessingHistory(*this, "PROCESS_HISTORY");
 }
 
-void BF_BeamGroup::initNodes() {
-  Group::initNodes();
+BF_BeamGroup BF_SubArrayPointing::beam( unsigned nr )
+{
+  return BF_BeamGroup(*this, beamName(nr));
+}
 
+
+BF_BeamGroup::BF_BeamGroup( Group &parent, const std::string &name )
+:
+  Group(parent, name)
+{
+  initNodes();
+}
+
+void BF_BeamGroup::initNodes() {
+  addNode( new Attribute< vector<string> >(*this, "TARGETS") );
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
-  addNode( new Attribute< vector<string> >(*this, "TARGETS") );
-  addNode( new Attribute<string>(*this, "TRACKING") );
   addNode( new Attribute<unsigned>(*this, "NOF_SAMPLES") );
   addNode( new Attribute<double>(*this, "SAMPLING_RATE") );
   addNode( new Attribute<string>(*this, "SAMPLING_RATE_UNIT") );
   addNode( new Attribute<double>(*this, "SAMPLING_TIME") );
   addNode( new Attribute<string>(*this, "SAMPLING_TIME_UNIT") );
   addNode( new Attribute<unsigned>(*this, "CHANNELS_PER_SUBBAND") );
+  addNode( new Attribute<double>(*this, "SUBBAND_WIDTH") );
+  addNode( new Attribute<string>(*this, "SUBBAND_WIDTH_UNIT") );
   addNode( new Attribute<double>(*this, "CHANNEL_WIDTH") );
   addNode( new Attribute<string>(*this, "CHANNEL_WIDTH_UNIT") );
+  addNode( new Attribute<string>(*this, "TRACKING") );
   addNode( new Attribute<double>(*this, "POINT_RA") );
   addNode( new Attribute<string>(*this, "POINT_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_DEC") );
@@ -383,8 +326,6 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<string>(*this, "POINT_OFFSET_RA_UNIT") );
   addNode( new Attribute<double>(*this, "POINT_OFFSET_DEC") );
   addNode( new Attribute<string>(*this, "POINT_OFFSET_DEC_UNIT") );
-  addNode( new Attribute<double>(*this, "SUBBAND_WIDTH") );
-  addNode( new Attribute<string>(*this, "SUBBAND_WIDTH_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER_RA") );
   addNode( new Attribute<string>(*this, "BEAM_DIAMETER_RA_UNIT") );
   addNode( new Attribute<double>(*this, "BEAM_DIAMETER_DEC") );
@@ -405,6 +346,11 @@ void BF_BeamGroup::initNodes() {
   addNode( new Attribute<string>(*this, "SIGNAL_SUM") );
 }
 
+Attribute< vector<string> > BF_BeamGroup::targets()
+{
+  return getNode("TARGETS");
+}
+
 Attribute<unsigned> BF_BeamGroup::nofStations()
 {
   return getNode("NOF_STATIONS");
@@ -413,16 +359,6 @@ Attribute<unsigned> BF_BeamGroup::nofStations()
 Attribute< vector<string> > BF_BeamGroup::stationsList()
 {
   return getNode("STATIONS_LIST");
-}
-
-Attribute< vector<string> > BF_BeamGroup::targets()
-{
-  return getNode("TARGETS");
-}
-
-Attribute<string> BF_BeamGroup::tracking()
-{
-  return getNode("TRACKING");
 }
 
 Attribute<unsigned> BF_BeamGroup::nofSamples()
@@ -455,6 +391,16 @@ Attribute<unsigned> BF_BeamGroup::channelsPerSubband()
   return getNode("CHANNELS_PER_SUBBAND");
 }
 
+Attribute<double> BF_BeamGroup::subbandWidth()
+{
+  return getNode("SUBBAND_WIDTH");
+}
+
+Attribute<string> BF_BeamGroup::subbandWidthUnit()
+{
+  return getNode("SUBBAND_WIDTH_UNIT");
+}
+
 Attribute<double> BF_BeamGroup::channelWidth()
 {
   return getNode("CHANNEL_WIDTH");
@@ -463,6 +409,11 @@ Attribute<double> BF_BeamGroup::channelWidth()
 Attribute<string> BF_BeamGroup::channelWidthUnit()
 {
   return getNode("CHANNEL_WIDTH_UNIT");
+}
+
+Attribute<string> BF_BeamGroup::tracking()
+{
+  return getNode("TRACKING");
 }
 
 Attribute<double> BF_BeamGroup::pointRA()
@@ -503,16 +454,6 @@ Attribute<double> BF_BeamGroup::pointOffsetDEC()
 Attribute<string> BF_BeamGroup::pointOffsetDECUnit()
 {
   return getNode("POINT_OFFSET_DEC_UNIT");
-}
-
-Attribute<double> BF_BeamGroup::subbandWidth()
-{
-  return getNode("SUBBAND_WIDTH");
-}
-
-Attribute<string> BF_BeamGroup::subbandWidthUnit()
-{
-  return getNode("SUBBAND_WIDTH_UNIT");
 }
 
 Attribute<double> BF_BeamGroup::beamDiameterRA()
@@ -605,6 +546,21 @@ Attribute<string> BF_BeamGroup::signalSum()
   return getNode("SIGNAL_SUM");
 }
 
+BF_ProcessingHistory BF_BeamGroup::processHistory()
+{
+  return BF_ProcessingHistory(*this, "PROCESS_HISTORY");
+}
+
+CoordinatesGroup BF_BeamGroup::coordinates()
+{
+  return CoordinatesGroup(*this, coordinatesName());
+}
+
+BF_StokesDataset BF_BeamGroup::stokes( unsigned nr )
+{
+  return BF_StokesDataset(*this, stokesName(nr));
+}
+
 string BF_BeamGroup::stokesName( unsigned nr )
 {
   char buf[128];
@@ -618,25 +574,16 @@ string BF_BeamGroup::coordinatesName()
   return "COORDINATES";
 }
 
-BF_StokesDataset BF_BeamGroup::stokes( unsigned nr )
-{
-  return BF_StokesDataset(*this, stokesName(nr));
-}
 
-CoordinatesGroup BF_BeamGroup::coordinates()
+BF_StokesDataset::BF_StokesDataset( Group &parent, const std::string &name )
+:
+  Dataset<float>(parent, name)
 {
-  return CoordinatesGroup(*this, coordinatesName());
-}
-
-BF_ProcessingHistory BF_BeamGroup::processHistory()
-{
-  return BF_ProcessingHistory(*this, "PROCESS_HISTORY");
+  initNodes();
 }
 
 void BF_StokesDataset::initNodes()
 {
-  Group::initNodes();
-
   addNode( new Attribute<string>(*this, "DATATYPE") );
   addNode( new Attribute<string>(*this, "STOKES_COMPONENT") );
   addNode( new Attribute< vector<unsigned> >(*this, "NOF_CHANNELS") );

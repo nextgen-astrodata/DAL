@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef DAL_COMMONTUPLES_H
-#define DAL_COMMONTUPLES_H
+#ifndef DAL_COMMON_TUPLES_H
+#define DAL_COMMON_TUPLES_H
 
-#include "dal/hdf5/types/h5tuple.h"
+#include "../hdf5/types/h5tuple.h"
 
 namespace DAL {
 

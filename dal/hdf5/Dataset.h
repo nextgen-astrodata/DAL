@@ -17,13 +17,13 @@
 #ifndef DAL_DATASET_H
 #define DAL_DATASET_H
 
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <libgen.h>	// dirname()
 #ifdef __APPLE__
 #include <machine/endian.h>
 #else

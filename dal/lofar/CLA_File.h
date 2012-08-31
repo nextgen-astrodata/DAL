@@ -23,8 +23,8 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "dal/hdf5/Attribute.h"
-#include "dal/hdf5/File.h"
+#include "../hdf5/types/versiontype.h"
+#include "../hdf5/File.h"
 
 namespace DAL {
 
@@ -34,11 +34,11 @@ namespace DAL {
 class CLA_File: public File {
 public:
   CLA_File();
-  CLA_File( const std::string &filename, enum fileMode mode = READ );
+  CLA_File( const std::string &filename, FileMode mode = READ );
 
   virtual ~CLA_File();
 
-  virtual void open( const std::string &filename, enum fileMode mode = READ );
+  virtual void open( const std::string &filename, FileMode mode = READ );
   virtual void close();
 
   Attribute<std::string> fileName();
@@ -46,7 +46,6 @@ public:
   Attribute<std::string> fileType();
 
   Attribute<std::string>  telescope();
-  Attribute<std::string>  observer();
 
   Attribute<std::string>  projectID();
   Attribute<std::string>  projectTitle();
@@ -58,11 +57,9 @@ public:
 
   Attribute<std::string>  observationStartUTC();
   Attribute<double>       observationStartMJD();
-  Attribute<std::string>  observationStartTAI();
 
   Attribute<std::string>  observationEndUTC();
   Attribute<double>       observationEndMJD();
-  Attribute<std::string>  observationEndTAI();
 
   Attribute<unsigned>     observationNofStations();
   Attribute< std::vector<std::string> > observationStationsList();
@@ -83,16 +80,17 @@ public:
   Attribute<std::string>  pipelineName();
   Attribute<std::string>  pipelineVersion();
   Attribute<std::string>  docName();
-  Attribute<std::string>  docVersion();
+  Attribute<VersionType>  docVersion(); // TODO: (user explicit) create() fails, because missing typemap
   Attribute<std::string>  notes();
 
 protected:
-  virtual void            initNodes();
+  std::string             getFileModDate( const std::string& filename ) const;
+  std::string             formatFilenameTimestamp( const struct timeval& tv, const char* output_format,
+                                                  const char* output_format_secs, size_t output_size ) const;
 
-  std::string             getBasename(const std::string& filename) const;
-  std::string             getFileModDate(const std::string& filename) const;
-  std::string             formatFilenameTimestamp(const struct timeval& tv, const char* output_format,
-                                                  const char* output_format_secs, size_t output_size) const;
+private:
+  void                    openFile( const std::string &filename, FileMode mode );
+  void                    initNodes();
 };
 
 }

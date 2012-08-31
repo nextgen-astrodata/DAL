@@ -1,4 +1,4 @@
-# Makefile for DAL design decisions document
+# Makefile for DAL requirements and design decisions document
 #
 # The vector graphics figure 'Reqs_DD_layers.pdf' was produced using 'dia' in .dia, exported to .svg and converted to .pdf with 'inkscape'.
 # This is a pain for anyone interested to just build to read the document, and since the figure changes infrequently, put it in the repos.
@@ -27,5 +27,5 @@ spellcheck: $(SRC)
 clean:
 	@rm -f $(NAME).aux $(NAME).log $(NAME).out $(NAME).toc
 
-.PHONY: clean spellcheck
+.PHONY: spellcheck clean
 

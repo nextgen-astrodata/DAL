@@ -6,7 +6,7 @@ Description: The build system does not support Python 3, whether 2 and 3 are ins
   This used to work after it was fixed in LDA, even if 2 and 3 were both installed, but is now unsupported again. 
   Note that the LOFAR software does not support Python 3 either.
 Workaround: Use Python 2.6 or 2.7.
-Status: Low. This will not be worked on for 2.0.0.
+Status: Low priority. This will not be worked on for DAL 2.5.0.
 
 KI 2: 'make uninstall' leaves empty installation directories behind
 Description: The uninstall script removes all installed files. It also removes runtime generated .pyc files.
@@ -14,19 +14,19 @@ Description: The uninstall script removes all installed files. It also removes r
   These are: $PREFIX/share/doc/dal $PREFIX/include/dal $PYTHON_PREFIX/dist-packages/DAL and subdirectories.
   Parent directories may also have been created and not removed.
 Workaround: Remove them by hand.
-Status: Low. Already spent time to remove .pyc files. This will not be worked on further for 2.0.0.
+Status: Low priority. Already spent time to remove .pyc files. This will not be worked on further for 2.5.0.
 
 KI 3: No support for Windows
 Description: We do not build/run under Windows.
-Workaround: None (use Linux or MacOS).
-Status: Won't fix. Radio astronomers don't use Windows.
+Workaround: None (use Linux or Mac OS).
+Status: As long as radio astronomers don't use Windows, won't fix.
 
 KI 4: Long build time of Python bindings (DALPYTHON_wrap.cxx)
 Description: Compiling DALPYTHON_wrap.cxx can take a while, but on older GCC versions (e.g. 4.2.1) with the default
   build type ('RelWithDebInfo') it can take many minutes. Note that if you do a parallel build, it may appear to
   "hang" on another file, but building DALPYTHON_wrap.cxx is just not done yet.
 Workaround: Build in Debug mode (without optimizations) by passing '-DCMAKE_BUILD_TYPE=Debug' to cmake, or
-  upgrade your GCC version, or try to build with clang/llvm (last time we checked, 3.0 worked, 2.0 did not).
+  upgrade your GCC version, or build with clang/llvm (last time we checked, 3.0 worked, 2.0 did not).
   If you don't need Python bindings, turn them off by passing '-DPYTHON_BINDINGS=OFF' to cmake.
 Status: Won't fix. We don't know how to reduce SWIG's output, nor do we want to build in Debug mode by default.
 

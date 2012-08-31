@@ -19,12 +19,13 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <hdf5.h>
+#include "types/implicitdowncast.h"
 #include "Node.h"
+#include "Attribute.h"
 
 namespace DAL {
-
-template<typename T> class Attribute;
 
 /*!
  * Wraps an HDF5 group, providing core functionality.
@@ -54,7 +55,7 @@ public:
   virtual Group& create();
 
   /*!
-   * Returns whether this group exists as a group (not an attribute or dataset) in the HDF5 file.
+   * Returns whether this group exists as a HDF5 group or dataset in the HDF5 file.
    */
   virtual bool exists() const;
 
@@ -125,43 +126,36 @@ public:
 
 #endif
 
-  /*!
-   * Add a node to the map. Ownerschip is taken.
-   */
-  void addNode( Node *attr );
-
-  /*!
-   * Remove all registered nodes from the map and delete them.
-   */
-  void freeNodeMap();
-
 protected:
   hid_gc _group;
 
-  virtual void initNodes();
+
+  /*!
+   * Add a node to the node map. Ownerschip is taken. Do not pass NULL.
+   */
+  void addNode( Node *attr );
 
   virtual hid_gc open( hid_t parent, const std::string &name ) const;
 
   std::vector<std::string> memberNames();
 
-  // constructor for root group only
-  Group( const hid_gc &fileId );
+  //! Constructor for root group (in File) only
+  Group( const hid_gc &fileId, FileInfo fileInfo );
 
 private:
   //! The map containing all (registered) nodes in this set
   std::map<std::string, Node*> nodeMap;
 
-  //! Whether nodeMap is initialised through initNodes()
-  bool mapInitialised; // TODO: use !nodeMap.empty()
 
-  //! Makes sure that nodeMap can be accessed
-  void ensureNodesExist();
+  void initNodes();
+
+  /*!
+   * Remove all registered nodes from the map and delete them.
+   */
+  void freeNodeMap();
 };
 
 }
-
-// make sure that Attribute is actually defined
-#include "Attribute.h"
 
 #endif
 

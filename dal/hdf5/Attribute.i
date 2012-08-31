@@ -6,10 +6,7 @@ namespace DAL {
 %extend DAL::Attribute {
   // The C++ ABI name for this Attribute class
   static std::string _typeName() {
-    hid_gc dummy_hid;
-    Attribute< T > dummy(dummy_hid, "");
-
-    return typeid(Attribute< T >(dummy)).name();
+    return typeid(Attribute< T >).name();
   }
 
   // Force node `name' in nodeset `nodeSet' to be of our type

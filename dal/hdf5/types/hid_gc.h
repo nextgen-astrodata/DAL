@@ -18,11 +18,12 @@
 #define DAL_HID_GC_H
 
 #include <hdf5.h>
-#include "dal/hdf5/exceptions/exceptions.h"
+#include <algorithm>
+#include "../exceptions/exceptions.h"
 
 namespace DAL {
 
-// Autocloses hid_t types using closefunc() on destruction, and keeps a reference count.
+//! Autocloses hid_t types using closefunc() on destruction, and keeps a reference count.
 class hid_gc
 {
 public:
@@ -55,11 +56,11 @@ public:
   }
 
   friend void swap( hid_gc& first, hid_gc& second ) {
-    using namespace std;
-    swap(first.hid,       second.hid);
-    swap(first.closefunc, second.closefunc);
+    std::swap(first.hid,       second.hid);
+    std::swap(first.closefunc, second.closefunc);
   }
 
+  //! Get the hid from a hid_gc object. For implicit conversions.
   operator hid_t() const { return hid; }
 
   /*!
@@ -72,9 +73,10 @@ private:
   hid_t (*closefunc)(hid_t);
 };
 
-// Autocloses hid_t types using closefunc() on destruction, without using reference counting.
-//
-// This variant is faster than hid_gc, but cannot be copied.
+/*!
+ * Autocloses hid_t types using closefunc() on destruction, without using reference counting.
+ * This variant is faster than hid_gc, but cannot be copied.
+ */
 class hid_gc_noref
 {
 public:
@@ -90,6 +92,7 @@ public:
     }  
   }
 
+  //! Get the hid from a hid_gc_noref object. For implicit conversions.
   operator hid_t() const { return hid; }
 
   /*!

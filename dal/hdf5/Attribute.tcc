@@ -144,7 +144,8 @@ static inline bool h5stringIsVariable( hid_t datatype )
   return isVariable > 0;  
 }
 
-// generic versions
+
+// generic variants
 template<typename T> inline Attribute<T>& Attribute<T>::create()
 {
   hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace for attribute " + _name);
@@ -187,6 +188,9 @@ template<typename T> inline bool Attribute<T>::valid() const
 
   return true;
 }
+
+
+// specializations for vector<T>
 
 template<typename T> inline Attribute< std::vector<T> >& Attribute< std::vector<T> >::create( size_t length )
 {
@@ -241,6 +245,21 @@ template<typename T> inline bool Attribute< std::vector<T> >::valid() const
 
   return true;
 }
+
+
+// specializations for VersionType
+
+template<> inline void Attribute<VersionType>::set( const VersionType &value )
+{
+  set(value.to_string());
+  setFileInfoVersion(value); // update in-memory value as well
+}
+
+template<> inline VersionType Attribute<VersionType>::get() const
+{
+  return fileInfoVersion(); // retrieve from in-memory value
+}
+
 
 // specialisations for std::string
 
@@ -349,6 +368,7 @@ template<> inline std::string Attribute<std::string>::get() const
 
   return value;
 }
+
 
 // specialisations for std::vector<std::string>
 

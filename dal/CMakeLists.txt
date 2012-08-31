@@ -31,6 +31,7 @@ set(dal_sources
   hdf5/Node.cc
   hdf5/exceptions/exceptions.cc
   hdf5/exceptions/errorstack.cc
+  hdf5/types/FileInfo.cc
   hdf5/types/versiontype.cc
 
   lofar/Flagging.cc
@@ -52,6 +53,7 @@ set(dal_headers
   hdf5/Dataset.h
   hdf5/Dataset.tcc
   hdf5/Group.h
+  hdf5/types/FileInfo.h
   hdf5/types/h5complex.h
   hdf5/types/issame.h
   hdf5/types/implicitdowncast.h

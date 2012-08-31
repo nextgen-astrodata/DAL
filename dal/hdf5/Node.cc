@@ -15,9 +15,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Node.h"
-#include "Attribute.h"
 #include "Group.h"
-#include <string>
 
 using namespace std;
 
@@ -25,39 +23,29 @@ namespace DAL {
 
 Node::Node()
 :
-  minVersion(0),
   parent(hid_gc()),
-  _name("")
+  _name(),
+  minVersion(0),
+  fileInfo()
 {
 }
 
 Node::Node( Group &parent, const std::string &name )
 :
-  minVersion(parent.minVersion),
   parent(parent.group()),
   _name(name),
-  data(parent.data)
+  minVersion(parent.minVersion),
+  fileInfo(parent.fileInfo)
 {
-  const std::string parentName = parent.name();
-
-  if (parentName.empty())
-    // parent is the root group
-    data.parentNodePath = "/";
-  else if (parentName[0] == '/')
-    // absolute path
-    data.parentNodePath = parentName;
-  else  
-    // relative path (note: HDF5 does not support /../ like UNIX does)
-    if (data.parentNodePath == "/")
-      data.parentNodePath = "/" + parent.name();
-    else  
-      data.parentNodePath = data.parentNodePath + "/" + parent.name();
 }
 
-Node::Node( const hid_gc &parent, const std::string &name )
+//! Constructor for Node of root group (in File) only.
+Node::Node( const hid_gc &parent, const std::string &name, FileInfo fileInfo )
 :
   parent(parent),
-  _name(name)
+  _name(name),
+  minVersion(),
+  fileInfo(fileInfo)
 {
 }
 
@@ -71,20 +59,45 @@ Node& Node::operator=(Node rhs)
 
 void swap(Node& first, Node& second)
 {
-  std::swap(first.minVersion, second.minVersion);
   swap(first.parent, second.parent);
   swap(first._name, second._name);
-  std::swap(first.data, second.data); // TODO: call specialization, but don't bother: struct PropagatedData will be reworked
+  std::swap(first.minVersion, second.minVersion);
+  swap(first.fileInfo, second.fileInfo);
 }
 
-VersionType Node::fileVersion()
-{
-  return data.fileVersion;
+
+/*
+ * Just forward the calls. For a few values, this is preferable, because then
+ * we can stick the FileInfo ref counting into a separate class FileInfoRef.
+ */
+const string& Node::fileName() const {
+  return fileInfo.fileName();
 }
 
-bool Node::canWrite() const
-{
-  return data.canWrite;
+const string& Node::fileDirName() const {
+  return fileInfo.fileDirName();
+}
+
+Node::FileMode Node::fileMode() const {
+  return fileInfo.fileMode();
+}
+
+bool Node::canWrite() const {
+  FileMode mode = fileMode();
+  return mode == CREATE || mode == CREATE_EXCL || mode == READWRITE;
+}
+
+const std::string& Node::versionAttrName() const {
+  return fileInfo.versionAttrName();
+}
+
+VersionType& Node::fileInfoVersion() const {
+  return fileInfo.fileVersion();
+}
+
+void Node::setFileInfoVersion(const VersionType& newVersion) {
+  fileInfo.setFileVersion(newVersion);
 }
 
 }
+

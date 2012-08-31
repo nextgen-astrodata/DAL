@@ -19,7 +19,7 @@
 
 #include <stdexcept>
 #include <string>
-#include "dal/hdf5/exceptions/errorstack.h"
+#include "errorstack.h"
 
 namespace DAL {
 

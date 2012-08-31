@@ -20,11 +20,9 @@
 #include <string>
 #include <vector>
 #include <hdf5.h>
-#include "dal/hdf5/Dataset.h"
-#include "dal/hdf5/Group.h"
-#include "dal/hdf5/Attribute.h"
-#include "dal/lofar/CLA_File.h"
-#include "dal/lofar/Coordinates.h"
+#include "CLA_File.h"
+#include "Coordinates.h"
+#include "../hdf5/Dataset.h"
 
 namespace DAL {
 
@@ -45,11 +43,11 @@ public:
   /*!
    * Open `filename` for reading/writing/creation.
    */
-  BF_File( const std::string &filename, enum fileMode mode = READ );
+  BF_File( const std::string &filename, FileMode mode = READ );
 
   virtual ~BF_File();
 
-  virtual void open( const std::string &filename, enum fileMode mode = READ );
+  virtual void open( const std::string &filename, FileMode mode = READ );
   virtual void close();
 
   Attribute<std::string>  createOfflineOnline();
@@ -59,7 +57,7 @@ public:
   Attribute<double>       totalIntegrationTime();
   Attribute<std::string>  totalIntegrationTimeUnit();
   
-  Attribute<std::string>  observationDataType();
+  Attribute<std::string>  observationDatatype();
 
   Attribute<double>       subArrayPointingDiameter();
   Attribute<std::string>  subArrayPointingDiameterUnit();
@@ -67,23 +65,19 @@ public:
   Attribute<std::string>  bandwidthUnit();
   Attribute<double>       beamDiameter();
   Attribute<std::string>  beamDiameterUnit();
-  
-  Attribute< std::vector<double> >      weatherTemperature();
-  Attribute<std::string>                weatherTemperatureUnit();
-  Attribute< std::vector<double> >      weatherHumidity();
-  Attribute<std::string>                weatherHumidityUnit();
-  Attribute< std::vector<double> >      systemTemperature();
-  Attribute<std::string>                systemTemperatureUnit();
-  
+
   Attribute<unsigned>     observationNofSubArrayPointings();
   Attribute<unsigned>     nofSubArrayPointings();
   virtual BF_SubArrayPointing subArrayPointing( unsigned nr );
 
   BF_SysLog               sysLog();
-protected:
-  virtual void                    initNodes();
 
-  std::string                     subArrayPointingName( unsigned nr );
+protected:
+  std::string             subArrayPointingName( unsigned nr );
+
+private:
+  void                    openFile( FileMode mode );
+  void                    initNodes();
 };
 
 class BF_SysLog: public Group {
@@ -94,27 +88,17 @@ public:
 class BF_ProcessingHistory: public Group {
 public:
   BF_ProcessingHistory( Group &parent, const std::string &name ): Group(parent, name) {}
-
-  Attribute<std::string>         observationParset();
-  Attribute<std::string>         observationLog();
-  Attribute<std::string>         prestoParset();
-  Attribute<std::string>         prestoLog();
-
-protected:
-  virtual void            initNodes();
 };
 
 class BF_SubArrayPointing: public Group {
 public:
-  BF_SubArrayPointing( Group &parent, const std::string &name ): Group(parent, name) {}
+  BF_SubArrayPointing( Group &parent, const std::string &name );
 
   Attribute<std::string>  expTimeStartUTC();
-  Attribute<double>       expTimeStartMJD();
-  Attribute<std::string>  expTimeStartTAI();
-
   Attribute<std::string>  expTimeEndUTC();
+
+  Attribute<double>       expTimeStartMJD();
   Attribute<double>       expTimeEndMJD();
-  Attribute<std::string>  expTimeEndTAI();
 
   Attribute<double>       totalIntegrationTime();
   Attribute<std::string>  totalIntegrationTimeUnit();
@@ -131,26 +115,27 @@ public:
 
   Attribute<unsigned>     observationNofBeams();
   Attribute<unsigned>     nofBeams();
-  virtual BF_BeamGroup    beam( unsigned nr );
 
   virtual BF_ProcessingHistory processHistory();
 
-protected:
-  virtual void            initNodes();
+  virtual BF_BeamGroup    beam( unsigned nr );
 
+protected:
   std::string             beamName( unsigned nr );
+
+private:
+  void                    initNodes();
 };
 
 class BF_BeamGroup: public Group {
 public:
-  BF_BeamGroup( Group &parent, const std::string &name ): Group(parent, name) {}
-
-  Attribute<unsigned>     nofStations();
-  Attribute< std::vector<std::string> > stationsList();
+  BF_BeamGroup( Group &parent, const std::string &name );
 
   Attribute< std::vector<std::string> >  targets();
 
-  Attribute<std::string>  tracking();
+  Attribute<unsigned>     nofStations();
+
+  Attribute< std::vector<std::string> > stationsList();
 
   Attribute<unsigned>     nofSamples();
   Attribute<double>       samplingRate();
@@ -159,9 +144,13 @@ public:
   Attribute<std::string>  samplingTimeUnit();
 
   Attribute<unsigned>     channelsPerSubband();
+  Attribute<double>       subbandWidth();
+  Attribute<std::string>  subbandWidthUnit();
 
   Attribute<double>       channelWidth();
   Attribute<std::string>  channelWidthUnit();
+
+  Attribute<std::string>  tracking();
 
   Attribute<double>       pointRA();
   Attribute<std::string>  pointRAUnit();    
@@ -172,9 +161,6 @@ public:
   Attribute<std::string>  pointOffsetRAUnit();  
   Attribute<double>       pointOffsetDEC();
   Attribute<std::string>  pointOffsetDECUnit();  
-
-  Attribute<double>       subbandWidth();
-  Attribute<std::string>  subbandWidthUnit();
 
   Attribute<double>       beamDiameterRA();
   Attribute<std::string>  beamDiameterRAUnit();
@@ -198,22 +184,24 @@ public:
   Attribute< std::vector<std::string> > stokesComponents();
   Attribute<bool>         complexVoltage();
   Attribute<std::string>  signalSum();
-  virtual BF_StokesDataset stokes( unsigned nr );
-
-  virtual CoordinatesGroup coordinates();
 
   virtual BF_ProcessingHistory processHistory();
 
-protected:
-  virtual void            initNodes();
+  virtual CoordinatesGroup coordinates();
 
+  virtual BF_StokesDataset stokes( unsigned nr );
+
+protected:
   std::string             stokesName( unsigned nr );
   std::string             coordinatesName();
+
+private:
+  void                    initNodes();
 };
 
 class BF_StokesDataset: public Dataset<float> {
 public:
-  BF_StokesDataset( Group &parent, const std::string &name ): Dataset<float>(parent, name) {}
+  BF_StokesDataset( Group &parent, const std::string &name );
 
   Attribute<std::string>  dataType();
 
@@ -222,8 +210,8 @@ public:
   Attribute<unsigned>     nofSubbands();
   Attribute<unsigned>     nofSamples();
 
-protected:
-  virtual void            initNodes();
+private:
+  void                    initNodes();
 };
 
 }

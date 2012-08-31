@@ -20,7 +20,7 @@
 #include <complex>
 #include <hdf5.h>
 #include "hid_gc.h"
-#include "dal/hdf5/exceptions/exceptions.h"
+#include "../exceptions/exceptions.h"
 
 namespace DAL {
 

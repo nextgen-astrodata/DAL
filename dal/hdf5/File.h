@@ -19,9 +19,9 @@
 
 #include <string>
 #include <hdf5.h>
-#include "dal/hdf5/types/hid_gc.h"
-#include "dal/hdf5/Group.h"
-#include "dal/hdf5/Attribute.h"
+#include "types/versiontype.h"
+#include "Group.h"
+#include "Attribute.h"
 
 namespace DAL {
 
@@ -41,19 +41,17 @@ namespace DAL {
  */
 class File: public Group {
 public:
-  enum fileMode { READ = 1, READWRITE = 2, CREATE = 3, CREATE_EXCL = 4 };
-
   /*!
    * Create default File object.
-   * This is intended to be able to define a struct/class that contains a File object before the filename is known.
+   * This is intended to be able to have a container that contains a File object before the filename is known.
    * Once the filename is known, use open() to initialize further.
    */
   File();
 
   /*!
    * Try to open or create `filename` with open mode `mode` and treat `versionAttrName` as the version attribute name.
-   * For an existing file, the specified version attribute must exist.
-   * For a new file, it must be possible to create it (cannot be "").
+   * For an existing file, the specified version attribute must exist. For a new file, it will be created.
+   * The default value skips Node tracking (except Group's GROUPTYPE) and versioning.
    *
    * See the class description for more info on reopening and closing files.
    *
@@ -72,7 +70,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  File( const std::string &filename, enum fileMode mode, const std::string &versionAttrName );
+  File( const std::string &filename, FileMode mode, const std::string &versionAttrName = "");
 
   /*!
    * Destruct File object.
@@ -94,13 +92,13 @@ public:
 
   /*!
    * Open or create `filename` with open mode `mode` and treat `versionAttrName` as the version attribute name.
-   * See the File(filename, mode, versionAttrName) constructor for more info.
    * Upon return, the previously opened file reference (if any) has been closed.
    * If an exception is thrown, the previously opened file reference (if any) is unaltered.
    *
+   * See the File(filename, mode, versionAttrName) constructor for more info.
    * See the class description for more info on reopening and closing files.
    */
-  virtual void open( const std::string &filename, enum fileMode mode, const std::string &versionAttrName );
+  virtual void open( const std::string &filename, FileMode mode, const std::string &versionAttrName = "");
 
   /*!
    * Indicate that this File object will not be used anymore to access the underlying HDF5 file (if any),
@@ -120,24 +118,8 @@ public:
    */
   virtual bool exists() const;
 
-
   /*!
-   * The name of the file.
-   */
-  std::string filename;
-
-  /*!
-   * The mode in which the file is opened.
-   */
-  fileMode mode;
-
-  /*!
-   * The name of the attribute containing the file version.
-   */
-  std::string versionAttrName;
-
-  /*!
-   * Stores the given version in the HDF5 file.
+   * Returns the version attribute using the `versionAttrName` passed when the file was opened or created.
    *
    * Python example:
    * \code
@@ -145,29 +127,29 @@ public:
    *    >>> f = File("example.h5", File.CREATE)
    *
    *    # Set and get the file version
-   *    >>> f.setFileVersion(VersionType(1,2,3))
+   *    >>> f.version(VersionType(1,2,3))
    *
-   *    # fileVersion() reports the version
-   *    >>> str(f.fileVersion())
+   *    # version() reports the version
+   *    >>> str(f.version().get())
    *    '1.2.3'
    *
    *    # Groups and attributes inherit the Version
    *    >>> g = Group(f, "GROUP")
-   *    >>> str(g.fileVersion())
+   *    >>> str(g.version())
    *    '1.2.3'
    *
-   *    # Note: changing the version does not affect
+   *    # Note: changing the version affects
    *    # already existing group objects.
-   *    >>> f.setFileVersion(VersionType(4,5,6))
-   *    >>> str(f.fileVersion())
+   *    >>> f.version.set(VersionType(4,5,6))
+   *    >>> str(f.version().get())
    *    '4.5.6'
-   *    >>> str(g.fileVersion())
-   *    '1.2.3'
+   *    >>> str(g.version.get())
+   *    '4.5.6'
    *
    *    # Reload other objects to refresh the file info,
    *    # including the newly set version.
    *    >>> g = Group(f, "GROUP")
-   *    >>> str(g.fileVersion())
+   *    >>> str(g.version())
    *    '4.5.6'
    *
    *    # Clean up
@@ -175,17 +157,11 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  void setFileVersion( const VersionType &version );
-
-protected:
-  /*!
-   * Return the version as stored in the HDF5 file.
-   * A default value is returned if the attribute does not exist.
-   */
-  VersionType getStoredFileVersion();
+  Attribute<VersionType> version();
 
 private:
-  hid_gc openFile( const std::string &filename, enum fileMode mode ) const;
+  hid_gc openFile( const std::string &filename, FileMode mode ) const;
+  void initNodes();
 };
 
 }

@@ -21,10 +21,9 @@
 #include <vector>
 #include <complex>
 #include <hdf5.h>
-#include "dal/hdf5/Dataset.h"
-#include "dal/hdf5/Attribute.h"
-#include "dal/lofar/CLA_File.h"
-#include "dal/lofar/Flagging.h"
+#include "CLA_File.h"
+#include "Flagging.h"
+#include "../hdf5/Dataset.h"
 
 namespace DAL {
 
@@ -43,11 +42,11 @@ public:
   /*!
    * Open `filename` for reading/writing/creation.
    */
-  TBB_File( const std::string &filename, enum fileMode mode = READ );
+  TBB_File( const std::string &filename, FileMode mode = READ );
 
   virtual ~TBB_File();
 
-  virtual void open( const std::string &filename, enum fileMode mode = READ );
+  virtual void open( const std::string &filename, FileMode mode = READ );
   virtual void close();
 
   Attribute<std::string> operatingMode();

@@ -51,7 +51,6 @@ class bfmeta:
     print self.fh.fileDate().name(), "\t\t=", self.fh.fileDate().value
     print self.fh.fileType().name(), "\t\t=", self.fh.fileType().value
     print self.fh.telescope().name(), "\t\t=", self.fh.telescope().value
-#    print self.fh.observer().name(), "\t\t=", self.fh.observer().value
     print self.fh.projectID().name(), "\t\t=", self.fh.projectID().value
     print self.fh.projectTitle().name(), "\t\t=", self.fh.projectTitle().value
     print self.fh.projectPI().name(), "\t\t=", self.fh.projectPI().value
@@ -86,7 +85,7 @@ class bfmeta:
     print self.fh.BFVersion().name(), "\t\t=", self.fh.BFVersion().value
     if self.fh.totalIntegrationTime().value != None:
       print self.fh.totalIntegrationTime().name(), " = %(ti).2f %(tiu)s" %{'ti':self.fh.totalIntegrationTime().value, 'tiu':self.fh.totalIntegrationTimeUnit().value}
-    print self.fh.observationDataType().name(), "\t=", self.fh.observationDataType().value
+    print self.fh.observationDatatype().name(), "\t=", self.fh.observationDatatype().value
     print self.fh.subArrayPointingDiameter().name(), " =", self.fh.subArrayPointingDiameter().value, self.fh.subArrayPointingDiameterUnit().value
     if self.fh.bandwidth().value != None:
       print self.fh.bandwidth().name(), "\t\t= %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}

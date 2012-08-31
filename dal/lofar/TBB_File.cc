@@ -22,16 +22,14 @@ namespace DAL {
 
 TBB_File::TBB_File() {}
 
-TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
+TBB_File::TBB_File( const std::string &filename, FileMode mode )
 :
   CLA_File(filename, mode)
 {
-  if (mode == CREATE) {
+  if (mode == CREATE || mode == CREATE_EXCL) {
     fileType().create().set("tbb");
     docName() .create().set("ICD 1: TBB Time-Series Data");
-    Attribute<string> versionAttr(*this, versionAttrName);
-    versionAttr.create();
-    setFileVersion(VersionType(2, 5)); // release number is always 0 for the doc version
+    docVersion()       .set(VersionType(2, 5)); // already created by File
   } else {
     bool isTbbFileType = false;
     try {
@@ -39,14 +37,14 @@ TBB_File::TBB_File( const std::string &filename, enum fileMode mode )
     } catch (DALException& ) {
     }
     if (!isTbbFileType) {
-      throw DALException("Failed to open TBB file: A TBB file must have /FILETYPE=\"tbb\".");
+      throw DALException("Failed to open TBB file: A TBB file must have FILETYPE=\"tbb\".");
     }
   }
 }
 
 TBB_File::~TBB_File() {}
 
-void TBB_File::open( const std::string &filename, enum fileMode mode )
+void TBB_File::open( const std::string &filename, FileMode mode )
 {
   // As long as we have no member vars, keep open() and close() simple. See CLA_File::open().
   CLA_File::open(filename, mode);

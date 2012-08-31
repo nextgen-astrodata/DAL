@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "errorstack.h"
+#include "exceptions.h"
 #include "dal/dal_config.h"
 #include "dal/dal_version.h"
-#include "dal/hdf5/exceptions/errorstack.h"
-#include "dal/hdf5/exceptions/exceptions.h"
 #include <hdf5.h>
 
 namespace DAL {

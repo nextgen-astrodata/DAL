@@ -16,16 +16,13 @@
  */
 #include "CLA_File.h"
 
-#include <cstdlib>
-#include <cstring>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <cstdio>
 #include <ctime>
-#include <libgen.h>
 
-#include <dal/dal_version.h>
+#include "dal/dal_version.h"
 
 using namespace std;
 
@@ -33,34 +30,21 @@ namespace DAL {
 
 CLA_File::CLA_File() {}
 
-CLA_File::CLA_File( const std::string &filename, enum fileMode mode )
+CLA_File::CLA_File( const std::string &filename, FileMode mode )
 :
   File(filename, mode, "DOC_VERSION")
 {
-  if (mode == CREATE) {
-    telescope().create().set("LOFAR");
-    fileName().create().set(getBasename(filename));
-    fileDate().create().set(getFileModDate(filename)); // UTC
-  } else {
-    bool isCompatibleFileType = false;
-    try {
-      isCompatibleFileType = telescope().get() == "LOFAR"/* && enforceVersioning && getStoredFileVersion() >= VersionType(2, 0, 0)*/;
-    } catch (DALException& ) {
-    }
-    if (!isCompatibleFileType) {
-      throw DALException("Failed to open file: A LOFAR data product must have /TELESCOPE=\"LOFAR\" and /VERSION>=\"2.0.0\".\n"
-                         "Older data products can be upgraded or the version check can be circumvented on opening.");
-    }
-    // TODO: enable the right (versions of) attributes based on file type and file version here and in sub-classes; allow circumvention and unversioned fields
-  }
+  openFile(filename, mode);
 }
 
 CLA_File::~CLA_File() {}
 
-void CLA_File::open( const std::string &filename, enum fileMode mode )
+void CLA_File::open( const std::string &filename, FileMode mode )
 {
   // As long as we have no member vars, keep open() and close() simple. See File::open().
   File::open(filename, mode, "DOC_VERSION");
+
+  openFile(filename, mode);
 }
 
 void CLA_File::close()
@@ -68,15 +52,33 @@ void CLA_File::close()
   File::close();
 }
 
+void CLA_File::openFile( const string &filename, FileMode mode )
+{
+  initNodes();
+
+  if (mode == CREATE || mode == CREATE_EXCL) {
+    telescope().create().set("LOFAR");
+    fileName().create().set(File::fileName()); // File::fileName() is without path
+    fileDate().create().set(getFileModDate(filename)); // UTC
+  } else {
+    bool isCompatibleFileType = false;
+    try {
+      isCompatibleFileType = telescope().get() == "LOFAR";
+    } catch (DALException& ) {
+    }
+    if (!isCompatibleFileType) {
+      throw DALException("Failed to open file: A LOFAR data product must have TELESCOPE=\"LOFAR\".\n");
+    }
+  }
+}
+
 void CLA_File::initNodes()
 {
-  File::initNodes();
-
+  //addNode( new Attribute<string>(*this, "GROUPTYPE") ); // already added by Group
   addNode( new Attribute<string>(*this, "FILENAME") );
   addNode( new Attribute<string>(*this, "FILEDATE") );
   addNode( new Attribute<string>(*this, "FILETYPE") );
   addNode( new Attribute<string>(*this, "TELESCOPE") );
-  addNode( new Attribute<string>(*this, "OBSERVER") );
   addNode( new Attribute<string>(*this, "PROJECT_ID") );
   addNode( new Attribute<string>(*this, "PROJECT_TITLE") );
   addNode( new Attribute<string>(*this, "PROJECT_PI") );
@@ -85,15 +87,13 @@ void CLA_File::initNodes()
   addNode( new Attribute<string>(*this, "OBSERVATION_ID") );
   addNode( new Attribute<string>(*this, "OBSERVATION_START_UTC") );
   addNode( new Attribute<double>(*this, "OBSERVATION_START_MJD") );
-  addNode( new Attribute<string>(*this, "OBSERVATION_START_TAI") );
   addNode( new Attribute<string>(*this, "OBSERVATION_END_UTC") );
   addNode( new Attribute<double>(*this, "OBSERVATION_END_MJD") );
-  addNode( new Attribute<string>(*this, "OBSERVATION_END_TAI") );
   addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "OBSERVATION_STATIONS_LIST") );
-  addNode( new Attribute<double>(*this, "OBSERVATION_FREQUENCY_MAX") );
   addNode( new Attribute<double>(*this, "OBSERVATION_FREQUENCY_MIN") );
   addNode( new Attribute<double>(*this, "OBSERVATION_FREQUENCY_CENTER") );
+  addNode( new Attribute<double>(*this, "OBSERVATION_FREQUENCY_MAX") );
   addNode( new Attribute<string>(*this, "OBSERVATION_FREQUENCY_UNIT") );
   addNode( new Attribute<unsigned>(*this, "OBSERVATION_NOF_BITS_PER_SAMPLE") );
   addNode( new Attribute<double>(*this, "CLOCK_FREQUENCY") );
@@ -105,20 +105,11 @@ void CLA_File::initNodes()
   addNode( new Attribute<string>(*this, "PIPELINE_NAME") );
   addNode( new Attribute<string>(*this, "PIPELINE_VERSION") );
   addNode( new Attribute<string>(*this, "DOC_NAME") );
-  addNode( new Attribute<string>(*this, "DOC_VERSION") );
+  //addNode( new Attribute<VersionType>(*this, "DOC_VERSION") ); // already added by File
   addNode( new Attribute<string>(*this, "NOTES") );
 }
 
-std::string CLA_File::getBasename(const std::string& filename) const {
-  vector<char> fn(filename.size() + 1);
-  memcpy(&fn[0], filename.c_str(), filename.size() + 1);
-
-  char* bn = basename(&fn[0]); // don't use ::basename(), as basename is sometimes a macro
-
-  return string(bn);
-}
-
-/*
+/*!
  * Returns last mod date/time of filename, or current time of day if stat()ing fails,
  * in "YYYY-MM-DDThh:mm:ss.s" UTC format.
  * For FILEDATE attribute.
@@ -144,7 +135,7 @@ std::string CLA_File::getFileModDate(const std::string& filename) const {
 	return formatFilenameTimestamp(tv, output_format, output_format_secs, sizeof(output_format_example));
 }
 
-/*
+/*!
  * The output_format is without seconds. The output_size is including the '\0'.
  * Helper for in filenames and for the FILEDATE attribute.
  */
@@ -183,11 +174,6 @@ Attribute<string> CLA_File::fileType()
 Attribute<string> CLA_File::telescope()
 {
   return getNode("TELESCOPE");
-}
-
-Attribute<string> CLA_File::observer()
-{
-  return getNode("OBSERVER");
 }
 
 Attribute<string> CLA_File::projectID()
@@ -230,11 +216,6 @@ Attribute<double> CLA_File::observationStartMJD()
   return getNode("OBSERVATION_START_MJD");
 }
 
-Attribute<string> CLA_File::observationStartTAI()
-{
-  return getNode("OBSERVATION_START_TAI");
-}
-
 Attribute<string> CLA_File::observationEndUTC()
 {
   return getNode("OBSERVATION_END_UTC");
@@ -243,11 +224,6 @@ Attribute<string> CLA_File::observationEndUTC()
 Attribute<double> CLA_File::observationEndMJD()
 {
   return getNode("OBSERVATION_END_MJD");
-}
-
-Attribute<string> CLA_File::observationEndTAI()
-{
-  return getNode("OBSERVATION_END_TAI");
 }
 
 Attribute<unsigned> CLA_File::observationNofStations()
@@ -330,7 +306,7 @@ Attribute<string> CLA_File::docName()
   return getNode("DOC_NAME");
 }
 
-Attribute<string> CLA_File::docVersion()
+Attribute<VersionType> CLA_File::docVersion()
 {
   return getNode("DOC_VERSION");
 }
