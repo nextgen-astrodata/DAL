@@ -26,6 +26,28 @@ TBB_File::TBB_File( const std::string &filename, FileMode mode )
 :
   CLA_File(filename, mode)
 {
+  openFile(mode);
+}
+
+TBB_File::~TBB_File() {}
+
+void TBB_File::open( const std::string &filename, FileMode mode )
+{
+  // As long as we have no member vars, keep open() and close() simple. See CLA_File::open().
+  CLA_File::open(filename, mode);
+
+  openFile(mode);
+}
+
+void TBB_File::close()
+{
+  CLA_File::close();
+}
+
+void TBB_File::openFile( FileMode mode )
+{
+  initNodes();
+
   if (mode == CREATE || mode == CREATE_EXCL) {
     fileType().create().set("tbb");
     docName() .create().set("ICD 1: TBB Time-Series Data");
@@ -42,17 +64,9 @@ TBB_File::TBB_File( const std::string &filename, FileMode mode )
   }
 }
 
-TBB_File::~TBB_File() {}
-
-void TBB_File::open( const std::string &filename, FileMode mode )
-{
-  // As long as we have no member vars, keep open() and close() simple. See CLA_File::open().
-  CLA_File::open(filename, mode);
-}
-
-void TBB_File::close()
-{
-  CLA_File::close();
+void TBB_File::initNodes() {
+  addNode( new Attribute<string>(*this, "OPERATING_MODE") );
+  addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
 }
 
 Attribute<string> TBB_File::operatingMode()
@@ -96,6 +110,23 @@ TBB_Trigger TBB_File::trigger()
 }
 
 
+TBB_Trigger::TBB_Trigger( Group &parent, const std::string &name )
+:
+  Group(parent, name)
+{
+  initNodes();
+}
+
+void TBB_Trigger::initNodes() {
+  addNode( new Attribute<string>(*this, "TRIGGER_TYPE") );
+  addNode( new Attribute<int>(*this, "TRIGGER_VERSION") );
+  addNode( new Attribute<int>(*this, "PARAM_COINCIDENCE_CHANNELS") );
+  addNode( new Attribute<double>(*this, "PARAM_COINCIDENCE_TIME") );
+  addNode( new Attribute<string>(*this, "PARAM_DIRECTION_FIT") );
+  addNode( new Attribute<double>(*this, "PARAM_ELEVATION_MIN") );
+  addNode( new Attribute<double>(*this, "PARAM_FIT_VARIANCE_MAX") );
+}
+
 Attribute<string> TBB_Trigger::triggerType()
 {
   return Attribute<string>(*this, "TRIGGER_TYPE");
@@ -131,6 +162,26 @@ Attribute<double> TBB_Trigger::paramFitVarianceMax()
   return Attribute<double>(*this, "PARAM_FIT_VARIANCE_MAX");
 }
 
+
+TBB_Station::TBB_Station( Group &parent, const std::string &name )
+:
+  Group(parent, name)
+{
+  initNodes();
+}
+
+void TBB_Station::initNodes() {
+  addNode( new Attribute<string>(*this, "STATION_NAME") );
+  addNode( new Attribute< vector<double> >(*this, "STATION_POSITION") );
+  addNode( new Attribute<string>(*this, "STATION_POSITION_UNIT") );
+  addNode( new Attribute<string>(*this, "STATION_POSITION_FRAME") );
+  addNode( new Attribute< vector<double> >(*this, "BEAM_DIRECTION") );
+  addNode( new Attribute<string>(*this, "BEAM_DIRECTION_UNIT") );
+  addNode( new Attribute<string>(*this, "BEAM_DIRECTION_FRAME") );
+  addNode( new Attribute<double>(*this, "CLOCK_OFFSET") );
+  addNode( new Attribute<string>(*this, "CLOCK_OFFSET_UNIT") );
+  addNode( new Attribute<unsigned>(*this, "NOF_DIPOLES") );
+}
 
 Attribute<string> TBB_Station::stationName()
 {
@@ -211,6 +262,42 @@ string TBB_Station::dipoleDatasetName( unsigned stationID, unsigned rspID, unsig
   return string(buf);
 }
 
+
+TBB_DipoleDataset::TBB_DipoleDataset( Group &parent, const std::string &name )
+:
+  Dataset<short>(parent, name)
+{
+  initNodes();
+}
+
+void TBB_DipoleDataset::initNodes() {
+  addNode( new Attribute<unsigned>(*this, "STATION_ID") );
+  addNode( new Attribute<unsigned>(*this, "RSP_ID") );
+  addNode( new Attribute<unsigned>(*this, "RCU_ID") );
+  addNode( new Attribute<double>(*this, "SAMPLE_FREQUENCY") );
+  addNode( new Attribute<string>(*this, "SAMPLE_FREQUENCY_UNIT") );
+  addNode( new Attribute<unsigned>(*this, "TIME") );
+  addNode( new Attribute<unsigned>(*this, "SAMPLE_NUMBER") );
+  addNode( new Attribute<unsigned>(*this, "SAMPLES_PER_FRAME") );
+  addNode( new Attribute<unsigned long long>(*this, "DATA_LENGTH") );
+  addNode( new Attribute< vector<Range> >(*this, "FLAG_OFFSETS") );
+  addNode( new Attribute<unsigned>(*this, "NYQUIST_ZONE") );
+  addNode( new Attribute<double>(*this, "CABLE_DELAY") );
+  addNode( new Attribute<string>(*this, "CABLE_DELAY_UNIT") );
+  addNode( new Attribute<double>(*this, "DIPOLE_CALIBRATION_DELAY") );
+  addNode( new Attribute<string>(*this, "DIPOLE_CALIBRATION_DELAY_UNIT") );
+  addNode( new Attribute< vector<complex<double> > >(*this, "DIPOLE_CALIBRATION_DELAY_GAIN_CURVE") );
+  addNode( new Attribute< vector<double> >(*this, "ANTENNA_POSITION") );
+  addNode( new Attribute<string>(*this, "ANTENNA_POSITION_UNIT") );
+  addNode( new Attribute<string>(*this, "ANTENNA_POSITION_FRAME") );
+  addNode( new Attribute< vector<double> >(*this, "ANTENNA_NORMAL_VECTOR") );
+  addNode( new Attribute< vector<double> >(*this, "ANTENNA_ROTATION_MATRIX") );
+  addNode( new Attribute< vector<double> >(*this, "TILE_BEAM") );
+  addNode( new Attribute<string>(*this, "TILE_BEAM_UNIT") );
+  addNode( new Attribute<string>(*this, "TILE_BEAM_FRAME") );
+  addNode( new Attribute<double>(*this, "DISPERSION_MEASURE") );
+  addNode( new Attribute<string>(*this, "DISPERSION_MEASURE_UNIT") );
+}
 
 Attribute<unsigned> TBB_DipoleDataset::stationID()
 {

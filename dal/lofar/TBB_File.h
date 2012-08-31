@@ -58,12 +58,15 @@ public:
   virtual TBB_Trigger    trigger();
 
 private:
+  void                   openFile( FileMode mode );
+  void                   initNodes();
+
   std::string            stationGroupName( const std::string &stationName );
 };
 
 class TBB_Trigger: public Group {
 public:
-  TBB_Trigger( Group &parent, const std::string &name ): Group(parent, name) {}
+  TBB_Trigger( Group &parent, const std::string &name );
 
   Attribute<std::string> triggerType();
   Attribute<int>         triggerVersion();
@@ -73,11 +76,14 @@ public:
   Attribute<std::string> paramDirectionFit();
   Attribute<double>      paramElevationMin();
   Attribute<double>      paramFitVarianceMax();
+
+private:
+  void                   initNodes();
 };
 
 class TBB_Station: public Group {
 public:
-  TBB_Station( Group &parent, const std::string &name ): Group(parent, name) {}
+  TBB_Station( Group &parent, const std::string &name );
 
   Attribute<std::string>                stationName();
 
@@ -98,12 +104,13 @@ public:
   virtual TBB_DipoleDataset             dipole( unsigned stationID, unsigned rspID, unsigned rcuID );
 
 private:
+  void                                  initNodes();
   std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
 };
 
 class TBB_DipoleDataset: public Dataset<short> {
 public:
-  TBB_DipoleDataset( Group &parent, const std::string &name ): Dataset<short>(parent, name) {}
+  TBB_DipoleDataset( Group &parent, const std::string &name );
 
   Attribute<unsigned>                   stationID();
   Attribute<unsigned>                   rspID();
@@ -139,6 +146,9 @@ public:
 
   Attribute<double>                     dispersionMeasure();
   Attribute<std::string>                dispersionMeasureUnit();
+
+private:
+  void                                  initNodes();
 };
 
 }
