@@ -110,13 +110,12 @@ void CLA_File::initNodes()
 }
 
 std::string CLA_File::getBasename(const std::string& filename) const {
-  char* fn = strdup(filename.c_str());
-  if (fn == NULL)
-    throw DALException("Failed to open file: out of memory.");
-  char* bn = basename(fn); // don't use ::basename(), as basename is sometimes a macro
-  string bnStr(bn); // bn may point into fn, so copy before free()
-  std::free(fn);
-  return bnStr;
+  vector<char> fn(filename.size() + 1);
+  memcpy(&fn[0], filename.c_str(), filename.size() + 1);
+
+  char* bn = basename(&fn[0]); // don't use ::basename(), as basename is sometimes a macro
+
+  return string(bn);
 }
 
 /*
