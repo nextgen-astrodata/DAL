@@ -155,23 +155,15 @@ std::string CLA_File::formatFilenameTimestamp(const struct timeval& tv, const ch
 	gmtime_r(&tv.tv_sec, &tm);
 	double secs = tm.tm_sec + tv.tv_usec / 1000000.0;
 
-	struct Date {
-		char* date;
-		Date(size_t size) : date(new char[size]) {
-		}
-		~Date() {
-			delete[] date;
-		}
-	} d(output_size); // ensure C string for strftime() is always deleted
+	vector<char> date(output_size);
 
-	size_t nwritten = strftime(d.date, output_size, output_format, &tm);
+	size_t nwritten = strftime(&date[0], output_size, output_format, &tm);
 	if (nwritten == 0) {
-		d.date[0] = '\0';
+		date[0] = '\0';
 	}
-	/*int nprinted = */snprintf(d.date + nwritten, output_size - nwritten, output_format_secs, secs);
+	(void)snprintf(&date[0] + nwritten, output_size - nwritten, output_format_secs, secs);
 
-	string dateStr(d.date);
-	return dateStr;
+	return string(&date[0]);
 }
 
 Attribute<string> CLA_File::fileName()
