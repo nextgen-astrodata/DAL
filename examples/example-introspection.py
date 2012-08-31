@@ -30,12 +30,15 @@ def printNodesInfo(h5file):
 
 
 for filename in filenames:
-  f = DAL.CLA_File(filedir + '/' + filename)
+  fullpath = '%s/%s' % (filedir, filename)
+
+  f = DAL.CLA_File(fullpath)
   ftype = f.fileType().get()
+
   if ftype == 'tbb':
-    f = DAL.TBB_File(filename)
+    f = DAL.TBB_File(fullpath)
   elif ftype == 'bf' or ftype == 'dynspec':
-    f = DAL.BF_File(filename)
+    f = DAL.BF_File(fullpath)
   else:
     None # leave it opened as a CLA_File, so we can access the Common LOFAR Attributes
 
