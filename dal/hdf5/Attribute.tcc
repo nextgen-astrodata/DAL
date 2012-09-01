@@ -247,21 +247,7 @@ template<typename T> inline bool Attribute< std::vector<T> >::valid() const
 }
 
 
-// specializations for VersionType
-
-template<> inline void Attribute<VersionType>::set( const VersionType &value )
-{
-  set(value.to_string());
-  setFileInfoVersion(value); // update in-memory value as well
-}
-
-template<> inline VersionType Attribute<VersionType>::get() const
-{
-  return fileInfoVersion(); // retrieve from in-memory value
-}
-
-
-// specialisations for std::string
+// specializations for std::string
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
@@ -297,7 +283,7 @@ template<> inline void Attribute<std::string>::set( const std::string &value )
     hid_gc_noref datatype(h5fixedStringType(requiredsize), H5Tclose, "Could not create fixed length string datatype to set attribute " + _name);
 
     if (diskdatasize < requiredsize) {
-      // recreate as fixed string of the right size
+      // recreate as fixed string of the right size 
       remove();
 
       hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace to set attribute " + _name);
@@ -370,7 +356,7 @@ template<> inline std::string Attribute<std::string>::get() const
 }
 
 
-// specialisations for std::vector<std::string>
+// specializations for std::vector<std::string>
 
 template<> inline Attribute< std::vector<std::string> >& Attribute< std::vector<std::string> >::create( size_t length )
 {
@@ -431,6 +417,35 @@ template<> inline std::vector<std::string> Attribute< std::vector<std::string> >
     throw DALException("Could not reclaim memory for variable-length attribute " + _name);
 
   return value;
+}
+
+
+// specializations for VersionType
+// Under water, VersionType is stored as a string, but avoid a h5typemap for VersionType.
+
+template<> inline Attribute<VersionType>& Attribute<VersionType>::create()
+{
+  /*
+   * We don't want to (re)introduce an Attribute constructor that takes a hid,
+   * because attributes can only be stored in groups/datasets, not in any HDF5 node.
+   * Just force a string attribute.
+   */
+  reinterpret_cast< Attribute<std::string>* >(this)->create();
+  return *this;
+}
+
+template<> inline void Attribute<VersionType>::set( const VersionType &value )
+{
+  // see create() comment above
+  reinterpret_cast< Attribute<std::string>* >(this)->set(value.to_string());
+
+  // update in-memory value as well
+  setFileInfoVersion(value);
+}
+
+template<> inline VersionType Attribute<VersionType>::get() const
+{
+  return fileInfoVersion(); // retrieve from in-memory value
 }
 
 #endif
