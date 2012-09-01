@@ -115,7 +115,7 @@ void Group::set( const Group &other, bool deepcopy ) {
 }
 
 const hid_gc &Group::group() {
-  // deferred opening of group, as it may need to be created first
+  // deferred opening of group/dataset, as it may need to be created first
   if (!_group.isset())
     _group = open(parent, _name);
 
@@ -150,10 +150,11 @@ void Group::addNode( Node *attr )
 
 ImplicitDowncast<Node> Group::getNode( const std::string &name )
 {
-  if (nodeMap.find(name) == nodeMap.end())
+  std::map<std::string, Node*>::const_iterator it(nodeMap.find(name));
+  if (it == nodeMap.end())
     throw DALValueError("Could not get (find) node " + name);
 
-  return *nodeMap[name];
+  return *it->second;
 }
 
 vector<string> Group::nodeNames() {
