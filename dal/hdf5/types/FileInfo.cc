@@ -37,7 +37,7 @@ FileInfo::FileInfo(const FileInfo& other) : ptr(other.ptr) {
 }
 
 FileInfo::~FileInfo() {
-  if (ptr->refCount == 1) {
+  if (--ptr->refCount == 0) {
     delete ptr;
   }
 }
