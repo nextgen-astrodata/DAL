@@ -46,7 +46,7 @@ void TBB_File::close()
 
 void TBB_File::openFile( FileMode mode )
 {
-  initNodes();
+  initFileNodes();
 
   if (mode == CREATE || mode == CREATE_EXCL) {
     fileType().create().set("tbb");
@@ -64,7 +64,7 @@ void TBB_File::openFile( FileMode mode )
   }
 }
 
-void TBB_File::initNodes() {
+void TBB_File::initFileNodes() {
   addNode( new Attribute<string>(*this, "OPERATING_MODE") );
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
 }
@@ -114,10 +114,15 @@ TBB_Trigger::TBB_Trigger( Group &parent, const std::string &name )
 :
   Group(parent, name)
 {
+}
+
+void TBB_Trigger::open( hid_t /*parent*/, const std::string &/*name*/ )
+{
   initNodes();
 }
 
 void TBB_Trigger::initNodes() {
+  Group::initNodes();
   addNode( new Attribute<string>(*this, "TRIGGER_TYPE") );
   addNode( new Attribute<int>(*this, "TRIGGER_VERSION") );
   addNode( new Attribute<int>(*this, "PARAM_COINCIDENCE_CHANNELS") );
@@ -167,10 +172,15 @@ TBB_Station::TBB_Station( Group &parent, const std::string &name )
 :
   Group(parent, name)
 {
+}
+
+void TBB_Station::open( hid_t /*parent*/, const std::string &/*name*/ )
+{
   initNodes();
 }
 
 void TBB_Station::initNodes() {
+  Group::initNodes();
   addNode( new Attribute<string>(*this, "STATION_NAME") );
   addNode( new Attribute< vector<double> >(*this, "STATION_POSITION") );
   addNode( new Attribute<string>(*this, "STATION_POSITION_UNIT") );
@@ -267,10 +277,15 @@ TBB_DipoleDataset::TBB_DipoleDataset( Group &parent, const std::string &name )
 :
   Dataset<short>(parent, name)
 {
+}
+
+void TBB_DipoleDataset::open( hid_t /*parent*/, const std::string &/*name*/ )
+{
   initNodes();
 }
 
 void TBB_DipoleDataset::initNodes() {
+  Dataset::initNodes();
   addNode( new Attribute<unsigned>(*this, "STATION_ID") );
   addNode( new Attribute<unsigned>(*this, "RSP_ID") );
   addNode( new Attribute<unsigned>(*this, "RCU_ID") );

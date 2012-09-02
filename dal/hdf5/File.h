@@ -161,7 +161,7 @@ public:
 
 private:
   hid_gc openFile( const std::string &filename, FileMode mode ) const;
-  void initNodes();
+  void initFileNodes();
 };
 
 }

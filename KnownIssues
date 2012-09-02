@@ -39,3 +39,4 @@ Description: The build system does not support Python 3, whether 2 and 3 are ins
   Note that the LOFAR software does not support Python 3 either.
 Workaround: Use Python 2.6 or 2.7.
 Status: Low priority. This will not be worked on for DAL 2.5.0.
+

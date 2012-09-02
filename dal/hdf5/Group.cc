@@ -22,7 +22,6 @@ namespace DAL {
 
 Group::Group()
 {
-  //no need to populate nodeMap, because File::open() creates a new File obj and swaps.
 }
 
 Group::Group( const Group &other )
@@ -35,9 +34,9 @@ Group::Group( const Group &other )
 
 Group::Group( Group &parent, const std::string &name )
 :
-  Node(parent, name),
+  Node(parent, name)
   // _group is set once this Group obj is opened, which cannot be done now, because it may not exist
-  nodeMap(parent.nodeMap)
+  // nodeMap is set when opened: for files on obj construction, and for other groups on use (i.e. on group())
 {
 }
 
@@ -47,7 +46,6 @@ Group::Group( const hid_gc &fileId, FileInfo fileInfo )
   Node(fileId, "/", fileInfo),
   _group(fileId)
 {
-  initNodes();
 }
 
 Group::~Group() {
@@ -117,14 +115,15 @@ void Group::set( const Group &other, bool deepcopy ) {
 const hid_gc &Group::group() {
   // deferred opening of group/dataset, as it may need to be created first
   if (!_group.isset())
-    _group = open(parent, _name);
+    open(parent, _name);
 
   return _group;
 }
 
-hid_gc Group::open( hid_t parent, const std::string &name ) const
+void Group::open( hid_t parent, const std::string &name )
 {
-  return hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group " + _name);
+  _group = hid_gc(H5Gopen2(parent, name.c_str(), H5P_DEFAULT), H5Gclose, "Could not open group " + _name);
+  initNodes();
 }
 
 Attribute<string> Group::groupType()
@@ -173,7 +172,7 @@ void Group::freeNodeMap()
     delete i->second;
   }
 
-  nodeMap.clear();
+  //nodeMap.clear(); // redundant
 }
 
 vector<string> Group::memberNames() {

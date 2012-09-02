@@ -77,7 +77,7 @@ protected:
 
 private:
   void                    openFile( FileMode mode );
-  void                    initNodes();
+  void                    initFileNodes();
 };
 
 class BF_SysLog: public Group {
@@ -122,9 +122,10 @@ public:
 
 protected:
   std::string             beamName( unsigned nr );
+  void                    initNodes();
 
 private:
-  void                    initNodes();
+  virtual void            open( hid_t parent, const std::string &name );
 };
 
 class BF_BeamGroup: public Group {
@@ -194,9 +195,10 @@ public:
 protected:
   std::string             stokesName( unsigned nr );
   std::string             coordinatesName();
+  void                    initNodes();
 
 private:
-  void                    initNodes();
+  virtual void            open( hid_t parent, const std::string &name );
 };
 
 class BF_StokesDataset: public Dataset<float> {
@@ -210,8 +212,11 @@ public:
   Attribute<unsigned>     nofSubbands();
   Attribute<unsigned>     nofSamples();
 
-private:
+protected:
   void                    initNodes();
+
+private:
+  virtual void            open( hid_t parent, const std::string &name );
 };
 
 }

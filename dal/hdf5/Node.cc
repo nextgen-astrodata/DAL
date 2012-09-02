@@ -32,7 +32,7 @@ Node::Node()
 
 Node::Node( Group &parent, const std::string &name )
 :
-  parent(parent.group()),
+  parent(parent.group()), // .group(): friend-allowed
   _name(name),
   minVersion(parent.minVersion),
   fileInfo(parent.fileInfo)

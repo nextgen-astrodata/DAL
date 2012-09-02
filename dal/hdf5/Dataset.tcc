@@ -349,6 +349,11 @@ template<typename T> void Dataset<T>::setScalar1D( size_t pos, T value )
   Dataset<T>::setScalar(vpos, value);
 }
 
+template<typename T> void Dataset<T>::open( hid_t parent, const std::string &name ) {
+  _group = hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset " + _name);
+  initNodes();
+}
+
 template<typename T> bool Dataset<T>::bigEndian( enum Endianness endianness ) const
 {
   if (endianness == LITTLE)

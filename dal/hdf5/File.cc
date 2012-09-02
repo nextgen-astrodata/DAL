@@ -40,7 +40,7 @@ File::File( const std::string &filename, FileMode mode, const std::string &versi
       setFileInfoVersion(h5StoredVersionAttr.get());
     }
 
-    initNodes();
+    initFileNodes();
   }
 }
 
@@ -125,7 +125,7 @@ Attribute<VersionType> File::version()
   return getNode(versionAttrName());
 }
 
-void File::initNodes()
+void File::initFileNodes()
 {
   addNode( new Attribute<VersionType>(*this, versionAttrName()) );
 }

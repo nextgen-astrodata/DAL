@@ -59,7 +59,7 @@ public:
 
 private:
   void                   openFile( FileMode mode );
-  void                   initNodes();
+  void                   initFileNodes();
 
   std::string            stationGroupName( const std::string &stationName );
 };
@@ -77,8 +77,11 @@ public:
   Attribute<double>      paramElevationMin();
   Attribute<double>      paramFitVarianceMax();
 
-private:
+protected:
   void                   initNodes();
+
+private:
+  virtual void           open( hid_t parent, const std::string &name );
 };
 
 class TBB_Station: public Group {
@@ -103,8 +106,11 @@ public:
   virtual std::vector<TBB_DipoleDataset> dipoles();
   virtual TBB_DipoleDataset             dipole( unsigned stationID, unsigned rspID, unsigned rcuID );
 
-private:
+protected:
   void                                  initNodes();
+
+private:
+  virtual void                          open( hid_t parent, const std::string &name );
   std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
 };
 
@@ -147,8 +153,11 @@ public:
   Attribute<double>                     dispersionMeasure();
   Attribute<std::string>                dispersionMeasureUnit();
 
-private:
+protected:
   void                                  initNodes();
+
+private:
+  virtual void                          open( hid_t parent, const std::string &name );
 };
 
 }

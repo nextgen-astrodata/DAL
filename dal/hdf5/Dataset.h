@@ -109,7 +109,7 @@ public:
    * after the dataset has been created (HDF5 1.8), so providing an absolute path will make the
    * dataset difficult to copy or move across systems. We strongly advice against absolute paths (and "../") here!
    * Note that HDF5 1.8 has a problem accessing external files outside the current working directory.
-   * DAL works around this, but see Known Issue 1 for more detail.
+   * DAL works around this, but see Known Issue 1 on how the current working directory affects this.
    *
    * If `filename' equals "", then dims == maxdims is required due to limitations of HDF5.
    *
@@ -293,9 +293,9 @@ public:
    * \param[in] dim3index         index of the third dimension to query
    *
    * Requires:
-   *    - ndims() >= 2
+   *    - ndims() >= 3
    *    - pos.size() == ndims()
-   *    - dim1index < dim2index < ndims()
+   *    - dim1index < dim2index < dim3index < ndims()
    */
   void set3D( const std::vector<size_t> &pos, const T *inbuffer3, size_t dim1, size_t dim2, size_t dim3, unsigned dim1index = 0, unsigned dim2index = 1, unsigned dim3index = 2 );
 
@@ -326,10 +326,6 @@ public:
   void setScalar1D( size_t pos, T value );
 
 protected:
-  virtual hid_gc open( hid_t parent, const std::string &name ) const {
-    return hid_gc(H5Dopen2(parent, name.c_str(), H5P_DEFAULT), H5Dclose, "Could not open dataset " + _name);
-  }
-
   /*!
    * Returns true if endianness is BIG or if it is NATIVE and the current machine architecture is big endian.
    * Returns false if endianness is LITTLE or if it is NATIVE and the current machine architecture is little endian.
@@ -343,11 +339,14 @@ protected:
   /*!
    * Do not use this create function.
    * It always throws to catch incorrect calls to create() in Group.
-   * To create a Dataset, use the create function with arguments instead.
+   * To create a Dataset, use the Dataset::create function with arguments.
    */
   virtual Dataset<T>& create() {
     throw HDF5Exception("create() without parameters not supported on a dataset " + _name);
   }
+
+private:
+  virtual void open( hid_t parent, const std::string &name );
 };
 
 }

@@ -46,7 +46,7 @@ void BF_File::close()
 
 void BF_File::openFile( FileMode mode )
 {
-  initNodes();
+  initFileNodes();
 
   if (mode == CREATE || mode == CREATE_EXCL) {
     fileType().create().set("bf");
@@ -64,7 +64,7 @@ void BF_File::openFile( FileMode mode )
   }
 }
 
-void BF_File::initNodes() {
+void BF_File::initFileNodes() {
   addNode( new Attribute<string>(*this, "CREATE_OFFLINE_ONLINE") );
   addNode( new Attribute<string>(*this, "BF_FORMAT") );
   addNode( new Attribute<string>(*this, "BF_VERSION") );
@@ -175,10 +175,15 @@ BF_SubArrayPointing::BF_SubArrayPointing( Group &parent, const std::string &name
 :
   Group(parent, name)
 {
+}
+
+void BF_SubArrayPointing::open( hid_t /*parent*/, const std::string &/*name*/ )
+{
   initNodes();
 }
 
 void BF_SubArrayPointing::initNodes() {
+  Group::initNodes();
   addNode( new Attribute<string>(*this, "EXPTIME_START_UTC") );
   addNode( new Attribute<string>(*this, "EXPTIME_END_UTC") );
   addNode( new Attribute<double>(*this, "EXPTIME_START_MJD") );
@@ -300,10 +305,15 @@ BF_BeamGroup::BF_BeamGroup( Group &parent, const std::string &name )
 :
   Group(parent, name)
 {
+}
+
+void BF_BeamGroup::open( hid_t /*parent*/, const std::string &/*name*/ )
+{
   initNodes();
 }
 
 void BF_BeamGroup::initNodes() {
+  Group::initNodes();
   addNode( new Attribute< vector<string> >(*this, "TARGETS") );
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
   addNode( new Attribute< vector<string> >(*this, "STATIONS_LIST") );
@@ -579,11 +589,16 @@ BF_StokesDataset::BF_StokesDataset( Group &parent, const std::string &name )
 :
   Dataset<float>(parent, name)
 {
+}
+
+void BF_StokesDataset::open( hid_t /*parent*/, const std::string &/*name*/ )
+{
   initNodes();
 }
 
 void BF_StokesDataset::initNodes()
 {
+  Dataset::initNodes();
   addNode( new Attribute<string>(*this, "DATATYPE") );
   addNode( new Attribute<string>(*this, "STOKES_COMPONENT") );
   addNode( new Attribute< vector<unsigned> >(*this, "NOF_CHANNELS") );

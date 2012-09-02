@@ -90,7 +90,7 @@ protected:
 
 private:
   void                    openFile( const std::string &filename, FileMode mode );
-  void                    initNodes();
+  void                    initFileNodes();
 };
 
 }

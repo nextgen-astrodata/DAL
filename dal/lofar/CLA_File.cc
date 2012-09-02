@@ -54,7 +54,7 @@ void CLA_File::close()
 
 void CLA_File::openFile( const string &filename, FileMode mode )
 {
-  initNodes();
+  initFileNodes();
 
   if (mode == CREATE || mode == CREATE_EXCL) {
     telescope().create().set("LOFAR");
@@ -72,7 +72,7 @@ void CLA_File::openFile( const string &filename, FileMode mode )
   }
 }
 
-void CLA_File::initNodes()
+void CLA_File::initFileNodes()
 {
   //addNode( new Attribute<string>(*this, "GROUPTYPE") ); // already added by Group
   addNode( new Attribute<string>(*this, "FILENAME") );
