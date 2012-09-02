@@ -283,7 +283,7 @@ template<> inline void Attribute<std::string>::set( const std::string &value )
     hid_gc_noref datatype(h5fixedStringType(requiredsize), H5Tclose, "Could not create fixed length string datatype to set attribute " + _name);
 
     if (diskdatasize < requiredsize) {
-      // recreate as fixed string of the right size 
+      // recreate as fixed string of the right size
       remove();
 
       hid_gc_noref dataspace(h5scalar(), H5Sclose, "Could not create scalar dataspace to set attribute " + _name);

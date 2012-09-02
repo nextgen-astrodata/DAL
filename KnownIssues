@@ -1,27 +1,22 @@
 Data Access Library (DAL) - KnownIssues
 =======================================
 
-KI 1: No support for Python 3
-Description: The build system does not support Python 3, whether 2 and 3 are installed or only 3.
-  This used to work after it was fixed in LDA, even if 2 and 3 were both installed, but is now unsupported again. 
-  Note that the LOFAR software does not support Python 3 either.
-Workaround: Use Python 2.6 or 2.7.
-Status: Low priority. This will not be worked on for DAL 2.5.0.
+KI 1: DAL changes the current working directory (cwd) in some cases
+Description: When opening a HDF5 file in another directory and that HDF5 file has data sets stored in external
+  files, then DAL changes the cwd to the HDF5 file and back around every access to an external data file. Else,
+  HDF5 will report an error; DAL works around this. This always uses one extra file descriptor per opened file.
+  Note that DAL uses fchdir(), such that users can change the cwd after HDF5 files have been opened. When DAL
+  changes the cwd, it tries to set it back (needs another file descriptor (temp)), but this may fail.
+Workaround: Change the cwd yourself to always open the HDF5 file from the cwd (no extra file descriptor used and
+  DAL does not touch the cwd). In that case, the cwd needs to be the same when accessing external data sets.
+Status: The underlying HDF5 issue has been reported to the HDF Group. We don't know how to work around it better.
 
-KI 2: 'make uninstall' leaves empty installation directories behind
-Description: The uninstall script removes all installed files. It also removes runtime generated .pyc files.
-  It does not remove created directories, even if empty.
-  These are: $PREFIX/share/doc/dal $PREFIX/include/dal $PYTHON_PREFIX/dist-packages/DAL and subdirectories.
-  Parent directories may also have been created and not removed.
-Workaround: Remove them by hand.
-Status: Low priority. Already spent time to remove .pyc files. This will not be worked on further for 2.5.0.
-
-KI 3: No support for Windows
-Description: We do not build/run under Windows.
+KI 2: No support for Windows
+Description: DAL does not build/run under Windows.
 Workaround: None (use Linux or Mac OS).
 Status: As long as radio astronomers don't use Windows, won't fix.
 
-KI 4: Long build time of Python bindings (DALPYTHON_wrap.cxx)
+KI 3: Long build time of Python bindings (DALPYTHON_wrap.cxx)
 Description: Compiling DALPYTHON_wrap.cxx can take a while, but on older GCC versions (e.g. 4.2.1) with the default
   build type ('RelWithDebInfo') it can take many minutes. Note that if you do a parallel build, it may appear to
   "hang" on another file, but building DALPYTHON_wrap.cxx is just not done yet.
@@ -30,3 +25,17 @@ Workaround: Build in Debug mode (without optimizations) by passing '-DCMAKE_BUIL
   If you don't need Python bindings, turn them off by passing '-DPYTHON_BINDINGS=OFF' to cmake.
 Status: Won't fix. We don't know how to reduce SWIG's output, nor do we want to build in Debug mode by default.
 
+KI 4: 'make uninstall' leaves empty installation directories behind
+Description: The uninstall script removes all installed files. It also removes runtime generated .pyc files.
+  It does not remove created directories, even if empty.
+  These are: $PREFIX/share/doc/dal $PREFIX/include/dal $PYTHON_PREFIX/dist-packages/DAL and subdirectories.
+  Parent directories may also have been created and not removed.
+Workaround: Remove them by hand.
+Status: Low priority. Already spent time to remove .pyc files. This will not be worked on further for 2.5.0.
+
+KI 5: No support for Python 3
+Description: The build system does not support Python 3, whether 2 and 3 are installed or only 3.
+  This used to work after it was fixed in LDA, even if 2 and 3 were both installed, but is now unsupported again. 
+  Note that the LOFAR software does not support Python 3 either.
+Workaround: Use Python 2.6 or 2.7.
+Status: Low priority. This will not be worked on for DAL 2.5.0.
