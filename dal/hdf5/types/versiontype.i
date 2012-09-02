@@ -5,3 +5,6 @@
     __repr__ = to_string
   }
 }
+
+AddAttribute( VersionType, VersionType );
+

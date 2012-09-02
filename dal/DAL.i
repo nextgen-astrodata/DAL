@@ -55,10 +55,10 @@
 %}
 
 %include "dal/hdf5/types/h5tuple.i"
-%include "dal/hdf5/types/versiontype.i"
 
 %include "dal/hdf5/Node.i"
 %include "dal/hdf5/Attribute.i"
+%include "dal/hdf5/types/versiontype.i"
 %include "dal/hdf5/Group.i"
 %include "dal/hdf5/Dataset.i"
 %include dal/hdf5/File.h
