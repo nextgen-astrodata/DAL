@@ -271,7 +271,7 @@ TBB_DipoleDataset::TBB_DipoleDataset( Group &parent, const std::string &name )
 }
 
 void TBB_DipoleDataset::initNodes() {
-  Dataset::initNodes();
+  Dataset<short>::initNodes();
   addNode( new Attribute<unsigned>(*this, "STATION_ID") );
   addNode( new Attribute<unsigned>(*this, "RSP_ID") );
   addNode( new Attribute<unsigned>(*this, "RCU_ID") );
