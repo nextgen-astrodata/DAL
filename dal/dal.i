@@ -51,17 +51,21 @@
   #include "dal/lofar/BF_File.h"
   #include "dal/lofar/TBB_File.h"
 
+  #include "dal/dal_version.h"
+
   using namespace dal;
 %}
 
-%include "dal/hdf5/types/h5tuple.i"
-
 %include "dal/hdf5/Node.i"
 %include "dal/hdf5/Attribute.i"
-%include "dal/hdf5/types/versiontype.i"
 %include "dal/hdf5/Group.i"
 %include "dal/hdf5/Dataset.i"
 %include dal/hdf5/File.h
+
+%include "dal/hdf5/types/h5tuple.i"
+%include "dal/hdf5/types/versiontype.i"
+
+%include "dal/dal_version.h"
 
 %include dal/lofar/StationNames.h
 %include "dal/lofar/Flagging.i"
