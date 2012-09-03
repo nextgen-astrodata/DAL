@@ -3,7 +3,7 @@ Data Access Library (DAL) - ChangeLog
 
 2.5.0 (initial release, after DAL v1 and LDA)
 - Improved support for beamformed (BF) and transient buffer board (TBB) data formats. First "release" version.
-- Improved SWIG Python bindings in functionality, type mapping, and error handling + messages. Added custom STL vector binding for more extensive and safer vector support.
+- Improved SWIG Python bindings in functionality, type mapping (custom STL vector binding), usability (doc strings, tab completion), and error handling.
 - Added per-attribute/group/dataset versioning for backward-compatibility and other versioning checks.
 - Added BF and TBB data format validation utilities to verify data product conformance to file format specifications.
 - Added 3D data set support and simpler functions for 1D data sets.
@@ -13,13 +13,13 @@ Data Access Library (DAL) - ChangeLog
 - Added flagging support for TBB.
 - Added exception hierarchy.
 - Added utilities for BF and TBB header printing, BF header editing, and TBB empty/flagged data scanning.
-- Added eight example programs (bf introspection, bf read, bf recreate dataset, bf custom write, exceptions, bf/tbb introspection, tbb read, tuple types).
+- Added eight C++ and Python example programs (bf introspection, bf read, bf recreate dataset, bf custom write, exceptions, bf/tbb introspection, tbb read, tuple types).
 - Added two BF and two TBB example HDF5 files with some data.
 - Added test suite. All utilities and examples are also run as test cases, some using the example HDF5 files.
-- Extensive documentation: User manual (sphinx), API reference (doxygen), README, INSTALL, Contributing, KnownIssues, ChangeLog, requirements/design decisions document.
+- Extensive documentation: User manual (sphinx), API reference (doxygen), README, INSTALL, Contributing, KnownIssues, ChangeLog, and a requirements/design decisions document.
 - Made user manual and API reference available online at http://nextgen-astrodata.github.com/DAL.
 - Improved compatibility with various Linux and Mac OS environments and compilers.
-- Improved naming of DAL library and utilities to liblofardal.so.2 and lofar-[tbb,bf]-progname.py to clarify and avoid clashes (libdal).
+- Improved naming of DAL library and utilities to liblofardal.so.x.y.z and lofar-[tbb,bf]-progname.py to clarify and avoid clashes (libdal).
 - Added an uninstaller; also removes .pyc bytecode files.
 - Fixed many usability issues and bugs.
 - Added license text and headers.
