@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
 	// Create another file to copy the stokes dataset into.
 	filename = "example-bf-recreate-dataset.h5";
 	filenameRaw = "example-bf-recreate-dataset.raw";
-	f.open(filedir + filename, DAL::File::CREATE);
+	f.open(filename, DAL::File::CREATE); // create output in current dir, not into example data dir
 	DAL::BF_SubArrayPointing sap(f.subArrayPointing(0));
 	sap.create();
 	DAL::BF_BeamGroup beam(sap.beam(0));
