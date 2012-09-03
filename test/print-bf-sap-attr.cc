@@ -1,4 +1,4 @@
-// c++ -Wall print-bf-sap_attr.cc -llofardal -lhdf5
+// c++ -Wall print-bf-sap-attr.cc -llofardal -lhdf5
 #include <iostream>
 
 #include "dal/lofar/BF_File.h"

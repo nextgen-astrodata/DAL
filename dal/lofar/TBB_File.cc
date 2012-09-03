@@ -65,6 +65,7 @@ void TBB_File::openFile( FileMode mode )
 }
 
 void TBB_File::initFileNodes() {
+  CLA_File::initNodes();
   addNode( new Attribute<string>(*this, "OPERATING_MODE") );
   addNode( new Attribute<unsigned>(*this, "NOF_STATIONS") );
 }

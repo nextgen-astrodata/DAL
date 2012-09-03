@@ -65,6 +65,7 @@ void BF_File::openFile( FileMode mode )
 }
 
 void BF_File::initFileNodes() {
+  CLA_File::initNodes();
   addNode( new Attribute<string>(*this, "CREATE_OFFLINE_ONLINE") );
   addNode( new Attribute<string>(*this, "BF_FORMAT") );
   addNode( new Attribute<string>(*this, "BF_VERSION") );
