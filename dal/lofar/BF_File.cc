@@ -584,7 +584,7 @@ BF_StokesDataset::BF_StokesDataset( Group &parent, const std::string &name )
 
 void BF_StokesDataset::initNodes()
 {
-  Dataset::initNodes();
+  Dataset<float>::initNodes();
   addNode( new Attribute<string>(*this, "DATATYPE") );
   addNode( new Attribute<string>(*this, "STOKES_COMPONENT") );
   addNode( new Attribute< vector<unsigned> >(*this, "NOF_CHANNELS") );
