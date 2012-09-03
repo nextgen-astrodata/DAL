@@ -4,22 +4,22 @@
   #include <sstream>
 %}
 
-// make DAL::TupleBase more pythonic
-%ignore DAL::TupleBase::operator[];
-%ignore DAL::TupleBase::begin;
-%ignore DAL::TupleBase::end;
-%ignore DAL::TupleUntemplated;
+// make dal::TupleBase more pythonic
+%ignore dal::TupleBase::operator[];
+%ignore dal::TupleBase::begin;
+%ignore dal::TupleBase::end;
+%ignore dal::TupleUntemplated;
 
 %include hdf5/types/h5tuple.h
 
-// make DAL::TupleBase more pythonic
-%extend DAL::TupleBase {
+// make dal::TupleBase more pythonic
+%extend dal::TupleBase {
   T __getitem__(ssize_t index) {
     if (index < 0)
       index += $self->size();
 
     if (index < 0 || index >= $self->size())
-      throw DAL::DALIndexError("list index out of range");
+      throw dal::DALIndexError("list index out of range");
 
     return $self->operator[](index);
   }
@@ -29,7 +29,7 @@
       index += $self->size();
 
     if (index < 0 || index >= $self->size())
-      throw DAL::DALIndexError("list index out of range");
+      throw dal::DALIndexError("list index out of range");
 
     $self->operator[](index) = value;
   }
@@ -62,7 +62,7 @@
 
 // SWIG sets __repr__ for all classes, so we need to replace them for
 // all classes too.
-%extend DAL::Tuple {
+%extend dal::Tuple {
   %pythoncode {
     __repr__ = __str__
   }
@@ -73,7 +73,7 @@
   %template(PythonName) CPPName;
 %enddef
 
-namespace DAL {
+namespace dal {
   // TupleBases need to be instantiated to force that they will be %extended
   %template(_TupleBaseUInt2)         TupleBase<unsigned int,2>;
   %template(_TupleBaseUInt3)         TupleBase<unsigned int,3>;
@@ -89,16 +89,16 @@ namespace DAL {
   %template(_TupleBaseDouble4)       TupleBase<double,4>;
 }
 
-AddTuple( TupleUInt2, %arg(DAL::Tuple<unsigned int,2>) )
-AddTuple( TupleUInt3, %arg(DAL::Tuple<unsigned int,3>) )
-AddTuple( TupleUInt4, %arg(DAL::Tuple<unsigned int,4>) )
-AddTuple( TupleULongLong2, %arg(DAL::Tuple<unsigned long long,2>) )
-AddTuple( TupleULongLong3, %arg(DAL::Tuple<unsigned long long,3>) )
-AddTuple( TupleULongLong4, %arg(DAL::Tuple<unsigned long long,4>) )
-AddTuple( TupleFloat2, %arg(DAL::Tuple<float,2>) )
-AddTuple( TupleFloat3, %arg(DAL::Tuple<float,3>) )
-AddTuple( TupleFloat4, %arg(DAL::Tuple<float,4>) )
-AddTuple( TupleDouble2, %arg(DAL::Tuple<double,2>) )
-AddTuple( TupleDouble3, %arg(DAL::Tuple<double,3>) )
-AddTuple( TupleDouble4, %arg(DAL::Tuple<double,4>) )
+AddTuple( TupleUInt2, %arg(dal::Tuple<unsigned int,2>) )
+AddTuple( TupleUInt3, %arg(dal::Tuple<unsigned int,3>) )
+AddTuple( TupleUInt4, %arg(dal::Tuple<unsigned int,4>) )
+AddTuple( TupleULongLong2, %arg(dal::Tuple<unsigned long long,2>) )
+AddTuple( TupleULongLong3, %arg(dal::Tuple<unsigned long long,3>) )
+AddTuple( TupleULongLong4, %arg(dal::Tuple<unsigned long long,4>) )
+AddTuple( TupleFloat2, %arg(dal::Tuple<float,2>) )
+AddTuple( TupleFloat3, %arg(dal::Tuple<float,3>) )
+AddTuple( TupleFloat4, %arg(dal::Tuple<float,4>) )
+AddTuple( TupleDouble2, %arg(dal::Tuple<double,2>) )
+AddTuple( TupleDouble3, %arg(dal::Tuple<double,3>) )
+AddTuple( TupleDouble4, %arg(dal::Tuple<double,4>) )
 

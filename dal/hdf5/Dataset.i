@@ -4,8 +4,8 @@
 // because SWIG generates a new wrapper object and does not
 // know how to do the memory management right between
 // both wrapper objects. So we write our own further below.
-%rename(_create)   DAL::Dataset::create;
-%rename(_create1D) DAL::Dataset::create1D;
+%rename(_create)   dal::Dataset::create;
+%rename(_create1D) dal::Dataset::create1D;
 
 // -------------------------------
 // Type marshalling
@@ -62,7 +62,7 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 // Class extensions for bindings
 // -------------------------------
 
-%extend DAL::Dataset {
+%extend dal::Dataset {
   %pythoncode {
     def create(self, *args, **kwargs):
       self._create(*args, **kwargs)
@@ -78,7 +78,7 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
   }    
 }
 
-namespace DAL {
+namespace dal {
   %template(DatasetShort)        Dataset<short>;
   %template(DatasetFloat)        Dataset<float>;
   %template(DatasetComplexFloat) Dataset< std::complex<float> >;

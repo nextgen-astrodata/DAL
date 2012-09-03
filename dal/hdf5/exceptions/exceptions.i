@@ -14,7 +14,7 @@
 
   // Catch DAL exception classes
 
-  } catch (const DAL::HDF5Exception &e) {
+  } catch (const dal::HDF5Exception &e) {
     const std::string msg = std::string(e.what()) + ": " + e.stackSummary();
 
 #ifdef SWIGPYTHON
@@ -24,11 +24,11 @@
     SWIG_exception(SWIG_RuntimeError, msg.c_str());
 #endif
 
-  } catch (const DAL::DALIndexError &e) {
+  } catch (const dal::DALIndexError &e) {
     SWIG_exception(SWIG_IndexError, e.what());
-  } catch (const DAL::DALValueError &e) {
+  } catch (const dal::DALValueError &e) {
     SWIG_exception(SWIG_ValueError, e.what());
-  } catch (const DAL::DALException &e) {
+  } catch (const dal::DALException &e) {
     SWIG_exception(SWIG_RuntimeError, e.what());
   }  
 
@@ -40,11 +40,11 @@
 /*
  * Marshall and extend HDF5 error stack classes.
  */
-vector_typemap( DAL::HDF5StackLine );
+vector_typemap( dal::HDF5StackLine );
 
 %include "hdf5/exceptions/errorstack.h"
 
-%extend DAL::HDF5StackLine {
+%extend dal::HDF5StackLine {
   %pythoncode {
     __repr__ = longDesc
     __str__  = shortDesc  
@@ -75,14 +75,14 @@ namespace std {
 %}
 
 %init %{
-  pHDF5Exception = PyErr_NewException(const_cast<char*>("_DAL.HDF5Exception"), PyExc_RuntimeError, NULL);
+  pHDF5Exception = PyErr_NewException(const_cast<char*>("_dal.HDF5Exception"), PyExc_RuntimeError, NULL);
   Py_INCREF(pHDF5Exception);
   PyModule_AddObject(m, "HDF5Exception", pHDF5Exception); // 'm' is the name of the module object in SWIG
 %}
 
 %pythoncode {
   # marshall from shadow module
-  HDF5Exception = _DAL.HDF5Exception
+  HDF5Exception = _dal.HDF5Exception
 }
 
 /*

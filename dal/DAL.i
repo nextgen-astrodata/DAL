@@ -6,7 +6,7 @@
 "DAL implements a Data Access Layer for dal/lofar data."
 %enddef
 
-%module(docstring=DOCSTRING) DAL
+%module(docstring=DOCSTRING) dal
 
 // first generate signatures using SWIG's knowledge
 %feature("autodoc",1);
@@ -32,7 +32,7 @@
 %include "dal/vectors.i"
 
 // ignore DAL-global functions that need renaming but are not needed for Python users
-%ignore DAL::swap;
+%ignore dal::swap;
 
 // -------------------------------
 // Exception handling
@@ -51,7 +51,7 @@
   #include "dal/lofar/BF_File.h"
   #include "dal/lofar/TBB_File.h"
 
-  using namespace DAL;
+  using namespace dal;
 %}
 
 %include "dal/hdf5/types/h5tuple.i"

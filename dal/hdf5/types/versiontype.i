@@ -1,6 +1,6 @@
 %include dal/hdf5/types/versiontype.h
 
-%extend DAL::VersionType {
+%extend dal::VersionType {
   %pythoncode {
     __repr__ = to_string
     __str__  = __repr__

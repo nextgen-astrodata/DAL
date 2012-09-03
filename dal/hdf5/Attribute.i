@@ -1,9 +1,9 @@
 // prevent SWIG from requiring a default constructor for AttributeBase
-namespace DAL {
+namespace dal {
   %valuewrapper AttributeBase;
   class AttributeBase;
 };
-%extend DAL::Attribute {
+%extend dal::Attribute {
   // The C++ ABI name for this Attribute class
   static std::string _typeName() {
     return typeid(Attribute< T >).name();
@@ -20,14 +20,14 @@ namespace DAL {
 // because SWIG generates a new wrapper object and does not
 // know how to do the memory management right between
 // both wrapper objects. So we write our own further below.
-%rename(_create) DAL::Attribute::create;
+%rename(_create) dal::Attribute::create;
 
 // We will provide an Attribute.value implementation in Python
-%ignore DAL::Attribute::value;
+%ignore dal::Attribute::value;
 
 %include dal/hdf5/Attribute.h
 
-%extend DAL::Attribute {
+%extend dal::Attribute {
   %pythoncode {
     def create(self, *args, **kwargs):
       self._create(*args, **kwargs)
@@ -59,7 +59,7 @@ namespace DAL {
 
 %define AddAttribute( PythonName, CPPName )
   // create the Python class AttributeXXX
-  %template(Attribute ## PythonName) DAL::Attribute< CPPName >;
+  %template(Attribute ## PythonName) dal::Attribute< CPPName >;
 
   // register it in our Attributes dict
   %pythoncode {
@@ -79,7 +79,7 @@ namespace DAL {
 %enddef
 
 %pythoncode {
-  # DAL::Attribute templates can be registered here
+  # dal::Attribute templates can be registered here
   _Attributes = {}
 }
 

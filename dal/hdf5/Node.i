@@ -3,7 +3,7 @@
 %rename(get_hid_gc) operator hid_gc;
 
 // do not bother renaming operator=: Python users do not need it
-%ignore DAL::Node::operator=;
+%ignore dal::Node::operator=;
 
 %include dal/hdf5/Node.h
 

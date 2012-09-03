@@ -2,7 +2,7 @@
 // because SWIG generates a new wrapper object and does not
 // know how to do the memory management right between
 // both wrapper objects. So we write our own further below.
-%rename(_create) DAL::Group::create;
+%rename(_create) dal::Group::create;
 
 %{
 #include <typeinfo>
@@ -11,7 +11,7 @@
 // To replace Group.getNode, SWIG requires us to first
 // %extend it, and then %ignore the original, both before
 // loading the actual class.
-%extend DAL::Group {
+%extend dal::Group {
   /*
    * Each Group allows nodes to be registered in a generic
    * map<string, Node*> using the addNode method. The getNode method
@@ -71,7 +71,7 @@
       """
         Returns a registered node `name'.
         
-        If the attribute type is present in DAL._Attributes.values(),
+        If the attribute type is present in dal._Attributes.values(),
         the returned object will have the correct type. Otherwise,
         a generic Node object is returned.
 
@@ -113,14 +113,14 @@
 
 // ignore the original getNode routine, which cannot be exported
 // because it returns a fancy ImplicitDowncast<Node>.
-%ignore DAL::Group::getNode;
+%ignore dal::Group::getNode;
 
 // do not bother renaming operator=: Python users do not need it
-%ignore DAL::Group::operator=;
+%ignore dal::Group::operator=;
 
 %include hdf5/Group.h
 
-%extend DAL::Group {
+%extend dal::Group {
   %pythoncode {
     def create(self, *args, **kwargs):
       self._create(*args, **kwargs)
