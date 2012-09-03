@@ -50,6 +50,7 @@ template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> 
   // create the dataset
   _group = hid_gc(H5Dcreate2(parent, _name.c_str(), h5typemap<T>::dataType(bigEndian(endianness)),
                   filespace, H5P_DEFAULT, dcpl, H5P_DEFAULT), H5Dclose, "Could not create dataset " + _name);
+  initNodes();
 
   return *this;
 }

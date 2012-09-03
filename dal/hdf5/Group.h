@@ -126,7 +126,7 @@ public:
 #endif
 
 protected:
-  //! hid of the Group. Always read it through group().
+  //! hid of the Group. Always read it through group(). Set only once, then call initNodes().
   hid_gc _group;
 
 
