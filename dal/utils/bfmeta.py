@@ -63,8 +63,8 @@ class bfmeta:
       print self.fh.observationStartMJD().name(), "\t=%(mjd)19.12f" %{'mjd':self.fh.observationStartMJD().value}
     if self.fh.observationEndMJD().value != None:
       print self.fh.observationEndMJD().name(), "\t=%(mjd)19.12f" %{'mjd':self.fh.observationEndMJD().value}
-    print self.fh.observationStartTAI().name(), "\t=", self.fh.observationStartTAI().value
-    print self.fh.observationEndTAI().name(), "\t=", self.fh.observationEndTAI().value
+#    print self.fh.observationStartTAI().name(), "\t=", self.fh.observationStartTAI().value
+#    print self.fh.observationEndTAI().name(), "\t=", self.fh.observationEndTAI().value
     print self.fh.observationNofStations().name(), "=", self.fh.observationNofStations().value
     print self.fh.observationStationsList().name(), "=", self.fh.observationStationsList().value
     print self.fh.observationFrequencyMin().name(), "\t=", self.fh.observationFrequencyMin().value, self.fh.observationFrequencyUnit().value
@@ -90,9 +90,9 @@ class bfmeta:
     if self.fh.bandwidth().value != None:
       print self.fh.bandwidth().name(), "\t\t= %(bw).2f %(bwu)s" %{'bw':self.fh.bandwidth().value, 'bwu':self.fh.bandwidthUnit().value}
 #    print self.fh.beamDiameter().name(), "\t\t=", self.fh.beamDiameter().value, self.fh.beamDiameterUnit().value
-    print self.fh.weatherTemperature().name(), "\t=", self.fh.weatherTemperature().value, self.fh.weatherTemperatureUnit().value
-    print self.fh.weatherHumidity().name(), "\t=", self.fh.weatherHumidity().value, self.fh.weatherHumidityUnit().value
-    print self.fh.systemTemperature().name(), "\t=", self.fh.systemTemperature().value, self.fh.systemTemperatureUnit().value
+#    print self.fh.weatherTemperature().name(), "\t=", self.fh.weatherTemperature().value, self.fh.weatherTemperatureUnit().value
+#    print self.fh.weatherHumidity().name(), "\t=", self.fh.weatherHumidity().value, self.fh.weatherHumidityUnit().value
+#    print self.fh.systemTemperature().name(), "\t=", self.fh.systemTemperature().value, self.fh.systemTemperatureUnit().value
     print self.fh.observationNofSubArrayPointings().name(), "=", self.fh.observationNofSubArrayPointings().value
     print self.fh.nofSubArrayPointings().name(), "=", self.fh.nofSubArrayPointings().value
     
@@ -160,10 +160,10 @@ class bfmeta:
       print self.prefix + sap.expTimeStartMJD().name() + "\t=%(mjd)19.12f" %{'mjd':sap.expTimeStartMJD().value}
     if sap.expTimeEndMJD().value != None:
       print self.prefix + sap.expTimeEndMJD().name() + "\t\t=%(mjd)19.12f" %{'mjd':sap.expTimeEndMJD().value}
-    if sap.expTimeStartTAI().value != None:
-      print self.prefix + sap.expTimeStartTAI().name() + "\t= %(tai)s" %{'tai':sap.expTimeStartTAI().value}
-    if sap.expTimeEndTAI().value != None:
-      print self.prefix + sap.expTimeEndTAI().name() + "\t\t= %(tai)s" %{'tai':sap.expTimeEndTAI().value}
+#    if sap.expTimeStartTAI().value != None:
+#      print self.prefix + sap.expTimeStartTAI().name() + "\t= %(tai)s" %{'tai':sap.expTimeStartTAI().value}
+#    if sap.expTimeEndTAI().value != None:
+#      print self.prefix + sap.expTimeEndTAI().name() + "\t\t= %(tai)s" %{'tai':sap.expTimeEndTAI().value}
     if sap.totalIntegrationTime().value != None and sap.totalIntegrationTimeUnit().value != None: 
       print self.prefix + sap.totalIntegrationTime().name(), " = %(ti).2f %(tiu)s" %{'ti':sap.totalIntegrationTime().value, 'tiu':sap.totalIntegrationTimeUnit().value}
     if sap.pointRA().value != None:
