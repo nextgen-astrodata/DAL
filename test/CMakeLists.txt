@@ -13,6 +13,7 @@ add_c_test(constructors)
 add_c_test(version-check)
 add_c_test(attr-empty)
 add_c_test(get-tbb-station-ref)
+add_c_test(print-bf-sap-attr)
 add_c_test(remove-root-exc)
 
 # Python tests

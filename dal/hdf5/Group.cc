@@ -150,6 +150,9 @@ void Group::addNode( Node *attr )
 
 ImplicitDowncast<Node> Group::getNode( const std::string &name )
 {
+  // Make sure nodeMap is populated. If group does not exist, better know it early.
+  group();
+
   std::map<std::string, Node*>::const_iterator it(nodeMap.find(name));
   if (it == nodeMap.end())
     throw DALValueError("Could not get (find) node " + name);
