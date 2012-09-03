@@ -70,7 +70,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  File( const std::string &filename, FileMode mode, const std::string &versionAttrName = "");
+  File( const std::string &filename, FileMode mode = READ, const std::string &versionAttrName = "");
 
   /*!
    * Destruct File object.
@@ -98,7 +98,7 @@ public:
    * See the File(filename, mode, versionAttrName) constructor for more info.
    * See the class description for more info on reopening and closing files.
    */
-  virtual void open( const std::string &filename, FileMode mode, const std::string &versionAttrName = "");
+  virtual void open( const std::string &filename, FileMode mode = READ, const std::string &versionAttrName = "");
 
   /*!
    * Indicate that this File object will not be used anymore to access the underlying HDF5 file (if any),
