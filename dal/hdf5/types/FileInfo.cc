@@ -43,7 +43,8 @@ FileInfo::FileInfo(const FileInfo& other) : ptr(other.ptr) {
 
 FileInfo::~FileInfo() {
   if (--ptr->refCount == 0) {
-    ::close(ptr->fdirfd);
+    if (ptr->fdirfd != -1)
+      ::close(ptr->fdirfd);
     delete ptr;
   }
 }
