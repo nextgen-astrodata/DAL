@@ -58,7 +58,7 @@ void swap(FileInfo& fi0, FileInfo& fi1) {
   std::swap(fi0.ptr, fi1.ptr);
 }
 
-const string& FileInfo::filename() const {
+const std::string& FileInfo::filename() const {
   return ptr->filename;
 }
 
@@ -82,7 +82,7 @@ void FileInfo::setFileVersion(const VersionType& newVersion) {
   ptr->fileVersion = newVersion;
 }
 
-int FileInfo::openOtherDirname(const string& filename) {
+int FileInfo::openOtherDirname(const std::string& filename) {
   string dirName(getDirname(filename));
   if (dirName == ".")
     return -1;
@@ -91,7 +91,7 @@ int FileInfo::openOtherDirname(const string& filename) {
 
 // static functions
 //! C++ interface to basename(3). Returns filename without path.
-string FileInfo::getBasename(const string& filename) {
+std::string FileInfo::getBasename(const std::string& filename) {
   vector<char> fn(filename.size() + 1);
   memcpy(&fn[0], filename.c_str(), filename.size() + 1);
 
@@ -101,7 +101,7 @@ string FileInfo::getBasename(const string& filename) {
 }
 
 //! C++ interface to dirname(3). Returns path of filename.
-string FileInfo::getDirname(const string& filename) {
+std::string FileInfo::getDirname(const std::string& filename) {
   vector<char> fn(filename.size() + 1);
   memcpy(&fn[0], filename.c_str(), filename.size() + 1);
 
