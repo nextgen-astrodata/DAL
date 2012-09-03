@@ -80,7 +80,7 @@ public:
   Attribute<std::string>  pipelineName();
   Attribute<std::string>  pipelineVersion();
   Attribute<std::string>  docName();
-  Attribute<VersionType>  docVersion(); // TODO: (user explicit) create() fails, because missing typemap
+  Attribute<VersionType>  docVersion();
   Attribute<std::string>  notes();
 
 protected:
