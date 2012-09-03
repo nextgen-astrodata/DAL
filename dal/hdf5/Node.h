@@ -24,7 +24,7 @@
 #include "types/FileInfo.h"
 #include "types/versiontype.h"
 
-namespace DAL {
+namespace dal {
 
 class Group;
 

@@ -5,13 +5,13 @@
 using namespace std;
 
 static void createTest() {
-	DAL::CLA_File f("test-reopen-rw-cla-cc.h5", DAL::CLA_File::CREATE);
+	dal::CLA_File f("test-reopen-rw-cla-cc.h5", dal::CLA_File::CREATE);
 
 	f.clockFrequency().value = 160.0;
 }
 
 static void reopenrwTest() {
-	DAL::CLA_File f("test-reopen-rw-cla-cc.h5", DAL::CLA_File::READWRITE);
+	dal::CLA_File f("test-reopen-rw-cla-cc.h5", dal::CLA_File::READWRITE);
 
 	f.clockFrequencyUnit().value = "MHz";
 }
@@ -19,7 +19,7 @@ static void reopenrwTest() {
 static int checkTest() {
 	int err = 0;
 
-	DAL::CLA_File f("test-reopen-rw-cla-cc.h5");
+	dal::CLA_File f("test-reopen-rw-cla-cc.h5");
 
 	if (f.clockFrequency().get() != 160.0) {
 		err = 1;
@@ -30,7 +30,7 @@ static int checkTest() {
 		cout << "Written clock freq unit val could not be read back" << endl;
 	}
 
-	//DAL::CLA_File f2("test-reopen-rw-cla-cc.h5", DAL::CLA_File::READWRITE); // throws: HDF5 cannot reopen while already open
+	//dal::CLA_File f2("test-reopen-rw-cla-cc.h5", dal::CLA_File::READWRITE); // throws: HDF5 cannot reopen while already open
 
 	return err;
 }

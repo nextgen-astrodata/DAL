@@ -20,7 +20,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 Range::Range() : begin(0), end(0) {}
 

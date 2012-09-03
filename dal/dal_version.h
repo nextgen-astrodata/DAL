@@ -21,7 +21,7 @@
 #include <cstdio>
 #include <hdf5.h>
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Return the version of this DAL library.

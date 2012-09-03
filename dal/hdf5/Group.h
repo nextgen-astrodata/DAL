@@ -25,7 +25,7 @@
 #include "Node.h"
 #include "Attribute.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Wraps an HDF5 group, providing core functionality.

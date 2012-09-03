@@ -20,7 +20,7 @@
 #include <string>
 #include "versiontype.h"
 
-namespace DAL {
+namespace dal {
 
 class FileInfoType;
 

@@ -15,8 +15,8 @@ using namespace std;
 static int exit_status;
 
 template <typename T>
-static T test(DAL::CLA_File& file, const string& attrName, const T& t0 = T()) {
-	DAL::Attribute<T> attr(file, attrName);
+static T test(dal::CLA_File& file, const string& attrName, const T& t0 = T()) {
+	dal::Attribute<T> attr(file, attrName);
 	attr.value = t0;
 
 	T readback = attr.get();
@@ -32,7 +32,7 @@ static T test(DAL::CLA_File& file, const string& attrName, const T& t0 = T()) {
 int main() {
 	string filename("test-attr-empty.h5");
 
-	DAL::CLA_File file(filename, DAL::CLA_File::CREATE);
+	dal::CLA_File file(filename, dal::CLA_File::CREATE);
 
 	string         s  = test<string>         (file, "ATTR_STR_EMPTY");
 	vector<int>    vi = test<vector<int> >   (file, "ATTR_VEC_EMPTY");

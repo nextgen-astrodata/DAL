@@ -26,7 +26,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 CLA_File::CLA_File() {}
 

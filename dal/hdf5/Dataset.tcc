@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace DAL {
+namespace dal {
 
 template<typename T> Dataset<T>& Dataset<T>::create( const std::vector<ssize_t> &dims,
         const std::vector<ssize_t> &maxdims, const std::string &filename, enum Endianness endianness ) {

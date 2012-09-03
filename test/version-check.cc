@@ -27,25 +27,25 @@ int main() {
 
 
 	// Test if dal_version functions exist and do anything remotely reasonable.
-	string libVersion(DAL::get_lib_version());
+	string libVersion(dal::get_lib_version());
 	if (libVersion[0] != '2') { // really basic check
 		cerr << "lib version should start with 2" << endl;
 		err = 1;
 	}
 
-	string firstVersion(DAL::get_first_release_lib_version());
+	string firstVersion(dal::get_first_release_lib_version());
 	if (firstVersion != "2.5.0") {
 		cerr << "first lib version should be 2.5.0" << endl;
 		err = 1;
 	}
 
-	string hdf5IncVersion(DAL::get_dal_hdf5_version());
+	string hdf5IncVersion(dal::get_dal_hdf5_version());
 	if (hdf5IncVersion == "") {
 		cerr << "hdf5 inc version should not be an empty string" << endl;
 		err = 1;
 	}
 
-	bool same = DAL::check_hdf5_versions();
+	bool same = dal::check_hdf5_versions();
 	if (!same) {
 		cerr << "DAL version built and test case version built should be the same" << endl;
 		err = 1;

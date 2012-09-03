@@ -26,7 +26,7 @@
 #include "../hdf5/types/versiontype.h"
 #include "../hdf5/File.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Wraps an HDF5 file implementing the Common LOFAR Attributes.

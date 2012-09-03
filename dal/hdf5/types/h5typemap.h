@@ -23,7 +23,7 @@
 #include "h5tuple.h"
 #include "isderivedfrom.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * struct h5typemap<T>

@@ -27,7 +27,7 @@
  * and http://www.hdfgroup.org/HDF5/doc/RM/RM_H5E.html
  */
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Saves and restores the current error stack. Useful for preserving

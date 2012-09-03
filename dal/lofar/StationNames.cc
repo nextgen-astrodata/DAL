@@ -20,7 +20,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 // from the LOFAR repos in MAC/Deployment/data/StaticMetaData/StationInfo.dat
 const char stationNames[][6] = {

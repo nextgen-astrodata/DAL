@@ -23,7 +23,7 @@
 #include "CasaDatasetExtend.h"
 #include "Attribute.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Adds casacore functionality to an Dataset<T> class or any of its derivatives.

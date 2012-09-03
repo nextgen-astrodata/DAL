@@ -11,14 +11,14 @@ using namespace std;
 int main() {
 	int exit_status;
 
-	DAL::CLA_File file("test-remove_root_exc.h5", DAL::CLA_File::CREATE);
+	dal::CLA_File file("test-remove_root_exc.h5", dal::CLA_File::CREATE);
 	try {
 		// In DAL, a file is a group, but this must throw.
 		file.remove();
 
 		exit_status = 1;
 		cerr << "remove() on the HDF5 root group incorrectly returned" << endl;
-	} catch (DAL::HDF5Exception& ) {
+	} catch (dal::HDF5Exception& ) {
 		exit_status = 0;
 	}
 

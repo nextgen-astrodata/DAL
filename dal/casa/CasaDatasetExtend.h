@@ -21,7 +21,7 @@
 #include "dal/hdf5/exceptions/exceptions.h"
 #include "Dataset.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Adds casacore functionality to an Dataset<T> class or any of its derivatives.

@@ -5,9 +5,9 @@
 using namespace std;
 
 int main() {
-	DAL::TBB_File f("test-get-tbb-station-ref-cc.h5", DAL::TBB_File::CREATE);
+	dal::TBB_File f("test-get-tbb-station-ref-cc.h5", dal::TBB_File::CREATE);
 
-	DAL::TBB_Station st(f.station("CSxxx"));
+	dal::TBB_Station st(f.station("CSxxx"));
 
 	return 0;
 }

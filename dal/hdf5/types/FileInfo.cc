@@ -28,7 +28,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 FileInfo::FileInfo() : ptr(new FileInfoType) { }
 

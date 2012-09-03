@@ -19,7 +19,7 @@
 
 #include <string>
 
-namespace DAL {
+namespace dal {
 
 // stupid GNU
 #ifdef major

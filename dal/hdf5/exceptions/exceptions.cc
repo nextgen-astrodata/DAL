@@ -19,7 +19,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 HDF5Exception::HDF5Exception(const std::string &msg, const HDF5ErrorStack &stack)
 :

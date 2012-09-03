@@ -19,7 +19,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 File::File() {}
 

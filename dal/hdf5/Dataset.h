@@ -40,7 +40,7 @@
 #include "exceptions/exceptions.h"
 #include "Group.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * \class Dataset

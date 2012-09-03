@@ -18,7 +18,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 BF_File::BF_File() {}
 

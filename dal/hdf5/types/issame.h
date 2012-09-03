@@ -17,7 +17,7 @@
 #ifndef DAL_ISSAME_H
 #define DAL_ISSAME_H
 
-namespace DAL {
+namespace dal {
 
 /*!
  * IsSame<T,U>::Is evaluates to true (at compile time!)

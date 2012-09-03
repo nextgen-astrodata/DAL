@@ -26,7 +26,7 @@
 #include "types/versiontype.h"
 #include "Node.h"
 
-namespace DAL {
+namespace dal {
 
 class Group;
 

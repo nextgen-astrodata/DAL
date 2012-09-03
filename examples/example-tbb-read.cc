@@ -27,14 +27,14 @@ struct Data {
 };
 
 static void readTBB_File(const string& filename) {
-	DAL::TBB_File tf(filename);
+	dal::TBB_File tf(filename);
 
 	Data<int16_t> d;
-	vector<DAL::TBB_Station> stations = tf.stations();
+	vector<dal::TBB_Station> stations = tf.stations();
 	for (size_t i = 0; i < stations.size(); i++) {
 		cout << "Station " << stations[i].stationName().get() << ":" << endl;
 
-		vector<DAL::TBB_DipoleDataset> dipoles(stations[i].dipoles());
+		vector<dal::TBB_DipoleDataset> dipoles(stations[i].dipoles());
 		for (size_t j = 0; j < dipoles.size(); j++) {
 			cout << "\tDipole " << dipoles[j].rspID().get() << " " << dipoles[j].rcuID().get() << ":" << endl;
 
@@ -89,10 +89,10 @@ int main(int argc, char* argv[]) {
 		}
 
 		exit_status = 0;
-	} catch (DAL::HDF5Exception& exc) {
+	} catch (dal::HDF5Exception& exc) {
 		cerr << "Error: DAL HDF5 exception: " << exc.what() << endl;
 		cerr << exc.stackSummary() << endl;
-	} catch (DAL::DALException& exc) {
+	} catch (dal::DALException& exc) {
 		cerr << "Error: DAL exception: " << exc.what() << endl;
 	} catch (exception& exc) {
 		cerr << "Error: exception: " << exc.what() << endl;

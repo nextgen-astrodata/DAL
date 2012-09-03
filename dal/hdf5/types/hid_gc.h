@@ -21,7 +21,7 @@
 #include <algorithm>
 #include "../exceptions/exceptions.h"
 
-namespace DAL {
+namespace dal {
 
 //! Autocloses hid_t types using closefunc() on destruction, and keeps a reference count.
 class hid_gc

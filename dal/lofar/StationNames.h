@@ -20,13 +20,13 @@
 #include <string>
 #include "../hdf5/exceptions/exceptions.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Array of C strings with all LOFAR station names.
  *
  * The number of station names is:
- *   ( sizeof(DAL::stationNames) / sizeof(DAL::stationNames[0]) )
+ *   ( sizeof(dal::stationNames) / sizeof(dal::stationNames[0]) )
  */
 extern const char stationNames[][6];
 
@@ -38,7 +38,7 @@ std::string stationIDToName(unsigned stationID);
 
 /*!
  * Returns LOFAR station ID corresponding to stationName (e.g. "CS011").
- * May throw DAL::DALValueError if stationName is not in the stationNames array above.
+ * May throw dal::DALValueError if stationName is not in the stationNames array above.
  * Does not throw on a valid stationName with a suffix (e.g. a field name like "CS011HBA0").
  */
 unsigned stationNameToID(const std::string& stationName);

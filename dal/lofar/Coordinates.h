@@ -37,7 +37,7 @@
  *      - Tabular<P,W> (P = pixel type (unsigned/int/double), W = world type (double/string))
  */
 
-namespace DAL {
+namespace dal {
 
 class Coordinate;
 

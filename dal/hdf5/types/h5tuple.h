@@ -22,7 +22,7 @@
 #include "hid_gc.h"
 #include "../exceptions/exceptions.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * A (DAL) tuple is a structure consisting of N elements of type T. All

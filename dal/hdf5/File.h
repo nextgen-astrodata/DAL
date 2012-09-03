@@ -23,7 +23,7 @@
 #include "Group.h"
 #include "Attribute.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * A File object encapsulates the data and provides the functions to operate on a HDF5 file.

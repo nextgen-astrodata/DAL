@@ -19,7 +19,7 @@
 
 #include "../hdf5/types/h5tuple.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Coordinate3D<T> is a 3-dimensional coordinate with fields x, y, z.

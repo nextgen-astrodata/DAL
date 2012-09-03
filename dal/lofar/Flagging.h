@@ -21,7 +21,7 @@
 #include <string>
 #include "../hdf5/types/h5tuple.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * class Range is typically used in a vector for flagging data.

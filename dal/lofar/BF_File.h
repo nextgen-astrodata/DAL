@@ -24,7 +24,7 @@
 #include "Coordinates.h"
 #include "../hdf5/Dataset.h"
 
-namespace DAL {
+namespace dal {
 
 class BF_File;
 class BF_SysLog;

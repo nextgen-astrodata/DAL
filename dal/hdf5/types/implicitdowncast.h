@@ -19,7 +19,7 @@
 
 #include "isderivedfrom.h"
 
-namespace DAL {
+namespace dal {
 
 /*!
  * ImplicitDowncast< B > returns an object that can implictly be

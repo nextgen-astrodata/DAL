@@ -18,7 +18,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 Attribute< vector<double> > CoordinatesGroup::refLocationValue()
 {

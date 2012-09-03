@@ -21,7 +21,7 @@
 #include <string>
 #include "errorstack.h"
 
-namespace DAL {
+namespace dal {
 
 class DALException: public std::runtime_error
 {

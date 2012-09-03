@@ -18,7 +18,7 @@
 
 using namespace std;
 
-namespace DAL {
+namespace dal {
 
 TBB_File::TBB_File() {}
 

@@ -19,7 +19,7 @@
 
 #include "issame.h"
 
-namespace DAL {
+namespace dal {
 
 // Excerpted from the book More Exceptional C++ by Herb Sutter.
 // see http://www.gotw.ca/publications/mxc++-item-4.htm

@@ -25,7 +25,7 @@
 #include "Flagging.h"
 #include "../hdf5/Dataset.h"
 
-namespace DAL {
+namespace dal {
 
 class TBB_File;
 class TBB_Station;

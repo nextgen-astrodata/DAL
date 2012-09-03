@@ -20,7 +20,7 @@
 #include "dal/dal_version.h"
 #include <hdf5.h>
 
-namespace DAL {
+namespace dal {
 
 /*!
  * Disables HDF5 error printing to stderr by uninstalling the HDF5 error handler

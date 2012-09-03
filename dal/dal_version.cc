@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <hdf5.h>
 
-namespace DAL {
+namespace dal {
 
 using namespace std;
 

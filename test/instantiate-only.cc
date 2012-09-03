@@ -5,8 +5,8 @@
 #include <dal/lofar/TBB_File.h>
 
 int main() {
-	DAL::BF_File  bfFile ("test-instantiate-only_bf.h5",  DAL::File::CREATE);
-	DAL::TBB_File tbbFile("test-instantiate-only_tbb.h5", DAL::File::CREATE);
+	dal::BF_File  bfFile ("test-instantiate-only_bf.h5",  dal::File::CREATE);
+	dal::TBB_File tbbFile("test-instantiate-only_tbb.h5", dal::File::CREATE);
 
 	return 0;
 }

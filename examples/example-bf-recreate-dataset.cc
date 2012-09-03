@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 	string filename("L63876_SAP000_B000_S0_P000_bf.h5");
 	string filenameRaw(filename.substr(0, filename.size()-3).append(".raw")); // assumes filename.size() > 3
 
-	DAL::BF_File f(filedir + filename);
+	dal::BF_File f(filedir + filename);
 	vector<size_t> pos0(2, 0); // start at (0, 0)
 	size_t sliceLen;
 
@@ -47,9 +47,9 @@ int main(int argc, char* argv[]) {
 
 
 { // new scope, so we can close all attributes at scope exit (better do this in a function)
-	DAL::BF_SubArrayPointing sap(f.subArrayPointing(0));
-	DAL::BF_BeamGroup beam(sap.beam(0));
-	DAL::BF_StokesDataset stokes(beam.stokes(0));
+	dal::BF_SubArrayPointing sap(f.subArrayPointing(0));
+	dal::BF_BeamGroup beam(sap.beam(0));
+	dal::BF_StokesDataset stokes(beam.stokes(0));
 
 	if (stokes.ndims() != 2) {
 		cerr << "stokes ndims must be 2" << endl;
@@ -93,14 +93,14 @@ int main(int argc, char* argv[]) {
 	// Create another file to copy the stokes dataset into.
 	filename = "example-bf-recreate-dataset.h5";
 	filenameRaw = "example-bf-recreate-dataset.raw";
-	f.open(filename, DAL::File::CREATE); // create output in current dir, not into example data dir
-	DAL::BF_SubArrayPointing sap(f.subArrayPointing(0));
+	f.open(filename, dal::File::CREATE); // create output in current dir, not into example data dir
+	dal::BF_SubArrayPointing sap(f.subArrayPointing(0));
 	sap.create();
-	DAL::BF_BeamGroup beam(sap.beam(0));
+	dal::BF_BeamGroup beam(sap.beam(0));
 	beam.create();
-	DAL::BF_StokesDataset stokes(beam.stokes(0));
+	dal::BF_StokesDataset stokes(beam.stokes(0));
 
-	stokes.create(dims, maxdims, filenameRaw, DAL::BF_StokesDataset::BIG);
+	stokes.create(dims, maxdims, filenameRaw, dal::BF_StokesDataset::BIG);
 	stokes.groupType().create().set(groupType);
 	stokes.dataType().create().set(dataType);
 	stokes.stokesComponent().create().set(stokesComponent);

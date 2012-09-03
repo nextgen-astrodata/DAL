@@ -22,7 +22,7 @@
 #include "hid_gc.h"
 #include "../exceptions/exceptions.h"
 
-namespace DAL {
+namespace dal {
 
 inline hid_gc h5complexType( hid_t halftype )
 {
