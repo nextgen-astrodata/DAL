@@ -69,7 +69,7 @@ void File::close()
   swap(*this, ftmp);
 }
 
-hid_gc File::openFile( const string &filename, FileMode mode ) const
+hid_gc File::openFile( const std::string &filename, FileMode mode ) const
 {
   switch (mode) {
     case CREATE:
