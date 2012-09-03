@@ -32,9 +32,9 @@ namespace DAL {
 
 FileInfo::FileInfo() : ptr(new FileInfoType) { }
 
-FileInfo::FileInfo(const std::string& fullFileName, FileMode fileMode,
+FileInfo::FileInfo(const std::string& fullFilename, FileMode fileMode,
                    const std::string& versionAttrName)
-: ptr(new FileInfoType(fullFileName, openOtherDirname(fullFileName),
+: ptr(new FileInfoType(fullFilename, openOtherDirname(fullFilename),
                        fileMode, versionAttrName)) { }
 
 FileInfo::FileInfo(const FileInfo& other) : ptr(other.ptr) {
@@ -58,8 +58,8 @@ void swap(FileInfo& fi0, FileInfo& fi1) {
   std::swap(fi0.ptr, fi1.ptr);
 }
 
-const string& FileInfo::fileName() const {
-  return ptr->fileName;
+const string& FileInfo::filename() const {
+  return ptr->filename;
 }
 
 int FileInfo::fileDirfd() const {
@@ -82,8 +82,8 @@ void FileInfo::setFileVersion(const VersionType& newVersion) {
   ptr->fileVersion = newVersion;
 }
 
-int FileInfo::openOtherDirname(const string& fileName) {
-  string dirName(getDirname(fileName));
+int FileInfo::openOtherDirname(const string& filename) {
+  string dirName(getDirname(filename));
   if (dirName == ".")
     return -1;
   return ::open(dirName.c_str(), O_RDONLY);
@@ -114,10 +114,10 @@ string FileInfo::getDirname(const string& filename) {
 
 FileInfoType::FileInfoType() : refCount(1), fdirfd(-1), fileMode(0) { }
 
-FileInfoType::FileInfoType(const std::string& fileName, int fdirfd,
+FileInfoType::FileInfoType(const std::string& filename, int fdirfd,
                            FileInfo::FileMode fileMode, const std::string& versionAttrName)
 : refCount(1)
-, fileName(fileName)
+, filename(filename)
 , fdirfd(fdirfd)
 , fileMode(fileMode)
 , versionAttrName(versionAttrName)

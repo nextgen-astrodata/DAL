@@ -10,7 +10,7 @@ filenames = \
 ] 
 
 def printNodesInfo(h5file):
-  print "file %s reports to be version %s" % (h5file.filename, h5file.docVersion())
+  print "file %s reports to be version %s" % (h5file.filename(), h5file.docVersion().get())
   print
 
   print "supp   = whether this attribute is supported by the version as reported by the file"
@@ -30,7 +30,7 @@ def printNodesInfo(h5file):
 
 
 for filename in filenames:
-  fullpath = '%s/%s' % (filedir, filename)
+  fullpath = filedir + '/' + filename
 
   f = DAL.CLA_File(fullpath)
   ftype = f.fileType().get()

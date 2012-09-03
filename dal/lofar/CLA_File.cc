@@ -58,7 +58,7 @@ void CLA_File::openFile( const string &filename, FileMode mode )
 
   if (mode == CREATE || mode == CREATE_EXCL) {
     telescope().create().set("LOFAR");
-    fileName().create().set(File::fileName()); // File::fileName() is without path
+    fileName().create().set(FileInfo::getBasename(File::filename()));
     fileDate().create().set(getFileModDate(filename)); // UTC
   } else {
     bool isCompatibleFileType = false;

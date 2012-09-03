@@ -70,8 +70,8 @@ void swap(Node& first, Node& second)
  * Just forward the calls. For a few values, this is preferable, because then
  * we can stick the FileInfo ref counting into a separate class FileInfoRef.
  */
-const string& Node::fileName() const {
-  return fileInfo.fileName();
+const string& Node::filename() const {
+  return fileInfo.filename();
 }
 
 Node::FileMode Node::fileMode() const {

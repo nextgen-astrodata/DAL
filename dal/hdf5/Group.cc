@@ -157,7 +157,8 @@ ImplicitDowncast<Node> Group::getNode( const std::string &name )
 }
 
 vector<string> Group::nodeNames() {
-  vector<string> names(nodeMap.size());
+  vector<string> names;
+  names.reserve(nodeMap.size());
 
   for( map<string, Node*>::const_iterator i = nodeMap.begin(); i != nodeMap.end(); ++i ) {
     names.push_back(i->first);

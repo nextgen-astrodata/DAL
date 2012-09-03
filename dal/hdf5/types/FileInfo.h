@@ -36,7 +36,7 @@ public:
   typedef int FileMode; // see class Node for possible values
 
   FileInfo();
-  FileInfo(const std::string& fullFileName, FileMode fileMode,
+  FileInfo(const std::string& fullFilename, FileMode fileMode,
            const std::string& versionAttrName);
   FileInfo(const FileInfo& other);
   ~FileInfo();
@@ -44,7 +44,7 @@ public:
 
   friend void swap(FileInfo& fi0, FileInfo& fi1);
 
-  const std::string& fileName() const;
+  const std::string& filename() const;
   int fileDirfd() const;
   FileMode fileMode() const;
   const std::string& versionAttrName() const;
@@ -57,7 +57,7 @@ public:
   static std::string getDirname(const std::string& filename);
 
 private:
-  int openOtherDirname(const std::string& fileName);
+  int openOtherDirname(const std::string& filename);
 };
 
 /*!
@@ -81,7 +81,7 @@ class FileInfoType {
   /*!
    * Name of the opened file without path.
    */
-  const std::string fileName;
+  const std::string filename;
 
   /*!
    * File descriptor of the directory of the file opened, or -1 if "." or failed to open.
@@ -102,7 +102,7 @@ class FileInfoType {
 
 
   FileInfoType();
-  FileInfoType(const std::string& fileName, const int fdirfd,
+  FileInfoType(const std::string& filename, const int fdirfd,
                FileInfo::FileMode fileMode, const std::string& versionAttrName);
 };
 

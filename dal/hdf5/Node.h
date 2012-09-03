@@ -160,7 +160,7 @@ public:
    *    >>> os.remove("example.h5")
    * \endcode
    */
-  const std::string& fileName() const;
+  const std::string& filename() const;
 
   //! Returns the mode the file was opened with.
   FileMode fileMode() const;

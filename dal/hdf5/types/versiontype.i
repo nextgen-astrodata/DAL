@@ -3,6 +3,7 @@
 %extend DAL::VersionType {
   %pythoncode {
     __repr__ = to_string
+    __str__  = __repr__
   }
 }
 
