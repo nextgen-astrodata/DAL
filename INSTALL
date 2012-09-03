@@ -33,7 +33,7 @@ To do a multi-threaded build, set the MAKEFLAGS environment variable to -j<NCPUS
 To run the test suite:
 	make test
 
-To uninstall, run: (only works after 'make install'; still leaves empty installation directories behind)
+To uninstall, run: (only works after any previous 'make install'; still leaves empty installation directories behind)
 	make uninstall				# with sufficient privileges
 
 
@@ -67,7 +67,7 @@ To build DAL (default config), you need the following packages:
 	- python        (version 2.3+; for the Python bindings)
 	- python-numpy  (idem)
 	- python-dev    (idem)
-	- swig 2.0+     (generate Python bindings, idem)
+	- swig 1.3+     (generate Python bindings, idem)
 
 	- python-sphinx (generate user manual)
 	- doxygen 1.6+  (generate API documentation and python docstring support)

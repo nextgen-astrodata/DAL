@@ -40,3 +40,8 @@ Description: The build system does not support Python 3, whether 2 and 3 are ins
 Workaround: Use Python 2.6 or 2.7.
 Status: Low priority. This will not be worked on for DAL 2.5.0.
 
+KI 6: Coordinates support is incomplete
+Description: The coordinates part of bf is not complete and untested.
+Workaround: none (well, one can always access any attribute around the lofar/ file classes)
+Status: To be fixed in the next release.
+ 
