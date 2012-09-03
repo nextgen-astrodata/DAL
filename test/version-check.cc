@@ -4,6 +4,7 @@
 #include <dal/dal_version.h>
 
 using namespace std;
+using namespace dal;
 
 int main() {
 	int err = 0;
@@ -25,29 +26,38 @@ int main() {
 	// DAL_VERSION_STRING is for runtime use.
 	string dalVersionString(DAL_VERSION_STRING);
 
-
 	// Test if dal_version functions exist and do anything remotely reasonable.
-	string libVersion(dal::get_lib_version());
-	if (libVersion[0] != '2') { // really basic check
+	VersionType libVersion(version());
+	if (libVersion.major != 2) { // really basic check
 		cerr << "lib version should start with 2" << endl;
 		err = 1;
 	}
 
-	string firstVersion(dal::get_first_release_lib_version());
-	if (firstVersion != "2.5.0") {
+	VersionType firstVersion(version_first_release());
+	if (firstVersion != VersionType(2, 5, 0)) {
 		cerr << "first lib version should be 2.5.0" << endl;
 		err = 1;
 	}
 
-	string hdf5IncVersion(dal::get_dal_hdf5_version());
-	if (hdf5IncVersion == "") {
-		cerr << "hdf5 inc version should not be an empty string" << endl;
+	VersionType hdf5IncVersion1(version_hdf5_headers_dal());
+	if (hdf5IncVersion1 == VersionType(0, 0, 0)) {
+		cerr << "version_hdf5_headers_dal should be set" << endl;
 		err = 1;
 	}
 
-	bool same = dal::check_hdf5_versions();
+	VersionType hdf5IncVersion2(version_hdf5_headers_current());
+	if (hdf5IncVersion2 == VersionType(0, 0, 0)) {
+		cerr << "version_hdf5_headers_current should be set" << endl;
+		err = 1;
+	}
+
+	bool same = check_hdf5_versions();
 	if (!same) {
 		cerr << "DAL version built and test case version built should be the same" << endl;
+		cerr << "DAL version:                   " << version() << endl;
+		cerr << "HDF5 lib version:              " << version_hdf5() << endl;
+		cerr << "HDF5 header version (DAL):     " << version_hdf5_headers_dal() << endl;
+		cerr << "HDF5 header version (current): " << version_hdf5_headers_current() << endl;
 		err = 1;
 	}
 

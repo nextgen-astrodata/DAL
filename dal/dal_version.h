@@ -17,6 +17,7 @@
 #ifndef DAL_DAL_VERSION_H
 #define DAL_DAL_VERSION_H
 
+#include "dal/hdf5/types/versiontype.h"
 #include <string>
 #include <cstdio>
 #include <hdf5.h>
@@ -26,22 +27,27 @@ namespace dal {
 /*!
  * Return the version of this DAL library.
  */
-std::string get_lib_version();
+VersionType version();
 
 /*!
  * Return the version of the first release of this DAL library (DAL 2).
  */
-std::string get_first_release_lib_version();
+VersionType version_first_release();
+
+/*!
+ * Return the version of HDF5 library currently in use.
+ */
+VersionType version_hdf5();
 
 /*!
  * Return the version of HDF5 headers used to compile the DAL
  */
-std::string get_dal_hdf5_version();
+VersionType version_hdf5_headers_dal();
 
 /*!
  * Return the version of HDF5 headers currently in use.
  */
-static std::string get_current_hdf5_header_version() {
+inline VersionType version_hdf5_headers_current() {
   // this code needs to be in a header file, to let
   // the client compiler fill in H5_VERS_* below.
   //
@@ -49,35 +55,24 @@ static std::string get_current_hdf5_header_version() {
   // include sub-release information that messes up our
   // version check systems (i.e. "1.8.4-patch1").
 
-#define LOFARDAL_QUOTE_(x) #x
-#define LOFARDAL_QUOTE(x) LOFARDAL_QUOTE_(x)
-
-  return std::string(LOFARDAL_QUOTE(H5_VERS_MAJOR) "." LOFARDAL_QUOTE(H5_VERS_MINOR) "." LOFARDAL_QUOTE(H5_VERS_RELEASE));
-
-#undef LOFARDAL_QUOTE
-#undef LOFARDAL_QUOTE_
-
+  return VersionType(H5_VERS_MAJOR, H5_VERS_MINOR, H5_VERS_RELEASE);
 }
 
-/*!
- * Return the version of HDF5 library currently in use.
- */
-std::string get_current_hdf5_lib_version();
 
 /*!
  * Returns true if the hdf5 versions used to compile
  * the DAL and to compile the client code are the same.
  */
-static bool check_hdf5_versions() {
+inline bool check_hdf5_versions() {
   // this code needs to be in a header file, to let
   // the client compiler fill in H5_PACKAGE_VERSION.
 
   // client HDF5 header should be the same version as used by DAL
-  if (get_current_hdf5_header_version() != get_dal_hdf5_version())
+  if (version_hdf5_headers_dal() != version_hdf5_headers_current())
     return false;
 
   // client HDF5 library should be the same version as used by DAL
-  if (get_current_hdf5_lib_version() != get_dal_hdf5_version())
+  if (version_hdf5_headers_dal() != version_hdf5())
     return false;
 
   // all HDF5 versions used are the same

@@ -16,38 +16,35 @@
  */
 #include "dal/dal_config.h"
 #include "dal/dal_version.h"
-#include <cstdio>
 #include <hdf5.h>
 
 namespace dal {
 
 using namespace std;
 
-string get_lib_version() {
-  return DAL_VERSION_STRING;
+VersionType version() {
+  return VersionType(DAL_VERSION_MAJOR, DAL_VERSION_MINOR, DAL_VERSION_RELEASE);
 }
 
-string get_first_release_lib_version() {
+VersionType version_first_release() {
   /*
    * The first DAL 2.x release version was 2.5.0, because the 
    * bf draft spec was 2.04.xx at the time (tbb was at 2.02.xx).
    */
-  return "2.5.0";
+  return VersionType(2, 5, 0);
 }
 
-string get_dal_hdf5_version() {
-  return get_current_hdf5_header_version();
+VersionType version_hdf5_headers_dal() {
+  // return the 'current' hdf5 header version
+  return version_hdf5_headers_current();
 }
 
-string get_current_hdf5_lib_version() {
-  char buf[128];
+VersionType version_hdf5() {
   unsigned maj, min, rel;
 
   H5get_libversion(&maj, &min, &rel);
 
-  snprintf(buf, sizeof buf, "%u.%u.%u", maj, min, rel);
-
-  return string(buf);
+  return VersionType(maj, min, rel);
 }
 
 }

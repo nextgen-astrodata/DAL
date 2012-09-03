@@ -116,4 +116,8 @@ bool VersionType::operator !=(const VersionType &other) const {
   return cmp(other) != 0;
 }
 
+std::ostream &operator<<(std::ostream &str, const VersionType &version) {
+  return str << version.to_string();
+}
+
 }

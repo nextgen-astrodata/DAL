@@ -18,6 +18,7 @@
 #define DAL_VERSIONTYPE_H
 
 #include <string>
+#include <ostream>
 
 namespace dal {
 
@@ -101,6 +102,8 @@ struct VersionType {
   bool operator ==(const VersionType &other) const;
   bool operator !=(const VersionType &other) const;
 };
+
+std::ostream &operator<<(std::ostream &str, const VersionType &version);
 
 }
 

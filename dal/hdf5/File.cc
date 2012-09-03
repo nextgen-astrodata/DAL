@@ -31,10 +31,12 @@ File::File( const std::string &filename, FileMode mode, const std::string &versi
   if (!versionAttrName.empty()) {
     // Also set in-memory version of FileInfo. Do not use version().get() as it calls fileInfoVersion().
     // Not passed in initializer, because eval order of openFile(), FileInfo() is unspecified.
-    Attribute<string> h5StoredVersionAttr(*this, versionAttrName);
+    Attribute<VersionType> h5StoredVersionAttr(*this, versionAttrName);
+
     if (mode == CREATE || mode == CREATE_EXCL) {
-      string defaultVersion(VersionType().to_string());
+      VersionType defaultVersion;
       h5StoredVersionAttr.create().set(defaultVersion);
+
       setFileInfoVersion(defaultVersion);
     } else {
       setFileInfoVersion(h5StoredVersionAttr.get());
@@ -69,7 +71,7 @@ void File::close()
   swap(*this, ftmp);
 }
 
-hid_gc File::openFile( const string &filename, FileMode mode ) const
+hid_gc File::openFile( const std::string &filename, FileMode mode ) const
 {
   switch (mode) {
     case CREATE:
