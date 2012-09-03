@@ -158,8 +158,6 @@ if(PYTHON_BINDINGS)
     DESTINATION ${PYTHON_SITE_PACKAGES}/dal
     COMPONENT python
   )
-
-  add_subdirectory(python)
 endif(PYTHON_BINDINGS)
 
 add_subdirectory(casa)

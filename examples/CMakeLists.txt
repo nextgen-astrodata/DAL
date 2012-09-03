@@ -3,8 +3,7 @@ include(TestMacros)
 
 # Create symlink from the current bin dir to examples/data so we can find input files. The create_symlink cmd only works on UNIX systems.
 # Note: Also done for test/ and dal/utils. The absolute CMAKE_CURRENT_SOURCE_DIR path breaks if the user moves everything (alt: copy all example data files)
-add_custom_target(example_symlink ALL COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data data
-                  COMMENT "Creating symlink to data sets for example programs")
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_SOURCE_DIR}/data" examples/data)
 
 # C++ tests, each with and without valgrind
 add_c_test(example-bf-recreate-dataset)
