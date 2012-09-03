@@ -118,7 +118,7 @@ Note that for Python, alternate names are needed because < and > are not valid c
 
 The HDF5 structure described above can be created and populated in C++ as follows:
 
-        using namespace DAL;
+        using namespace dal;
         using namespace std;
 
         File f("foo.h5", File.CREATE);
@@ -138,27 +138,27 @@ The HDF5 structure described above can be created and populated in C++ as follow
 
 or alternatively, in Python:
 
-        import DAL
+        import dal
 
-        f = DAL.File("foo.h5", DAL.File.CREATE)
+        f = dal.File("foo.h5", dal.File.CREATE)
 
-        name = DAL.AttributeString(f, "NAME")
+        name = dal.AttributeString(f, "NAME")
         name.value = "John Doe"
 
-        age = DAL.AttributeString(f, "AGE")
+        age = dal.AttributeString(f, "AGE")
         age.value = 21;
 
-        d = DAL.DatasetFloat(f, "MY_DATASET")
+        d = dal.DatasetFloat(f, "MY_DATASET")
         d.create([2,2])
 
-        desc = DAL.AttributeString(d, "DESCRIPTION")
+        desc = dal.AttributeString(d, "DESCRIPTION")
         desc.value = "This is an example dataset"
 
 Note that the f and d.group() functions are used to access named elements within those groups. The group() functions provide an identifier for that group, with which child elements can be referenced.
 
 The DAL ships with classes that wrap the HDF5 structures as described in the ICD documents in a similar way. For example, the above structure could be wrapped in C++ classes as follows:
 
-        using namespace DAL;
+        using namespace dal;
         using namespace std;
 
         class MyDataset;

@@ -24,7 +24,7 @@ interface casacore arrays with datasets.
 4. C++ <-> Python
 
 SWIG takes care of marshalling native types between C++ and Python. The
-file DAL.i augments this process in order to translate non-standard
+file dal.i augments this process in order to translate non-standard
 types like size_t and ssize_t. The same file also contains translations
 for the names of templates, as Python cannot handle types containing
 the angle brackets like Attribute<double>.
@@ -35,5 +35,5 @@ The numpy arrays are used to interface with datasets from python. SWIG,
 with help from external/numpy.i, can translate parameter patterns like
 (size_t dim1, size_t dim2, float *in_buffer2) to an interface for
 numpy arrays. As numpy has its own types, explicit type conversions
-need to be defined in DAL.i.
+need to be defined in dal.i.
 

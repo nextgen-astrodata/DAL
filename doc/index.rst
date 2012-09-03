@@ -29,14 +29,14 @@ As a very brief example, the following code creates an Common LOFAR Attributes F
   #include <dal/lofar/CLA_File.h>
 
   int main {
-    DAL::CLA_File f("example.h5", DAL::File::CREATE);
+    dal::CLA_File f("example.h5", dal::File::CREATE);
     f.observationID().value = "12345";
   }
 
   [Python]
-  import DAL
+  import dal
 
-  f = DAL.CLA_File("example.h5", DAL.File.CREATE)
+  f = dal.CLA_File("example.h5", dal.File.CREATE)
   f.observationID().value = "12345"
 
 And the following code reads it back out::
@@ -46,14 +46,14 @@ And the following code reads it back out::
   #include <iostream>
 
   int main {
-    DAL::CLA_File f("example.h5");
+    dal::CLA_File f("example.h5");
     cout << f.observationID().value << endl;
   }
 
   [Python]
-  import DAL
+  import dal
 
-  f = DAL.CLA_File("example.h5")
+  f = dal.CLA_File("example.h5")
   print f.observationID().value
 
 ============
@@ -97,7 +97,7 @@ Creating the structure using the DAL
 
 The following code creates the above structure in Python in a file called ``foo.h5``::
 
-  from DAL import *
+  from dal import *
 
   f = File("foo.h5", File.CREATE)
 
@@ -142,7 +142,7 @@ Or, in C++, producing the same HDF5 file::
   #include <complex>
   #include <vector>
 
-  using namespace DAL;
+  using namespace dal;
   using namespace std;
 
   int main() {
@@ -259,7 +259,7 @@ Reading the structure using the DAL
 
 The individual data can also be read using the DAL, of course. For example, the following programs extract the values of a few attributes, as well as a few scalars from the dataset from ``foo.h5``. In Python::
 
-  from DAL import *
+  from dal import *
 
   f = File("foo.h5", File.READ)
 
@@ -306,7 +306,7 @@ In C++::
   #include <vector>
   #include <iostream>
 
-  using namespace DAL;
+  using namespace dal;
   using namespace std;
 
   int main() {
@@ -365,7 +365,7 @@ The following sections will explain basic functionality offered by the DAL to wo
   #include <dal/hdf5/Attribute.h>
   #include <iostream>
 
-  using namespace DAL;
+  using namespace dal;
   using namespace std;
 
   int main() {
@@ -373,7 +373,7 @@ The following sections will explain basic functionality offered by the DAL to wo
   }
 
   [Python]
-  from DAL import *
+  from dal import *
 
   ... insert example here ...
 
@@ -622,7 +622,7 @@ Almost all of the DAL functions can throw an exception in case of an error. The 
 +===================+=======================+=========================+
 | ``DALException``  | ``RuntimeError``      | Something went wrong    |
 +-------------------+-----------------------+-------------------------+
-| ``HDF5Exception`` | ``DAL.HDF5Exception`` | HDF5 threw an error     |
+| ``HDF5Exception`` | ``dal.HDF5Exception`` | HDF5 threw an error     |
 +-------------------+-----------------------+-------------------------+
 | ``DALValueError`` | ``ValueError``        | Invalid parameter value |
 +-------------------+-----------------------+-------------------------+
