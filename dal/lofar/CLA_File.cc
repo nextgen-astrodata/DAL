@@ -52,7 +52,7 @@ void CLA_File::close()
   File::close();
 }
 
-void CLA_File::openFile( const string &filename, FileMode mode )
+void CLA_File::openFile( const std::string &filename, FileMode mode )
 {
   initFileNodes();
 
