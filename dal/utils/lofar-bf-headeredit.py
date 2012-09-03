@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# bfheaderedit.py
+# lofar-bf-headeredit.py
 # Python script that allows to header information in a BF.h5 file 
 #
-# File:         bfheaderedit.py
+# File:         lofar-bf-headeredit.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-06-05
 # Last change:  2012-06-15
@@ -13,8 +13,6 @@ import os
 import numpy
 from optparse import OptionParser         # command line argument parsing
 import dal
-import bfmeta
-import bfheader
 
 def main():
   basename=os.path.basename(sys.argv[0]) 
@@ -54,7 +52,7 @@ def main():
     if filename in args:
       args.remove(filename)                 # remove filename from args list
 
-    header=bfheader.bfheader(fh=fh, args=args, options=options)
+    header=dal.bfheader(fh=fh, args=args, options=options)
 
     for arg in args:
       header.analyzeArgument(arg)

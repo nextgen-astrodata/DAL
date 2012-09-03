@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# bf_header.py
+# lofar-bf-headerinfo.py
 # Python script that displays header information from a BF.h5 file 
 #
-# File:         bfheaderinfo.py
+# File:         lofar-bf-headerinfo.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-01
 # Last change:  2012-07-26
@@ -13,7 +13,6 @@ import os
 import numpy
 from optparse import OptionParser         # command line argument parsing
 import dal
-import bfmeta
 
 
 def main():
@@ -43,7 +42,7 @@ def main():
     filename=args[0]
     fh=dal.BF_File(filename)      # open file
 
-    bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, level=options.level) #verbose=options.verbose)
+    dal.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, level=options.level) #verbose=options.verbose)
 
 # Entry point on call
 #  
