@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 
 import sys
-import DAL
+import dal
 
 def createTest():
-  f = DAL.CLA_File('test-reopen-rw-cla-py.h5', DAL.CLA_File.CREATE)
+  f = dal.CLA_File('test-reopen-rw-cla-py.h5', dal.CLA_File.CREATE)
 
   f.clockFrequency().value = 160.0
 
 def reopenrwTest():
-  f = DAL.CLA_File('test-reopen-rw-cla-py.h5', DAL.CLA_File.READWRITE)
+  f = dal.CLA_File('test-reopen-rw-cla-py.h5', dal.CLA_File.READWRITE)
 
   f.clockFrequencyUnit().value = 'MHz'
 
 def checkTest():
   err = 0
 
-  f = DAL.CLA_File('test-reopen-rw-cla-py.h5')
+  f = dal.CLA_File('test-reopen-rw-cla-py.h5')
 
   if f.clockFrequency().get() != 160.0:
     err = 1

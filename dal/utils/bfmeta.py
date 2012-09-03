@@ -9,12 +9,12 @@
 # Last change:  2012-07-18
 
 import sys
-import DAL
+import dal
 
 class bfmeta:
   def __init__(self, fh=0, filename="", tabs=True, color=False, sap="all", beam="all", stokes="all", level=6, verbose=False):
     if fh==0:                       # if no file handle given
-      self.fh=DAL.BF_File(filename)      # open file    
+      self.fh=dal.BF_File(filename)      # open file    
     else:
       self.fh=fh                        # take handle
       
@@ -408,7 +408,7 @@ class bfmeta:
 
       # Now identify coordinate
       if coord.groupType().value == "TimeCoord":
-        timeCoord=DAL.TimeCoordinate(coords, coord.name())   # create a TimeCoord from the generic coord
+        timeCoord=dal.TimeCoordinate(coords, coord.name())   # create a TimeCoord from the generic coord
         print self.prefix + timeCoord.referenceValue().name() + "\t\t=", timeCoord.referenceValue().value
         print self.prefix + timeCoord.referencePixel().name() + "\t\t=", timeCoord.referencePixel().value
         print self.prefix + timeCoord.increment().name() + "\t\t=", timeCoord.increment().value     
@@ -416,7 +416,7 @@ class bfmeta:
         print self.prefix + timeCoord.axisValuesPixel().name() + "\t=", timeCoord.axisValuesPixel().value     
         print self.prefix + timeCoord.axisValuesWorld().name() + "\t=", timeCoord.axisValuesWorld().value     
       elif coord.groupType().value == "SpectralCoord":
-        spectralCoord=DAL.SpectralCoordinate(coords, coord.name())   # create a SpectralCoord from the generic coord
+        spectralCoord=dal.SpectralCoordinate(coords, coord.name())   # create a SpectralCoord from the generic coord
         print self.prefix + spectralCoord.referenceValue().name() + "\t\t=", spectralCoord.referenceValue().value
         print self.prefix + spectralCoord.referencePixel().name() + "\t\t=", spectralCoord.referencePixel().value
         print self.prefix + spectralCoord.increment().name() + "\t\t=", spectralCoord.increment().value     

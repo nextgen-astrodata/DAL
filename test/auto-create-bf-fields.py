@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import sys
-import DAL
+import dal
 
 exit_status = 0
 
 filename = 'test-auto-create-bf-fields.h5'
-f = DAL.BF_File(filename, DAL.BF_File.CREATE)
+f = dal.BF_File(filename, dal.BF_File.CREATE)
 
 telescope_attr = f.telescope()
 if telescope_attr.get() != 'LOFAR':

@@ -10,7 +10,7 @@
 
 import sys
 import numpy
-import DAL
+import dal
 
 def get_lost_frame_nrs(data, block_len):
 	lost_frame_nrs = [ ]
@@ -31,7 +31,7 @@ def get_lost_frame_nrs(data, block_len):
 	return lost_frame_nrs
 
 def print_lost_frame_nrs(filename):
-	fh = DAL.TBB_File(filename)
+	fh = dal.TBB_File(filename)
 
 	datasets_found = False
 	total_frames = 0

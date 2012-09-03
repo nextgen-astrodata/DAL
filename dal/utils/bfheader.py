@@ -10,7 +10,7 @@
 # Last change:  2012-06-25
 
 import re     # regular expressions
-import DAL
+import dal
 
 class bfheader:
   def __init__(self, fh=None, filename="", options=None, args=[]):
@@ -19,7 +19,7 @@ class bfheader:
     if self.debug:
       print "__init__"                  # DEBUG
     if fh==None:                        # if no file handle given
-      self.fh=DAL.BF_File(filename)     # open file    
+      self.fh=dal.BF_File(filename)     # open file    
     else:
       self.fh=fh                        # take handle
     

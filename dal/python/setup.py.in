@@ -30,7 +30,7 @@ else:
   hdf5_include = "/opt/cep/hdf5/include"
   hdf5_lib     = "/opt/cep/hdf5/lib"
 
-DAL_module = Extension('_DAL',
+dal_module = Extension('_DAL',
 			sources=['DAL.i', 'CLA_File.cc', 'BF_File.cc', 'TBB_File.cc', 'File.cc', 'Group.cc'],
 			include_dirs=[hdf5_include, numpy_include],
 			library_dirs=[hdf5_lib],
@@ -40,7 +40,7 @@ DAL_module = Extension('_DAL',
 			language='c++',
 			)
 
-dist = setup (name	= 'DAL',
+dist = setup (name	= 'dal',
 	version		= '@DAL_VERSION_STRING@',
 	author		= "dr. Jan David Mol, ASTRON, the Netherlands",
 	author_email	= "mol@astron.nl",
@@ -51,9 +51,9 @@ dist = setup (name	= 'DAL',
 
         install_requires = ['numpy'],
 
-        scripts         = ['__init__.py','DAL.py'],
-	ext_modules	= [DAL_module],
-	py_modules	= ["DAL"],
+        scripts         = ['__init__.py','dal.py'],
+	ext_modules	= [dal_module],
+	py_modules	= ["dal"],
 	)
 
 # Because while SWIG support is 'native' to python, it refuses to

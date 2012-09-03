@@ -1,3 +1,3 @@
 #!/usr/bin/env python
-import DAL
+import dal
 

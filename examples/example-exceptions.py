@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-import DAL
+import dal
 
-# DAL throws an DAL.HDF5Exception if an error is raised by the HDF5 library.
+# DAL throws an dal.HDF5Exception if an error is raised by the HDF5 library.
 # The exception object contains a 'stack' member, which contains the back trace
 # within HDF5.
 
 try:
-  f = DAL.File("example-exceptions_file.h5", DAL.File.READ, "DOC_VERSION")
-except DAL.HDF5Exception, e:
+  f = dal.File("example-exceptions_file.h5", dal.File.READ, "DOC_VERSION")
+except dal.HDF5Exception, e:
   print("Caught exception: %s" % (e,))
 
   print("Brief backtrace:")
@@ -18,7 +18,7 @@ except DAL.HDF5Exception, e:
 
 # Common parameter errors trigger regular Python exceptions
 try:
-  t = DAL.TupleUInt3()
+  t = dal.TupleUInt3()
   t[4] = 0
 except IndexError, e:
   print("Caught exception: %s" % (e,))
@@ -26,7 +26,7 @@ except IndexError, e:
 # Errors raised by the C++ -> Python translation layer can unfortunately
 # be a bit cryptic.
 try:
-  t = DAL.TupleUInt3()
+  t = dal.TupleUInt3()
   t[0] = "must be an integer"
 except TypeError, e:
   print("Caught exception: %s" % (e,))

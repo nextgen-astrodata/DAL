@@ -12,7 +12,7 @@ import sys
 import os
 import numpy
 from optparse import OptionParser         # command line argument parsing
-import DAL
+import dal
 import bfmeta
 import bfheader
 
@@ -44,12 +44,12 @@ def main():
     if options.debug:
       print "filename: ", filename         # DEBUG
     if options.clobber:
-      fh=DAL.BF_File(filename, DAL.File.READWRITE)  # open file read/write
+      fh=dal.BF_File(filename, dal.File.READWRITE)  # open file read/write
     elif options.overwrite:
        # make copy first
       print "Copying", filename,"to "
     else:
-      fh=DAL.BF_File(filename, DAL.File.READ)  # open file readonly
+      fh=dal.BF_File(filename, dal.File.READ)  # open file readonly
     
     if filename in args:
       args.remove(filename)                 # remove filename from args list

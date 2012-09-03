@@ -1,2 +1,2 @@
-from DAL import *
+from dal import *
 

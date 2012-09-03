@@ -12,7 +12,7 @@ import sys
 import os
 import numpy
 from optparse import OptionParser         # command line argument parsing
-import DAL
+import dal
 import bfmeta
 
 
@@ -41,7 +41,7 @@ def main():
     sys.exit()
   else:
     filename=args[0]
-    fh=DAL.BF_File(filename)      # open file
+    fh=dal.BF_File(filename)      # open file
 
     bfmeta.bfmeta(fh, tabs=options.tabs, color=options.color, sap=options.sap, beam=options.beam, stokes=options.stokes, level=options.level) #verbose=options.verbose)
 

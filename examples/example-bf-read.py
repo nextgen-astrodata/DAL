@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import DAL
+import dal
 import numpy
 from itertools import count
 
@@ -74,7 +74,7 @@ def printData(bffile):
 
 # open the file for reading
 for filename in filenames:
-  f = DAL.BF_File(filedir + '/' + filename)
+  f = dal.BF_File(filedir + '/' + filename)
   printData(f)
   print "--------------------------------------------------------------------------------"
 

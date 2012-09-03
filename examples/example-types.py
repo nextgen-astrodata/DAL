@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-import DAL
+import dal
 
 print("---- Tuples")
 
 # Create a tuple of unsigned numbers (1,2,3)
-t = DAL.TupleUInt3()
+t = dal.TupleUInt3()
 t.set([1,2,3])
 
 # A Tuple behaves like a tuple, but
@@ -22,7 +22,7 @@ for x in t:
   print("t contains %s"% (x,))
 
 # Create another tuple
-t2 = DAL.TupleUInt3()
+t2 = dal.TupleUInt3()
 t2.first  = 4
 t2.second = 5
 t2.third  = 6
@@ -32,7 +32,7 @@ print("t2 = %s" % (t2,))
 
 print("---- Ranges")
 
-r = DAL.Range() # sets begin=0, end=0
+r = dal.Range() # sets begin=0, end=0
 print "r =", r
 
 r.begin = 1
@@ -43,10 +43,10 @@ print "Range size =", r.size(), "(2 by definition)"
 # to determine its span, use
 print "span size =", r.end - r.begin
 
-r2 = DAL.Range(10, 100)
+r2 = dal.Range(10, 100)
 print("begin = %lu, end = %lu" % (r2.begin, r2.end))
 
-# For flagging, a list of DAL.Range objects is received / must be passed
+# For flagging, a list of dal.Range objects is received / must be passed
 flags = [ ] # valid
 print "flags =", flags
 flags.append(r)
