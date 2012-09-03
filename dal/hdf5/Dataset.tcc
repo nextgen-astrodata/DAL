@@ -419,6 +419,33 @@ template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos,
     throw HDF5Exception("Could not select hyperslab (2) to perform matrixIO on dataset " + _name);
 
 
+  /*
+   * Work around HDF5 1.8 issue where external datasets are accessed relative to the cwd (instead of the HDF5 file).
+   * Always (try to) restore the cwd in case the application depends on it. See known issue KI 1 for more detail.
+   */
+  struct ScopedCWD {
+    int cwd_fd;
+    ScopedCWD() : cwd_fd(-1) { }
+    ~ScopedCWD() {
+      if (cwd_fd != -1) {
+        // nothing we can do if these fail, tough luck
+        ::fchdir(cwd_fd);
+        ::close(cwd_fd);
+      }
+    }
+  } sc;
+
+  /*
+   * Skip cwd fiddling if the HDF5 file was opened in ".". We could also skip the cwd fiddling if externalFiles()
+   * is empty, but we always use external files for good reason and externalFiles() does another 2+N HDF5 calls.
+   */
+  int fdirfd = fileDirfd();
+  if (fdirfd >= 0) {
+    // Open the cwd, so we can (try to) fchdir() back to it afterwards. If err, go anyway (hopefully won't get the wrong file).
+    sc.cwd_fd = ::open(".", O_RDONLY);
+    ::fchdir(fdirfd);
+  }
+
   if (read) {
     if (H5Dread(group(), h5typemap<T>::memoryType(), memspace, dataspace, H5P_DEFAULT, buffer) < 0)
       throw HDF5Exception("Could not perform matrixIO to read data from dataset " + _name);

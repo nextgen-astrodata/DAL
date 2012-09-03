@@ -45,7 +45,7 @@ public:
   friend void swap(FileInfo& fi0, FileInfo& fi1);
 
   const std::string& fileName() const;
-  const std::string& fileDirName() const;
+  int fileDirfd() const;
   FileMode fileMode() const;
   const std::string& versionAttrName() const;
   VersionType& fileVersion() const;
@@ -55,6 +55,9 @@ public:
 
   static std::string getBasename(const std::string& filename);
   static std::string getDirname(const std::string& filename);
+
+private:
+  int openOtherDirname(const std::string& fileName);
 };
 
 /*!
@@ -81,10 +84,10 @@ class FileInfoType {
   const std::string fileName;
 
   /*!
-   * Directory name of the file opened (no trailing '/'). If no dir was specified, it is ".".
+   * File descriptor of the directory of the file opened, or -1 if "." or failed to open.
    * Needed to work around an HDF5 issue related to external data sets and the cwd.
    */
-  const std::string fileDirName;
+  const int fdirfd;
 
   //! The mode the file was opened with (READWRITE, CREATE, ...).
   const FileInfo::FileMode fileMode;
@@ -99,7 +102,7 @@ class FileInfoType {
 
 
   FileInfoType();
-  FileInfoType(const std::string& fileName, const std::string& fileDirName,
+  FileInfoType(const std::string& fileName, const int fdirfd,
                FileInfo::FileMode fileMode, const std::string& versionAttrName);
 };
 

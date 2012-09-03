@@ -17,7 +17,12 @@
 
 #include <cstddef>
 #include <cstring>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <libgen.h>
+
 #include <vector>
 #include "FileInfo.h"
 
@@ -29,7 +34,7 @@ FileInfo::FileInfo() : ptr(new FileInfoType) { }
 
 FileInfo::FileInfo(const std::string& fullFileName, FileMode fileMode,
                    const std::string& versionAttrName)
-: ptr(new FileInfoType(getBasename(fullFileName), getDirname(fullFileName),
+: ptr(new FileInfoType(fullFileName, openOtherDirname(fullFileName),
                        fileMode, versionAttrName)) { }
 
 FileInfo::FileInfo(const FileInfo& other) : ptr(other.ptr) {
@@ -38,6 +43,7 @@ FileInfo::FileInfo(const FileInfo& other) : ptr(other.ptr) {
 
 FileInfo::~FileInfo() {
   if (--ptr->refCount == 0) {
+    ::close(ptr->fdirfd);
     delete ptr;
   }
 }
@@ -56,8 +62,8 @@ const string& FileInfo::fileName() const {
   return ptr->fileName;
 }
 
-const std::string& FileInfo::fileDirName() const {
-  return ptr->fileDirName;
+int FileInfo::fileDirfd() const {
+  return ptr->fdirfd;
 }
 
 FileInfo::FileMode FileInfo::fileMode() const {
@@ -76,6 +82,12 @@ void FileInfo::setFileVersion(const VersionType& newVersion) {
   ptr->fileVersion = newVersion;
 }
 
+int FileInfo::openOtherDirname(const string& fileName) {
+  string dirName(getDirname(fileName));
+  if (dirName == ".")
+    return -1;
+  return ::open(dirName.c_str(), O_RDONLY);
+}
 
 // static functions
 //! C++ interface to basename(3). Returns filename without path.
@@ -100,13 +112,13 @@ string FileInfo::getDirname(const string& filename) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-FileInfoType::FileInfoType() : refCount(1), fileMode(0) { }
+FileInfoType::FileInfoType() : refCount(1), fdirfd(-1), fileMode(0) { }
 
-FileInfoType::FileInfoType(const std::string& fileName, const std::string& fileDirName,
+FileInfoType::FileInfoType(const std::string& fileName, int fdirfd,
                            FileInfo::FileMode fileMode, const std::string& versionAttrName)
 : refCount(1)
 , fileName(fileName)
-, fileDirName(fileDirName)
+, fdirfd(fdirfd)
 , fileMode(fileMode)
 , versionAttrName(versionAttrName)
 { }

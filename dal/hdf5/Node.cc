@@ -74,10 +74,6 @@ const string& Node::fileName() const {
   return fileInfo.fileName();
 }
 
-const string& Node::fileDirName() const {
-  return fileInfo.fileDirName();
-}
-
 Node::FileMode Node::fileMode() const {
   return fileInfo.fileMode();
 }
@@ -89,6 +85,10 @@ bool Node::canWrite() const {
 
 const std::string& Node::versionAttrName() const {
   return fileInfo.versionAttrName();
+}
+
+int Node::fileDirfd() const {
+  return fileInfo.fileDirfd();
 }
 
 VersionType& Node::fileInfoVersion() const {

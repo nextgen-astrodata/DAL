@@ -143,11 +143,8 @@ public:
   std::string className() const { return typeid(*this).name(); }
 */
 
-  /*
-   * FileInfo accessors follow.
-   */
   /*!
-   * The name of the file as it was opened, without path.
+   * The name of the file as it was opened.
    *
    * Python example:
    * \code
@@ -164,26 +161,6 @@ public:
    * \endcode
    */
   const std::string& fileName() const;
-
-  /*!
-   * The name of the dir in the file as it was opened.
-   * If just a filename was opened, returns ".".
-   *
-   * Python example:
-   * \code
-   *    # Create a new HDF5 file called "example.h5"
-   *    >>> f = File("example.h5", File.CREATE)
-   *
-   *    # Query the file name
-   *    >>> f.fileDirName()
-   *    '.'
-   *
-   *    # Clean up
-   *    >>> import os
-   *    >>> os.remove("example.h5")
-   * \endcode
-   */
-  const std::string& fileDirName() const;
 
   //! Returns the mode the file was opened with.
   FileMode fileMode() const;
@@ -257,6 +234,12 @@ protected:
 
   //! Constructor for Node of root group (in File) only
   Node( const hid_gc &parent, const std::string &name, FileInfo fileInfo);
+
+  /*!
+   * The file descriptor of the name of the dir in the file as it was opened,
+   * or -1 if "." or failed to open. Needed for a HDF5 issue workaround.
+   */
+  int fileDirfd() const;
 
   /*!
    * Returns the in-memory stored file version.
