@@ -136,7 +136,7 @@ std::string CLA_File::getFileModDate(const std::string& filename) const {
 }
 
 /*!
- * The output_format is without seconds. The output_size is including the '\0'.
+ * The output_format is without seconds. The output_size is including the terminating NUL char.
  * Helper for in filenames and for the FILEDATE attribute.
  */
 std::string CLA_File::formatFilenameTimestamp(const struct timeval& tv, const char* output_format,
