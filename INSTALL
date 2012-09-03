@@ -43,6 +43,7 @@ Additional CMake Variables
 The following custom flags can be added to the cmake command line:
 
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo       Select build flags. RelWithDebInfo: '-O2 -g' (default), Debug: '-g', Release: '-O3 -DNDEBUG'
+        -DCMAKE_CXX_COMPILER=/usr/bin/clang++   Build DAL using llvm/clang in the indicated path.
 	-DCMAKE_INSTALL_PREFIX=$PWD             Install DAL into the indicated path (default: /usr/local).
 	-DPYTHON_SITE_PACKAGES=$PWD/python      Install DAL Python bindings into the indicated path (default: derived from Python interpreter)
 	-DPYTHON_VERSION=2.x                    Python version 2.x to compile the bindings against (default: derived from Python library)
