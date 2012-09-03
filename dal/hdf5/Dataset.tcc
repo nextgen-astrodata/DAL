@@ -430,7 +430,7 @@ template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos,
     ~ScopedCWD() {
       if (cwd_fd != -1) {
         // nothing we can do if these fail, tough luck
-        ::fchdir(cwd_fd);
+        int unused = ::fchdir(cwd_fd);
         ::close(cwd_fd);
       }
     }
@@ -444,7 +444,7 @@ template<typename T> void Dataset<T>::matrixIO( const std::vector<size_t> &pos,
   if (fdirfd >= 0) {
     // Open the cwd, so we can (try to) fchdir() back to it afterwards. If err, go anyway (hopefully won't get the wrong file).
     sc.cwd_fd = ::open(".", O_RDONLY);
-    ::fchdir(fdirfd);
+    int unused = ::fchdir(fdirfd);
   }
 
   if (read) {
