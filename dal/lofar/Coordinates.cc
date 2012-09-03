@@ -103,10 +103,6 @@ Coordinate *CoordinatesGroup::coordinate( unsigned nr )
   if (type == "Polarization")
     return new PolarizationCoordinate(*this, name);
 
-  /* TODO:
-    type == "FaradayDepth" ??
-  */  
-
   // unknown type
   return new Coordinate(*this, name);
 }

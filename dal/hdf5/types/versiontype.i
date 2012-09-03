@@ -1,3 +1,10 @@
+%ignore dal::VersionType::operator<;
+%ignore dal::VersionType::operator<=;
+%ignore dal::VersionType::operator>;
+%ignore dal::VersionType::operator>=;
+%ignore dal::VersionType::operator==;
+%ignore dal::VersionType::operator!=;
+
 %include dal/hdf5/types/versiontype.h
 
 %extend dal::VersionType {
@@ -9,6 +16,13 @@
       yield self.major
       yield self.minor
       yield self.release
+
+    def __cmp__(self, other):
+      try:
+        return self.cmp(self, other)
+      except TypeError:
+        # fall-back to allow comparisons with sequences
+        return cmp(tuple(self), other)
   }
 }
 
