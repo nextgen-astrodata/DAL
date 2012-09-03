@@ -17,7 +17,7 @@
       yield self.minor
       yield self.release
 
-    def __cmp___(self, other):
+    def __cmp__(self, other):
       try:
         return self.cmp(self, other)
       except TypeError:
