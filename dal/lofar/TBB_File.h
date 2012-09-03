@@ -78,10 +78,7 @@ public:
   Attribute<double>      paramFitVarianceMax();
 
 protected:
-  void                   initNodes();
-
-private:
-  virtual void           open( hid_t parent, const std::string &name );
+  virtual void           initNodes();
 };
 
 class TBB_Station: public Group {
@@ -106,12 +103,11 @@ public:
   virtual std::vector<TBB_DipoleDataset> dipoles();
   virtual TBB_DipoleDataset             dipole( unsigned stationID, unsigned rspID, unsigned rcuID );
 
-protected:
-  void                                  initNodes();
-
 private:
-  virtual void                          open( hid_t parent, const std::string &name );
   std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
+
+protected:
+  virtual void                          initNodes();
 };
 
 class TBB_DipoleDataset: public Dataset<short> {
@@ -154,10 +150,7 @@ public:
   Attribute<std::string>                dispersionMeasureUnit();
 
 protected:
-  void                                  initNodes();
-
-private:
-  virtual void                          open( hid_t parent, const std::string &name );
+  virtual void                          initNodes();
 };
 
 }

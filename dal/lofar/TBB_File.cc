@@ -116,11 +116,6 @@ TBB_Trigger::TBB_Trigger( Group &parent, const std::string &name )
 {
 }
 
-void TBB_Trigger::open( hid_t /*parent*/, const std::string &/*name*/ )
-{
-  initNodes();
-}
-
 void TBB_Trigger::initNodes() {
   Group::initNodes();
   addNode( new Attribute<string>(*this, "TRIGGER_TYPE") );
@@ -172,11 +167,6 @@ TBB_Station::TBB_Station( Group &parent, const std::string &name )
 :
   Group(parent, name)
 {
-}
-
-void TBB_Station::open( hid_t /*parent*/, const std::string &/*name*/ )
-{
-  initNodes();
 }
 
 void TBB_Station::initNodes() {
@@ -277,11 +267,6 @@ TBB_DipoleDataset::TBB_DipoleDataset( Group &parent, const std::string &name )
 :
   Dataset<short>(parent, name)
 {
-}
-
-void TBB_DipoleDataset::open( hid_t /*parent*/, const std::string &/*name*/ )
-{
-  initNodes();
 }
 
 void TBB_DipoleDataset::initNodes() {

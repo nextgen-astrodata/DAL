@@ -122,10 +122,8 @@ public:
 
 protected:
   std::string             beamName( unsigned nr );
-  void                    initNodes();
 
-private:
-  virtual void            open( hid_t parent, const std::string &name );
+  virtual void            initNodes();
 };
 
 class BF_BeamGroup: public Group {
@@ -195,10 +193,8 @@ public:
 protected:
   std::string             stokesName( unsigned nr );
   std::string             coordinatesName();
-  void                    initNodes();
 
-private:
-  virtual void            open( hid_t parent, const std::string &name );
+  virtual void            initNodes();
 };
 
 class BF_StokesDataset: public Dataset<float> {
@@ -213,10 +209,7 @@ public:
   Attribute<unsigned>     nofSamples();
 
 protected:
-  void                    initNodes();
-
-private:
-  virtual void            open( hid_t parent, const std::string &name );
+  virtual void            initNodes();
 };
 
 }

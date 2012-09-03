@@ -177,11 +177,6 @@ BF_SubArrayPointing::BF_SubArrayPointing( Group &parent, const std::string &name
 {
 }
 
-void BF_SubArrayPointing::open( hid_t /*parent*/, const std::string &/*name*/ )
-{
-  initNodes();
-}
-
 void BF_SubArrayPointing::initNodes() {
   Group::initNodes();
   addNode( new Attribute<string>(*this, "EXPTIME_START_UTC") );
@@ -305,11 +300,6 @@ BF_BeamGroup::BF_BeamGroup( Group &parent, const std::string &name )
 :
   Group(parent, name)
 {
-}
-
-void BF_BeamGroup::open( hid_t /*parent*/, const std::string &/*name*/ )
-{
-  initNodes();
 }
 
 void BF_BeamGroup::initNodes() {
@@ -589,11 +579,6 @@ BF_StokesDataset::BF_StokesDataset( Group &parent, const std::string &name )
 :
   Dataset<float>(parent, name)
 {
-}
-
-void BF_StokesDataset::open( hid_t /*parent*/, const std::string &/*name*/ )
-{
-  initNodes();
 }
 
 void BF_StokesDataset::initNodes()

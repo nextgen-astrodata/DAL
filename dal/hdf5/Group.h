@@ -136,9 +136,7 @@ protected:
    */
   const hid_gc &group(); // protected w/ friend above to keep hid_gc inside DAL
 
-  // initNodes() does not have to be virtual, as long as any new sub-classes
-  // that have initNodes() also have their own virtual open() like the one here.
-  void initNodes();
+  virtual void initNodes();
 
   /*!
    * Add a node to the node map. Ownerschip is taken. Do not pass NULL.
