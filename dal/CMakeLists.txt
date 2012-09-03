@@ -77,7 +77,7 @@ set(dal_headers
 )
 
 set(swig_sources
-  DAL.i
+  dal.i
   vectors.i
   external/numpy.i
 
@@ -136,26 +136,26 @@ if(PYTHON_BINDINGS)
   )
 
   list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
-  set_source_files_properties(DAL.i PROPERTIES CPLUSPLUS ON)
-  set_source_files_properties(DAL.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
+  set_source_files_properties(dal.i PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties(dal.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
   set(SWIG_MODULE_DAL_EXTRA_DEPS lofardal ${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i ${swig_sources} ${dal_headers})
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i PROPERTIES GENERATED ON)
-  swig_add_module(DAL python DAL.i ${dal_sources})
-  swig_link_libraries(DAL ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
+  swig_add_module(dal python dal.i ${dal_sources})
+  swig_link_libraries(dal ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
 
   add_dependencies(${SWIG_MODULE_DAL_REAL_NAME} swig_docstrings)
 
   install(TARGETS
     ${SWIG_MODULE_DAL_REAL_NAME}
 
-    DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
+    DESTINATION ${PYTHON_SITE_PACKAGES}/dal
     COMPONENT python
   )
 
   install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/DAL.py
+    ${CMAKE_CURRENT_BINARY_DIR}/dal.py
 
-    DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
+    DESTINATION ${PYTHON_SITE_PACKAGES}/dal
     COMPONENT python
   )
 

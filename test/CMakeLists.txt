@@ -18,7 +18,7 @@ add_c_test(remove-root-exc)
 
 # Python tests
 add_py_test(py-import-only ${CMAKE_CURRENT_SOURCE_DIR}/import-only.py)
-add_py_test(py-doctest ${CMAKE_BINARY_DIR}/dal/DAL.py)
+add_py_test(py-doctest ${CMAKE_BINARY_DIR}/dal/dal.py)
 add_py_test(py-auto-create-bf-fields ${CMAKE_CURRENT_SOURCE_DIR}/auto-create-bf-fields.py)
 add_py_test(py-get-tbb-station-ref ${CMAKE_CURRENT_SOURCE_DIR}/get-tbb-station-ref.py)
 add_py_test(py-reopen-rw ${CMAKE_CURRENT_SOURCE_DIR}/reopen-rw.py)

@@ -24,7 +24,7 @@ if(PYTHON_BINDINGS)
     bfmeta.py
     bfheader.py
 
-    DESTINATION ${PYTHON_SITE_PACKAGES}/DAL
+    DESTINATION ${PYTHON_SITE_PACKAGES}/dal
     COMPONENT python
   )
 endif(PYTHON_BINDINGS)
