@@ -138,15 +138,15 @@ if(PYTHON_BINDINGS)
   list(APPEND CMAKE_SWIG_FLAGS -Wall -Wextra)
   set_source_files_properties(dal.i PROPERTIES CPLUSPLUS ON)
   set_source_files_properties(dal.i PROPERTIES SWIG_FLAGS -modern -oldrepr -keyword -castmode -modernargs)
-  set(SWIG_MODULE_DAL_EXTRA_DEPS lofardal ${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i ${swig_sources} ${dal_headers})
+  set(SWIG_MODULE_dal_EXTRA_DEPS lofardal ${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i ${swig_sources} ${dal_headers})
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/doc/docstrings.i PROPERTIES GENERATED ON)
   swig_add_module(dal python dal.i ${dal_sources})
   swig_link_libraries(dal ${PYTHON_LIBRARIES} ${HDF5_LIBRARIES})
 
-  add_dependencies(${SWIG_MODULE_DAL_REAL_NAME} swig_docstrings)
+  add_dependencies(${SWIG_MODULE_dal_REAL_NAME} swig_docstrings)
 
   install(TARGETS
-    ${SWIG_MODULE_DAL_REAL_NAME}
+    ${SWIG_MODULE_dal_REAL_NAME}
 
     DESTINATION ${PYTHON_SITE_PACKAGES}/dal
     COMPONENT python
