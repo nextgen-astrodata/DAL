@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# tbb-lostframes.py
+# lofar_tbb_flaggeddata.py
 # Python script that searches for frame payload sized sequences of zeros in TBB transient data in LOFAR HDF5 files.
 #
-# File:         tbb-lostframes.py
+# File:         lofar_tbb_flaggeddata
 # Author:       Alexander S. van Amesfoort (amesfoort_at_astron.nl)
 # Date:         2012-06-11
 # Last change:  2012-08-15
@@ -71,6 +71,7 @@ def print_lost_frame_nrs(filename):
 		print
 
 def print_usage():
+	print 'Search for and print frame payload sized sequences of zeros in TBB transient data in LOFAR HDF5 files.'
 	print 'Usage:', sys.argv[0], 'L12345_xxx_tbb.h5 ...'
 
 def main():

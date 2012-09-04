@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# lofar-bf-headerinfo.py
-# Python script that displays header information from a BF.h5 file 
+# lofar_bf_headerinfo.py
+# Python script that displays header information from a BF .h5 file 
 #
-# File:         lofar-bf-headerinfo.py
+# File:         lofar_bf_headerinfo.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-03-01
 # Last change:  2012-07-26

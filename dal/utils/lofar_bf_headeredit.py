@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# lofar-bf-headeredit.py
+# lofar_bf_headeredit.py
 # Python script that allows to header information in a BF.h5 file 
 #
-# File:         lofar-bf-headeredit.py
+# File:         lofar_bf_headeredit.py
 # Author:       Sven Duscha (duscha_at_astron.nl)
 # Date:         2012-06-05
 # Last change:  2012-06-15
