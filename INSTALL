@@ -1,11 +1,11 @@
 Data Access Library (DAL) - INSTALL
 ===================================
 
-For most users, obtaining and building the DAL sources requires installing a few packages easily available for most Linux and MacOS installations.
+For most users, obtaining and building the DAL sources requires installing a few packages easily available for most Linux and Mac OS installations.
 Building documentation and Python bindings (both default: on) requires some additional packages, also easily available.
 Both can be turned off (see below). Documentation can also be browsed online (see README).
 
-If the latest DAL sources do not build cleanly on your system with all dependencies, please let us know (see the file 'Contributing').
+If the latest DAL sources do not build cleanly on your system with all dependencies in place, please let us know (see the file 'Contributing').
 
 
 Retrieving DAL
@@ -21,7 +21,7 @@ Build Instructions
 
 	mkdir build
 	cd build
-	cmake ..
+	cmake ..				# see Additional CMake Variables below for customization and/or use 'ccmake'
 	make
 	make install                            # with sufficient privileges
 
@@ -44,8 +44,8 @@ The following custom flags can be added to the cmake command line:
 
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo       Select build flags. RelWithDebInfo: '-O2 -g' (default), Debug: '-g', Release: '-O3 -DNDEBUG'
         -DCMAKE_CXX_COMPILER=/usr/bin/clang++   Build DAL using llvm/clang in the indicated path.
-	-DCMAKE_INSTALL_PREFIX=$PWD             Install DAL into the indicated path (default: /usr/local).
-	-DPYTHON_SITE_PACKAGES=$PWD/python      Install DAL Python bindings into the indicated path (default: derived from Python interpreter)
+	-DCMAKE_INSTALL_PREFIX=$PWD             Install the DAL C++ library and headers into the indicated path (default: /usr/local).
+	-DPYTHON_SITE_PACKAGES=$PWD/python      Install the DAL Python bindings into the indicated path (default: derived from Python interpreter)
 	-DPYTHON_VERSION=2.x                    Python version 2.x to compile the bindings against (default: derived from Python library)
 
 	-DGENERATE_DOCS=OFF                     Do not generate documentation.
@@ -76,10 +76,10 @@ To build DAL (default config), you need the following packages:
 	- casacore      (to exchange datasets with casacore (incomplete, ask us) (default: off))
 
 Maintainer and developer builds, additionally:
-	- git           (source version control)
+	- git           (obtaining the source, version control)
 	- cmake-curses-gui (ccmake) (graphical list to configure all CMake config variables)
 	- valgrind      (run C++ tests again under valgrind to track memory related bugs)
-	- texlive (pdflatex) (regenerate design documentation (default: off, Makefile provided))
+	- texlive (pdflatex) (regenerate design documentation (default: off, separate Makefile))
 
 
 For Linux Debian/Ubuntu/Mint users, install dependencies using (with sufficient privileges):

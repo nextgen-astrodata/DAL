@@ -23,6 +23,7 @@ COPYING.LESSER		The license text.
 Contributing		How to contact us and/or submit contributions.
 KnownIssues		Known issues in this release.
 ChangeLog		Added features and fixed bugs per release.
+ReleaseSteps            Steps for the developers to make a release.
 README			This file.
 
 CMakeLists.txt		Build configuration script.
