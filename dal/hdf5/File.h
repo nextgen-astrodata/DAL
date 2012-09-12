@@ -98,7 +98,7 @@ public:
    * See the File(filename, mode, versionAttrName) constructor for more info.
    * See the class description for more info on reopening and closing files.
    */
-  virtual void open( const std::string &filename, FileMode mode = READ, const std::string &versionAttrName = "");
+  void open( const std::string &filename, FileMode mode = READ, const std::string &versionAttrName = "");
 
   /*!
    * Indicate that this File object will not be used anymore to access the underlying HDF5 file (if any),
@@ -160,6 +160,8 @@ public:
   Attribute<VersionType> version();
 
 private:
+  virtual void open( hid_t parent, const std::string &name );
+
   hid_gc openFile( const std::string &filename, FileMode mode ) const;
   void initFileNodes();
 };

@@ -132,6 +132,14 @@ void File::initFileNodes()
   addNode( new Attribute<VersionType>(*this, versionAttrName()) );
 }
 
+void File::open( hid_t parent, const std::string &name )
+{
+  (void)parent;
+  (void)name;
+
+  throw DALException("File does not support lazy open");
+}
+
 
 }
 

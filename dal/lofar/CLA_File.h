@@ -38,7 +38,7 @@ public:
 
   virtual ~CLA_File();
 
-  virtual void open( const std::string &filename, FileMode mode = READ );
+  void open( const std::string &filename, FileMode mode = READ );
   virtual void close();
 
   Attribute<std::string> fileName();
