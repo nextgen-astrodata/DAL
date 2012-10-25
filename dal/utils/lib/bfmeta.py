@@ -154,8 +154,8 @@ class bfmeta:
       return    
 
     print self.prefix + sap.groupType().name() +  "\t\t= " + sap.groupType().value
-    print self.prefix + sap.expTimeStartUTC().name() +  "\t= " + sap.expTimeStartUTC().value
-    print self.prefix + sap.expTimeEndUTC().name() +  "\t\t= " + sap.expTimeEndUTC().value
+    print self.prefix + sap.expTimeStartUTC().name() +  "\t= " + str(sap.expTimeStartUTC().value)
+    print self.prefix + sap.expTimeEndUTC().name() +  "\t\t= " + str(sap.expTimeEndUTC().value)
     if sap.expTimeStartMJD().value != None:
       print self.prefix + sap.expTimeStartMJD().name() + "\t=%(mjd)19.12f" %{'mjd':sap.expTimeStartMJD().value}
     if sap.expTimeEndMJD().value != None:
