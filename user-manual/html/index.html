@@ -651,9 +651,9 @@ cout &lt;&lt; "Element [1,2] = " &lt;&lt; d.getScalar(pos) &lt;&lt; endl;
 // float *data = new float[3 * 3]     data
 float data[3][3];
 
-d.get2D( pos, 3, 3, &amp;data[0][0] );
+d.get2D( pos, &amp;data[0][0], 3, 3 );
 data[0][0] = 1.0;
-d.set2D( pos, 3, 3, &amp;data[0][0] );
+d.set2D( pos, &amp;data[0][0], 3, 3 );
 
 cout &lt;&lt; "Element [1,2] = " &lt;&lt; d.getScalar(pos) &lt;&lt; endl;
 
@@ -979,7 +979,7 @@ for name in f.nodeNames():
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Jan David Mol, Alexander van Amesfoort, Lars Baehren.
+        &copy; Copyright 2011-2012, Jan David Mol, Alexander S. van Amesfoort, Lars Baehren.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
