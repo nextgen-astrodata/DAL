@@ -587,9 +587,9 @@ The data set can also be sliced to access blocks of elements in a single call, w
   // float *data = new float[3 * 3]     data
   float data[3][3];
 
-  d.get2D( pos, 3, 3, &data[0][0] );
+  d.get2D( pos, &data[0][0], 3, 3 );
   data[0][0] = 1.0;
-  d.set2D( pos, 3, 3, &data[0][0] );
+  d.set2D( pos, &data[0][0], 3, 3 );
 
   cout << "Element [1,2] = " << d.getScalar(pos) << endl;
 
