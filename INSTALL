@@ -22,16 +22,13 @@ Build Instructions
 	mkdir build
 	cd build
 	cmake ..				# see Additional CMake Variables below for customization and/or use 'ccmake'
-	make
+	make					# to build concurrently using N threads, pass: -j N
 	make install                            # with sufficient privileges
 
 If cmake does not find the (preferred) HDF5 includes and libraries, provide a hint to the Find module by setting the HDF5_ROOT_DIR environment variable.
 
-To do a multi-threaded build, set the MAKEFLAGS environment variable to -j<NCPUS> before running 'make'. On Linux, you can run:
-	export MAKEFLAGS=-j`cat /proc/cpuinfo | grep processor | wc -l`
-
 To run the test suite:
-	make test
+	ctest					# To run N tests concurrently, pass: -j N  To exclude slow valgrind tests, pass: -E vg-
 
 To uninstall, run: (only works after any previous 'make install'; still leaves empty installation directories behind)
 	make uninstall				# with sufficient privileges
