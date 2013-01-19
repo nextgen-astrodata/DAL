@@ -25,20 +25,20 @@ File::File() {}
 
 File::File( const std::string &filename, FileMode mode, const std::string &versionAttrName )
 :
-  // Store the file hid as the group hid; pass file info.
+  // Store the file hid as the group hid.
   Group(openFile(filename, mode), FileInfo(filename, mode, versionAttrName))
 {
   if (!versionAttrName.empty()) {
-    // Also set in-memory version of FileInfo. Do not use version().get() as it calls fileInfoVersion().
+    // To make specialized VersionType [gs]et() functions usable, access HDF5 version string attribute around it.
     // Not passed in initializer, because eval order of openFile(), FileInfo() is unspecified.
-    Attribute<VersionType> h5StoredVersionAttr(*this, versionAttrName);
+    Attribute<string> h5StoredVersionAttr(*this, versionAttrName);
 
     if (mode == CREATE || mode == CREATE_EXCL) {
-      VersionType defaultVersion;
+      // In-memory version already default initialized.
+      string defaultVersion(VersionType().to_string());
       h5StoredVersionAttr.create().set(defaultVersion);
-
-      setFileInfoVersion(defaultVersion);
     } else {
+      // Try to set in-memory version from HDF5 attribute.
       setFileInfoVersion(h5StoredVersionAttr.get());
     }
 
