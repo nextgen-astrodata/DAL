@@ -111,9 +111,9 @@ set_target_properties(lofardal PROPERTIES VERSION ${DAL_VERSION_STRING})
 # If passed data structures change size, the dyn linker will refuse and recompilation is also needed.
 set_target_properties(lofardal PROPERTIES SOVERSION "${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}")
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
   set_target_properties(lofardal PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wno-unused-function -Wno-long-long -ansi -pedantic")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
 
 target_link_libraries(lofardal ${HDF5_LIBRARIES})
 
