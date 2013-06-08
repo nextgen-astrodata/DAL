@@ -16,7 +16,7 @@ Data Access Library (DAL) - ChangeLog
 - Added two BF and two TBB example HDF5 files with some data.
 - Added test suite. All utilities and examples are also run as test cases, some using the example HDF5 files. All 37 tests should pass.
 - Extensive documentation: User manual (Sphinx), API reference (Doxygen), README, INSTALL, Contributing, KnownIssues, ChangeLog, and a requirements/design decisions document.
-- Made user manual and API reference available online at http://nextgen-astrodata.github.com/DAL.
+- Made user manual and API reference available online at http://nextgen-astrodata.github.io/DAL
 - Improved compatibility with various Linux and Mac OS environments and compilers.
 - Improved naming of DAL library and utilities to liblofardal.so.x.y.z and lofar_[tbb,bf]_progname.py to clarify and avoid clashes (libdal).
 - Added an uninstaller; also removes .pyc bytecode files.
