@@ -31,17 +31,12 @@ Description: The uninstall script removes all installed files. It also removes r
   These are: $PREFIX/share/doc/dal $PREFIX/include/dal $PYTHON_PREFIX/dist-packages/DAL and subdirectories.
   Parent directories may also have been created and not removed.
 Workaround: Remove them by hand.
-Status: Low priority. Already spent time to remove .pyc files. This will not be worked on further for 2.5.0.
+Status: Low priority. Already spent time to remove .pyc files. This will not be worked on any time soon.
 
 KI 5: No support for Python 3
 Description: The build system does not support Python 3, whether 2 and 3 are installed or only 3.
   This used to work after it was fixed in LDA, even if 2 and 3 were both installed, but is now unsupported again. 
   Note that the LOFAR software does not support Python 3 either.
 Workaround: Use Python 2.6 or 2.7.
-Status: Low priority. This will not be worked on for DAL 2.5.0.
+Status: Low priority. This will not be worked on any time soon.
 
-KI 6: Coordinates support is incomplete
-Description: The coordinates part of bf is not complete and untested.
-Workaround: none (well, one can always access any attribute around the lofar/ file classes)
-Status: To be fixed in the next release.
- 

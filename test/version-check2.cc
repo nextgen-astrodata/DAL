@@ -22,7 +22,7 @@ int main() {
 	// Same but indicated version attribute does not exist: must throw.
 	bool thrown = false;
 	try {
-		dal::File f2(filename, dal::File::READ, "DOC_VERSION_NONEXISTANT");
+		dal::File f2(filename, dal::File::READ, "DOC_VERSION_NONEXISTENT");
 		cout << "Incorrectly opened file for READ specifying non-existing attribute: should have thrown" << endl;
 	} catch (dal::HDF5Exception& ) {
 		thrown = true;

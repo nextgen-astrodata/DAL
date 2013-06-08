@@ -6,7 +6,7 @@
 # File:         lofar_tbb_headerinfo.py
 # Author:       Alexander S. van Amesfoort (amesfoort_at_astron.nl)
 # Date:         2012-09-04
-# Last change:  2012-09-04
+# Last change:  2013-01-22
 
 import sys
 import dal
@@ -110,7 +110,7 @@ def print_basic_dipole_info(dp):
 	nflaggedSamp = 0 # i.e. for this dipole
 	for flrange in dp.flagOffsets().value:
 		nflaggedSamp += flrange.end - flrange.begin
-	print dp.flagOffsets().name(), 'summary\t\t=', nflaggedSamp, '(' + str(100.0 * nflaggedSamp // datalen) + '%)' # don't bother with proper rounding
+	print dp.flagOffsets().name(), 'summary\t\t=', nflaggedSamp, '(' + str(100.0 * nflaggedSamp / datalen) + '%)'
 
 	print dp.nyquistZone().name(), '\t\t\t=', dp.nyquistZone().value
 	print dp.dispersionMeasure().name(), '\t\t=', dp.dispersionMeasure().value, dp.dispersionMeasureUnit().value

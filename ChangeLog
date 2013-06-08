@@ -7,7 +7,7 @@ Data Access Library (DAL) - ChangeLog
 - Added per-attribute/group/dataset versioning for backward-compatibility and other versioning checks.
 - Added 3D data set support and simpler functions for 1D data sets.
 - Extended support for HDF5 custom tuple types beyond complex value types to Coordinate and Range types.
-- Improved file open/create functionalty with explicit open/close functions, safe "default" object state, basic file content checks, and auto-created attributes.
+- Improved file open/create functionality with explicit open/close functions, safe "default" object state, basic file content checks, and auto-created attributes.
 - Added "global" per-file info and made it available to all HDF5 objects in the file without the need to "navigate" the HDF5 object hierarchy.
 - Added flagging support for TBB.
 - Added exception hierarchy.

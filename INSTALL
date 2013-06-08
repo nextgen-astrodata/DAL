@@ -40,7 +40,7 @@ Additional CMake Variables
 The following custom flags can be added to the cmake command line:
 
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo       Select build flags. RelWithDebInfo: '-O2 -g' (default), Debug: '-g', Release: '-O3 -DNDEBUG'
-        -DCMAKE_CXX_COMPILER=/usr/bin/clang++   Build DAL using llvm/clang in the indicated path.
+        -DCMAKE_CXX_COMPILER=/usr/bin/clang     Build DAL using LLVM/Clang in the indicated path.
 	-DCMAKE_INSTALL_PREFIX=$PWD             Install the DAL C++ library and headers into the indicated path (default: /usr/local).
 	-DPYTHON_SITE_PACKAGES=$PWD/python      Install the DAL Python bindings into the indicated path (default: derived from Python interpreter)
 	-DPYTHON_VERSION=2.x                    Python version 2.x to compile the bindings against (default: derived from Python library)
@@ -57,7 +57,7 @@ Dependencies
 To build DAL (default config), you need the following packages:
 	- cmake 2.8+
 	- make
-	- g++ or llvm/clang
+	- g++ or LLVM/Clang
 
 	- libhdf5-1.8 or later
 	- libhdf5-dev-1.8+

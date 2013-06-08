@@ -19,11 +19,6 @@ if(GENERATE_DOCS)
     COMMENT "Generating doxygen documentation"
   )
 
-  # run "make doc" to generate doxygen documentation
-  add_custom_target(doc ALL
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/xml/index.xml
-  )
-
   set_property(DIRECTORY
     APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
     ${CMAKE_CURRENT_BINARY_DIR}/html
