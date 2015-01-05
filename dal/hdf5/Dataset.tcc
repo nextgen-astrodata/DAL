@@ -69,7 +69,7 @@ template<typename T> size_t Dataset<T>::ndims()
   // ndims() might lead to concurrency issues. Maybe only cache if data
   // is read-only or only allow access through this API?
 
-  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not get dataspace to get number of dimenstions of dataset " + _name);
+  hid_gc_noref dataspace(H5Dget_space(group()), H5Sclose, "Could not get dataspace to get number of dimensions of dataset " + _name);
 
   int rank = H5Sget_simple_extent_ndims(dataspace);
 
