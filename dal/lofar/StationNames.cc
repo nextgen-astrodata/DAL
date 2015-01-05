@@ -38,7 +38,10 @@ const char stationNames[][6] = {
 "RS507", "RS508", "RS509",
 
 "DE601", "DE602", "DE603", "DE604", "DE605", "FR606", "SE607", "UK608",
-"FI609"
+"DE609", "PL610", "PL611", "PL612",
+
+// Test and non-ILT
+"CS100", "FI609"
 };
 
 string stationIDToName(unsigned stationID) {
@@ -139,15 +142,22 @@ string stationIDToName(unsigned stationID) {
 		case 188: name = "RS508"; break;
 		case 189: name = "RS509"; break;
 
-		case 201: name = "DE601"; break;
-		case 202: name = "DE602"; break;
-		case 203: name = "DE603"; break;
-		case 204: name = "DE604"; break;
-		case 205: name = "DE605"; break;
-		case 206: name = "FR606"; break;
-		case 207: name = "SE607"; break;
-		case 208: name = "UK608"; break;
-		case 209: name = "FI609"; break;
+		case 201: name = "DE601"; break; // Effelsberg
+		case 202: name = "DE602"; break; // Garching
+		case 203: name = "DE603"; break; // Tautenburg
+		case 204: name = "DE604"; break; // Potsdam
+		case 205: name = "DE605"; break; // Juelich
+		case 206: name = "FR606"; break; // Nancay
+		case 207: name = "SE607"; break; // Onsala
+		case 208: name = "UK608"; break; // Chillbolton
+		case 209: name = "DE609"; break; // Norderstedt
+		case 210: name = "PL610"; break; // Borowiec
+		case 211: name = "PL611"; break; // Lazy
+		case 212: name = "PL612"; break; // Baldy
+
+		case 230: name = "CS100"; break; // test system
+
+		case 901: name = "FI609"; break; // KAIRA (non-ILT)
 
 		// Unknown station number. Return "ST<stationID>".
 		default:
@@ -162,19 +172,26 @@ string stationIDToName(unsigned stationID) {
 }
 
 unsigned stationNameToID(const string& stationName) {
+	// The 'sub' formula below appears to hold for all station names,
+	// except for these Test and non-ILT stations with arbitrary names and station IDs.
+	if (stationName == "CS100") {
+		return 230;
+	} else if (stationName == "FI609" || stationName == "KAIRA") {
+		return 901;
+	}
+
 	if (stationName.size() < 5) {
 		throw DALValueError("stationNameToID(): station name must be at least 5 characters (e.g. \"CS031\")");
 	}
 
-	unsigned id = (unsigned)atoi(&stationName.c_str()[2]);
+	int id = atoi(&stationName.c_str()[2]);
 	if (id > 999) { // Don't bother checking the first 2 chars and don't error on unknown 3 digit IDs incl from conv err.
-		throw DALValueError("stationNameToID(): number in station name must have 3 digits");
+		throw DALValueError("stationNameToID(): number in station name must fit in 3 digits");
 	}
 
-	if (id > 200) {
-		unsigned sub = (id - 101) / 100;
-		id = id - sub * 80;
-	}
+	int sub = (id - 101 >= 0 ? id - 101 : 0) / 100;
+	id = id - sub * 80;
+
 	return id;
 }
 
