@@ -45,7 +45,7 @@ dist = setup (name	= 'dal',
 	author		= "dr. Jan David Mol, ASTRON, the Netherlands",
 	author_email	= "mol@astron.nl",
 	description	= """Bindings of DAL""",
-        license         = "LGPL",
+        license         = "LGPL v3",
         keywords        = "LOFAR HDF5 DAL",
         url             = "https://github.com/nextgen-astrodata/DAL",
 
