@@ -61,22 +61,22 @@ if (NOT HDF5_FOUND)
   
   find_path (HDF5_INCLUDES hdf5.h hdf5_hl.h
     HINTS ${HDF5_ROOT_DIR} 
-    PATH_SUFFIXES include include/hdf5
+    PATH_SUFFIXES include include/hdf5 include/hdf5/serial include/hdf5/openmpi
     )
   
   find_path (HAVE_HDF5_HDF5_H hdf5.h
     HINTS ${HDF5_ROOT_DIR} 
-    PATH_SUFFIXES include include/hdf5
+    PATH_SUFFIXES include include/hdf5 include/hdf5/serial include/hdf5/openmpi
     )
   
   find_path (HAVE_HDF5_H5LT_H H5LT.h
     HINTS ${HDF5_ROOT_DIR} 
-    PATH_SUFFIXES include include/hdf5
+    PATH_SUFFIXES include include/hdf5 include/hdf5/serial include/hdf5/openmpi
     )
   
   find_path (HAVE_HDF5_HDF5_HL_H hdf5_hl.h
     HINTS ${HDF5_ROOT_DIR} 
-    PATH_SUFFIXES include include/hdf5
+    PATH_SUFFIXES include include/hdf5 include/hdf5/serial include/hdf5/openmpi
     )
 
   ##_____________________________________________________________________________
@@ -108,7 +108,7 @@ if (NOT HDF5_FOUND)
 
   ## Compilers
 
-  find_program (HDF5_C_COMPILER h5cc h5pcc
+  find_program (HDF5_C_COMPILER h5cc h5pcc h5pcc.openmpi
     HINTS ${HDF5_ROOT_DIR} 
     PATH_SUFFIXES bin
     )
