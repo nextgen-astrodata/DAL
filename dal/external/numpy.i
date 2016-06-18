@@ -301,9 +301,9 @@
       result = (PyArrayObject*) PyArray_FromArray(ary,
                                                   array_descr(ary),
 %#if NPY_API_VERSION < 0x0000000A
-                                                  NPY_ARRAY_F_CONTIGUOUS);
-%#else
                                                   NPY_FORTRANORDER);
+%#else
+                                                  NPY_ARRAY_F_CONTIGUOUS);
 %#endif
       *is_new_object = 1;
     }
