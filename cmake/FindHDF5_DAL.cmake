@@ -91,7 +91,7 @@ if (NOT HDF5_FOUND)
     
     ## Search for the library
     find_library (HDF5_${_varHDF5}_LIBRARY
-      NAMES ${_libHDF5}
+      NAMES ${_libHDF5} ${_libHDF5}_serial ${_libHDF5}_openmpi
       HINTS ${HDF5_ROOT_DIR} 
       PATH_SUFFIXES lib hdf5/lib
       )
