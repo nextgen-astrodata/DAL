@@ -80,15 +80,15 @@ namespace std {
   PyModule_AddObject(m, "HDF5Exception", pHDF5Exception); // 'm' is the name of the module object in SWIG
 %}
 
-%pythoncode {
+%pythoncode %{
   # marshall from shadow module
   HDF5Exception = _dal.HDF5Exception
-}
+%}
 
 /*
  * Extend  HDF5Exception.__init__ to provide an error stack.
  */
-%pythoncode {
+%pythoncode %{
   HDF5Exception.__old_init = HDF5Exception.__init__
 
   def newinit(self, *args, **kwargs):
@@ -98,7 +98,7 @@ namespace std {
 
   HDF5Exception.__init__ = newinit
   del newinit
-}
+%}
 
 #endif  
 

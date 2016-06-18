@@ -66,7 +66,7 @@
     return typeid(obj).name();
   }
 
-  %pythoncode {
+  %pythoncode %{
     def getNode(self, name):
       """
         Returns a registered node `name'.
@@ -108,7 +108,7 @@
       else:
         # cast to the lowest common denominator
         return self._getNode(name)
-  }
+  %}
 }
 
 // ignore the original getNode routine, which cannot be exported
@@ -121,10 +121,10 @@
 %include hdf5/Group.h
 
 %extend dal::Group {
-  %pythoncode {
+  %pythoncode %{
     def create(self, *args, **kwargs):
       self._create(*args, **kwargs)
       return self
-  }    
+  %}
 }
 

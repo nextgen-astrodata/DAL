@@ -14,7 +14,7 @@ namespace dal {
   static Attribute< T > _castNode( Group &nodeSet, const std::string &name ) {
     return nodeSet.getNode(name);
   }
-}  
+}
 
 // member functions that return *this are problematic,
 // because SWIG generates a new wrapper object and does not
@@ -28,7 +28,7 @@ namespace dal {
 %include dal/hdf5/Attribute.h
 
 %extend dal::Attribute {
-  %pythoncode {
+  %pythoncode %{
     def create(self, *args, **kwargs):
       self._create(*args, **kwargs)
       return self
@@ -54,7 +54,7 @@ namespace dal {
     def value(self):
       if self.exists():
         self.remove()
-  }
+  %}
 }
 
 %define AddAttribute( PythonName, CPPName )
@@ -62,9 +62,9 @@ namespace dal {
   %template(Attribute ## PythonName) dal::Attribute< CPPName >;
 
   // register it in our Attributes dict
-  %pythoncode {
+  %pythoncode %{
     _Attributes[Attribute ## PythonName ._typeName()] = Attribute ## PythonName;
-  }
+  %}
 %enddef
 
 %define AddSimpleAttributeAndVector( PythonName, CPPName )
@@ -78,10 +78,10 @@ namespace dal {
   AddSimpleAttributeAndVector( %arg(PythonName), %arg(CPPName) );
 %enddef
 
-%pythoncode {
+%pythoncode %{
   # dal::Attribute templates can be registered here
   _Attributes = {}
-}
+%}
 
 AddAttribute( Bool, bool );
 AddSimpleAttributeAndVector( Int,           int );
