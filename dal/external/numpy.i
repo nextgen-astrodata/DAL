@@ -96,7 +96,12 @@
 %#endif
 %#define array_is_contiguous(a) (PyArray_ISCONTIGUOUS((PyArrayObject*)a))
 %#define array_is_native(a)     (PyArray_ISNOTSWAPPED((PyArrayObject*)a))
+
+%#if NPY_API_VERSION < 0x0000000A
+%#define array_is_fortran(a)    (PyArray_ISFORTRAN((PyArrayObject*)a))
+%#else
 %#define array_is_fortran(a)    (PyArray_IS_F_CONTIGUOUS((PyArrayObject*)a))
+%#endif
 }
 
 /**********************************************************************/
@@ -295,7 +300,11 @@
       Py_INCREF(array_descr(ary));
       result = (PyArrayObject*) PyArray_FromArray(ary,
                                                   array_descr(ary),
+%#if NPY_API_VERSION < 0x0000000A
                                                   NPY_ARRAY_F_CONTIGUOUS);
+%#else
+                                                  NPY_FORTRANORDER);
+%#endif
       *is_new_object = 1;
     }
     return result;
