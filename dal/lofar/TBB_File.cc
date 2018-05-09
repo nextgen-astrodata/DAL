@@ -3,7 +3,7 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -11,7 +11,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TBB_File.h"
@@ -279,6 +279,7 @@ void TBB_DipoleDataset::initNodes() {
   addNode( new Attribute<string>(*this, "SAMPLE_FREQUENCY_UNIT") );
   addNode( new Attribute<unsigned>(*this, "TIME") );
   addNode( new Attribute<unsigned>(*this, "SAMPLE_NUMBER") );
+  addNode( new Attribute<unsigned>(*this, "SLICE_NUMBER") );
   addNode( new Attribute<unsigned>(*this, "SAMPLES_PER_FRAME") );
   addNode( new Attribute<unsigned long long>(*this, "DATA_LENGTH") );
   addNode( new Attribute< vector<Range> >(*this, "FLAG_OFFSETS") );
@@ -333,6 +334,11 @@ Attribute<unsigned> TBB_DipoleDataset::time()
 Attribute<unsigned> TBB_DipoleDataset::sampleNumber()
 {
   return Attribute<unsigned>(*this, "SAMPLE_NUMBER");
+}
+
+Attribute<unsigned> TBB_DipoleDataset::sliceNumber()
+{
+  return Attribute<unsigned>(*this, "SLICE_NUMBER");
 }
 
 Attribute<unsigned> TBB_DipoleDataset::samplesPerFrame()
