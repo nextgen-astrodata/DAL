@@ -79,18 +79,10 @@ hid_gc File::openFile( const std::string &filename, FileMode mode ) const
       {
         hid_gc_noref fapl(H5Pcreate(H5P_FILE_ACCESS), H5Pclose, "Could not create file access property list to create file " + filename);
 
-        /*
-         * We want to use 1.8 features, but always be able to read back any created file.
-         * We can force min and max versions, but apart from H5F_LIBVER_EARLIEST and H5F_LIBVER_LATEST,
-         * there is only H5F_LIBVER_18 introduced in 1.8.6+, but not in 1.9(.108) (pre-1.10).
-         * For now, set H5F_LIBVER_LATEST on all 1.8 and 1.9, and guess we may benefit from LIBVER_18 at 1.10+.
-         */
-#if H5_VERS_MAJOR == 1 && H5_VERS_MINOR <= 9
+        /* We use the latest version to create the file, for maximum efficiency. HDF5 offers very little
+           choice here. */
         if (H5Pset_libver_bounds(fapl, H5F_LIBVER_LATEST, H5F_LIBVER_LATEST) < 0)
-#else // >= 1.10
-        if (H5Pset_libver_bounds(fapl, H5F_LIBVER_18, H5F_LIBVER_18) < 0)
-#endif
-          throw DALException("Could not set HDF5 version bounds to create forward compatible file for HDF5 1.8 features");
+          throw DALException("Could not set HDF5 version bounds to create forward compatible file");
 
         unsigned flags;
         if (mode == CREATE)
