@@ -30,7 +30,7 @@ public:
   // allow deference of actual construction to operator=
   hid_gc(): hid(0), closefunc(0) {}
 
-  hid_gc(hid_t hid, hid_t (*closefunc)(hid_t) = 0, const std::string &errordesc = ""): hid(hid), closefunc(closefunc) {
+  hid_gc(hid_t hid, herr_t (*closefunc)(hid_t) = 0, const std::string &errordesc = ""): hid(hid), closefunc(closefunc) {
     // checking for success here greatly reduces the code base
     if (hid <= 0)
       throw HDF5Exception(errordesc);
@@ -70,7 +70,7 @@ public:
 
 private:
   hid_t hid;
-  hid_t (*closefunc)(hid_t);
+  herr_t (*closefunc)(hid_t);
 };
 
 /*!
@@ -80,7 +80,7 @@ private:
 class hid_gc_noref
 {
 public:
-  hid_gc_noref(hid_t hid, hid_t (*closefunc)(hid_t) = 0, const std::string &errordesc = ""): hid(hid), closefunc(closefunc) {
+  hid_gc_noref(hid_t hid, herr_t (*closefunc)(hid_t) = 0, const std::string &errordesc = ""): hid(hid), closefunc(closefunc) {
     // checking for success here greatly reduces the code base
     if (hid <= 0)
       throw HDF5Exception(errordesc);
@@ -107,7 +107,7 @@ private:
   void swap( hid_gc& first, hid_gc& second );
 
   const hid_t hid;
-  hid_t (*const closefunc)(hid_t);
+  herr_t (*const closefunc)(hid_t);
 };
 
 }
