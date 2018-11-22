@@ -16,6 +16,7 @@
  */
 #include "Node.h"
 #include "Group.h"
+#include <hdf5.h>
 
 using namespace std;
 
@@ -97,6 +98,22 @@ VersionType& Node::fileInfoVersion() const {
 
 void Node::setFileInfoVersion(const VersionType& newVersion) {
   fileInfo.setFileVersion(newVersion);
+}
+
+bool Node::isHDF5DataSet() {
+  H5G_stat_t stat;
+  if (H5Gget_objinfo(parent, _name.c_str(), true, &stat) != 0)
+    throw HDF5Exception("Cannot get object info for " + _name);
+
+  return stat.type == H5G_DATASET;
+}
+
+bool Node::isHDF5Group() {
+  H5G_stat_t stat;
+  if (H5Gget_objinfo(parent, _name.c_str(), true, &stat) != 0)
+    throw HDF5Exception("Cannot get object info for " + _name);
+
+  return stat.type == H5G_GROUP;
 }
 
 }
