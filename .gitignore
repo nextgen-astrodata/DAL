@@ -1,3 +1,7 @@
+.cproject
+.project
+.pydevproject
+.settings
 /build
 *.pyc
 *.patch
