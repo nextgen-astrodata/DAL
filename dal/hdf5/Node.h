@@ -197,6 +197,12 @@ public:
   //! Returns name of the version attribute.
   const std::string& versionAttrName() const;
 
+  //! check if this node is a dataset in the hdf5 file (is of the H5G_DATASET type)
+  bool isHDF5DataSet();
+
+  //! check if this node is a group in the hdf5 file (is of the H5G_GROUP type)
+  bool isHDF5Group();
+
 protected:
   hid_gc parent;
   std::string _name;

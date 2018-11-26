@@ -30,6 +30,8 @@ namespace dal {
 class TBB_File;
 class TBB_Station;
 class TBB_DipoleDataset;
+class TBB_DipoleGroup;
+class TBB_SubbandDataset;
 class TBB_Trigger;
 
 /*!
@@ -49,7 +51,11 @@ public:
   virtual void open( const std::string &filename, FileMode mode = READ );
   virtual void close();
 
+  /*! operatingMode() returns the operatingMode in which the TBB data was recorded.
+   * This can be either "transient" (since v1.0) or "spectral" (since v3.0)
+   */
   Attribute<std::string> operatingMode();
+
   Attribute<unsigned>    nofStations();
 
   virtual std::vector<TBB_Station> stations();
@@ -77,6 +83,23 @@ public:
   Attribute<double>      paramElevationMin();
   Attribute<double>      paramFitVarianceMax();
 
+  // optional parameters for version >= 3.3 "spectral" operatingMode, default to 0.
+  // ICD states that non-filled-in parameters should/can be present, and should contain 0 by default.
+  Attribute<double>                 triggerDispersionMeasure();
+  Attribute<std::string>            triggerDispersionMeasureUnit();
+  Attribute<std::vector<unsigned> > time();
+  Attribute<std::vector<unsigned> > sampleNumber();
+  Attribute<std::string>            fitDirectionCoordinateSystem();
+  Attribute<double>                 fitDirectionAngle1();
+  Attribute<double>                 fitDirectionAngle2();
+  Attribute<double>                 fitDirectionDistance();
+  Attribute<double>                 fitDirectionVariance();
+  Attribute<double>                 referenceFrequency();
+  Attribute<std::vector<double> >   observatoryCoordinates();
+  Attribute<std::string>            observatoryCoordinatesCoordinateSystem();
+  Attribute<std::string>            triggerId();
+  Attribute<std::string>            additionalInfo();
+
 protected:
   virtual void           initNodes();
 };
@@ -100,8 +123,17 @@ public:
 
   Attribute<unsigned>                   nofDipoles();
 
+  //kept for backwards compatibility. This calls dipoleDataSets();
   virtual std::vector<TBB_DipoleDataset> dipoles();
+  //kept for backwards compatibility. This calls dipoleDataSet(unsigned stationID, unsigned rspID, unsigned rcuID);
   virtual TBB_DipoleDataset             dipole( unsigned stationID, unsigned rspID, unsigned rcuID );
+
+  virtual std::vector<TBB_DipoleDataset> dipoleDataSets();
+  virtual TBB_DipoleDataset             dipoleDataSet( unsigned stationID, unsigned rspID, unsigned rcuID );
+
+  virtual std::vector<TBB_DipoleGroup>  dipoleGroups();
+  virtual TBB_DipoleGroup               dipoleGroup( unsigned stationID, unsigned rspID, unsigned rcuID );
+
 
 private:
   std::string                           dipoleDatasetName( unsigned stationID, unsigned rspID, unsigned rcuID );
@@ -109,6 +141,57 @@ private:
 protected:
   virtual void                          initNodes();
 };
+
+
+
+class TBB_DipoleGroup: public Group {
+public:
+  TBB_DipoleGroup ( Group &parent, const std::string &name );
+
+  Attribute<unsigned>                   stationID();
+  Attribute<unsigned>                   rspID();
+  Attribute<unsigned>                   rcuID();
+
+  Attribute<double>                     sampleFrequency();
+  Attribute<std::string>                sampleFrequencyUnit();
+
+  Attribute<unsigned>                   nyquistZone();
+
+  Attribute<double>                     adc2voltage();
+
+  Attribute<double>                     cableDelay();
+  Attribute<std::string>                cableDelayUnit();
+
+  Attribute<double>                     dipoleCalibrationDelay();
+  Attribute<std::string>                dipoleCalibrationDelayUnit();
+  Attribute< std::vector<std::complex<double> > > dipoleCalibrationGainCurve();
+
+  Attribute< std::vector<double> >      antennaPosition();
+  Attribute<std::string>                antennaPositionUnit();
+  Attribute<std::string>                antennaPositionFrame();
+  Attribute< std::vector<double> >      antennaNormalVector();
+  Attribute< std::vector<double> >      antennaRotationMatrix(); // 3 x 3, row-minor
+
+  Attribute< std::vector<double> >      tileBeam();
+  Attribute<std::string>                tileBeamUnit();
+  Attribute<std::string>                tileBeamFrame();
+
+  Attribute<double>                     dispersionMeasure();
+  Attribute<std::string>                dispersionMeasureUnit();
+
+  Attribute<unsigned>                   nofSubbands();
+  Attribute<std::vector<unsigned> >     subbands();
+  std::vector<TBB_SubbandDataset>       subbandDatasets();
+  TBB_SubbandDataset                    subband( unsigned subband_nr );
+
+private:
+  std::string                           subbandDatasetName( unsigned subband_nr );
+
+protected:
+  virtual void                          initNodes();
+};
+
+
 
 class TBB_DipoleDataset: public Dataset<short> {
 public:
@@ -149,6 +232,27 @@ public:
 
   Attribute<double>                     dispersionMeasure();
   Attribute<std::string>                dispersionMeasureUnit();
+
+protected:
+  virtual void                          initNodes();
+};
+
+class TBB_SubbandDataset: public Dataset<short> {
+public:
+  TBB_SubbandDataset( Group &parent, const std::string &name );
+
+  Attribute<unsigned>                   time();
+  Attribute<double>                     centralFrequency();
+  Attribute<std::string>                centralFrequencyUnit();
+  Attribute<double>                     bandwidth();
+  Attribute<std::string>                bandwidthUnit();
+  Attribute<double>                     timeResolution();
+  Attribute<std::string>                timeResolutionUnit();
+  Attribute<unsigned>                   bandNumber();
+  Attribute<unsigned>                   sliceNumber();
+  Attribute<unsigned>                   samplesPerFrame();
+  Attribute<unsigned long long>         dataLength();
+  Attribute< std::vector<Range> >       flagOffsets();
 
 protected:
   virtual void                          initNodes();
