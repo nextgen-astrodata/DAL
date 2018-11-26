@@ -61,10 +61,6 @@ void TBB_File::openFile( FileMode mode )
     if (!isTbbFileType) {
       throw DALException("Failed to open TBB file: A TBB file must have FILETYPE=\"tbb\".");
     }
-
-    if (operatingMode().get() == "spectral" && docVersion().get() < VersionType(3, 3)) {
-      throw DALException("Invalid version for TBB spectral operating mode.");
-    }
   }
 }
 
@@ -329,10 +325,10 @@ Attribute<unsigned> TBB_Station::nofDipoles()
 }
 
 vector<TBB_DipoleDataset> TBB_Station::dipoles() {
-  return dipoleDataSets();
+  return dipoleDatasets();
 }
 
-vector<TBB_DipoleDataset> TBB_Station::dipoleDataSets()
+vector<TBB_DipoleDataset> TBB_Station::dipoleDatasets()
 {
   const string dpPrefix("DIPOLE_");
   vector<TBB_DipoleDataset> dipoleDatasets;
@@ -371,10 +367,10 @@ vector<TBB_DipoleGroup> TBB_Station::dipoleGroups()
 }
 
 TBB_DipoleDataset TBB_Station::dipole( unsigned stationID, unsigned rspID, unsigned rcuID ) {
-  return dipole(stationID, rspID, rcuID);
+  return dipoleDataset(stationID, rspID, rcuID);
 }
 
-TBB_DipoleDataset TBB_Station::dipoleDataSet( unsigned stationID, unsigned rspID, unsigned rcuID )
+TBB_DipoleDataset TBB_Station::dipoleDataset( unsigned stationID, unsigned rspID, unsigned rcuID )
 {
   return TBB_DipoleDataset(*this, dipoleDatasetName(stationID, rspID, rcuID));
 }

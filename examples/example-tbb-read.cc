@@ -34,7 +34,7 @@ static void readTBB_File(const string& filename) {
 	for (size_t i = 0; i < stations.size(); i++) {
 		cout << "Station " << stations[i].stationName().get() << ":" << endl;
 
-		vector<dal::TBB_DipoleDataset> dipoleDatasets(stations[i].dipoleDataSets());
+		vector<dal::TBB_DipoleDataset> dipoleDatasets(stations[i].dipoleDatasets());
 		for (size_t j = 0; j < dipoleDatasets.size(); j++) {
 			cout << "\tDipole dataset " << dipoleDatasets[j].rspID().get() << " " << dipoleDatasets[j].rcuID().get() << ":" << endl;
 

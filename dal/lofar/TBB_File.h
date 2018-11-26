@@ -128,8 +128,8 @@ public:
   //kept for backwards compatibility. This calls dipoleDataSet(unsigned stationID, unsigned rspID, unsigned rcuID);
   virtual TBB_DipoleDataset             dipole( unsigned stationID, unsigned rspID, unsigned rcuID );
 
-  virtual std::vector<TBB_DipoleDataset> dipoleDataSets();
-  virtual TBB_DipoleDataset             dipoleDataSet( unsigned stationID, unsigned rspID, unsigned rcuID );
+  virtual std::vector<TBB_DipoleDataset> dipoleDatasets();
+  virtual TBB_DipoleDataset             dipoleDataset( unsigned stationID, unsigned rspID, unsigned rcuID );
 
   virtual std::vector<TBB_DipoleGroup>  dipoleGroups();
   virtual TBB_DipoleGroup               dipoleGroup( unsigned stationID, unsigned rspID, unsigned rcuID );
