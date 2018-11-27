@@ -2,8 +2,8 @@
 project (DAL)
 
 ## Project release version
-set (DAL_VERSION_MAJOR 2)
-set (DAL_VERSION_MINOR 5)
+set (DAL_VERSION_MAJOR 3)
+set (DAL_VERSION_MINOR 3)
 set (DAL_VERSION_RELEASE 0)
 set (DAL_VERSION_STRING "${DAL_VERSION_MAJOR}.${DAL_VERSION_MINOR}.${DAL_VERSION_RELEASE}")
 
@@ -40,14 +40,14 @@ if(PYTHON_BINDINGS)
   find_package(SWIG REQUIRED)
   include(${SWIG_USE_FILE})
 
-  find_package(PythonLibs REQUIRED)
+  find_package(PythonLibs 2.7 REQUIRED)
   include_directories(${PYTHON_INCLUDE_DIRS})
 
   find_package(Numpy REQUIRED)
   include_directories(${NUMPY_INCLUDE_DIRS})
 
   if(NOT CMAKE_CROSSCOMPILING)
-    find_package(PythonInterp)
+    find_package(PythonInterp 2.7)
   endif(NOT CMAKE_CROSSCOMPILING)
 
   # Backwards compatibility

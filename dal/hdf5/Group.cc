@@ -15,6 +15,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Group.h"
+#include "exceptions/exceptions.h"
 
 using namespace std;
 

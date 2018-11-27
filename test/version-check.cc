@@ -11,25 +11,25 @@ int main() {
 
 	// Test if dal_config version defines are correctly propagated by cmake.
 	// This is needed to work around version-specific bugs or API changes (hope we don't).
-#if DAL_VERSION_MAJOR == 2
+#if DAL_VERSION_MAJOR == 3
 #endif
 
-#if DAL_VERSION_MINOR == 5
+#if DAL_VERSION_MINOR == 3
 #endif
 
 #if DAL_VERSION_RELEASE == 0
 #endif
 
 // This doesn't work; use the numerical symbols above for pre-processor comparisons.
-//#if DAL_VERSION_STRING == "2.5.0"
+//#if DAL_VERSION_STRING == "3.3.0"
 //#endif
 	// DAL_VERSION_STRING is for runtime use.
 	string dalVersionString(DAL_VERSION_STRING);
 
 	// Test if dal_version functions exist and do anything remotely reasonable.
 	VersionType libVersion(version());
-	if (libVersion.major != 2) { // really basic check
-		cerr << "lib version should start with 2" << endl;
+	if (libVersion.major != 3) { // really basic check
+		cerr << "lib version should start with 3" << endl;
 		err = 1;
 	}
 

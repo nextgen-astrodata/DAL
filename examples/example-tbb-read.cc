@@ -34,11 +34,11 @@ static void readTBB_File(const string& filename) {
 	for (size_t i = 0; i < stations.size(); i++) {
 		cout << "Station " << stations[i].stationName().get() << ":" << endl;
 
-		vector<dal::TBB_DipoleDataset> dipoles(stations[i].dipoles());
-		for (size_t j = 0; j < dipoles.size(); j++) {
-			cout << "\tDipole " << dipoles[j].rspID().get() << " " << dipoles[j].rcuID().get() << ":" << endl;
+		vector<dal::TBB_DipoleDataset> dipoleDatasets(stations[i].dipoleDatasets());
+		for (size_t j = 0; j < dipoleDatasets.size(); j++) {
+			cout << "\tDipole dataset " << dipoleDatasets[j].rspID().get() << " " << dipoleDatasets[j].rcuID().get() << ":" << endl;
 
-			size_t dpDataLen = dipoles[j].dims1D();
+			size_t dpDataLen = dipoleDatasets[j].dims1D();
 			if (d.len < dpDataLen) {
 				delete[] d.data;
 				d.data = NULL; // safe delete[] in ~Data() in case new[] fails
@@ -47,7 +47,7 @@ static void readTBB_File(const string& filename) {
 			}
 
 			size_t pos = 0;
-			dipoles[j].get1D(pos, d.data, d.len);
+			dipoleDatasets[j].get1D(pos, d.data, d.len);
 
 			size_t printedLen = d.len < MAX_PRINTED ? d.len : MAX_PRINTED;
 			for (size_t k = 0; k < printedLen; k++) {
@@ -56,6 +56,16 @@ static void readTBB_File(const string& filename) {
 			cout << endl;
 		}
 
+
+		vector<dal::TBB_DipoleGroup> dipoleGroups(stations[i].dipoleGroups());
+		for (size_t j = 0; j < dipoleGroups.size(); j++) {
+			cout << "\tDipole group " << dipoleGroups[j].rspID().get() << " " << dipoleGroups[j].rcuID().get() << ":" << endl;
+
+      vector<dal::TBB_SubbandDataset> subbandDatasets(dipoleGroups[j].subbandDatasets());
+      for (size_t k = 0; k < subbandDatasets.size(); k++) {
+        cout << "\tSubband dataset " << subbandDatasets[k].bandNumber().get() << " " << subbandDatasets[k].centralFrequency().get() << ":" << endl;
+      }
+		}
 	}
 }
 
