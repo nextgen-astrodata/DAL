@@ -142,42 +142,78 @@ protected:
   virtual void                          initNodes();
 };
 
+/*!
+ * Common base class defining the common interface for dipole groups and datasets.
+ */
+class TBB_DipoleCommon {
+public:
+  virtual ~TBB_DipoleCommon() {}
 
+  virtual Attribute<unsigned>                   stationID() = 0;
+  virtual Attribute<unsigned>                   rspID() = 0;
+  virtual Attribute<unsigned>                   rcuID() = 0;
 
-class TBB_DipoleGroup: public Group {
+  virtual Attribute<double>                     sampleFrequency() = 0;
+  virtual Attribute<std::string>                sampleFrequencyUnit() = 0;
+
+  virtual Attribute<unsigned>                   nyquistZone() = 0;
+
+  virtual Attribute<double>                     cableDelay() = 0;
+  virtual Attribute<std::string>                cableDelayUnit() = 0;
+
+  virtual Attribute<double>                     dipoleCalibrationDelay() = 0;
+  virtual Attribute<std::string>                dipoleCalibrationDelayUnit() = 0;
+  virtual Attribute< std::vector<std::complex<double> > > dipoleCalibrationGainCurve() = 0;
+
+  virtual Attribute< std::vector<double> >      antennaPosition() = 0;
+  virtual Attribute<std::string>                antennaPositionUnit() = 0;
+  virtual Attribute<std::string>                antennaPositionFrame() = 0;
+  virtual Attribute< std::vector<double> >      antennaNormalVector() = 0;
+  virtual Attribute< std::vector<double> >      antennaRotationMatrix() = 0; // 3 x 3, row-minor
+
+  virtual Attribute< std::vector<double> >      tileBeam() = 0;
+  virtual Attribute<std::string>                tileBeamUnit() = 0;
+  virtual Attribute<std::string>                tileBeamFrame() = 0;
+
+  virtual Attribute<double>                     dispersionMeasure() = 0;
+  virtual Attribute<std::string>                dispersionMeasureUnit() = 0;
+};
+
+class TBB_DipoleGroup: public Group, public TBB_DipoleCommon {
 public:
   TBB_DipoleGroup ( Group &parent, const std::string &name );
+  virtual ~TBB_DipoleGroup() {}
 
-  Attribute<unsigned>                   stationID();
-  Attribute<unsigned>                   rspID();
-  Attribute<unsigned>                   rcuID();
+  virtual Attribute<unsigned>                   stationID();
+  virtual Attribute<unsigned>                   rspID();
+  virtual Attribute<unsigned>                   rcuID();
 
-  Attribute<double>                     sampleFrequency();
-  Attribute<std::string>                sampleFrequencyUnit();
+  virtual Attribute<double>                     sampleFrequency();
+  virtual Attribute<std::string>                sampleFrequencyUnit();
 
-  Attribute<unsigned>                   nyquistZone();
+  virtual Attribute<unsigned>                   nyquistZone();
 
-  Attribute<double>                     adc2voltage();
+  Attribute<double>                             adc2voltage();
 
-  Attribute<double>                     cableDelay();
-  Attribute<std::string>                cableDelayUnit();
+  virtual Attribute<double>                     cableDelay();
+  virtual Attribute<std::string>                cableDelayUnit();
 
-  Attribute<double>                     dipoleCalibrationDelay();
-  Attribute<std::string>                dipoleCalibrationDelayUnit();
-  Attribute< std::vector<std::complex<double> > > dipoleCalibrationGainCurve();
+  virtual Attribute<double>                     dipoleCalibrationDelay();
+  virtual Attribute<std::string>                dipoleCalibrationDelayUnit();
+  virtual Attribute< std::vector<std::complex<double> > > dipoleCalibrationGainCurve();
 
-  Attribute< std::vector<double> >      antennaPosition();
-  Attribute<std::string>                antennaPositionUnit();
-  Attribute<std::string>                antennaPositionFrame();
-  Attribute< std::vector<double> >      antennaNormalVector();
-  Attribute< std::vector<double> >      antennaRotationMatrix(); // 3 x 3, row-minor
+  virtual Attribute< std::vector<double> >      antennaPosition();
+  virtual Attribute<std::string>                antennaPositionUnit();
+  virtual Attribute<std::string>                antennaPositionFrame();
+  virtual Attribute< std::vector<double> >      antennaNormalVector();
+  virtual Attribute< std::vector<double> >      antennaRotationMatrix(); // 3 x 3, row-minor
 
-  Attribute< std::vector<double> >      tileBeam();
-  Attribute<std::string>                tileBeamUnit();
-  Attribute<std::string>                tileBeamFrame();
+  virtual Attribute< std::vector<double> >      tileBeam();
+  virtual Attribute<std::string>                tileBeamUnit();
+  virtual Attribute<std::string>                tileBeamFrame();
 
-  Attribute<double>                     dispersionMeasure();
-  Attribute<std::string>                dispersionMeasureUnit();
+  virtual Attribute<double>                     dispersionMeasure();
+  virtual Attribute<std::string>                dispersionMeasureUnit();
 
   Attribute<unsigned>                   nofSubbands();
   Attribute<std::vector<unsigned> >     subbands();
@@ -193,45 +229,46 @@ protected:
 
 
 
-class TBB_DipoleDataset: public Dataset<short> {
+class TBB_DipoleDataset: public Dataset<short>, public TBB_DipoleCommon {
 public:
   TBB_DipoleDataset( Group &parent, const std::string &name );
+  virtual ~TBB_DipoleDataset() {}
 
-  Attribute<unsigned>                   stationID();
-  Attribute<unsigned>                   rspID();
-  Attribute<unsigned>                   rcuID();
+  virtual Attribute<unsigned>                   stationID();
+  virtual Attribute<unsigned>                   rspID();
+  virtual Attribute<unsigned>                   rcuID();
 
-  Attribute<double>                     sampleFrequency();
-  Attribute<std::string>                sampleFrequencyUnit();
+  virtual Attribute<double>                     sampleFrequency();
+  virtual Attribute<std::string>                sampleFrequencyUnit();
 
-  Attribute<unsigned>                   time();
-  Attribute<unsigned>                   sampleNumber();
-  Attribute<unsigned>                   sliceNumber();
+  Attribute<unsigned>                           time();
+  Attribute<unsigned>                           sampleNumber();
+  Attribute<unsigned>                           sliceNumber();
 
-  Attribute<unsigned>                   samplesPerFrame();
-  Attribute<unsigned long long>         dataLength();
-  Attribute< std::vector<Range> >       flagOffsets();
-  Attribute<unsigned>                   nyquistZone();
+  Attribute<unsigned>                           samplesPerFrame();
+  Attribute<unsigned long long>                 dataLength();
+  Attribute< std::vector<Range> >               flagOffsets();
+  virtual Attribute<unsigned>                   nyquistZone();
 
-  Attribute<double>                     cableDelay();
-  Attribute<std::string>                cableDelayUnit();
+  virtual Attribute<double>                     cableDelay();
+  virtual Attribute<std::string>                cableDelayUnit();
 
-  Attribute<double>                     dipoleCalibrationDelay();
-  Attribute<std::string>                dipoleCalibrationDelayUnit();
-  Attribute< std::vector<std::complex<double> > > dipoleCalibrationGainCurve();
+  virtual Attribute<double>                     dipoleCalibrationDelay();
+  virtual Attribute<std::string>                dipoleCalibrationDelayUnit();
+  virtual Attribute< std::vector<std::complex<double> > > dipoleCalibrationGainCurve();
 
-  Attribute< std::vector<double> >      antennaPosition();
-  Attribute<std::string>                antennaPositionUnit();
-  Attribute<std::string>                antennaPositionFrame();
-  Attribute< std::vector<double> >      antennaNormalVector();
-  Attribute< std::vector<double> >      antennaRotationMatrix(); // 3 x 3, row-minor
+  virtual Attribute< std::vector<double> >      antennaPosition();
+  virtual Attribute<std::string>                antennaPositionUnit();
+  virtual Attribute<std::string>                antennaPositionFrame();
+  virtual Attribute< std::vector<double> >      antennaNormalVector();
+  virtual Attribute< std::vector<double> >      antennaRotationMatrix(); // 3 x 3, row-minor
 
-  Attribute< std::vector<double> >      tileBeam();
-  Attribute<std::string>                tileBeamUnit();
-  Attribute<std::string>                tileBeamFrame();
+  virtual Attribute< std::vector<double> >      tileBeam();
+  virtual Attribute<std::string>                tileBeamUnit();
+  virtual Attribute<std::string>                tileBeamFrame();
 
-  Attribute<double>                     dispersionMeasure();
-  Attribute<std::string>                dispersionMeasureUnit();
+  virtual Attribute<double>                     dispersionMeasure();
+  virtual Attribute<std::string>                dispersionMeasureUnit();
 
 protected:
   virtual void                          initNodes();
