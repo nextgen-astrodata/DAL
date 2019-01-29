@@ -749,12 +749,12 @@ Attribute<string> TBB_DipoleDataset::dispersionMeasureUnit()
 
 TBB_SubbandDataset::TBB_SubbandDataset( Group &parent, const std::string &name )
 :
-  Dataset<short>(parent, name)
+  Dataset< std::complex< int16_t > >(parent, name)
 {
 }
 
 void TBB_SubbandDataset::initNodes() {
-  Dataset<short>::initNodes();
+  Dataset< std::complex< int16_t > >::initNodes();
   addNode( new Attribute<unsigned>(*this, "TIME") );
   addNode( new Attribute<double>(*this, "CENTRAL_FREQUENCY") );
   addNode( new Attribute<string>(*this, "CENTRAL_FREQUENCY_UNIT") );

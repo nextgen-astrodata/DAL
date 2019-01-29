@@ -79,6 +79,7 @@ DATASETTYPE(std::complex<float>, NPY_CFLOAT, size_t);
 }
 
 namespace dal {
+  %template(DatasetComplexShort) Dataset< std::complex < int16_t > >;
   %template(DatasetShort)        Dataset<short>;
   %template(DatasetFloat)        Dataset<float>;
   %template(DatasetComplexFloat) Dataset< std::complex<float> >;

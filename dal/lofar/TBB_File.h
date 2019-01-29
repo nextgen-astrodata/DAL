@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <complex>
+#include <stdint.h>
 #include <hdf5.h>
 #include "CLA_File.h"
 #include "Flagging.h"
@@ -274,7 +275,7 @@ protected:
   virtual void                          initNodes();
 };
 
-class TBB_SubbandDataset: public Dataset<short> {
+class TBB_SubbandDataset: public Dataset<std::complex < int16_t > > {
 public:
   TBB_SubbandDataset( Group &parent, const std::string &name );
 
