@@ -1,0 +1,45 @@
+HOW-TO: use the spec file to build a RPM
+========================================
+
+Create the rpmbuild directories:
+$ yum install rpm-build rpmdevtools
+$ rpmdev-setuptree
+$ ls ~/rpmbuild
+
+An environment file ~/.rpmmacros has been created as well. Add the following macros to that file:
+  %packager <name>
+  %vendor <company>
+
+(e.g. LOFARBuild and ASTRON). 
+
+Then to build the DAL rpm:
+$ wget -O ~/rpmbuild/SOURCES/DAL_v2.6.1.tar.gz https://github.com/nextgen-astrodata/DAL/archive/v2.6.1.tar.gz
+$ cd ~/rpmbuild/SPECS
+$ rpmbuild -ba DAL_2.6.1.spec
+
+'rpmbuild -ba' builds both the source package (in ~/rpmbuild/SRPMS) and binary package (in ~/rpmbuild/RPMS).
+
+
+HOW-TO: use the source package to create a binary package
+=========================================================
+
+With the source package a binary package can be created using rpmbuild, the SPEC file in the source package contains all the information that is needed to compile the code:
+
+$ rpmbuild --rebuild DAL-2.6.1-2.el7.src.rpm
+
+Rpmbuild will automatically create the ~/rpmbuild directory and clean it up after the build. 
+
+BEWARE: don't do this as the same user on the same host where you are building your RPM's because the ~/rpmbuild directory will be cleaned up after the build.
+
+
+HOW-TO: install the binary RPM
+==============================
+
+The DAL package is a relocatable package. By default it will install DAL in /opt/DAL:
+
+$ rpm -i DAL-2.6.1-2.el7.x86_64.rpm
+
+To install it in <other_dir>:
+
+$ rpm -i --prefix=<other_dir>  DAL-2.6.1-2.el7.x86_64.rpm
+
